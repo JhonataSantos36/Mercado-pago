@@ -2,6 +2,7 @@ package com.mercadopago.review_and_confirm.components;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,19 @@ import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.components.RendererFactory;
 import com.mercadopago.customviews.MPTextView;
+import com.mercadopago.model.Summary;
+import com.mercadopago.model.SummaryDetail;
+import com.mercadopago.review_and_confirm.models.ReviewAndConfirmPreferences;
+import com.mercadopago.review_and_confirm.props.AmountDescriptionProps;
 import com.mercadopago.uicontrollers.payercosts.PayerCostColumn;
 import com.mercadopago.util.CurrenciesUtil;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.mercadopago.util.TextUtils.isEmpty;
+import static com.mercadopago.util.TextUtils.isNotEmpty;
 
 /**
  * Created by mromar on 2/28/18.
@@ -39,7 +47,7 @@ public class FullSummaryRenderer extends Renderer<FullSummary> {
         final LinearLayout disclaimerLinearLayout = summaryView.findViewById(R.id.disclaimer);
 
         //summaryDetails list
-        for (AmountDescription amountDescription : component.getAmountDescriptionComponents()) {
+        for (AmountDescription amountDescription : getAmountDescriptionComponents()) {
             final Renderer amountDescriptionRenderer = RendererFactory.create(context, amountDescription);
             final View amountView = amountDescriptionRenderer.render();
             summaryDetailsContainer.addView(amountView);
@@ -73,10 +81,108 @@ public class FullSummaryRenderer extends Renderer<FullSummary> {
         secondSeparator.setVisibility(component.getTotalAmount() == null ? View.GONE : View.VISIBLE);
 
         //disclaimer
-        setText(disclaimerTextView, component.getSummary().getDisclaimerText());
-        disclaimerTextView.setTextColor(component.getSummary().getDisclaimerColor());
+        setText(disclaimerTextView, getSummary().getDisclaimerText());
+        disclaimerTextView.setTextColor(getSummary().getDisclaimerColor());
 
         return summaryView;
+    }
+
+    private Summary getSummary(Context context) {
+        ReviewAndConfirmPreferences reviewAndConfirmPreferences = props.reviewAndConfirmPreferences;
+        Summary.Builder summaryBuilder = new com.mercadopago.model.Summary.Builder();
+
+        if (isValidTotalAmount() && reviewAndConfirmPreferences.hasProductAmount()) {
+            summaryBuilder.addSummaryProductDetail(reviewAndConfirmPreferences.getProductAmount(), getItemTitle(), getDefaultTextColor(context))
+                    .addSummaryShippingDetail(reviewAndConfirmPreferences.getShippingAmount(), getSummaryShippingTitle(context), getDefaultTextColor(context))
+                    .addSummaryArrearsDetail(reviewAndConfirmPreferences.getArrearsAmount(), getSummaryArrearTitle(context), getDefaultTextColor(context))
+                    .addSummaryTaxesDetail(reviewAndConfirmPreferences.getTaxesAmount(), getSummaryTaxesTitle(context), getDefaultTextColor(context))
+                    .addSummaryDiscountDetail(getDiscountAmount(), getSummaryDiscountsTitle(context), getDiscountTextColor(context))
+                    .setDisclaimerText(reviewAndConfirmPreferences.getDisclaimerText())
+                    .setDisclaimerColor(provider.getDisclaimerTextColor());
+
+            if (getChargesAmount().compareTo(BigDecimal.ZERO) > 0) {
+                summaryBuilder.addSummaryChargeDetail(getChargesAmount(), provider.getSummaryChargesTitle(),
+                        provider.getDefaultTextColor());
+            }
+        } else {
+            summaryBuilder.addSummaryProductDetail(props.summaryModel.getTotalAmount(), getItemTitle(),
+                    provider.getDefaultTextColor());
+
+            if (isValidAmount(props.summaryModel.getPayerCostTotalAmount()) &&
+                    getPayerCostChargesAmount().compareTo(BigDecimal.ZERO) > 0) {
+                summaryBuilder.addSummaryChargeDetail(getPayerCostChargesAmount(), provider.getSummaryChargesTitle(),
+                        provider.getDefaultTextColor());
+            }
+
+            if (!isEmpty(reviewAndConfirmPreferences.getDisclaimerText())) {
+                summaryBuilder.setDisclaimerText(reviewAndConfirmPreferences.getDisclaimerText())
+                        .setDisclaimerColor(provider.getDisclaimerTextColor());
+            }
+
+            if (isValidAmount(props.summaryModel.getCouponAmount())) {
+                summaryBuilder.addSummaryDiscountDetail(props.summaryModel.getCouponAmount(),
+                        provider.getSummaryDiscountsTitle(),
+                        provider.getDiscountTextColor());
+            }
+        }
+
+        return summaryBuilder.build();
+    }
+
+    private String getSummaryDiscountsTitle(Context context) {
+        return context.getString(R.string.mpsdk_review_summary_discounts);
+    }
+
+    private String getSummaryTaxesTitle(Context context) {
+        return context.getString(R.string.mpsdk_review_summary_taxes);
+    }
+
+    private String getSummaryArrearTitle(Context context) {
+        return context.getString(R.string.mpsdk_review_summary_arrear);
+    }
+
+    private String getSummaryShippingTitle(Context context) {
+        return context.getString(R.string.mpsdk_review_summary_shipping);
+    }
+
+    private int getDefaultTextColor(Context context) {
+        return ContextCompat.getColor(context, R.color.mpsdk_summary_text_color);
+    }
+
+    private int getDiscountTextColor(Context context) {
+        return ContextCompat.getColor(context, R.color.mpsdk_summary_discount_color);
+    }
+
+    private boolean isValidTotalAmount() {
+        ReviewAndConfirmPreferences reviewScreenPreference = props.reviewAndConfirmPreferences;
+        BigDecimal totalAmountPreference = reviewScreenPreference.getTotalAmount();
+        return totalAmountPreference.compareTo(props.summaryModel.getTotalAmount()) == 0;
+    }
+
+    private String getItemTitle() {
+        String title = props.summaryModel.title;
+
+        if (isNotEmpty(props.reviewAndConfirmPreferences.getProductTitle())) {
+            title = props.reviewAndConfirmPreferences.getProductTitle();
+        }
+
+        return title;
+    }
+
+    private List<AmountDescription> getAmountDescriptionComponents() {
+        List<AmountDescription> amountDescriptionList = new ArrayList<>();
+
+        for (SummaryDetail summaryDetail : getSummary().getSummaryDetails()) {
+            final AmountDescriptionProps amountDescriptionProps = new AmountDescriptionProps(
+                    summaryDetail.getTotalAmount(),
+                    summaryDetail.getTitle(),
+                    props.summaryModel.currencyId,
+                    summaryDetail.getTextColor());
+
+            amountDescriptionList.add(new AmountDescription(amountDescriptionProps));
+        }
+
+        return amountDescriptionList;
     }
 
     private Spanned getFormattedAmount(BigDecimal amount, String currencyId) {

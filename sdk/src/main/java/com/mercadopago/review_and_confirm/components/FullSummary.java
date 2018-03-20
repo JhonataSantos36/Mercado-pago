@@ -59,80 +59,6 @@ public class FullSummary extends Component<SummaryComponent.SummaryProps, Void> 
         return isCardPaymentMethod() && props.summaryModel.getInstallments() > 1;
     }
 
-    public List<AmountDescription> getAmountDescriptionComponents() {
-        List<AmountDescription> amountDescriptionList = new ArrayList<>();
-
-        for (SummaryDetail summaryDetail : getSummary().getSummaryDetails()) {
-            final AmountDescriptionProps amountDescriptionProps = new AmountDescriptionProps(
-                    summaryDetail.getTotalAmount(),
-                    summaryDetail.getTitle(),
-                    props.summaryModel.currencyId,
-                    summaryDetail.getTextColor());
-
-            amountDescriptionList.add(new AmountDescription(amountDescriptionProps));
-        }
-
-        return amountDescriptionList;
-    }
-
-    @VisibleForTesting
-    Summary getSummary() {
-        ReviewAndConfirmPreferences reviewAndConfirmPreferences = props.reviewAndConfirmPreferences;
-        Summary.Builder summaryBuilder = new com.mercadopago.model.Summary.Builder();
-
-        if (isValidTotalAmount() && reviewAndConfirmPreferences.hasProductAmount()) {
-            summaryBuilder.addSummaryProductDetail(reviewAndConfirmPreferences.getProductAmount(), getItemTitle(),
-                    provider.getDefaultTextColor())
-                    .addSummaryShippingDetail(reviewAndConfirmPreferences.getShippingAmount(),
-                            provider.getSummaryShippingTitle(), provider.getDefaultTextColor())
-                    .addSummaryArrearsDetail(reviewAndConfirmPreferences.getArrearsAmount(), provider.getSummaryArrearTitle(),
-                            provider.getDefaultTextColor())
-                    .addSummaryTaxesDetail(reviewAndConfirmPreferences.getTaxesAmount(), provider.getSummaryTaxesTitle(),
-                            provider.getDefaultTextColor())
-                    .addSummaryDiscountDetail(getDiscountAmount(), provider.getSummaryDiscountsTitle(),
-                            provider.getDiscountTextColor())
-                    .setDisclaimerText(reviewAndConfirmPreferences.getDisclaimerText())
-                    .setDisclaimerColor(provider.getDisclaimerTextColor());
-
-            if (getChargesAmount().compareTo(BigDecimal.ZERO) > 0) {
-                summaryBuilder.addSummaryChargeDetail(getChargesAmount(), provider.getSummaryChargesTitle(),
-                        provider.getDefaultTextColor());
-            }
-        } else {
-            summaryBuilder.addSummaryProductDetail(props.summaryModel.getTotalAmount(), getItemTitle(),
-                    provider.getDefaultTextColor());
-
-            if (isValidAmount(props.summaryModel.getPayerCostTotalAmount()) &&
-                    getPayerCostChargesAmount().compareTo(BigDecimal.ZERO) > 0) {
-                summaryBuilder.addSummaryChargeDetail(getPayerCostChargesAmount(), provider.getSummaryChargesTitle(),
-                        provider.getDefaultTextColor());
-            }
-
-            if (!isEmpty(reviewAndConfirmPreferences.getDisclaimerText())) {
-                summaryBuilder.setDisclaimerText(reviewAndConfirmPreferences.getDisclaimerText())
-                        .setDisclaimerColor(provider.getDisclaimerTextColor());
-            }
-
-            if (isValidAmount(props.summaryModel.getCouponAmount())) {
-                summaryBuilder.addSummaryDiscountDetail(props.summaryModel.getCouponAmount(),
-                        provider.getSummaryDiscountsTitle(),
-                        provider.getDiscountTextColor());
-            }
-        }
-
-        return summaryBuilder.build();
-    }
-
-    private String getItemTitle() {
-        String title = props.summaryModel.title;
-
-        if (isNotEmpty(props.reviewAndConfirmPreferences.getProductTitle())) {
-            title = props.reviewAndConfirmPreferences.getProductTitle();
-        }
-
-        return title;
-    }
-
     @VisibleForTesting
     BigDecimal getChargesAmount() {
         ReviewAndConfirmPreferences reviewScreenPreference = props.reviewAndConfirmPreferences;
@@ -178,12 +104,6 @@ public class FullSummary extends Component<SummaryComponent.SummaryProps, Void> 
 
     private boolean isValidAmount(BigDecimal amount) {
         return amount != null && amount.compareTo(BigDecimal.ZERO) >= 0;
-    }
-
-    private boolean isValidTotalAmount() {
-        ReviewAndConfirmPreferences reviewScreenPreference = props.reviewAndConfirmPreferences;
-        BigDecimal totalAmountPreference = reviewScreenPreference.getTotalAmount();
-        return totalAmountPreference.compareTo(props.summaryModel.getTotalAmount()) == 0;
     }
 
     private boolean isEmptySummaryDetails() {

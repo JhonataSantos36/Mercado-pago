@@ -33,36 +33,6 @@ public class SummaryProviderImpl implements SummaryProvider {
     }
 
     @Override
-    public int getDefaultTextColor() {
-        return ContextCompat.getColor(context, R.color.mpsdk_summary_text_color);
-    }
-
-    @Override
-    public String getSummaryShippingTitle() {
-        return context.getString(R.string.mpsdk_review_summary_shipping);
-    }
-
-    @Override
-    public int getDiscountTextColor() {
-        return ContextCompat.getColor(context, R.color.mpsdk_summary_discount_color);
-    }
-
-    @Override
-    public String getSummaryArrearTitle() {
-        return context.getString(R.string.mpsdk_review_summary_arrear);
-    }
-
-    @Override
-    public String getSummaryTaxesTitle() {
-        return context.getString(R.string.mpsdk_review_summary_taxes);
-    }
-
-    @Override
-    public String getSummaryDiscountsTitle() {
-        return context.getString(R.string.mpsdk_review_summary_discounts);
-    }
-
-    @Override
     public int getDisclaimerTextColor() {
         int disclaimerTextColor;
 
