@@ -78,9 +78,9 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
 
     public CardVaultPresenter() {
         super();
-        this.mInstallmentsEnabled = true;
-        this.mDiscountEnabled = true;
-        this.mPaymentPreference = new PaymentPreference();
+        mInstallmentsEnabled = true;
+        mDiscountEnabled = true;
+        mPaymentPreference = new PaymentPreference();
     }
 
     public void initialize() {
@@ -97,35 +97,35 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
     }
 
     public void setPaymentRecovery(final PaymentRecovery paymentRecovery) {
-        this.mPaymentRecovery = paymentRecovery;
+        mPaymentRecovery = paymentRecovery;
     }
 
     public void setPaymentPreference(final PaymentPreference paymentPreference) {
-        this.mPaymentPreference = paymentPreference;
+        mPaymentPreference = paymentPreference;
     }
 
     public void setPaymentMethodList(final List<PaymentMethod> paymentMethodList) {
-        this.mPaymentMethodList = paymentMethodList;
+        mPaymentMethodList = paymentMethodList;
     }
 
     public void setSite(final Site site) {
-        this.mSite = site;
+        mSite = site;
     }
 
     public void setInstallmentsEnabled(final boolean installmentsEnabled) {
-        this.mInstallmentsEnabled = installmentsEnabled;
+        mInstallmentsEnabled = installmentsEnabled;
     }
 
     public void setCard(final Card card) {
-        this.mCard = card;
+        mCard = card;
     }
 
     public void setAmount(final BigDecimal amount) {
-        this.mAmount = amount;
+        mAmount = amount;
     }
 
     public void setFailureRecovery(final FailureRecovery failureRecovery) {
-        this.mFailureRecovery = failureRecovery;
+        mFailureRecovery = failureRecovery;
     }
 
     public Issuer getIssuer() {
@@ -189,11 +189,11 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
     }
 
     public void setESC(final String esc) {
-        this.mESC = esc;
+        mESC = esc;
     }
 
     public void setCardInfo(final CardInfo cardInfo) {
-        this.mCardInfo = cardInfo;
+        mCardInfo = cardInfo;
         if (mCardInfo == null) {
             mBin = "";
         } else {
@@ -202,15 +202,15 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
     }
 
     public void setPayerEmail(final String payerEmail) {
-        this.mPayerEmail = payerEmail;
+        mPayerEmail = payerEmail;
     }
 
     public String getPayerEmail() {
-        return this.mPayerEmail;
+        return mPayerEmail;
     }
 
     public void setDiscount(final Discount discount) {
-        this.mDiscount = discount;
+        mDiscount = discount;
     }
 
     public Discount getDiscount() {
@@ -218,27 +218,27 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
     }
 
     public void setDiscountEnabled(final boolean discountEnabled) {
-        this.mDiscountEnabled = discountEnabled;
+        mDiscountEnabled = discountEnabled;
     }
 
     public boolean getDiscountEnabled() {
-        return this.mDiscountEnabled;
+        return mDiscountEnabled;
     }
 
     public void setDiscountAdditionalInfo(final Map<String, String> discountAdditionalInfo) {
-        this.mDiscountAdditionalInfo = discountAdditionalInfo;
+        mDiscountAdditionalInfo = discountAdditionalInfo;
     }
 
     public Map<String, String> getDiscountAdditionalInfo() {
-        return this.mDiscountAdditionalInfo;
+        return mDiscountAdditionalInfo;
     }
 
     public void setInstallmentsReviewEnabled(final boolean installmentReviewEnabled) {
-        this.mInstallmentsReviewEnabled = installmentReviewEnabled;
+        mInstallmentsReviewEnabled = installmentReviewEnabled;
     }
 
     public Boolean getInstallmentsReviewEnabled() {
-        return this.mInstallmentsReviewEnabled;
+        return mInstallmentsReviewEnabled;
     }
 
     public CardInfo getCardInfo() {
@@ -250,23 +250,23 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
     }
 
     public void setMerchantBaseUrl(final String merchantBaseUrl) {
-        this.mMerchantBaseUrl = merchantBaseUrl;
+        mMerchantBaseUrl = merchantBaseUrl;
     }
 
     public String getMerchantBaseUrl() {
-        return this.mMerchantBaseUrl;
+        return mMerchantBaseUrl;
     }
 
     public void setMerchantDiscountBaseUrl(final String merchantDiscountUrl) {
-        this.mMerchantDiscountUrl = merchantDiscountUrl;
+        mMerchantDiscountUrl = merchantDiscountUrl;
     }
 
     public String getMerchantDiscountBaseUrl() {
-        return this.mMerchantDiscountUrl;
+        return mMerchantDiscountUrl;
     }
 
     public void setMerchantGetDiscountUri(final String merchantGetDiscountUri) {
-        this.mMerchantGetDiscountUri = merchantGetDiscountUri;
+        mMerchantGetDiscountUri = merchantGetDiscountUri;
     }
 
     public String getMerchantGetDiscountUri() {
@@ -274,15 +274,15 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
     }
 
     public void setDirectDiscountEnabled(final boolean directDiscountEnabled) {
-        this.mDirectDiscountEnabled = directDiscountEnabled;
+        mDirectDiscountEnabled = directDiscountEnabled;
     }
 
     public boolean getDirectDiscountEnabled() {
-        return this.mDirectDiscountEnabled;
+        return mDirectDiscountEnabled;
     }
 
     public void setAutomaticSelection(final boolean automaticSelection) {
-        this.mAutomaticSelection = automaticSelection;
+        mAutomaticSelection = automaticSelection;
     }
 
     public boolean getAutomaticSelection() {
@@ -536,7 +536,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
     }
 
     public void setPayerCostsList(final List<PayerCost> payerCostsList) {
-        this.mPayerCostsList = payerCostsList;
+        mPayerCostsList = payerCostsList;
     }
 
     private void setIssuersList(final List<Issuer> issuers) {

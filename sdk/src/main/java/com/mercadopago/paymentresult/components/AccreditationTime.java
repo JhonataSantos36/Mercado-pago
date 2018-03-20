@@ -49,14 +49,14 @@ public class AccreditationTime extends Component<AccreditationTime.Props, Void> 
         }
 
         public Props(@NonNull final Builder builder) {
-            this.accreditationMessage = builder.accreditationMessage;
-            this.accreditationComments = builder.accreditationComments;
+            accreditationMessage = builder.accreditationMessage;
+            accreditationComments = builder.accreditationComments;
         }
 
         public Builder toBuilder() {
             return new Props.Builder()
-                    .setAccreditationMessage(this.accreditationMessage)
-                    .setAccreditationComments(this.accreditationComments);
+                    .setAccreditationMessage(accreditationMessage)
+                    .setAccreditationComments(accreditationComments);
         }
 
         public static class Builder {

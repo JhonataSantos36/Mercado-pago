@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 public abstract class CompactComponent<Props, Actions> {
 
     protected Props props;
-    private Actions actions;
+    private final Actions actions;
 
     public CompactComponent() {
         this(null, null);
@@ -23,7 +23,7 @@ public abstract class CompactComponent<Props, Actions> {
     }
 
     public CompactComponent(final Props props, final Actions callBack) {
-        this.actions = callBack;
+        actions = callBack;
         this.props = props;
     }
 

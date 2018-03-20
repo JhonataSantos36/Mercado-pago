@@ -21,26 +21,26 @@ import java.math.BigDecimal;
 
 public class PayerCostColumn {
 
-    private String mSiteId;
-    private String mCurrencyId;
+    private final String mSiteId;
+    private final String mCurrencyId;
 
-    private Context mContext;
+    private final Context mContext;
     private View mView;
     private MPTextView mInstallmentsTextView;
     private MPTextView mZeroRateText;
     private MPTextView mTotalText;
 
-    private BigDecimal installmentsRate;
-    private BigDecimal payerCostTotalAmount;
-    private BigDecimal installmentsAmount;
-    private Integer installments;
+    private final BigDecimal installmentsRate;
+    private final BigDecimal payerCostTotalAmount;
+    private final BigDecimal installmentsAmount;
+    private final Integer installments;
 
     public PayerCostColumn(Context context, String currencyId, String siteId,
                            BigDecimal installmentsRate, Integer installments,
                            BigDecimal payerCostTotalAmount, BigDecimal installmentsAmount) {
-        this.mContext = context;
-        this.mCurrencyId = currencyId;
-        this.mSiteId = siteId;
+        mContext = context;
+        mCurrencyId = currencyId;
+        mSiteId = siteId;
         this.installmentsRate = installmentsRate;
         this.installments = installments;
         this.payerCostTotalAmount = payerCostTotalAmount;

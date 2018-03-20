@@ -17,7 +17,7 @@ import java.util.List;
 public class TrackingFormatter {
 
     private static final int MAX_LENGTH = 3000;
-    private static String internPrefix = ":";
+    private static final String internPrefix = ":";
     private static String externPrefix = "";
 
 

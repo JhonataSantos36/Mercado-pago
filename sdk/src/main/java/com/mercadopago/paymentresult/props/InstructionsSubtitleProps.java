@@ -15,12 +15,12 @@ public class InstructionsSubtitleProps {
     }
 
     public InstructionsSubtitleProps(@NonNull final Builder builder) {
-        this.subtitle = builder.subtitle;
+        subtitle = builder.subtitle;
     }
 
     public Builder toBuilder() {
         return new InstructionsSubtitleProps.Builder()
-                .setSubtitle(this.subtitle);
+                .setSubtitle(subtitle);
     }
 
     public static class Builder {

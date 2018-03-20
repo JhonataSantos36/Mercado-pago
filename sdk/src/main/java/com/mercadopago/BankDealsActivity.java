@@ -94,14 +94,14 @@ public class BankDealsActivity extends MercadoPagoActivity {
         try {
             Type listType = new TypeToken<List<BankDeal>>() {
             }.getType();
-            mBankDeals = JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("bankDeals"), listType);
+            mBankDeals = JsonUtil.getInstance().getGson().fromJson(getIntent().getStringExtra("bankDeals"), listType);
         } catch (Exception ex) {
             mBankDeals = null;
         }
     }
 
     private void initializeToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
+        mToolbar = findViewById(R.id.mpsdkToolbar);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);

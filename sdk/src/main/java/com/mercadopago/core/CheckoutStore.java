@@ -85,7 +85,8 @@ public class CheckoutStore {
         this.dataInitializationTask = dataInitializationTask;
     }
 
-    public @NonNull
+    @NonNull
+    public
     List<PaymentMethodPlugin> getPaymentMethodPluginList() {
         return paymentMethodPluginList;
     }
@@ -198,7 +199,7 @@ public class CheckoutStore {
     }
 
     public void addPaymentPlugins(@NonNull final PaymentProcessor paymentProcessor, @NonNull final String paymentMethod) {
-        this.paymentPlugins.put(paymentMethod, paymentProcessor);
+        paymentPlugins.put(paymentMethod, paymentProcessor);
     }
 
     public PaymentData getPaymentData() {

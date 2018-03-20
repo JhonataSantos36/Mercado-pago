@@ -11,10 +11,10 @@ import com.mercadopago.callbacks.card.TicketIdentificationNumberEditTextCallback
 
 public class TicketIdentificationNumberTextWatcher implements TextWatcher {
 
-    private TicketIdentificationNumberEditTextCallback mEditTextCallback;
+    private final TicketIdentificationNumberEditTextCallback mEditTextCallback;
 
     public TicketIdentificationNumberTextWatcher(TicketIdentificationNumberEditTextCallback editTextCallback) {
-        this.mEditTextCallback = editTextCallback;
+        mEditTextCallback = editTextCallback;
     }
 
     @Override

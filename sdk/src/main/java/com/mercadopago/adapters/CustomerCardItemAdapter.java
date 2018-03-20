@@ -23,9 +23,9 @@ public class CustomerCardItemAdapter extends RecyclerView.Adapter<CustomerCardIt
     private static final int ITEM_TYPE_CARD = 0;
     private static final int ITEM_TYPE_MESSAGE = 1;
 
-    private List<Card> mCards;
-    private String mActionMessage;
-    private OnSelectedCallback<Card> mOnSelectedCallback;
+    private final List<Card> mCards;
+    private final String mActionMessage;
+    private final OnSelectedCallback<Card> mOnSelectedCallback;
 
     public CustomerCardItemAdapter(List<Card> cards, String actionMessage, OnSelectedCallback<Card> onSelectedCallback) {
         mCards = cards;

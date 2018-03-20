@@ -6,7 +6,7 @@ public class FlowHandler {
     private static FlowHandler INSTANCE;
     private String flowId;
 
-    synchronized public static FlowHandler getInstance() {
+    public static synchronized FlowHandler getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new FlowHandler();
         }

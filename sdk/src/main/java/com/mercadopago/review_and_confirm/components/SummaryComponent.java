@@ -25,7 +25,7 @@ public class SummaryComponent extends Component<SummaryComponent.SummaryProps, V
         }
     }
 
-    private SummaryProvider provider;
+    private final SummaryProvider provider;
 
     static {
         RendererFactory.register(SummaryComponent.class, SummaryRenderer.class);

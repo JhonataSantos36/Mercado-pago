@@ -17,17 +17,17 @@ import java.util.List;
 
 public class CardNumberTextWatcher implements TextWatcher {
 
-    private PaymentMethodGuessingController mController;
-    private PaymentMethodSelectionCallback mPaymentSelectionCallback;
-    private CardNumberEditTextCallback mEditTextCallback;
+    private final PaymentMethodGuessingController mController;
+    private final PaymentMethodSelectionCallback mPaymentSelectionCallback;
+    private final CardNumberEditTextCallback mEditTextCallback;
     private String mBin;
 
     public CardNumberTextWatcher(PaymentMethodGuessingController controller,
                                  PaymentMethodSelectionCallback paymentSelectionCallback,
                                  CardNumberEditTextCallback editTextCallback) {
-        this.mController = controller;
-        this.mPaymentSelectionCallback = paymentSelectionCallback;
-        this.mEditTextCallback = editTextCallback;
+        mController = controller;
+        mPaymentSelectionCallback = paymentSelectionCallback;
+        mEditTextCallback = editTextCallback;
     }
 
     @Override

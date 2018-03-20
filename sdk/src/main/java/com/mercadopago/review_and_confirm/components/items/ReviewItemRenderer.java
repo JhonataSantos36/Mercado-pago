@@ -67,7 +67,7 @@ public class ReviewItemRenderer extends Renderer<ReviewItem> {
     }
 
     private void drawItemFromResource(final ImageView itemImage,
-        final @DrawableRes int resource) {
+        @DrawableRes final int resource) {
         itemImage.setImageResource(resource);
     }
 

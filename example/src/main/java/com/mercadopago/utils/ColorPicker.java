@@ -82,7 +82,7 @@ public class ColorPicker extends View {
     /**
      * Currently selected color
      */
-    private float[] colorHSV = new float[]{0f, 0f, 1f};
+    private float[] colorHSV = {0f, 0f, 1f};
 
     public ColorPicker(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -160,7 +160,7 @@ public class ColorPicker extends View {
 
         // drawing value slider
 
-        float[] hsv = new float[]{colorHSV[0], colorHSV[1], 1f};
+        float[] hsv = {colorHSV[0], colorHSV[1], 1f};
 
         SweepGradient sweepGradient = new SweepGradient(centerX, centerY, new int[]{Color.BLACK, Color.HSVToColor(hsv), Color.WHITE}, null);
         sweepGradient.setLocalMatrix(gradientRotationMatrix);
@@ -239,10 +239,10 @@ public class ColorPicker extends View {
         int centerX = width / 2;
         int centerY = height / 2;
 
-        innerPadding = (int) (paramInnerPadding * width / 100);
-        outerPadding = (int) (paramOuterPadding * width / 100);
-        arrowPointerSize = (int) (paramArrowPointerSize * width / 100);
-        valueSliderWidth = (int) (paramValueSliderWidth * width / 100);
+        innerPadding = paramInnerPadding * width / 100;
+        outerPadding = paramOuterPadding * width / 100;
+        arrowPointerSize = paramArrowPointerSize * width / 100;
+        valueSliderWidth = paramValueSliderWidth * width / 100;
 
         outerWheelRadius = width / 2 - outerPadding - arrowPointerSize;
         innerWheelRadius = outerWheelRadius - valueSliderWidth;
@@ -271,7 +271,7 @@ public class ColorPicker extends View {
         int colorCount = 12;
         int colorAngleStep = 360 / 12;
         int colors[] = new int[colorCount + 1];
-        float hsv[] = new float[]{0f, 1f, 1f};
+        float hsv[] = {0f, 1f, 1f};
         for (int i = 0; i < colors.length; i++) {
             hsv[0] = (i * colorAngleStep + 180) % 360;
             colors[i] = Color.HSVToColor(hsv);

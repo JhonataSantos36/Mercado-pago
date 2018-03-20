@@ -13,7 +13,7 @@ import java.util.Locale;
 
 public class PaymentMethod extends Component<PaymentMethodProps, Void> {
 
-    private PaymentMethodProvider provider;
+    private final PaymentMethodProvider provider;
 
     public PaymentMethod(@NonNull final PaymentMethodProps props,
                          @NonNull final ActionDispatcher dispatcher,

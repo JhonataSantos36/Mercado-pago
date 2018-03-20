@@ -19,14 +19,14 @@ public class InstructionsProps {
     }
 
     public InstructionsProps(@NonNull final Builder builder) {
-        this.instruction = builder.instruction;
-        this.processingMode = builder.processingMode;
+        instruction = builder.instruction;
+        processingMode = builder.processingMode;
     }
 
     public Builder toBuilder() {
         return new Builder()
-                .setInstruction(this.instruction)
-                .setProcessingMode(this.processingMode);
+                .setInstruction(instruction)
+                .setProcessingMode(processingMode);
     }
 
     public static class Builder {

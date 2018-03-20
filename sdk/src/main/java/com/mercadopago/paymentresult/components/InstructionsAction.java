@@ -25,12 +25,12 @@ public class InstructionsAction extends Component<InstructionsAction.Prop, Void>
         }
 
         public Prop(@NonNull final Builder builder) {
-            this.instructionActionInfo = builder.instructionActionInfo;
+            instructionActionInfo = builder.instructionActionInfo;
         }
 
         public Builder toBuilder() {
             return new Prop.Builder()
-                    .setInstructionActionInfo(this.instructionActionInfo);
+                    .setInstructionActionInfo(instructionActionInfo);
         }
 
         public static final class Builder {

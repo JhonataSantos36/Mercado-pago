@@ -540,11 +540,11 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     public void setPayerAccessToken(String payerAccessToken) {
-        this.mPayerAccessToken = payerAccessToken;
+        mPayerAccessToken = payerAccessToken;
     }
 
     public void setDiscount(Discount discount) {
-        this.mDiscount = discount;
+        mDiscount = discount;
     }
 
     public Discount getDiscount() {
@@ -552,7 +552,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     public void setPayerEmail(String payerEmail) {
-        this.mPayerEmail = payerEmail;
+        mPayerEmail = payerEmail;
     }
 
     public String getPayerEmail() {
@@ -560,35 +560,35 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     public void setInstallmentsReviewEnabled(Boolean installmentReviewEnabled) {
-        this.mInstallmentsReviewEnabled = installmentReviewEnabled;
+        mInstallmentsReviewEnabled = installmentReviewEnabled;
     }
 
     public Boolean getInstallmentsReviewEnabled() {
-        return this.mInstallmentsReviewEnabled;
+        return mInstallmentsReviewEnabled;
     }
 
     public void setDiscountEnabled(Boolean discountEnabled) {
-        this.mDiscountEnabled = discountEnabled;
+        mDiscountEnabled = discountEnabled;
     }
 
     public void setDirectDiscountEnabled(Boolean directDiscountEnabled) {
-        this.mDirectDiscountEnabled = directDiscountEnabled;
+        mDirectDiscountEnabled = directDiscountEnabled;
     }
 
     public Boolean getDirectDiscountEnabled() {
-        return this.mDirectDiscountEnabled;
+        return mDirectDiscountEnabled;
     }
 
     public Boolean getDiscountEnabled() {
-        return this.mDiscountEnabled;
+        return mDiscountEnabled;
     }
 
     public void setMaxSavedCards(int maxSavedCards) {
-        this.mMaxSavedCards = maxSavedCards;
+        mMaxSavedCards = maxSavedCards;
     }
 
     public void setShowAllSavedCardsEnabled(boolean showAll) {
-        this.mShowAllSavedCardsEnabled = showAll;
+        mShowAllSavedCardsEnabled = showAll;
     }
 
     public void recoverFromFailure() {

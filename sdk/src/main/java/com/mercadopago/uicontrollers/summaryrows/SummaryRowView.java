@@ -17,20 +17,20 @@ import com.mercadopago.util.CurrenciesUtil;
 
 public class SummaryRowView implements SummaryRowViewController {
 
-    private Context mContext;
+    private final Context mContext;
     private View mView;
 
     private MPTextView mSummaryLableText;
     private MPTextView mSummaryAmountText;
 
     public SummaryRowView(Context context) {
-        this.mContext = context;
+        mContext = context;
     }
 
     @Override
     public void initializeControls() {
-        mSummaryLableText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryLabelText);
-        mSummaryAmountText = (MPTextView) mView.findViewById(R.id.mpsdkReviewSummaryAmountText);
+        mSummaryLableText = mView.findViewById(R.id.mpsdkReviewSummaryLabelText);
+        mSummaryAmountText = mView.findViewById(R.id.mpsdkReviewSummaryAmountText);
     }
 
     @Override

@@ -41,16 +41,16 @@ public class SummaryModel implements Parcelable {
                         String title) {
 
         this.amount = amount.toString();
-        this.currencyId = site.getCurrencyId();
-        this.siteId = site.getId();
-        this.paymentTypeId = paymentMethod.getPaymentTypeId();
-        this.payerCostTotalAmount = payerCost != null && payerCost.getTotalAmount() != null ? payerCost.getTotalAmount().toString() : null;
-        this.installments = payerCost != null && payerCost.getInstallments() != null ? payerCost.getInstallments().toString() : null;
-        this.cftPercent = payerCost != null && payerCost.getCFTPercent() != null ? payerCost.getCFTPercent() : null;
-        this.couponAmount = discount != null ? discount.getCouponAmount().toString() : null;
-        this.hasPercentOff = discount != null ? discount.hasPercentOff() : false;
-        this.installmentsRate = payerCost != null && payerCost.getInstallmentRate() != null ? payerCost.getInstallmentRate().toString() : null;
-        this.installmentAmount = payerCost != null && payerCost.getInstallmentAmount() != null ? payerCost.getInstallmentAmount().toString() : null;
+        currencyId = site.getCurrencyId();
+        siteId = site.getId();
+        paymentTypeId = paymentMethod.getPaymentTypeId();
+        payerCostTotalAmount = payerCost != null && payerCost.getTotalAmount() != null ? payerCost.getTotalAmount().toString() : null;
+        installments = payerCost != null && payerCost.getInstallments() != null ? payerCost.getInstallments().toString() : null;
+        cftPercent = payerCost != null && payerCost.getCFTPercent() != null ? payerCost.getCFTPercent() : null;
+        couponAmount = discount != null ? discount.getCouponAmount().toString() : null;
+        hasPercentOff = discount != null ? discount.hasPercentOff() : false;
+        installmentsRate = payerCost != null && payerCost.getInstallmentRate() != null ? payerCost.getInstallmentRate().toString() : null;
+        installmentAmount = payerCost != null && payerCost.getInstallmentAmount() != null ? payerCost.getInstallmentAmount().toString() : null;
         this.title = title;
     }
 
@@ -103,27 +103,27 @@ public class SummaryModel implements Parcelable {
     }
 
     public BigDecimal getTotalAmount() {
-        return new BigDecimal(this.amount);
+        return new BigDecimal(amount);
     }
 
     public BigDecimal getPayerCostTotalAmount() {
-        return this.payerCostTotalAmount != null ? new BigDecimal(this.payerCostTotalAmount) : null;
+        return payerCostTotalAmount != null ? new BigDecimal(payerCostTotalAmount) : null;
     }
 
     public BigDecimal getCouponAmount() {
-        return this.couponAmount != null ? new BigDecimal(this.couponAmount) : null;
+        return couponAmount != null ? new BigDecimal(couponAmount) : null;
     }
 
     public BigDecimal getInstallmentsRate() {
-        return this.installmentsRate != null ? new BigDecimal(this.installmentsRate) : null;
+        return installmentsRate != null ? new BigDecimal(installmentsRate) : null;
     }
 
     public BigDecimal getInstallmentAmount() {
-        return this.installmentAmount != null ? new BigDecimal(this.installmentAmount) : null;
+        return installmentAmount != null ? new BigDecimal(installmentAmount) : null;
     }
 
     public Integer getInstallments() {
-        return this.installments != null ? Integer.valueOf(this.installments) : null;
+        return installments != null ? Integer.valueOf(installments) : null;
     }
 
     public boolean hasMultipleInstallments() {

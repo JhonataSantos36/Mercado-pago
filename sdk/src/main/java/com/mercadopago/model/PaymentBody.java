@@ -97,30 +97,30 @@ public class PaymentBody {
     }
 
     public Boolean getBinaryMode() {
-        return this.binaryMode;
+        return binaryMode;
     }
 
     public String getEmail() {
-        return this.email;
+        return email;
     }
 
     public String getPublicKey() {
-        return this.publicKey;
+        return publicKey;
     }
 
     public Payer getPayer() {
-        return this.payer;
+        return payer;
     }
 
     public String getCouponCode() {
-        return this.couponCode;
+        return couponCode;
     }
 
     public Float getCouponAmount() {
-        return this.couponAmount;
+        return couponAmount;
     }
 
     public Integer getCampaignId() {
-        return this.campaignId;
+        return campaignId;
     }
 }

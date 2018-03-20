@@ -46,7 +46,7 @@ public class ReviewItemsRenderer extends Renderer<ReviewItems> {
     }
 
     @NonNull
-    private LinearLayout createMainLayout(final @NonNull Context context) {
+    private LinearLayout createMainLayout(@NonNull final Context context) {
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -54,7 +54,7 @@ public class ReviewItemsRenderer extends Renderer<ReviewItems> {
         return linearLayout;
     }
 
-    private void addReviewItem(final @NonNull ReviewItem reviewItem,
+    private void addReviewItem(@NonNull final ReviewItem reviewItem,
         final ViewGroup container) {
         Renderer renderer = RendererFactory.create(container.getContext(), reviewItem);
         renderer.render(container);

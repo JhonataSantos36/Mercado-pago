@@ -38,7 +38,7 @@ public class BusinessPaymentRenderer extends Renderer<BusinessPaymentContainer> 
         return scrollView;
     }
 
-    private void renderFooter(final @NonNull BusinessPaymentContainer component,
+    private void renderFooter(@NonNull final BusinessPaymentContainer component,
                               final LinearLayout linearLayout,
                               final ScrollView scrollView,
                               final View header) {
@@ -97,7 +97,7 @@ public class BusinessPaymentRenderer extends Renderer<BusinessPaymentContainer> 
         errorDescription.setText(help);
     }
 
-    private View addHeader(final @NonNull BusinessPaymentContainer component, final @NonNull Context context,
+    private View addHeader(@NonNull final BusinessPaymentContainer component, @NonNull final Context context,
                            final LinearLayout linearLayout) {
         Header header = new Header(HeaderProps.from(component.props, context), component.getDispatcher());
         View render = RendererFactory.create(context, header).render(linearLayout);
@@ -105,7 +105,7 @@ public class BusinessPaymentRenderer extends Renderer<BusinessPaymentContainer> 
     }
 
     @NonNull
-    private ScrollView createScrollContainer(final @NonNull Context context, final LinearLayout linearLayout) {
+    private ScrollView createScrollContainer(@NonNull final Context context, final LinearLayout linearLayout) {
         ScrollView scrollView = new ScrollView(context);
         scrollView.setLayoutParams(
                 new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -118,7 +118,7 @@ public class BusinessPaymentRenderer extends Renderer<BusinessPaymentContainer> 
     }
 
     @NonNull
-    private LinearLayout createMainContainer(final @NonNull Context context) {
+    private LinearLayout createMainContainer(@NonNull final Context context) {
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setBackgroundColor(context.getResources().getColor(R.color.mpsdk_white));

@@ -105,21 +105,21 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
         try {
             Type listType = new TypeToken<List<Issuer>>() {
             }.getType();
-            issuers = JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("issuers"), listType);
+            issuers = JsonUtil.getInstance().getGson().fromJson(getIntent().getStringExtra("issuers"), listType);
         } catch (Exception ex) {
             issuers = null;
         }
 
-        mPresenter.setPaymentMethod(JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class));
-        mPresenter.setCardInfo(JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("cardInfo"), CardInfo.class));
+        mPresenter.setPaymentMethod(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentMethod"), PaymentMethod.class));
+        mPresenter.setCardInfo(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("cardInfo"), CardInfo.class));
         mPresenter.setIssuers(issuers);
     }
 
     public void analyzeLowRes() {
         if (mPresenter.isRequiredCardDrawn()) {
-            this.mLowResActive = ScaleUtil.isLowRes(this);
+            mLowResActive = ScaleUtil.isLowRes(this);
         } else {
-            this.mLowResActive = true;
+            mLowResActive = true;
         }
     }
 
@@ -153,8 +153,8 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
     }
 
     private void initializeLowResControls() {
-        mLowResToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
-        mLowResTitleToolbar = (MPTextView) findViewById(R.id.mpsdkTitle);
+        mLowResToolbar = findViewById(R.id.mpsdkRegularToolbar);
+        mLowResTitleToolbar = findViewById(R.id.mpsdkTitle);
 
         if (CheckoutTimer.getInstance().isTimerEnabled()) {
             Toolbar.LayoutParams marginParams = new Toolbar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -168,10 +168,10 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
     }
 
     private void initializeNormalControls() {
-        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.mpsdkCollapsingToolbar);
-        mAppBar = (AppBarLayout) findViewById(R.id.mpsdkIssuersAppBar);
-        mCardContainer = (FrameLayout) findViewById(R.id.mpsdkActivityCardContainer);
-        mNormalToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
+        mCollapsingToolbar = findViewById(R.id.mpsdkCollapsingToolbar);
+        mAppBar = findViewById(R.id.mpsdkIssuersAppBar);
+        mCardContainer = findViewById(R.id.mpsdkActivityCardContainer);
+        mNormalToolbar = findViewById(R.id.mpsdkRegularToolbar);
         mNormalToolbar.setVisibility(View.VISIBLE);
     }
 
@@ -337,7 +337,7 @@ public class IssuersActivity extends MercadoPagoBaseActivity implements IssuersA
     @Override
     public void onFinish() {
         setResult(MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE);
-        this.finish();
+        finish();
     }
 
     @Override

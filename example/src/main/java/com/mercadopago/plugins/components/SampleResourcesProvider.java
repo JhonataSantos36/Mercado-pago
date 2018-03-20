@@ -6,7 +6,7 @@ import com.mercadopago.example.R;
 
 public class SampleResourcesProvider implements SampleResources {
 
-    private Context context;
+    private final Context context;
 
     public SampleResourcesProvider(Context context) {
         this.context = context;

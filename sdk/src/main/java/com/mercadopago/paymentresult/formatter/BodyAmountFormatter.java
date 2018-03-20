@@ -23,7 +23,7 @@ public class BodyAmountFormatter extends AmountFormat {
         String wholeNumber = getWholeNumber(formattedAmount);
         String totalAmount;
 
-        if (decimals != null && decimals.equals("00")) {
+        if ("00".equals(decimals)) {
             totalAmount = wholeNumber;
         } else {
             totalAmount = formattedAmount;

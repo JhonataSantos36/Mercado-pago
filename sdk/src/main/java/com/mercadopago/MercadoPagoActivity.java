@@ -88,7 +88,7 @@ public abstract class MercadoPagoActivity extends MercadoPagoBaseActivity {
     }
 
     public void setFailureRecovery(FailureRecovery failureRecovery) {
-        this.mFailureRecovery = failureRecovery;
+        mFailureRecovery = failureRecovery;
     }
 
     protected void recoverFromFailure() {

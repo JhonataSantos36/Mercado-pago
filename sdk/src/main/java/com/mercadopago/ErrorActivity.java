@@ -56,8 +56,8 @@ public class ErrorActivity extends MercadoPagoBaseActivity {
     }
 
     private void getActivityParameters() {
-        this.mMercadoPagoError = JsonUtil.getInstance().fromJson(getIntent().getStringExtra(ErrorUtil.ERROR_EXTRA_KEY), MercadoPagoError.class);
-        this.mPublicKey = getIntent().getStringExtra(ErrorUtil.PUBLIC_KEY_EXTRA);
+        mMercadoPagoError = JsonUtil.getInstance().fromJson(getIntent().getStringExtra(ErrorUtil.ERROR_EXTRA_KEY), MercadoPagoError.class);
+        mPublicKey = getIntent().getStringExtra(ErrorUtil.PUBLIC_KEY_EXTRA);
     }
 
     private void trackScreen() {
@@ -94,10 +94,10 @@ public class ErrorActivity extends MercadoPagoBaseActivity {
     }
 
     private void initializeControls() {
-        this.mErrorMessageTextView = (TextView) findViewById(R.id.mpsdkErrorMessage);
-        this.mRetryView = findViewById(R.id.mpsdkErrorRetry);
-        this.mExit = findViewById(R.id.mpsdkExit);
-        this.mExit.setOnClickListener(new View.OnClickListener() {
+        mErrorMessageTextView = findViewById(R.id.mpsdkErrorMessage);
+        mRetryView = findViewById(R.id.mpsdkErrorRetry);
+        mExit = findViewById(R.id.mpsdkExit);
+        mExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -113,7 +113,7 @@ public class ErrorActivity extends MercadoPagoBaseActivity {
             message = mMercadoPagoError.getMessage();
         }
 
-        this.mErrorMessageTextView.setText(message);
+        mErrorMessageTextView.setText(message);
 
         if (mMercadoPagoError.isRecoverable()) {
             mRetryView.setOnClickListener(new View.OnClickListener() {

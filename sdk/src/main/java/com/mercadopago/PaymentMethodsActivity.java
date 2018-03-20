@@ -62,15 +62,15 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
         PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         mPresenter.setPaymentPreference(paymentPreference);
 
-        Boolean showBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
+        Boolean showBankDeals = getIntent().getBooleanExtra("showBankDeals", true);
         mPresenter.setShowBankDeals(showBankDeals);
 
-        if (this.getIntent().getStringExtra("supportedPaymentTypes") != null) {
+        if (getIntent().getStringExtra("supportedPaymentTypes") != null) {
             Gson gson = new Gson();
             Type listType = new TypeToken<List<String>>() {
             }.getType();
 
-            List<String> supportedPaymentTypes = gson.fromJson(this.getIntent().getStringExtra("supportedPaymentTypes"), listType);
+            List<String> supportedPaymentTypes = gson.fromJson(getIntent().getStringExtra("supportedPaymentTypes"), listType);
             mPresenter.setSupportedPaymentTypes(supportedPaymentTypes);
         }
     }
@@ -121,6 +121,7 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
         });
     }
 
+    @Override
     public void onBackPressed() {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("backButtonPressed", true);

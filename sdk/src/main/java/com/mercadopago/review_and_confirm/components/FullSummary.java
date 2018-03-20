@@ -20,7 +20,7 @@ import static com.mercadopago.util.TextUtils.isNotEmpty;
 
 public class FullSummary extends Component<SummaryComponent.SummaryProps, Void> {
 
-    private SummaryProvider provider;
+    private final SummaryProvider provider;
 
     static {
         RendererFactory.register(FullSummary.class, FullSummaryRenderer.class);

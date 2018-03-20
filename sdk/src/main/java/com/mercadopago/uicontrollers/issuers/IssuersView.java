@@ -18,13 +18,13 @@ public class IssuersView implements IssuersViewController {
 
     public static final String CARD_IMAGE_PREFIX = "mpsdk_issuer_";
 
-    private Context mContext;
+    private final Context mContext;
     private View mView;
     private ImageView mIssuerImageView;
     private MPTextView mIssuerTextView;
 
     public IssuersView(Context context) {
-        this.mContext = context;
+        mContext = context;
     }
 
     @Override

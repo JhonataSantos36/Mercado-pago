@@ -16,20 +16,20 @@ import com.mercadopago.tracking.tracker.MPTracker;
 
 public class MPTrackingContext {
 
-    private String publicKey;
-    private Context context;
+    private final String publicKey;
+    private final Context context;
     private AppInformation appInformation;
-    private DeviceInfo deviceInfo;
-    private String trackingStrategy;
+    private final DeviceInfo deviceInfo;
+    private final String trackingStrategy;
 
     private MPTrackingContext(Builder builder) {
-        this.context = builder.context;
-        this.deviceInfo = initializeDeviceInfo();
-        this.trackingStrategy = builder.trackingStrategy;
-        this.publicKey = builder.publicKey;
+        context = builder.context;
+        deviceInfo = initializeDeviceInfo();
+        trackingStrategy = builder.trackingStrategy;
+        publicKey = builder.publicKey;
 
         if (!builder.publicKey.isEmpty() && builder.version != null) {
-            this.appInformation = initializeAppInformation(builder.version);
+            appInformation = initializeAppInformation(builder.version);
         }
     }
 
@@ -45,10 +45,10 @@ public class MPTrackingContext {
         return new DeviceInfo.Builder()
                 .setModel(Build.MODEL)
                 .setOS("android")
-                .setUuid(Fingerprint.getAndroidId(this.context))
+                .setUuid(Fingerprint.getAndroidId(context))
                 .setSystemVersion(Fingerprint.getDeviceSystemVersion())
-                .setScreenSize(Fingerprint.getDeviceResolution(this.context))
-                .setResolution(String.valueOf(Fingerprint.getDeviceScreenDensity(this.context)))
+                .setScreenSize(Fingerprint.getDeviceResolution(context))
+                .setResolution(String.valueOf(Fingerprint.getDeviceScreenDensity(context)))
                 .build();
     }
 
@@ -61,7 +61,7 @@ public class MPTrackingContext {
     }
 
     public static class Builder {
-        private Context context;
+        private final Context context;
         private String publicKey;
         private String version;
         private String trackingStrategy;

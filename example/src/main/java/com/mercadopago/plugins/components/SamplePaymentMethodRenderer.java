@@ -46,6 +46,7 @@ public class SamplePaymentMethodRenderer extends PluginRenderer<SamplePaymentMet
         });
 
         passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
                     final EditText editText = view.findViewById(R.id.password);

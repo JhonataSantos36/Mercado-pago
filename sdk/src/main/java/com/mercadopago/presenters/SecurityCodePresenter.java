@@ -47,23 +47,23 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
 
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.mPaymentMethod = paymentMethod;
+        mPaymentMethod = paymentMethod;
     }
 
     public void setToken(Token token) {
-        this.mToken = token;
+        mToken = token;
     }
 
     public void setCard(Card card) {
-        this.mCard = card;
+        mCard = card;
     }
 
     public void setCardInfo(CardInfo cardInfo) {
-        this.mCardInfo = cardInfo;
+        mCardInfo = cardInfo;
     }
 
     public void setPaymentRecovery(PaymentRecovery paymentRecovery) {
-        this.mPaymentRecovery = paymentRecovery;
+        mPaymentRecovery = paymentRecovery;
     }
 
     public CardInfo getCardInfo() {
@@ -71,7 +71,7 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
     }
 
     private void setFailureRecovery(FailureRecovery failureRecovery) {
-        this.mFailureRecovery = failureRecovery;
+        mFailureRecovery = failureRecovery;
     }
 
     public boolean isCardInfoAvailable() {
@@ -80,27 +80,27 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
 
 
     public PaymentMethod getPaymentMethod() {
-        return this.mPaymentMethod;
+        return mPaymentMethod;
     }
 
     public Token getToken() {
-        return this.mToken;
+        return mToken;
     }
 
     public Card getCard() {
-        return this.mCard;
+        return mCard;
     }
 
     public int getSecurityCodeLength() {
-        return this.mSecurityCodeLength;
+        return mSecurityCodeLength;
     }
 
     public String getSecurityCodeLocation() {
-        return this.mSecurityCodeLocation;
+        return mSecurityCodeLocation;
     }
 
     public int getCardNumberLength() {
-        return this.mCardNumberLength;
+        return mCardNumberLength;
     }
 
     public void validate() throws IllegalStateException {
@@ -163,7 +163,7 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
     }
 
     public void saveSecurityCode(String securityCode) {
-        this.mSecurityCode = securityCode;
+        mSecurityCode = securityCode;
     }
 
     public void validateSecurityCodeInput() {

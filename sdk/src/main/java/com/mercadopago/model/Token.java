@@ -28,6 +28,7 @@ public class Token implements CardInformation {
     private Cardholder cardholder;
     private String esc;
 
+    @Override
     public Integer getSecurityCodeLength() {
         return securityCodeLength;
     }
@@ -36,6 +37,7 @@ public class Token implements CardInformation {
         this.securityCodeLength = securityCodeLength;
     }
 
+    @Override
     public Integer getExpirationMonth() {
         return expirationMonth;
     }
@@ -44,6 +46,7 @@ public class Token implements CardInformation {
         this.expirationMonth = expirationMonth;
     }
 
+    @Override
     public Integer getExpirationYear() {
         return expirationYear;
     }
@@ -140,6 +143,7 @@ public class Token implements CardInformation {
         this.publicKey = publicKey;
     }
 
+    @Override
     public String getFirstSixDigits() {
         return firstSixDigits;
     }
@@ -148,6 +152,7 @@ public class Token implements CardInformation {
         this.firstSixDigits = firstSixDigits;
     }
 
+    @Override
     public String getLastFourDigits() {
         return lastFourDigits;
     }
@@ -156,6 +161,7 @@ public class Token implements CardInformation {
         this.lastFourDigits = lastFourDigits;
     }
 
+    @Override
     public Cardholder getCardHolder() {
         return cardholder;
     }

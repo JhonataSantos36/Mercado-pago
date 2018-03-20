@@ -9,20 +9,20 @@ public class PaymentResult {
     public static final String SELECT_OTHER_PAYMENT_METHOD = "select_other_payment_method";
     public static final String RECOVER_PAYMENT = "recover_payment";
 
-    private PaymentData paymentData;
-    private Long paymentId;
-    private String paymentStatus;
-    private String paymentStatusDetail;
-    private String payerEmail;
-    private String statementDescription;
+    private final PaymentData paymentData;
+    private final Long paymentId;
+    private final String paymentStatus;
+    private final String paymentStatusDetail;
+    private final String payerEmail;
+    private final String statementDescription;
 
     private PaymentResult(Builder builder) {
-        this.paymentData = builder.paymentData;
-        this.paymentId = builder.paymentId;
-        this.paymentStatus = builder.paymentStatus;
-        this.paymentStatusDetail = builder.paymentStatusDetail;
-        this.payerEmail = builder.payerEmail;
-        this.statementDescription = builder.statementDescription;
+        paymentData = builder.paymentData;
+        paymentId = builder.paymentId;
+        paymentStatus = builder.paymentStatus;
+        paymentStatusDetail = builder.paymentStatusDetail;
+        payerEmail = builder.payerEmail;
+        statementDescription = builder.statementDescription;
     }
 
     public PaymentData getPaymentData() {
@@ -94,7 +94,7 @@ public class PaymentResult {
         }
 
         public Builder setPaymentStatusDetail(String statusDetail) {
-            this.paymentStatusDetail = statusDetail;
+            paymentStatusDetail = statusDetail;
             return this;
         }
 

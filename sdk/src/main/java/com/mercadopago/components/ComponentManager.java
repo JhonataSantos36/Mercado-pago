@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 public class ComponentManager<T> implements ActionDispatcher, MutatorPropsListener<T> {
 
-    private Activity activity;
+    private final Activity activity;
     private Component root;
     private ActionsListener actionsListener;
     private Renderer renderer;

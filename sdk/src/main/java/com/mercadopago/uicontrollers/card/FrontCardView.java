@@ -49,7 +49,7 @@ public class FrontCardView {
     public static final int EDITING_TEXT_VIEW_ALPHA = 255;
 
 
-    private Context mContext;
+    private final Context mContext;
     private View mView;
     private String mMode;
     private String mSize;
@@ -76,27 +76,27 @@ public class FrontCardView {
     private Animation mAnimFadeIn;
 
     public FrontCardView(Context context, String mode) {
-        this.mContext = context;
-        this.mMode = mode;
-        this.mCardNumberLength = CARD_NUMBER_MAX_LENGTH;
-        this.mSecurityCodeLength = CARD_SECURITY_CODE_DEFAULT_LENGTH;
+        mContext = context;
+        mMode = mode;
+        mCardNumberLength = CARD_NUMBER_MAX_LENGTH;
+        mSecurityCodeLength = CARD_SECURITY_CODE_DEFAULT_LENGTH;
     }
 
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.mPaymentMethod = paymentMethod;
+        mPaymentMethod = paymentMethod;
     }
 
     public void setSize(String size) {
-        this.mSize = size;
+        mSize = size;
     }
 
     public void setCardNumberLength(int cardNumberLength) {
-        this.mCardNumberLength = cardNumberLength;
+        mCardNumberLength = cardNumberLength;
     }
 
     public void setSecurityCodeLength(int securityCodeLength) {
-        this.mSecurityCodeLength = securityCodeLength;
+        mSecurityCodeLength = securityCodeLength;
     }
 
     public void hasToShowSecurityCode(boolean show) {
@@ -108,7 +108,7 @@ public class FrontCardView {
     }
 
     public void setLastFourDigits(String lastFourDigits) {
-        this.mLastFourDigits = lastFourDigits;
+        mLastFourDigits = lastFourDigits;
     }
 
     public void initializeControls() {

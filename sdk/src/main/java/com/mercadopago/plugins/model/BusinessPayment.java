@@ -22,13 +22,13 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
     private final ExitAction exitActionSecondary;
 
     private BusinessPayment(Builder builder) {
-        this.help = builder.help;
-        this.title = builder.title;
-        this.status = builder.status;
-        this.iconId = builder.iconId;
-        this.hasPaymentMethod = builder.hasPaymentMethod;
-        this.exitActionPrimary = builder.buttonPrimary;
-        this.exitActionSecondary = builder.buttonSecondary;
+        help = builder.help;
+        title = builder.title;
+        status = builder.status;
+        iconId = builder.iconId;
+        hasPaymentMethod = builder.hasPaymentMethod;
+        exitActionPrimary = builder.buttonPrimary;
+        exitActionSecondary = builder.buttonSecondary;
     }
 
     protected BusinessPayment(Parcel in) {
@@ -144,7 +144,7 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
         private final String title;
 
         // Optional values
-        private boolean hasPaymentMethod;
+        private final boolean hasPaymentMethod;
         private ExitAction buttonPrimary;
         private ExitAction buttonSecondary;
         private String help;
@@ -155,10 +155,10 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
             this.title = title;
             this.status = status;
             this.iconId = iconId;
-            this.hasPaymentMethod = false;
-            this.buttonPrimary = null;
-            this.buttonSecondary = null;
-            this.help = null;
+            hasPaymentMethod = false;
+            buttonPrimary = null;
+            buttonSecondary = null;
+            help = null;
         }
 
         public BusinessPayment build() {
@@ -176,7 +176,7 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
          * @return builder
          */
         public Builder setPrimaryButton(@Nullable ExitAction exitAction) {
-            this.buttonPrimary = exitAction;
+            buttonPrimary = exitAction;
             return this;
         }
 
@@ -189,7 +189,7 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
          * @return builder
          */
         public Builder setSecondaryButton(@Nullable ExitAction exitAction) {
-            this.buttonSecondary = exitAction;
+            buttonSecondary = exitAction;
             return this;
         }
 

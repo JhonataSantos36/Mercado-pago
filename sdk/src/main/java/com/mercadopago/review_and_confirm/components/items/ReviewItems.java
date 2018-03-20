@@ -29,12 +29,12 @@ public class ReviewItems extends Component<ReviewItems.Props, Void> {
             return collectorIcon;
         }
 
-        final @DrawableRes Integer collectorIcon;
+        @DrawableRes final Integer collectorIcon;
         final String quantityLabel;
         final String unitPriceLabel;
 
         public Props(final ItemsModel itemsModel,
-            final @DrawableRes Integer collectorIcon,
+            @DrawableRes final Integer collectorIcon,
             final String quantityLabel,
             final String unitPriceLabel) {
             this.itemsModel = itemsModel;

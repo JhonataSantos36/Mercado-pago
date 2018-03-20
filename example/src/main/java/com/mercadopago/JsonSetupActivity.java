@@ -44,11 +44,11 @@ public class JsonSetupActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-        mJsonInputEditText = (EditText) findViewById(R.id.jsonEditText);
-        mStartCheckoutButton = (Button) findViewById(R.id.checkoutStartButton);
-        mStatusImageView = (ImageView) findViewById(R.id.statusImage);
+        mJsonInputEditText = findViewById(R.id.jsonEditText);
+        mStartCheckoutButton = findViewById(R.id.checkoutStartButton);
+        mStatusImageView = findViewById(R.id.statusImage);
 
-        mScrollView = (ScrollView) findViewById(R.id.setupScrollView);
+        mScrollView = findViewById(R.id.setupScrollView);
         mScrollView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
         mScrollView.setFocusable(true);
         mScrollView.setFocusableInTouchMode(true);

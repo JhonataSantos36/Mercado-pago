@@ -13,16 +13,18 @@ import java.util.List;
 
 public class IdentificationTypesAdapter extends BaseAdapter {
 
-    private List<IdentificationType> mData;
+    private final List<IdentificationType> mData;
 
     public IdentificationTypesAdapter(List<IdentificationType> data) {
         mData = data;
     }
 
+    @Override
     public int getCount() {
         return mData.size();
     }
 
+    @Override
     public Object getItem(int position) {
         try {
             return mData.get(position);
@@ -35,10 +37,12 @@ public class IdentificationTypesAdapter extends BaseAdapter {
         return mData;
     }
 
+    @Override
     public long getItemId(int position) {
         return position;
     }
 
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
         View row = convertView;

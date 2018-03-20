@@ -59,6 +59,6 @@ public class SummaryRow {
     }
 
     public void setRowTextColor(Integer colorTextRow) {
-        this.rowTextColor = colorTextRow;
+        rowTextColor = colorTextRow;
     }
 }

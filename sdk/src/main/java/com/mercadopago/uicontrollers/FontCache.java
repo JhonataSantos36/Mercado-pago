@@ -17,7 +17,7 @@ public class FontCache {
     public static final String FONT_ROBOTO = "Roboto";
     public static final String FONT_ROBOTO_MONO = "Roboto Mono";
 
-    private static HashMap<String, Typeface> fontCache = new HashMap<>();
+    private static final HashMap<String, Typeface> fontCache = new HashMap<>();
 
     public static void setTypeface(String fontName, Typeface typeFace) {
         fontCache.put(fontName, typeFace);

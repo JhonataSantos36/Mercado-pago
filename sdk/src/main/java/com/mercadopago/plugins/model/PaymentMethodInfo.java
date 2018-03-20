@@ -14,7 +14,7 @@ public class PaymentMethodInfo {
     public final String id;
     public final String name;
     public final String description;
-    public final @DrawableRes
+    @DrawableRes public final
     int icon;
 
     public PaymentMethodInfo(@NonNull final String id,
@@ -33,7 +33,7 @@ public class PaymentMethodInfo {
 
         this.id = id;
         this.name = name;
-        this.description = null;
+        description = null;
         this.icon = icon;
     }
 

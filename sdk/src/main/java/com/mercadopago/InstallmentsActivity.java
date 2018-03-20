@@ -127,14 +127,14 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         mPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPrivateKey = getIntent().getStringExtra("payerAccessToken");
 
-        mPresenter.setSite(JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("site"), Site.class));
-        mPresenter.setPaymentMethod(JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class));
-        mPresenter.setIssuer(JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("issuer"), Issuer.class));
+        mPresenter.setSite(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class));
+        mPresenter.setPaymentMethod(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentMethod"), PaymentMethod.class));
+        mPresenter.setIssuer(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("issuer"), Issuer.class));
         mPresenter.setCardInfo(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("cardInfo"), CardInfo.class));
 
         BigDecimal amount = null;
-        if (this.getIntent().getStringExtra("amount") != null) {
-            amount = new BigDecimal(this.getIntent().getStringExtra("amount"));
+        if (getIntent().getStringExtra("amount") != null) {
+            amount = new BigDecimal(getIntent().getStringExtra("amount"));
         }
 
         mPresenter.setAmount(amount);
@@ -143,7 +143,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         try {
             Type listType = new TypeToken<List<PayerCost>>() {
             }.getType();
-            payerCosts = JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("payerCosts"), listType);
+            payerCosts = JsonUtil.getInstance().getGson().fromJson(getIntent().getStringExtra("payerCosts"), listType);
         } catch (Exception ex) {
             payerCosts = null;
         }
@@ -151,10 +151,10 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         mPresenter.setPayerCosts(payerCosts);
         mPresenter.setPaymentPreference(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class));
         mPresenter.setDiscount(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class));
-        mPresenter.setDiscountEnabled(this.getIntent().getBooleanExtra("discountEnabled", true));
-        mPresenter.setDirectDiscountEnabled(this.getIntent().getBooleanExtra("directDiscountEnabled", true));
-        mPresenter.setInstallmentsReviewEnabled(this.getIntent().getBooleanExtra("installmentsReviewEnabled", true));
-        mPresenter.setPayerEmail(this.getIntent().getStringExtra("payerEmail"));
+        mPresenter.setDiscountEnabled(getIntent().getBooleanExtra("discountEnabled", true));
+        mPresenter.setDirectDiscountEnabled(getIntent().getBooleanExtra("directDiscountEnabled", true));
+        mPresenter.setInstallmentsReviewEnabled(getIntent().getBooleanExtra("installmentsReviewEnabled", true));
+        mPresenter.setPayerEmail(getIntent().getStringExtra("payerEmail"));
     }
 
     private void setMerchantInfo() {
@@ -168,9 +168,9 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
 
     public void analyzeLowRes() {
         if (mPresenter.isRequiredCardDrawn()) {
-            this.mLowResActive = ScaleUtil.isLowRes(this);
+            mLowResActive = ScaleUtil.isLowRes(this);
         } else {
-            this.mLowResActive = true;
+            mLowResActive = true;
         }
     }
 
@@ -191,8 +191,8 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     }
 
     private void initializeControls() {
-        mInstallmentsRecyclerView = (RecyclerView) findViewById(R.id.mpsdkActivityInstallmentsView);
-        mTimerTextView = (MPTextView) findViewById(R.id.mpsdkTimerTextView);
+        mInstallmentsRecyclerView = findViewById(R.id.mpsdkActivityInstallmentsView);
+        mTimerTextView = findViewById(R.id.mpsdkTimerTextView);
 
         if (mLowResActive) {
             initializeLowResControls();
@@ -200,14 +200,14 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
             initializeNormalControls();
         }
 
-        mDiscountFrameLayout = (FrameLayout) findViewById(R.id.mpsdkDiscount);
+        mDiscountFrameLayout = findViewById(R.id.mpsdkDiscount);
         mDiscountFrameLayout.setVisibility(View.VISIBLE);
-        mInstallmentsReview = (FrameLayout) findViewById(R.id.mpsdkInstallmentsReview);
+        mInstallmentsReview = findViewById(R.id.mpsdkInstallmentsReview);
     }
 
     private void initializeLowResControls() {
-        mLowResToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
-        mLowResTitleToolbar = (MPTextView) findViewById(R.id.mpsdkTitle);
+        mLowResToolbar = findViewById(R.id.mpsdkRegularToolbar);
+        mLowResTitleToolbar = findViewById(R.id.mpsdkTitle);
 
         if (CheckoutTimer.getInstance().isTimerEnabled()) {
             Toolbar.LayoutParams marginParams = new Toolbar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -221,10 +221,10 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     }
 
     private void initializeNormalControls() {
-        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.mpsdkCollapsingToolbar);
-        mAppBar = (AppBarLayout) findViewById(R.id.mpsdkInstallmentesAppBar);
-        mCardContainer = (FrameLayout) findViewById(R.id.mpsdkActivityCardContainer);
-        mNormalToolbar = (Toolbar) findViewById(R.id.mpsdkRegularToolbar);
+        mCollapsingToolbar = findViewById(R.id.mpsdkCollapsingToolbar);
+        mAppBar = findViewById(R.id.mpsdkInstallmentesAppBar);
+        mCardContainer = findViewById(R.id.mpsdkActivityCardContainer);
+        mNormalToolbar = findViewById(R.id.mpsdkRegularToolbar);
         mNormalToolbar.setVisibility(View.VISIBLE);
     }
 
@@ -395,7 +395,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
     @Override
     public void onFinish() {
         setResult(MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE);
-        this.finish();
+        finish();
     }
 
     @Override

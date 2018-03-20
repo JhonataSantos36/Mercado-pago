@@ -88,7 +88,7 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
         try {
             Type listType = new TypeToken<List<PaymentMethod>>() {
             }.getType();
-            paymentMethods = JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("paymentMethods"), listType);
+            paymentMethods = JsonUtil.getInstance().getGson().fromJson(getIntent().getStringExtra("paymentMethods"), listType);
         } catch (Exception ex) {
             paymentMethods = null;
         }
@@ -97,7 +97,7 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
         try {
             Type listType = new TypeToken<List<PaymentType>>() {
             }.getType();
-            paymentTypes = JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("paymentTypes"), listType);
+            paymentTypes = JsonUtil.getInstance().getGson().fromJson(getIntent().getStringExtra("paymentTypes"), listType);
         } catch (Exception ex) {
             paymentTypes = null;
         }
@@ -110,9 +110,9 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
 
     public void analizeLowRes() {
         if (mPresenter.isCardInfoAvailable()) {
-            this.mLowResActive = ScaleUtil.isLowRes(this);
+            mLowResActive = ScaleUtil.isLowRes(this);
         } else {
-            this.mLowResActive = true;
+            mLowResActive = true;
         }
     }
 
@@ -337,6 +337,6 @@ public class PaymentTypesActivity extends MercadoPagoBaseActivity implements Pay
     @Override
     public void onFinish() {
         setResult(MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE);
-        this.finish();
+        finish();
     }
 }

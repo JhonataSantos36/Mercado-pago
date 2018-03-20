@@ -31,15 +31,15 @@ public class PaymentTypesPresenter {
     private List<PaymentType> mPaymentTypeList;
 
     public void setView(PaymentTypesActivityView view) {
-        this.mView = view;
+        mView = view;
     }
 
     private void setFailureRecovery(FailureRecovery failureRecovery) {
-        this.mFailureRecovery = failureRecovery;
+        mFailureRecovery = failureRecovery;
     }
 
     public void setCardInfo(CardInfo cardInfo) {
-        this.mCardInfo = cardInfo;
+        mCardInfo = cardInfo;
     }
 
     public CardInfo getCardInfo() {
@@ -47,11 +47,11 @@ public class PaymentTypesPresenter {
     }
 
     public void setPaymentMethodList(List<PaymentMethod> paymentMethodList) {
-        this.mPaymentMethodList = paymentMethodList;
+        mPaymentMethodList = paymentMethodList;
     }
 
     public void setPaymentTypesList(List<PaymentType> paymentTypeList) {
-        this.mPaymentTypeList = paymentTypeList;
+        mPaymentTypeList = paymentTypeList;
     }
 
     public String getPublicKey() {
@@ -59,7 +59,7 @@ public class PaymentTypesPresenter {
     }
 
     public void setPublicKey(String publicKey) {
-        this.mPublicKey = publicKey;
+        mPublicKey = publicKey;
     }
 
     public boolean isCardInfoAvailable() {

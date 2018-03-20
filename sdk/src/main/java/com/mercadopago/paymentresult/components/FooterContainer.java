@@ -31,7 +31,7 @@ public class FooterContainer extends Component<FooterContainer.Props, Void> {
                            @NonNull final ActionDispatcher dispatcher,
                            @NonNull final PaymentResultProvider provider) {
         super(props, dispatcher);
-        this.resourcesProvider = provider;
+        resourcesProvider = provider;
     }
 
     @VisibleForTesting

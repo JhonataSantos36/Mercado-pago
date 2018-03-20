@@ -114,10 +114,10 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
 
     protected void getActivityParameters() {
         mPresenter.setMerchantPublicKey(getIntent().getStringExtra("merchantPublicKey"));
-        mPresenter.setPayerEmail(this.getIntent().getStringExtra("payerEmail"));
-        mPresenter.setTransactionAmount(new BigDecimal(this.getIntent().getStringExtra("amount")));
+        mPresenter.setPayerEmail(getIntent().getStringExtra("payerEmail"));
+        mPresenter.setTransactionAmount(new BigDecimal(getIntent().getStringExtra("amount")));
         mPresenter.setDiscount(JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class));
-        mPresenter.setDirectDiscountEnabled(this.getIntent().getBooleanExtra("directDiscountEnabled", true));
+        mPresenter.setDirectDiscountEnabled(getIntent().getBooleanExtra("directDiscountEnabled", true));
     }
 
     protected void setContentView() {
@@ -207,7 +207,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
     }
 
     private void initializeToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
+        mToolbar = findViewById(R.id.mpsdkToolbar);
 
         setSupportActionBar(mToolbar);
 
@@ -355,6 +355,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
 
     private void fullScrollDown() {
         Runnable runnable = new Runnable() {
+            @Override
             public void run() {
                 mScrollView.fullScroll(View.FOCUS_DOWN);
             }
@@ -414,7 +415,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
     @Override
     public void onFinish() {
         setResult(MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE);
-        this.finish();
+        finish();
     }
 
     private Boolean isAmountOffValid() {

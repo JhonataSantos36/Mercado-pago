@@ -11,18 +11,18 @@ import java.util.List;
 
 public class Summary {
 
-    private String disclaimer;
-    private int disclaimerColor;
-    private boolean showSubtotal;
-    private List<String> summaryDetailsOrder;
-    private HashMap<String, SummaryDetail> summaryDetails;
+    private final String disclaimer;
+    private final int disclaimerColor;
+    private final boolean showSubtotal;
+    private final List<String> summaryDetailsOrder;
+    private final HashMap<String, SummaryDetail> summaryDetails;
 
     public Summary(Builder builder) {
-        this.summaryDetails = builder.summaryDetails;
-        this.summaryDetailsOrder = getSummaryDetailsOrder(builder);
-        this.disclaimer = builder.disclaimer;
-        this.disclaimerColor = builder.disclaimerColor;
-        this.showSubtotal = builder.showSubtotal;
+        summaryDetails = builder.summaryDetails;
+        summaryDetailsOrder = getSummaryDetailsOrder(builder);
+        disclaimer = builder.disclaimer;
+        disclaimerColor = builder.disclaimerColor;
+        showSubtotal = builder.showSubtotal;
     }
 
     private List<String> getSummaryDetailsOrder(Builder builder) {
@@ -60,23 +60,23 @@ public class Summary {
     }
 
     public String getDisclaimerText() {
-        return this.disclaimer;
+        return disclaimer;
     }
 
     public int getDisclaimerColor() {
-        return this.disclaimerColor;
+        return disclaimerColor;
     }
 
     public boolean showSubtotal() {
-        return this.showSubtotal;
+        return showSubtotal;
     }
 
     public static class Builder {
         private String disclaimer;
         private int disclaimerColor;
         private List<String> summaryDetailsOrder;
-        private HashMap<String, SummaryDetail> summaryDetails = new HashMap<>();
-        private boolean showSubtotal = false;
+        private final HashMap<String, SummaryDetail> summaryDetails = new HashMap<>();
+        private final boolean showSubtotal = false;
 
         public Builder addSummaryProductDetail(BigDecimal amount, String title, Integer textColor) {
             putSummaryDetail(amount, title, SummaryItemType.PRODUCT, textColor);
@@ -131,7 +131,7 @@ public class Summary {
                 SummaryDetail summaryDetail = new SummaryDetail(title, summaryItemType, textColor);
                 summaryDetail.addAmountDetail(summaryItemDetail);
 
-                this.summaryDetails.put(summaryItemType, summaryDetail);
+                summaryDetails.put(summaryItemType, summaryDetail);
             }
         }
 

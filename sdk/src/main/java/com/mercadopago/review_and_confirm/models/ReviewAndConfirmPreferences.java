@@ -10,7 +10,7 @@ public class ReviewAndConfirmPreferences {
 
     private final CustomComponent topComponent;
     private final CustomComponent bottomComponent;
-    private final @DrawableRes
+    @DrawableRes private final
     Integer collectorIcon;
     private final String quantityLabel;
     private final String unitPriceLabel;
@@ -27,23 +27,23 @@ public class ReviewAndConfirmPreferences {
     private final boolean itemsEnabled;
 
     private ReviewAndConfirmPreferences(Builder builder) {
-        this.topComponent = builder.topView;
-        this.bottomComponent = builder.bottomView;
-        this.itemsEnabled = builder.itemsEnabled;
-        this.collectorIcon = builder.collectorIcon;
-        this.quantityLabel = builder.quantityLabel;
-        this.unitPriceLabel = builder.unitPriceLabel;
-        this.productAmount = builder.productAmount;
-        this.shippingAmount = builder.shippingAmount;
-        this.arrearsAmount = builder.arrearsAmount;
-        this.taxesAmount = builder.taxesAmount;
-        this.chargeAmount = builder.chargeAmount;
-        this.discountAmount = builder.discountAmount;
-        this.disclaimerText = builder.disclaimerText;
-        this.productTitle = builder.productTitle;
-        this.disclaimerTextColor = builder.disclaimerTextColor;
+        topComponent = builder.topView;
+        bottomComponent = builder.bottomView;
+        itemsEnabled = builder.itemsEnabled;
+        collectorIcon = builder.collectorIcon;
+        quantityLabel = builder.quantityLabel;
+        unitPriceLabel = builder.unitPriceLabel;
+        productAmount = builder.productAmount;
+        shippingAmount = builder.shippingAmount;
+        arrearsAmount = builder.arrearsAmount;
+        taxesAmount = builder.taxesAmount;
+        chargeAmount = builder.chargeAmount;
+        discountAmount = builder.discountAmount;
+        disclaimerText = builder.disclaimerText;
+        productTitle = builder.productTitle;
+        disclaimerTextColor = builder.disclaimerTextColor;
 
-        this.totalAmount = calculateTotalAmount();
+        totalAmount = calculateTotalAmount();
     }
 
     public boolean hasProductAmount() {
@@ -133,13 +133,13 @@ public class ReviewAndConfirmPreferences {
 
     private BigDecimal calculateTotalAmount() {
         BigDecimal totalAmount = new BigDecimal(0);
-        totalAmount = (productAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(productAmount);
-        totalAmount = (chargeAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(chargeAmount);
-        totalAmount = (taxesAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(taxesAmount);
-        totalAmount = (shippingAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(shippingAmount);
-        totalAmount = (arrearsAmount == null) ? totalAmount.add(new BigDecimal(0)) : totalAmount.add(arrearsAmount);
+        totalAmount = totalAmount.add(productAmount == null ? new BigDecimal(0) : productAmount);
+        totalAmount = totalAmount.add(chargeAmount == null ? new BigDecimal(0) : chargeAmount);
+        totalAmount = totalAmount.add(taxesAmount == null ? new BigDecimal(0) : taxesAmount);
+        totalAmount = totalAmount.add(shippingAmount == null ? new BigDecimal(0) : shippingAmount);
+        totalAmount = totalAmount.add(arrearsAmount == null ? new BigDecimal(0) : arrearsAmount);
         totalAmount =
-            (discountAmount == null) ? totalAmount.subtract(new BigDecimal(0)) : totalAmount.subtract(discountAmount);
+            totalAmount.subtract(discountAmount == null ? new BigDecimal(0) : discountAmount);
         return totalAmount;
     }
 
@@ -268,7 +268,7 @@ public class ReviewAndConfirmPreferences {
          * @return builder
          */
         public Builder setTopComponent(final CustomComponent topComponent) {
-            this.topView = topComponent;
+            topView = topComponent;
             return this;
         }
 
@@ -280,7 +280,7 @@ public class ReviewAndConfirmPreferences {
          * @return builder
          */
         public Builder setBottomComponent(final CustomComponent bottomComponent) {
-            this.bottomView = bottomComponent;
+            bottomView = bottomComponent;
             return this;
         }
 
@@ -290,7 +290,7 @@ public class ReviewAndConfirmPreferences {
          * @return builder
          */
         public Builder disableItems() {
-            this.itemsEnabled = false;
+            itemsEnabled = false;
             return this;
         }
 

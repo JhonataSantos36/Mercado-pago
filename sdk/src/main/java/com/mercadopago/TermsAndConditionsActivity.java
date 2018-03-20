@@ -75,9 +75,9 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
 
 
     private void initializeToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
+        mToolbar = findViewById(R.id.mpsdkToolbar);
         setSupportActionBar(mToolbar);
-        mTitle = (TextView) findViewById(R.id.mpsdkTitle);
+        mTitle = findViewById(R.id.mpsdkTitle);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -109,6 +109,7 @@ public class TermsAndConditionsActivity extends MercadoPagoActivity {
     private void showMPTermsAndConditions() {
         mProgressLayout.setVisibility(View.VISIBLE);
         mTermsAndConditionsWebView.setWebViewClient(new WebViewClient() {
+            @Override
             public void onPageFinished(WebView view, String url) {
                 mProgressLayout.setVisibility(View.GONE);
                 mMPTermsAndConditionsView.setVisibility(View.VISIBLE);

@@ -39,7 +39,7 @@ public class GuessingCardProviderImpl implements GuessingCardProvider {
     public GuessingCardProviderImpl(Context context, String publicKey, String privateKey) {
         this.context = context;
         this.publicKey = publicKey;
-        this.mercadoPago = new MercadoPagoServicesAdapter.Builder()
+        mercadoPago = new MercadoPagoServicesAdapter.Builder()
                 .setContext(context)
                 .setPublicKey(publicKey)
                 .setPrivateKey(privateKey)

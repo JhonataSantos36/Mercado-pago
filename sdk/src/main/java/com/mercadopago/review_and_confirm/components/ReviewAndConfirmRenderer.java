@@ -73,7 +73,7 @@ public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer
     }
 
     @NonNull
-    private LinearLayout createMainLayout(final @NonNull Context context) {
+    private LinearLayout createMainLayout(@NonNull final Context context) {
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -81,7 +81,7 @@ public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer
         return linearLayout;
     }
 
-    private void addFooter(final @NonNull ReviewAndConfirmContainer component, final LinearLayout linearLayout) {
+    private void addFooter(@NonNull final ReviewAndConfirmContainer component, final LinearLayout linearLayout) {
         Context context = linearLayout.getContext();
         String primaryText = context.getString(R.string.mpsdk_confirm);
         String linkText = context.getString(R.string.mpsdk_cancel_payment);
@@ -103,7 +103,7 @@ public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer
         parent.addView(paymentView);
     }
 
-    private void addReviewItems(final @NonNull ReviewAndConfirmContainer component, final ViewGroup parent) {
+    private void addReviewItems(@NonNull final ReviewAndConfirmContainer component, final ViewGroup parent) {
         Renderer renderer = RendererFactory.create(parent.getContext(),
                 new ReviewItems(
                         new ReviewItems.Props(
@@ -114,7 +114,7 @@ public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer
         renderer.render(parent);
     }
 
-    private void addTermsAndConditions(final @NonNull ReviewAndConfirmContainer component,
+    private void addTermsAndConditions(@NonNull final ReviewAndConfirmContainer component,
                                        final ViewGroup container) {
         Renderer termsAndConditions = RendererFactory.create(container.getContext(),
                 new TermsAndCondition(component.props.termsAndConditionsModel, component.getDispatcher()));

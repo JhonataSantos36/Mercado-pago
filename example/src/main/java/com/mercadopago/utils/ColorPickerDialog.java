@@ -23,8 +23,9 @@ import android.widget.RelativeLayout;
 public class ColorPickerDialog extends AlertDialog {
 
     private final OnColorSelectedListener onColorSelectedListener;
-    private ColorPicker colorPickerView;
-    private OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+    private final ColorPicker colorPickerView;
+    private final OnClickListener onClickListener = new DialogInterface.OnClickListener() {
+        @Override
         public void onClick(DialogInterface dialog, int which) {
             switch (which) {
                 case BUTTON_POSITIVE:
@@ -60,7 +61,7 @@ public class ColorPickerDialog extends AlertDialog {
     }
 
     public interface OnColorSelectedListener {
-        public void onColorSelected(int color);
+        void onColorSelected(int color);
     }
 
 }

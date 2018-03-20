@@ -21,16 +21,16 @@ public class InstructionsInfoProps {
     }
 
     public InstructionsInfoProps(@NonNull final Builder builder) {
-        this.infoTitle = builder.infoTitle;
-        this.infoContent = builder.infoContent;
-        this.bottomDivider = builder.bottomDivider;
+        infoTitle = builder.infoTitle;
+        infoContent = builder.infoContent;
+        bottomDivider = builder.bottomDivider;
     }
 
     public Builder toBuilder() {
         return new Builder()
-                .setInfoTitle(this.infoTitle)
-                .setInfoContent(this.infoContent)
-                .setBottomDivider(this.bottomDivider);
+                .setInfoTitle(infoTitle)
+                .setInfoContent(infoContent)
+                .setBottomDivider(bottomDivider);
     }
 
     public static class Builder {

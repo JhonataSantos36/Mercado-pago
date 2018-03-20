@@ -189,12 +189,13 @@ public class MPLoadingSpinner extends View {
      * When the view size changes, calculate its new size and start rotating from the center
      * {@inheritDoc}
      */
+    @Override
     protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
         super.onSizeChanged(width, height, oldWidth, oldHeight);
         viewBounds = new RectF(strokeSize, strokeSize, width - strokeSize, height - strokeSize);
 
-        if (this.getAnimation() != null) {
-            this.getAnimation().cancel();
+        if (getAnimation() != null) {
+            getAnimation().cancel();
         }
 
         RotateAnimation rotateAnimation = new RotateAnimation(0f, FULL_CIRCLE, viewBounds.centerX(), viewBounds.centerY());

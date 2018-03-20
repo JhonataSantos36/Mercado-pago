@@ -1,6 +1,5 @@
 package com.mercadopago.paymentresult.formatter;
 
-import android.os.Parcelable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 

@@ -30,6 +30,7 @@ public class PaymentMethodSearchCustomOption implements PaymentMethodSearchViewC
         mItem = item;
     }
 
+    @Override
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
         mView = LayoutInflater.from(mContext)
                 .inflate(R.layout.mpsdk_row_pm_search_item, parent, attachToRoot);
@@ -44,12 +45,14 @@ public class PaymentMethodSearchCustomOption implements PaymentMethodSearchViewC
         return mView;
     }
 
+    @Override
     public void initializeControls() {
-        mDescription = (MPTextView) mView.findViewById(R.id.mpsdkDescription);
-        mComment = (MPTextView) mView.findViewById(R.id.mpsdkComment);
-        mIcon = (ImageView) mView.findViewById(R.id.mpsdkImage);
+        mDescription = mView.findViewById(R.id.mpsdkDescription);
+        mComment = mView.findViewById(R.id.mpsdkComment);
+        mIcon = mView.findViewById(R.id.mpsdkImage);
     }
 
+    @Override
     public void draw() {
 
         mDescription.setText(mItem.getDescription());

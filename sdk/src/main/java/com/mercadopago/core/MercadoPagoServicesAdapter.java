@@ -338,32 +338,32 @@ public class MercadoPagoServicesAdapter {
         public MercadoPagoServicesAdapter.Builder setContext(Context context) {
 
             if (context == null) throw new IllegalArgumentException("context is null");
-            this.mContext = context;
+            mContext = context;
             return this;
         }
 
         public MercadoPagoServicesAdapter.Builder setPrivateKey(String key) {
 
-            this.mPrivateKey = key;
+            mPrivateKey = key;
             return this;
         }
 
         public MercadoPagoServicesAdapter.Builder setPublicKey(String key) {
 
-            this.mPublicKey = key;
+            mPublicKey = key;
             return this;
         }
 
         public MercadoPagoServicesAdapter.Builder setServicePreference(ServicePreference servicePreference) {
 
-            this.mServicePreference = servicePreference;
+            mServicePreference = servicePreference;
             return this;
         }
 
         public MercadoPagoServicesAdapter build() {
 
-            if (this.mContext == null) throw new IllegalStateException("context is null");
-            if (TextUtil.isEmpty(this.mPublicKey) && TextUtil.isEmpty(this.mPrivateKey))
+            if (mContext == null) throw new IllegalStateException("context is null");
+            if (TextUtil.isEmpty(mPublicKey) && TextUtil.isEmpty(mPrivateKey))
                 throw new IllegalStateException("key is null");
 
             return new MercadoPagoServicesAdapter(this);

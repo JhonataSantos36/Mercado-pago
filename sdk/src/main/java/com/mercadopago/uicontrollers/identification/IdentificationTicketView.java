@@ -31,6 +31,7 @@ public class IdentificationTicketView extends IdentificationView {
         super(context);
     }
 
+    @Override
     public void initializeControls() {
         super.initializeControls();
 
@@ -95,11 +96,11 @@ public class IdentificationTicketView extends IdentificationView {
     }
 
     public void setIdentificationName(String name) {
-        this.mName = name;
+        mName = name;
     }
 
     public void setIdentificationLastName(String lastName) {
-        this.mLastName = lastName;
+        mLastName = lastName;
     }
 
     public void setNormalColorNameText() {

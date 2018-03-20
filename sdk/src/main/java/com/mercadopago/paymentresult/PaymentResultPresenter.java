@@ -37,7 +37,7 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
     private Site site;
     private BigDecimal amount;
     private ServicePreference servicePreference;
-    private PaymentResultNavigator navigator;
+    private final PaymentResultNavigator navigator;
     private FailureRecovery failureRecovery;
     private boolean initialized = false;
 

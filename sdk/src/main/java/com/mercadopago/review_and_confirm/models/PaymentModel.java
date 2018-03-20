@@ -23,15 +23,15 @@ public class PaymentModel implements Parcelable {
                         Issuer issuer,
                         boolean moreThanOnePaymentMethod) {
 
-        this.paymentMethodId = paymentMethod.getId();
-        this.paymentMethodName = paymentMethod.getName();
-        this.paymentType = paymentMethod.getPaymentTypeId();
-        this.accreditationTime = paymentMethod.getAccreditationTime();
+        paymentMethodId = paymentMethod.getId();
+        paymentMethodName = paymentMethod.getName();
+        paymentType = paymentMethod.getPaymentTypeId();
+        accreditationTime = paymentMethod.getAccreditationTime();
         //Token and issuer are not always available
-        this.lastFourDigits = token != null ? token.getLastFourDigits() : null;
-        this.cardId = token != null ? token.getCardId() : null;
-        this.issuerName = issuer != null ? issuer.getName() : null;
-        this.issuerId = issuer != null ? issuer.getId() : 0L;
+        lastFourDigits = token != null ? token.getLastFourDigits() : null;
+        cardId = token != null ? token.getCardId() : null;
+        issuerName = issuer != null ? issuer.getName() : null;
+        issuerId = issuer != null ? issuer.getId() : 0L;
         this.moreThanOnePaymentMethod = moreThanOnePaymentMethod;
     }
 

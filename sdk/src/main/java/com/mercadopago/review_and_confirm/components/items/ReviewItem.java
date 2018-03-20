@@ -35,13 +35,13 @@ public class ReviewItem extends Component<ReviewItem.Props, Void> {
     public static class Props {
 
         final ItemModel itemModel;
-        final @DrawableRes
+        @DrawableRes final
         Integer icon;
         final String quantityLabel;
         final String unitPriceLabel;
 
         public Props(final ItemModel itemModel,
-            final @Nullable @DrawableRes Integer icon,
+            @DrawableRes @Nullable final Integer icon,
             final String quantityLabel,
             final String unitPriceLabel) {
             this.itemModel = itemModel;

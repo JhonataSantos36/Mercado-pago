@@ -43,9 +43,9 @@ public class Fingerprint {
     private static final String SHARED_PREFS_FINGERPRINT_LOCATION = "FINGERPRINT_LOCATION";
     public static final String PLATFORM_PROPERTY = "ro.product.cpu.abi";
 
-    private transient Context mContext;
-    private transient LocationManager mLocationManager;
-    private transient LocationListener mLocationListener;
+    private final transient Context mContext;
+    private final transient LocationManager mLocationManager;
+    private final transient LocationListener mLocationListener;
     public ArrayList<VendorId> vendorIds;
     public String model;
     public String os;
@@ -158,7 +158,7 @@ public class Fingerprint {
             out.close();
         }
 
-        public synchronized static String getValue(Context context) {
+        public static synchronized String getValue(Context context) {
             if (mFSUUID == null) {
                 final String path = Environment.getExternalStorageDirectory().getAbsolutePath();
                 File file = new File(path + "/" + context.getPackageName(), FILENAME_FSUUID);
@@ -268,8 +268,8 @@ public class Fingerprint {
     }
 
     private class VendorId {
-        private String name;
-        private String value;
+        private final String name;
+        private final String value;
 
         public VendorId(String mname, String mvalue) {
             name = mname;
@@ -307,24 +307,24 @@ public class Fingerprint {
         float screenDensity;
 
         private VendorSpecificAttributes() {
-            this.featureCamera = getFeatureCamera();
-            this.featureFlash = getFeatureFlash();
-            this.featureFrontCamera = getFeatureFrontCamera();
-            this.product = getProduct();
-            this.device = getDevice();
-            this.platform = getPlatform();
-            this.brand = getBrand();
-            this.featureAccelerometer = getFeatureAccelerometer();
-            this.featureBluetooth = getFeatureBluetooth();
-            this.featureCompass = getFeatureCompass();
-            this.featureGps = getFeatureGps();
-            this.featureGyroscope = getFeatureGyroscope();
-            this.featureMicrophone = getFeatureMicrophone();
-            this.featureNfc = getFeatureNfc();
-            this.featureTelephony = getFeatureTelephony();
-            this.featureTouchScreen = getFeatureTouchScreen();
-            this.manufacturer = getManufacturer();
-            this.screenDensity = getScreenDensity();
+            featureCamera = getFeatureCamera();
+            featureFlash = getFeatureFlash();
+            featureFrontCamera = getFeatureFrontCamera();
+            product = getProduct();
+            device = getDevice();
+            platform = getPlatform();
+            brand = getBrand();
+            featureAccelerometer = getFeatureAccelerometer();
+            featureBluetooth = getFeatureBluetooth();
+            featureCompass = getFeatureCompass();
+            featureGps = getFeatureGps();
+            featureGyroscope = getFeatureGyroscope();
+            featureMicrophone = getFeatureMicrophone();
+            featureNfc = getFeatureNfc();
+            featureTelephony = getFeatureTelephony();
+            featureTouchScreen = getFeatureTouchScreen();
+            manufacturer = getManufacturer();
+            screenDensity = getScreenDensity();
         }
 
         public boolean getFeatureCamera() {
@@ -405,7 +405,7 @@ public class Fingerprint {
         private static final String LOCATION_LATITUDE = "latitude";
         private static final String LOCATION_LONGITUDE = "longitude";
 
-        private JSONObject location;
+        private final JSONObject location;
 
         private Location(@NonNull JSONObject location) {
             this.location = location;

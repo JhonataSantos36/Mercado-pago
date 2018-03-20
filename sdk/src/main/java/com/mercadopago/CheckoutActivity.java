@@ -32,7 +32,6 @@ import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
-import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.presenters.CheckoutPresenter;
 import com.mercadopago.providers.CheckoutProvider;
@@ -100,36 +99,33 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     protected void getActivityParameters() {
 
         CheckoutPreference checkoutPreference = JsonUtil.getInstance()
-                .fromJson(this.getIntent().getStringExtra("checkoutPreference"), CheckoutPreference.class);
+                .fromJson(getIntent().getStringExtra("checkoutPreference"), CheckoutPreference.class);
         PaymentResultScreenPreference paymentResultScreenPreference = JsonUtil.getInstance()
-                .fromJson(this.getIntent().getStringExtra("paymentResultScreenPreference"),
+                .fromJson(getIntent().getStringExtra("paymentResultScreenPreference"),
                         PaymentResultScreenPreference.class);
-        ReviewScreenPreference reviewScreenPreference = JsonUtil.getInstance()
-                .fromJson(getIntent().getStringExtra("reviewScreenPreference"), ReviewScreenPreference.class);
         FlowPreference flowPreference =
                 JsonUtil.getInstance().fromJson(getIntent().getStringExtra("flowPreference"), FlowPreference.class);
 
-        Boolean binaryMode = this.getIntent().getBooleanExtra("binaryMode", false);
+        Boolean binaryMode = getIntent().getBooleanExtra("binaryMode", false);
 
         Discount discount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
-        Boolean directDiscountEnabled = this.getIntent().getBooleanExtra("directDiscountEnabled", true);
+        Boolean directDiscountEnabled = getIntent().getBooleanExtra("directDiscountEnabled", true);
 
         PaymentData paymentDataInput =
-                JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentData"), PaymentData.class);
+                JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentData"), PaymentData.class);
         PaymentResult paymentResultInput =
                 JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentResult"), PaymentResult.class);
 
-        mRequestedResultCode = this.getIntent().getIntExtra("resultCode", 0);
+        mRequestedResultCode = getIntent().getIntExtra("resultCode", 0);
 
         ServicePreference servicePreference = JsonUtil.getInstance()
-                .fromJson(this.getIntent().getStringExtra("servicePreference"), ServicePreference.class);
+                .fromJson(getIntent().getStringExtra("servicePreference"), ServicePreference.class);
 
-        mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
+        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPrivateKey = checkoutPreference.getPayer() != null ? checkoutPreference.getPayer().getAccessToken() : "";
 
         mCheckoutPresenter.setCheckoutPreference(checkoutPreference);
         mCheckoutPresenter.setPaymentResultScreenPreference(paymentResultScreenPreference);
-        mCheckoutPresenter.setReviewScreenPreference(reviewScreenPreference);
         mCheckoutPresenter.setFlowPreference(flowPreference);
         mCheckoutPresenter.setBinaryMode(binaryMode);
         mCheckoutPresenter.setDiscount(discount);
@@ -389,7 +385,6 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
                         .setActivity(this)
                         .setMerchantPublicKey(mMerchantPublicKey)
                         .setSite(mCheckoutPresenter.getCheckoutPreference().getSite())
-                        .setReviewScreenPreference(mCheckoutPresenter.getReviewScreenPreference())
                         .setPaymentMethod(mCheckoutPresenter.getSelectedPaymentMethod())
                         .setIssuer(mCheckoutPresenter.getIssuer())
                         .setPayerCost(mCheckoutPresenter.getSelectedPayerCost())
@@ -435,7 +430,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
 
     @Override
     public void showPaymentMethodSelection() {
-        if (this.isActive()) {
+        if (isActive()) {
             new MercadoPagoComponents.Activities.PaymentVaultActivityBuilder()
                     .setActivity(this)
                     .setMerchantPublicKey(mMerchantPublicKey)
@@ -526,6 +521,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         finish();
     }
 
+    @Override
     public void finishWithPaymentResult(Integer resultCode, Payment payment) {
         Intent intent = new Intent();
         if (mCustomDataBundle != null) {
@@ -612,7 +608,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         Intent intent = new Intent();
         intent.putExtra("paymentMethodChanged", paymentMethodEdited);
         setResult(resultCode, intent);
-        this.finish();
+        finish();
     }
 
     @Override

@@ -196,7 +196,7 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
     }
 
     private void analyzeLowRes() {
-        this.mLowResActive = ScaleUtil.isLowRes(this);
+        mLowResActive = ScaleUtil.isLowRes(this);
     }
 
     private void createPresenter() {
@@ -572,6 +572,7 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
 
     private void fullScrollDown() {
         Runnable r = new Runnable() {
+            @Override
             public void run() {
                 mScrollView.fullScroll(View.FOCUS_DOWN);
             }
@@ -690,7 +691,7 @@ public class PayerInformationActivity extends MercadoPagoBaseActivity implements
     }
 
     private void checkChangeErrorView() {
-        if (mErrorState != null && mErrorState.equals(ERROR_STATE)) {
+        if (ERROR_STATE.equals(mErrorState)) {
             clearErrorView();
         }
     }

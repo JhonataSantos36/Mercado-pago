@@ -10,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-
 import com.mercadopago.MercadoPagoBaseActivity;
 import com.mercadopago.R;
 import com.mercadopago.components.Action;

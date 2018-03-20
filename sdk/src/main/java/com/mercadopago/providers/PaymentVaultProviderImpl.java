@@ -43,9 +43,9 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
         this.merchantGetCustomerUri = merchantGetCustomerUri;
         this.merchantGetDiscountUri = merchantGetDiscountUri;
         this.merchantGetCustomerAdditionalInfo = merchantGetCustomerAdditionalInfo;
-        this.mDiscountAdditionalInfo = discountAdditionalInfo;
+        mDiscountAdditionalInfo = discountAdditionalInfo;
 
-        this.mercadoPago = new MercadoPagoServicesAdapter.Builder()
+        mercadoPago = new MercadoPagoServicesAdapter.Builder()
             .setContext(context)
             .setPublicKey(publicKey)
             .setPrivateKey(privateKey)
@@ -201,7 +201,7 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
         if (TextUtil.isEmpty(merchantDiscountBaseUrl)) {
             merchantBaseUrl = this.merchantBaseUrl;
         } else {
-            merchantBaseUrl = this.merchantDiscountBaseUrl;
+            merchantBaseUrl = merchantDiscountBaseUrl;
         }
 
         return merchantBaseUrl;

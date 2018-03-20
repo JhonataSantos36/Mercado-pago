@@ -22,18 +22,18 @@ public class PayerCostRow {
 
     private final Site mSite;
 
-    private String mCurrencyId;
+    private final String mCurrencyId;
 
-    private Context mContext;
+    private final Context mContext;
     private View mView;
     private MPTextView mInstallmentsTextView;
     private MPTextView mZeroRateText;
     private MPTextView mTotalText;
 
     public PayerCostRow(Context context, Site site) {
-        this.mContext = context;
-        this.mCurrencyId = site.getCurrencyId();
-        this.mSite = site;
+        mContext = context;
+        mCurrencyId = site.getCurrencyId();
+        mSite = site;
     }
 
 

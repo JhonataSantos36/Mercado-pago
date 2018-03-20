@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
 import com.mercadopago.components.RendererFactory;
-import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.review_and_confirm.SummaryProvider;
 import com.mercadopago.review_and_confirm.models.ItemsModel;
 import com.mercadopago.review_and_confirm.models.PaymentModel;
@@ -15,7 +14,7 @@ import com.mercadopago.review_and_confirm.models.TermsAndConditionsModel;
 
 public class ReviewAndConfirmContainer extends Component<ReviewAndConfirmContainer.Props, Void> {
 
-    private SummaryProvider summaryProvider;
+    private final SummaryProvider summaryProvider;
 
     static {
         RendererFactory.register(ReviewAndConfirmContainer.class, ReviewAndConfirmRenderer.class);

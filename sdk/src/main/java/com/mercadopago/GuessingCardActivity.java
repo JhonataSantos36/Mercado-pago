@@ -260,13 +260,13 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         String siteId = getIntent().getStringExtra("siteId");
         PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
 
-        PaymentRecovery paymentRecovery = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentRecovery"), PaymentRecovery.class);
+        PaymentRecovery paymentRecovery = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentRecovery"), PaymentRecovery.class);
 
-        BigDecimal transactionAmount = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("amount"), BigDecimal.class);
-        Boolean discountEnabled = this.getIntent().getBooleanExtra("discountEnabled", true);
-        Boolean directDiscountEnabled = this.getIntent().getBooleanExtra("directDiscountEnabled", true);
-        Discount discount = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("discount"), Discount.class);
-        String payerEmail = this.getIntent().getStringExtra("payerEmail");
+        BigDecimal transactionAmount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("amount"), BigDecimal.class);
+        Boolean discountEnabled = getIntent().getBooleanExtra("discountEnabled", true);
+        Boolean directDiscountEnabled = getIntent().getBooleanExtra("directDiscountEnabled", true);
+        Discount discount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
+        String payerEmail = getIntent().getStringExtra("payerEmail");
 
         Token token = null;
         PaymentMethod paymentMethod = null;
@@ -275,15 +275,15 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
         try {
             Type listType = new TypeToken<List<PaymentMethod>>() {
             }.getType();
-            paymentMethodList = JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("paymentMethodList"), listType);
+            paymentMethodList = JsonUtil.getInstance().getGson().fromJson(getIntent().getStringExtra("paymentMethodList"), listType);
         } catch (Exception ex) {
             paymentMethodList = null;
         }
         Identification identification = new Identification();
         boolean identificationNumberRequired = false;
 
-        Boolean showBankDeals = this.getIntent().getBooleanExtra("showBankDeals", true);
-        Boolean showDiscount = this.getIntent().getBooleanExtra("showDiscount", false);
+        Boolean showBankDeals = getIntent().getBooleanExtra("showBankDeals", true);
+        Boolean showDiscount = getIntent().getBooleanExtra("showDiscount", false);
 
         mPresenter.setPrivateKey(mPrivateKey);
         mPresenter.setPublicKey(mPublicKey);
@@ -428,7 +428,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     }
 
     private void analizeLowRes() {
-        this.mLowResActive = ScaleUtil.isLowRes(this);
+        mLowResActive = ScaleUtil.isLowRes(this);
     }
 
     private void setContentView() {
@@ -1272,6 +1272,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
 
     private void fullScrollDown() {
         Runnable r = new Runnable() {
+            @Override
             public void run() {
                 mScrollView.fullScroll(View.FOCUS_DOWN);
             }
@@ -1343,8 +1344,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     }
 
     private void requestIdentificationFocus() {
-        if ((mPresenter.isSecurityCodeRequired() && !mPresenter.validateSecurityCode()) ||
-                (!mPresenter.isSecurityCodeRequired() && !mPresenter.validateExpiryDate())) {
+        if (mPresenter.isSecurityCodeRequired() ? !mPresenter.validateSecurityCode() : !mPresenter.validateExpiryDate()) {
             return;
         }
         trackCardIdentification();
@@ -1505,7 +1505,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     }
 
     private void checkChangeErrorView() {
-        if (mErrorState != null && mErrorState.equals(ERROR_STATE)) {
+        if (ERROR_STATE.equals(mErrorState)) {
             clearErrorView();
         }
     }
@@ -1817,7 +1817,7 @@ public class GuessingCardActivity extends MercadoPagoBaseActivity implements Gue
     @Override
     public void onFinish() {
         setResult(MercadoPagoCheckout.TIMER_FINISHED_RESULT_CODE);
-        this.finish();
+        finish();
     }
 
     public void initializeDiscountActivity(View view) {

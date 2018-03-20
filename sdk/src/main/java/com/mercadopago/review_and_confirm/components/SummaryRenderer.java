@@ -4,17 +4,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
-import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.components.RendererFactory;
-import com.mercadopago.core.CheckoutStore;
-import com.mercadopago.review_and_confirm.models.ReviewAndConfirmPreferences;
-
-/**
- * Created by mromar on 2/28/18.
- */
 
 public class SummaryRenderer extends Renderer<SummaryComponent> {
 

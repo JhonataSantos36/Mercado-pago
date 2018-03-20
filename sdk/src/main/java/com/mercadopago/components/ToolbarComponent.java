@@ -18,14 +18,14 @@ public class ToolbarComponent extends Component<ToolbarComponent.Props, Void> {
         public final boolean toolbarVisible;
 
         public Props(@NonNull final Builder builder) {
-            this.toolbarTitle = builder.toolbarTitle;
-            this.toolbarVisible = builder.toolbarVisible;
+            toolbarTitle = builder.toolbarTitle;
+            toolbarVisible = builder.toolbarVisible;
         }
 
         public Builder toBuilder() {
             return new Builder()
-                .setToolbarTitle(this.toolbarTitle)
-                .setToolbarVisible(this.toolbarVisible);
+                .setToolbarTitle(toolbarTitle)
+                .setToolbarVisible(toolbarVisible);
         }
 
         public static class Builder {
