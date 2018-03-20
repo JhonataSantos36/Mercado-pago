@@ -209,6 +209,7 @@
     <string name="mpsdk_zero_rate">Interest free</string>
     <string name="mpsdk_exit_label">Exit</string>
     <string name="mpsdk_cancel_payment">Cancel payment</string>
+    <string name="mpsdk_cancel">Cancel</string>
     <string name="mpsdk_input_button_back">Previous</string>
     <string name="mpsdk_input_button_next">Continue</string>
     <string name="mpsdk_hour">hour</string>

@@ -84,7 +84,7 @@ public class ReviewAndConfirmRenderer extends Renderer<ReviewAndConfirmContainer
     private void addFooter(@NonNull final ReviewAndConfirmContainer component, final LinearLayout linearLayout) {
         Context context = linearLayout.getContext();
         String primaryText = context.getString(R.string.mpsdk_confirm);
-        String linkText = context.getString(R.string.mpsdk_cancel_payment);
+        String linkText = context.getString(R.string.mpsdk_cancel);
         Button.Props primaryButton = new Button.Props(primaryText, new ConfirmPaymentAction());
         Button.Props linkButton = new Button.Props(linkText, new CancelPaymentAction());
         Footer footer = new Footer(new Footer.Props(primaryButton, linkButton), component.getDispatcher());

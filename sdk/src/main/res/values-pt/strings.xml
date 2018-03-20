@@ -198,6 +198,7 @@
     <string name="mpsdk_zero_rate">Sem juros</string>
     <string name="mpsdk_exit_label">Sair</string>
     <string name="mpsdk_cancel_payment">Cancelar pagamento</string>
+    <string name="mpsdk_cancel">Cancelar</string>
     <string name="mpsdk_input_button_back">Anterior</string>
     <string name="mpsdk_input_button_next">Continuar</string>
     <string name="mpsdk_hour">hora</string>
