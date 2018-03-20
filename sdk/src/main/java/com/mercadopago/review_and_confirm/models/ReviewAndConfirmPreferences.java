@@ -1,7 +1,9 @@
 package com.mercadopago.review_and_confirm.models;
 
 import android.support.annotation.DrawableRes;
+
 import com.mercadopago.components.CustomComponent;
+
 import java.math.BigDecimal;
 
 public class ReviewAndConfirmPreferences {
@@ -156,7 +158,6 @@ public class ReviewAndConfirmPreferences {
         String disclaimerText;
         BigDecimal chargeAmount;
         BigDecimal discountAmount;
-        BigDecimal totalAmount;
         String productTitle;
         String disclaimerTextColor;
 
