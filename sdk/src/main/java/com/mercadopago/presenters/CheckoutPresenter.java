@@ -458,18 +458,22 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
             @Override
             public void onSuccess(final CheckoutPreference checkoutPreference) {
                 mCheckoutPreference = checkoutPreference;
-                startCheckoutForPreference();
+                if (isViewAttached()) {
+                    startCheckoutForPreference();
+                }
             }
 
             @Override
             public void onFailure(final MercadoPagoError error) {
-                getView().showError(error);
-                setFailureRecovery(new FailureRecovery() {
-                    @Override
-                    public void recover() {
-                        retrieveCheckoutPreference();
-                    }
-                });
+                if (isViewAttached()) {
+                    getView().showError(error);
+                    setFailureRecovery(new FailureRecovery() {
+                        @Override
+                        public void recover() {
+                            retrieveCheckoutPreference();
+                        }
+                    });
+                }
             }
         });
     }
