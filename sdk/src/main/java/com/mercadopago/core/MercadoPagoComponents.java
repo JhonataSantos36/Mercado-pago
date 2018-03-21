@@ -45,6 +45,7 @@ import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.review_and_confirm.ReviewAndConfirmActivity;
 import com.mercadopago.review_and_confirm.models.ItemsModel;
 import com.mercadopago.review_and_confirm.models.PaymentModel;
+import com.mercadopago.review_and_confirm.models.ReviewAndConfirmPreferences;
 import com.mercadopago.review_and_confirm.models.SummaryModel;
 import com.mercadopago.review_and_confirm.models.TermsAndConditionsModel;
 import com.mercadopago.uicontrollers.reviewandconfirm.ReviewItemsView;
