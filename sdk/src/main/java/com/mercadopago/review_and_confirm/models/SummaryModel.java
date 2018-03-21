@@ -126,6 +126,10 @@ public class SummaryModel implements Parcelable {
         return this.installments != null ? Integer.valueOf(this.installments) : null;
     }
 
+    public boolean hasDiscount() {
+        return currencyId != null && getCouponAmount() != null;
+    }
+
     public boolean hasMultipleInstallments() {
         return getInstallments() != null && getInstallments() > 1;
     }

@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.components.RendererFactory;
+import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.Summary;
 import com.mercadopago.model.SummaryDetail;
@@ -54,7 +55,7 @@ public class FullSummaryRenderer extends Renderer<FullSummary> {
             summaryDetailsContainer.addView(amountView);
         }
 
-        if (hasToRenderPayerCost(component)) {
+        if (PaymentTypes.isCardPaymentMethod(component.props.summaryModel.paymentTypeId)) {
             //payer cost
             PayerCostColumn payerCostColumn = new PayerCostColumn(context, component.props.summaryModel.currencyId,
                     component.props.summaryModel.siteId, component.props.summaryModel.getInstallmentsRate(),
@@ -68,7 +69,7 @@ public class FullSummaryRenderer extends Renderer<FullSummary> {
             firstSeparator.setVisibility(View.GONE);
         }
 
-        //disclaimer
+        //CFT
         if (!isEmpty(component.props.summaryModel.cftPercent)) {
             String disclaimer = getDisclaimer(component, context);
             final Renderer disclaimerRenderer = RendererFactory.create(context, getDisclaimerComponent(disclaimer));
@@ -99,7 +100,7 @@ public class FullSummaryRenderer extends Renderer<FullSummary> {
                     .addSummaryTaxesDetail(reviewAndConfirmPreferences.getTaxesAmount(), getSummaryTaxesTitle(context), getDefaultTextColor(context))
                     .addSummaryDiscountDetail(getDiscountAmount(component), getSummaryDiscountsTitle(context), getDiscountTextColor(context))
                     .setDisclaimerText(reviewAndConfirmPreferences.getDisclaimerText())
-                    .setDisclaimerColor(getDisclaimerTextColor(component,context));
+                    .setDisclaimerColor(getDisclaimerTextColor(component, context));
 
             if (getChargesAmount(component).compareTo(BigDecimal.ZERO) > 0) {
                 summaryBuilder.addSummaryChargeDetail(getChargesAmount(component), getSummaryChargesTitle(context), getDefaultTextColor(context));
@@ -184,7 +185,6 @@ public class FullSummaryRenderer extends Renderer<FullSummary> {
         return totalInterestsAmount;
     }
 
-
     private BigDecimal getDiscountAmount(FullSummary component) {
         ReviewAndConfirmPreferences reviewScreenPreference = component.props.reviewAndConfirmPreferences;
         BigDecimal discountAmount = reviewScreenPreference.getDiscountAmount();
@@ -261,9 +261,12 @@ public class FullSummaryRenderer extends Renderer<FullSummary> {
     private BigDecimal getTotalAmount(FullSummary component, Context context) {
         BigDecimal totalAmount;
 
-        if (isCardPaymentMethod(component)) {
+        if (PaymentTypes.isCardPaymentMethod(component.props.summaryModel.paymentTypeId)) {
+
             if (component.props.summaryModel.getInstallments() == 1) {
+
                 if (component.props.summaryModel.getCouponAmount() != null && !isEmptySummaryDetails(component, context)) {
+
                     totalAmount = component.props.summaryModel.getPayerCostTotalAmount();
                 } else {
                     totalAmount = component.props.summaryModel.getTotalAmount();
@@ -271,40 +274,18 @@ public class FullSummaryRenderer extends Renderer<FullSummary> {
             } else {
                 totalAmount = component.props.summaryModel.getPayerCostTotalAmount();
             }
-        } else if (hasDiscount(component) && !isEmptySummaryDetails(component, context)) {
+        } else if (component.props.summaryModel.hasDiscount() && !isEmptySummaryDetails(component, context)) {
             totalAmount = getSubtotal(component);
         } else {
             totalAmount = component.props.summaryModel.getTotalAmount();
         }
+
         return totalAmount;
-    }
-
-    private boolean isCardPaymentMethod(FullSummary component) {
-        return component.props.summaryModel.paymentTypeId != null && isCard(component.props.summaryModel.paymentTypeId);
-    }
-
-    private boolean hasDiscount(FullSummary component) {
-        return component.props.summaryModel.currencyId != null && component.props.summaryModel.getCouponAmount() != null;
-    }
-
-    private boolean isCard(String paymentTypeId) {
-        boolean isCard = false;
-
-        if ((paymentTypeId != null) && (paymentTypeId.equals("credit_card") ||
-                paymentTypeId.equals("debit_card") || paymentTypeId.equals("prepaid_card"))) {
-            isCard = true;
-        }
-
-        return isCard;
     }
 
     private boolean isEmptySummaryDetails(FullSummary component, Context context) {
         return getSummary(component, context) != null && getSummary(component, context).getSummaryDetails() != null &&
                 getSummary(component, context).getSummaryDetails().size() < 2;
-    }
-
-    private boolean hasToRenderPayerCost(FullSummary component) {
-        return isCardPaymentMethod(component) && component.props.summaryModel.getInstallments() > 1;
     }
 
     private DisclaimerComponent getDisclaimerComponent(String disclaimer) {
@@ -314,22 +295,11 @@ public class FullSummaryRenderer extends Renderer<FullSummary> {
 
     private BigDecimal getSubtotal(FullSummary component) {
         BigDecimal ans = component.props.summaryModel.getTotalAmount();
-        if (hasDiscount(component)) {
+        if (component.props.summaryModel.hasDiscount()) {
             ans = component.props.summaryModel.getTotalAmount().subtract(component.props.summaryModel.getCouponAmount());
         }
         return ans;
     }
-
-    private String getSummaryProductsTitle(FullSummary component, Context context) {
-        String summaryProductTitle;
-
-        if (!isEmpty(component.props.reviewAndConfirmPreferences.getProductTitle())) {
-            summaryProductTitle = component.props.reviewAndConfirmPreferences.getProductTitle();
-        } else {
-            summaryProductTitle = context.getString(R.string.mpsdk_review_summary_product);
-        }
-
-        return summaryProductTitle;
-    }
-
 }
+
+
