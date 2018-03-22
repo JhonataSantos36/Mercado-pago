@@ -55,7 +55,7 @@ public class BusinessPaymentRenderer extends Renderer<BusinessPaymentContainer> 
 
         if (secondaryAction != null) {
             String secondaryLabel = secondaryAction.getName();
-            secondaryButtonProps = new Button.Props(secondaryLabel, primaryAction);
+            secondaryButtonProps = new Button.Props(secondaryLabel, secondaryAction);
         }
 
         Footer footer = new Footer(new Footer.Props(primaryButtonProps, secondaryButtonProps), component.getDispatcher());
