@@ -199,9 +199,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
     private void initPaymentMethodSearch() {
 
-        getView().initializeMPTracker();
-
-        getView().trackInitialScreen();
+        trackInitialScreen();
 
         getView().setTitle(getResourcesProvider().getTitle());
 
@@ -290,8 +288,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     private void showSelectedItemChildren() {
-        getView().initializeMPTracker();
-        getView().trackChildrenScreen();
+        trackChildrenScreen();
 
         getView().setTitle(mSelectedSearchItem.getChildrenHeader());
         getView().showSearchItems(mSelectedSearchItem.getChildren(), getPaymentMethodSearchItemSelectionCallback());
@@ -655,5 +652,17 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     public PaymentMethod getAccountMoneyPaymentMethod() {
         return accountMoneyPaymentMethod;
     }
+
+
+    public void trackInitialScreen() {
+        getResourcesProvider().trackInitialScreen(mPaymentMethodSearch, mSite.getId());
+    }
+
+    public void trackChildrenScreen() {
+        getResourcesProvider().trackChildrenScreen(mSelectedSearchItem, mSite.getId());
+    }
+
+
+
 
 }

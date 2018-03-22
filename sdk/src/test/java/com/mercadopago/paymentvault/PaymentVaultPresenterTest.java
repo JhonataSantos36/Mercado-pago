@@ -1192,6 +1192,16 @@ public class PaymentVaultPresenterTest {
         public String getEmptyPaymentMethodsErrorMessage() {
             return EMPTY_PAYMENT_METHODS;
         }
+
+        @Override
+        public void trackInitialScreen(PaymentMethodSearch paymentMethodSearch, String siteId) {
+
+        }
+
+        @Override
+        public void trackChildrenScreen(PaymentMethodSearchItem paymentMethodSearchItem, String siteId) {
+
+        }
     }
 
     private class MockedView implements PaymentVaultView {
@@ -1310,16 +1320,6 @@ public class PaymentVaultPresenterTest {
         }
 
         @Override
-        public void trackChildrenScreen() {
-            //Not yet tested
-        }
-
-        @Override
-        public void initializeMPTracker() {
-            //Not yet tested
-        }
-
-        @Override
         public void showHook(Hook hook, int code) {
             //Not yet tested
         }
@@ -1327,11 +1327,6 @@ public class PaymentVaultPresenterTest {
         @Override
         public void showPaymentMethodPluginConfiguration() {
 
-        }
-
-        @Override
-        public void trackInitialScreen() {
-            //Not yet tested
         }
 
         private void simulateItemSelection(int index) {

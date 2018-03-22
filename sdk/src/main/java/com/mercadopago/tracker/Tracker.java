@@ -4,6 +4,11 @@ import android.content.Context;
 import android.support.v4.util.Pair;
 
 import com.mercadopago.BuildConfig;
+import com.mercadopago.core.CheckoutStore;
+import com.mercadopago.model.PaymentMethodSearch;
+import com.mercadopago.model.PaymentMethodSearchItem;
+import com.mercadopago.plugins.PaymentMethodPlugin;
+import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.review_and_confirm.models.PaymentModel;
 import com.mercadopago.review_and_confirm.models.SummaryModel;
 import com.mercadopago.tracking.model.ActionEvent;
@@ -12,38 +17,41 @@ import com.mercadopago.tracking.utils.TrackingUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 public class Tracker {
 
-    private static void addMetadata(final ScreenViewEvent.Builder builder,
-                                    final List<Pair<String, String>> metadataList) {
-        if (metadataList == null) return;
+    private static String trackingStrategy = TrackingUtil.NOOP_STRATEGY;
+
+    private static void addProperties(final ScreenViewEvent.Builder builder,
+                                      final List<Pair<String, String>> propertyList) {
+        if (propertyList == null) return;
         else {
-            for (Pair<String, String> metadata : metadataList) {
-                builder.addProperty(metadata.first, metadata.second);
+            for (Pair<String, String> property : propertyList) {
+                builder.addProperty(property.first, property.second);
             }
         }
     }
 
     private static MPTrackingContext getTrackerContext(final String merchantPublicKey, final Context context) {
-        return new MPTrackingContext.Builder(context, merchantPublicKey)
-                .setVersion(BuildConfig.VERSION_NAME)
-                .build();
-    }
+        MPTrackingContext.Builder builder = new MPTrackingContext.Builder(context, merchantPublicKey)
+                .setVersion(BuildConfig.VERSION_NAME);
+        if (trackingStrategy.equals(TrackingUtil.REALTIME_STRATEGY)){
+            builder.setTrackingStrategy(TrackingUtil.REALTIME_STRATEGY);
+            trackingStrategy = TrackingUtil.NOOP_STRATEGY;
+        }
 
-    private static MPTrackingContext getRealTimeTrackerContext(final String merchantPublicKey, final Context context) {
-        return new MPTrackingContext.Builder(context, merchantPublicKey)
-                .setVersion(BuildConfig.VERSION_NAME)
-                .setTrackingStrategy(TrackingUtil.REALTIME_STRATEGY)
-                .build();
+
+        return builder.build();
+
     }
 
     public static void trackScreen(final String screenId,
                                    final String screenName,
                                    final Context context,
                                    final String merchantPublicKey,
-                                   final List<Pair<String, String>> metadata) {
+                                   final List<Pair<String, String>> properties) {
 
         MPTrackingContext mpTrackingContext = getTrackerContext(merchantPublicKey, context);
 
@@ -52,7 +60,7 @@ public class Tracker {
                 .setScreenId(screenId)
                 .setScreenName(screenName);
 
-        addMetadata(builder, metadata);
+        addProperties(builder, properties);
         ScreenViewEvent event = builder.build();
         mpTrackingContext.trackEvent(event);
     }
@@ -61,22 +69,24 @@ public class Tracker {
                                                    final String merchantPublicKey,
                                                    final PaymentModel paymentModel) {
 
-        List<Pair<String, String>> metadata = new ArrayList<>();
-        metadata.add(new Pair<>(TrackingUtil.PROPERTY_SHIPPING_INFO, TrackingUtil.HAS_SHIPPING_DEFAULT_VALUE));
-        metadata.add(new Pair<>(TrackingUtil.PROPERTY_PAYMENT_TYPE_ID, paymentModel.getPaymentType()));
-        metadata.add(new Pair<>(TrackingUtil.PROPERTY_PAYMENT_METHOD_ID, paymentModel.paymentMethodId));
-        metadata.add(new Pair<>(TrackingUtil.PROPERTY_ISSUER_ID, String.valueOf(paymentModel.issuerId)));
+        List<Pair<String, String>> properties = new ArrayList<>();
+        properties.add(new Pair<>(TrackingUtil.PROPERTY_SHIPPING_INFO, TrackingUtil.HAS_SHIPPING_DEFAULT_VALUE));
+        properties.add(new Pair<>(TrackingUtil.PROPERTY_PAYMENT_TYPE_ID, paymentModel.getPaymentType()));
+        properties.add(new Pair<>(TrackingUtil.PROPERTY_PAYMENT_METHOD_ID, paymentModel.paymentMethodId));
+        properties.add(new Pair<>(TrackingUtil.PROPERTY_ISSUER_ID, String.valueOf(paymentModel.issuerId)));
 
         trackScreen(TrackingUtil.SCREEN_ID_REVIEW_AND_CONFIRM,
                 TrackingUtil.SCREEN_NAME_REVIEW_AND_CONFIRM,
-                context, merchantPublicKey, metadata);
+                context, merchantPublicKey, properties);
 
     }
 
 
     public static void trackCheckoutConfirm(final Context context, final String merchantPublicKey, final PaymentModel paymentModel, final SummaryModel summaryModel) {
 
-        final MPTrackingContext mpTrackingContext = getRealTimeTrackerContext(merchantPublicKey, context);
+        trackingStrategy = TrackingUtil.REALTIME_STRATEGY;
+
+        final MPTrackingContext mpTrackingContext = getTrackerContext(merchantPublicKey, context);
 
         ActionEvent.Builder builder = new ActionEvent.Builder()
                 .setFlowId(FlowHandler.getInstance().getFlowId())
@@ -102,4 +112,41 @@ public class Tracker {
         mpTrackingContext.trackEvent(actionEvent);
     }
 
+    public static void trackPaymentVaultScreen(final Context context, final String merchantPublicKey, final PaymentMethodSearch paymentMethodSearch, final Set<String> escCardIds) {
+
+        trackingStrategy = TrackingUtil.REALTIME_STRATEGY;
+
+        List<Pair<String, String>> properties = new ArrayList<>();
+        properties.add(new Pair<>(TrackingUtil.PROPERTY_OPTIONS, getFormattedPaymentMethodsForTracking(context, paymentMethodSearch, escCardIds)));
+
+        trackScreen(TrackingUtil.SCREEN_ID_PAYMENT_VAULT,
+                TrackingUtil.SCREEN_NAME_PAYMENT_VAULT,
+                context, merchantPublicKey, properties);
+    }
+
+    public static void trackPaymentVaultChildrenScreen(final Context context, final String merchantPublicKey, final PaymentMethodSearchItem selectedItem) {
+
+            String selectedItemId = selectedItem.getId();
+
+            if (TrackingUtil.GROUP_TICKET.equals(selectedItemId)) {
+                trackScreen(TrackingUtil.SCREEN_ID_PAYMENT_VAULT_TICKET, TrackingUtil.SCREEN_NAME_PAYMENT_VAULT_TICKET, context, merchantPublicKey, null);
+
+            } else if (TrackingUtil.GROUP_BANK_TRANSFER.equals(selectedItemId)) {
+                trackScreen(TrackingUtil.SCREEN_ID_PAYMENT_VAULT_BANK_TRANSFER, TrackingUtil.SCREEN_NAME_PAYMENT_VAULT_BANK_TRANSFER, context, merchantPublicKey, null);
+
+            } else if (TrackingUtil.GROUP_CARDS.equals(selectedItemId)) {
+                trackScreen(TrackingUtil.SCREEN_ID_PAYMENT_VAULT_CARDS, TrackingUtil.SCREEN_NAME_PAYMENT_VAULT_CARDS, context, merchantPublicKey, null);
+
+            } else {
+                trackScreen(TrackingUtil.SCREEN_ID_PAYMENT_VAULT, TrackingUtil.SCREEN_NAME_PAYMENT_VAULT, context, merchantPublicKey, null);
+
+            }
+    }
+
+    private static String getFormattedPaymentMethodsForTracking(final Context context, final PaymentMethodSearch paymentMethodSearch, final Set<String> escCardIds) {
+        List<PaymentMethodPlugin> paymentMethodPluginList = CheckoutStore.getInstance().getPaymentMethodPluginList();
+        List<PaymentMethodInfo> pluginsPaymentMethodInfo = PaymentMethodInfo.getPluginsPaymentMethodInfo(context, paymentMethodPluginList);
+
+        return TrackingFormatter.getFormattedPaymentMethodsForTracking(paymentMethodSearch, pluginsPaymentMethodInfo, escCardIds);
+    }
 }

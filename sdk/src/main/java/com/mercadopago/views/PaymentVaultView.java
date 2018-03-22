@@ -53,12 +53,6 @@ public interface PaymentVaultView extends MvpView {
 
     void cleanPaymentMethodOptions();
 
-    void trackInitialScreen();
-
-    void trackChildrenScreen();
-
-    void initializeMPTracker();
-
     void showHook(final Hook hook, final int code);
 
     void showPaymentMethodPluginConfiguration();

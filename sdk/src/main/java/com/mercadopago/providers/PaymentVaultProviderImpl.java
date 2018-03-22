@@ -2,6 +2,8 @@ package com.mercadopago.providers;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+
+import com.mercadopago.BuildConfig;
 import com.mercadopago.R;
 import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.CustomServer;
@@ -14,14 +16,20 @@ import com.mercadopago.model.Customer;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Payer;
 import com.mercadopago.model.PaymentMethodSearch;
+import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.preferences.PaymentPreference;
+import com.mercadopago.tracker.Tracker;
+import com.mercadopago.tracking.tracker.MPTracker;
 import com.mercadopago.util.ApiUtil;
+import com.mercadopago.util.MercadoPagoESC;
+import com.mercadopago.util.MercadoPagoESCImpl;
 import com.mercadopago.util.TextUtil;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class PaymentVaultProviderImpl implements PaymentVaultProvider {
 
@@ -33,17 +41,21 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
     private final String merchantDiscountBaseUrl;
     private final String merchantGetDiscountUri;
     private final Map<String, String> mDiscountAdditionalInfo;
+    private final MercadoPagoESC mercadoPagoESC;
+    private final String merchantPublicKey;
 
     public PaymentVaultProviderImpl(Context context, String publicKey, String privateKey, String merchantBaseUrl,
         String merchantGetCustomerUri, Map<String, String> merchantGetCustomerAdditionalInfo,
-        String merchantDiscountBaseUrl, String merchantGetDiscountUri, Map<String, String> discountAdditionalInfo) {
+        String merchantDiscountBaseUrl, String merchantGetDiscountUri, Map<String, String> discountAdditionalInfo,  boolean escEnabled) {
         this.context = context;
         this.merchantBaseUrl = merchantBaseUrl;
         this.merchantDiscountBaseUrl = merchantDiscountBaseUrl;
         this.merchantGetCustomerUri = merchantGetCustomerUri;
         this.merchantGetDiscountUri = merchantGetDiscountUri;
         this.merchantGetCustomerAdditionalInfo = merchantGetCustomerAdditionalInfo;
-        mDiscountAdditionalInfo = discountAdditionalInfo;
+        this.mDiscountAdditionalInfo = discountAdditionalInfo;
+        this.mercadoPagoESC = new MercadoPagoESCImpl(context, escEnabled);
+        this.merchantPublicKey = publicKey;
 
         mercadoPago = new MercadoPagoServicesAdapter.Builder()
             .setContext(context)
@@ -206,4 +218,20 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
 
         return merchantBaseUrl;
     }
+
+    public void initializeMPTracker(String siteId) {
+        MPTracker.getInstance().initTracker(merchantPublicKey, siteId, BuildConfig.VERSION_NAME, context);
+    }
+
+    public void trackInitialScreen(PaymentMethodSearch paymentMethodSearch, String siteId) {
+        initializeMPTracker(siteId);
+        Tracker.trackPaymentVaultScreen(context, merchantPublicKey, paymentMethodSearch, mercadoPagoESC.getESCCardIds());
+    }
+
+    public void trackChildrenScreen(PaymentMethodSearchItem paymentMethodSearchItem, String siteId) {
+        initializeMPTracker(siteId);
+        Tracker.trackPaymentVaultChildrenScreen(context, merchantPublicKey, paymentMethodSearchItem);
+    }
+
+
 }
