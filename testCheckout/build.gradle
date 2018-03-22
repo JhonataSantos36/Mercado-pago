@@ -1,0 +1,28 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion api_level as int
+    buildToolsVersion build_tools_version as String
+
+    defaultConfig {
+        minSdkVersion min_api_level as int
+        targetSdkVersion api_level as int
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation project(":testLib")
+    implementation project(":sdk")
+}

@@ -31,6 +31,7 @@ import java.util.List;
 
 public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements PaymentMethodsView {
 
+    public static final String EXTRA_MERCHANT_PUBLIC_KEY = "merchantPublicKey";
     protected String mMerchantPublicKey;
     protected RecyclerView mRecyclerView;
     protected Toolbar mToolbar;
@@ -57,7 +58,7 @@ public class PaymentMethodsActivity extends MercadoPagoBaseActivity implements P
 
     protected void getActivityParameters() {
 
-        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
+        mMerchantPublicKey = getIntent().getStringExtra(EXTRA_MERCHANT_PUBLIC_KEY);
 
         PaymentPreference paymentPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentPreference"), PaymentPreference.class);
         mPresenter.setPaymentPreference(paymentPreference);

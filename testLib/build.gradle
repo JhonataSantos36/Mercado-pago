@@ -1,0 +1,47 @@
+ext {
+    okHttp3Version = '3.8.1'
+    spoonClientVersion = '1.7.1'
+    espressoVersion = '3.0.1'
+    okHttpIdlingVersion = '1.0.0'
+    mockitoCoreVersion = '1.10.19'
+}
+
+group = 'com.mercadopago.android.testlib'
+version = '0.0.1'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "com.stanfy.spoon:spoon-gradle-plugin:1.2.2"
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'spoon'
+
+spoon {
+    grantAllPermissions = true
+}
+
+android {
+    compileSdkVersion api_level as int
+    buildToolsVersion build_tools_version as String
+
+    defaultConfig {
+        minSdkVersion min_api_level as int
+        targetSdkVersion api_level as int
+        versionCode 1
+        versionName "1.0"
+    }
+}
+
+dependencies {
+    compile "junit:junit:$junit"
+    compile "com.squareup.spoon:spoon-client:$spoonClientVersion"
+    compile "com.android.support.test.espresso:espresso-core:$espressoVersion"
+    compile "com.android.support.test.espresso:espresso-contrib:$espressoVersion"
+    compile "com.android.support.test.espresso:espresso-intents:$espressoVersion"
+    compile "com.jakewharton.espresso:okhttp3-idling-resource:$okHttpIdlingVersion"
+}
