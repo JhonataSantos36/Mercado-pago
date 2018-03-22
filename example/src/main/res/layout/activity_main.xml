@@ -56,6 +56,7 @@
                 android:src="@drawable/plugandplay"
                 android:tint="@color/mpsdk_white"/>
             <com.mercadopago.customviews.MPTextView
+                android:id="@+id/startButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"

@@ -9,6 +9,7 @@ import com.mercadopago.util.HttpClientUtil;
 import okhttp3.OkHttpClient;
 
 public abstract class BaseCheckoutTest extends BaseNetIdlingTest {
+
     @Override
     protected OkHttpClient getClient() {
         return HttpClientUtil.getClient(InstrumentationRegistry.getContext(), 10, 10, 10);

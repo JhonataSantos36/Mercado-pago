@@ -43,7 +43,8 @@ public class CardTest extends BaseCheckoutTest {
         new PaymentMethodPage()
                 .start(builder)
                 .selectCard()
-                .selectCreditCard();
+                .selectCreditCard()
+                .enterCreditCardNumber();
     }
 
     @Test
