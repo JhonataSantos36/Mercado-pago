@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import com.mercadopago.examples.R;
 import com.mercadopago.testCheckout.BaseCheckoutTest;
-import com.mercadopago.testCheckout.pages.PaymentMethodPage;
+import com.mercadopago.testCheckout.flows.Flows;
 
 
 import static android.support.test.espresso.Espresso.onView;
@@ -32,21 +32,14 @@ public class HelloWorld extends BaseCheckoutTest{
     public void mainActivityTest() {
         Matcher<View> ourCho = withId(R.id.startButton);
         Matcher<View> startCho = withId(R.id.continueButton);
+        Flows flows = new Flows();
 
         onView(ourCho).check(matches(isDisplayed()));
         onView(ourCho).perform(click());
         onView(startCho).check(matches(isDisplayed()));
         onView(startCho).perform(click());
-        new PaymentMethodPage()
-                .selectCard()
-                .selectCreditCard()
-                .enterCreditCardNumber()
-                .enterCardholderName()
-                .enterExpiryDate()
-                .enterSecurityCode()
-                .enterIdentificationNumber()
-                .selectInstallments()
-                .pressConfirmButton();
+
+        flows.creditCardPaymentFlow(null);
 
     }
 }
