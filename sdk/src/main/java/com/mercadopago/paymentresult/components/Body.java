@@ -8,7 +8,6 @@ import com.mercadopago.components.CustomComponent;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.model.Payment;
-import com.mercadopago.paymentresult.PaymentMethodProvider;
 import com.mercadopago.paymentresult.PaymentResultProvider;
 import com.mercadopago.paymentresult.props.BodyErrorProps;
 import com.mercadopago.paymentresult.props.InstructionsProps;
@@ -18,16 +17,13 @@ import com.mercadopago.paymentresult.props.ReceiptProps;
 
 public class Body extends Component<PaymentResultBodyProps, Void> {
 
-    private PaymentMethodProvider paymentMethodProvider;
     public PaymentResultProvider paymentResultProvider;
 
     public Body(@NonNull final PaymentResultBodyProps props,
                 @NonNull final ActionDispatcher dispatcher,
-                @NonNull final PaymentResultProvider paymentResultProvider,
-                @NonNull final PaymentMethodProvider paymentMethodProvider) {
+                @NonNull final PaymentResultProvider paymentResultProvider) {
         super(props, dispatcher);
         this.paymentResultProvider = paymentResultProvider;
-        this.paymentMethodProvider = paymentMethodProvider;
     }
 
     public boolean hasInstructions() {
@@ -79,7 +75,7 @@ public class Body extends Component<PaymentResultBodyProps, Void> {
                 .setAmountFormatter(props.bodyAmountFormatter)
                 .setDiscount(props.paymentData.getDiscount())
                 .build();
-        return new PaymentMethod(paymentMethodProps, getDispatcher(), paymentMethodProvider);
+        return new PaymentMethod(paymentMethodProps, getDispatcher());
     }
 
     public boolean hasBodyError() {

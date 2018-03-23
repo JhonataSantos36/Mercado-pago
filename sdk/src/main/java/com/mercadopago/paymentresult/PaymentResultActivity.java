@@ -97,7 +97,6 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
         getActivityParameters();
 
         final PaymentResultProvider paymentResultProvider = new PaymentResultProviderImpl(this, merchantPublicKey, payerAccessToken);
-        final PaymentMethodProvider paymentMethodProvider = new PaymentMethodProviderImpl(this);
 
         presenter.attachResourcesProvider(paymentResultProvider);
 
@@ -123,7 +122,7 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
         RendererFactory.register(BodyError.class, BodyErrorRenderer.class);
         RendererFactory.register(Receipt.class, ReceiptRenderer.class);
 
-        final Component root = new PaymentResultContainer(componentManager, paymentResultProvider, paymentMethodProvider);
+        final Component root = new PaymentResultContainer(componentManager, paymentResultProvider);
         componentManager.setActionsListener(presenter);
         componentManager.setComponent(root);
 

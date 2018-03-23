@@ -11,7 +11,6 @@ import com.mercadopago.constants.PaymentMethods;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentResult;
-import com.mercadopago.paymentresult.PaymentMethodProvider;
 import com.mercadopago.paymentresult.PaymentResultProvider;
 import com.mercadopago.paymentresult.model.Badge;
 import com.mercadopago.paymentresult.props.HeaderProps;
@@ -52,14 +51,11 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
     public static final int WARNING_BADGE_IMAGE = R.drawable.mpsdk_badge_warning;
 
     public PaymentResultProvider paymentResultProvider;
-    public PaymentMethodProvider paymentMethodProvider;
 
     public PaymentResultContainer(@NonNull final ActionDispatcher dispatcher,
-                                  @NonNull final PaymentResultProvider paymentResultProvider,
-                                  @NonNull final PaymentMethodProvider paymentMethodProvider) {
+                                  @NonNull final PaymentResultProvider paymentResultProvider) {
         super(new PaymentResultProps.Builder().build(), dispatcher);
         this.paymentResultProvider = paymentResultProvider;
-        this.paymentMethodProvider = paymentMethodProvider;
     }
 
     public boolean isLoading() {
@@ -120,7 +116,7 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
                     .setPaymentId(props.paymentResult.getPaymentId())
                     .setBodyAmountFormatter(props.bodyAmountFormatter)
                     .build();
-            body = new Body(bodyProps, getDispatcher(), paymentResultProvider, paymentMethodProvider);
+            body = new Body(bodyProps, getDispatcher(), paymentResultProvider);
         }
         return body;
     }
