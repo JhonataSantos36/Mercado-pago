@@ -14,12 +14,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 public class InstallmentsPage extends PageObject {
 
-    public ReviewAndConfirmPage selectInstallments(){
+    public ReviewAndConfirmPage selectInstallments(int installmentsOption){
 
         Matcher<View> InstallmentsRecyclerViewMatcher = withId(R.id.mpsdkActivityInstallmentsView);
 
         onView(InstallmentsRecyclerViewMatcher)
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+                .perform(RecyclerViewActions.actionOnItemAtPosition(installmentsOption, click()));
 
         return new ReviewAndConfirmPage();
     }

@@ -1,6 +1,7 @@
 package com.mercadopago.testlib;
 
 import android.support.test.espresso.IdlingRegistry;
+import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.jakewharton.espresso.OkHttp3IdlingResource;
@@ -12,6 +13,7 @@ import org.junit.runner.RunWith;
 import okhttp3.OkHttpClient;
 
 @RunWith(AndroidJUnit4.class)
+@LargeTest
 public abstract class BaseNetIdlingTest {
 
     private static final String RES_NAME_OK_HTTP = "OK-HTTP";

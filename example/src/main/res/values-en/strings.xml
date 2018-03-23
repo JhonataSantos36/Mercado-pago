@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MP Android SDK Samples</string>
-    <string name="welcome_title">Check these integration options. From simple to full payment flows.</string>
+    <string name="welcome_title">Check these integration options. From simple to full payment flow.</string>
     <string name="welcome_text">Try our Checkout, or create a custom one using our UI components or our services. </string>
 
     <string name="step1_choice_description">You can collect data through a few screens or use an unique form that will automatically fill the most it can.</string>
