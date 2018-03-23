@@ -12,11 +12,6 @@ buildscript {
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'maven'
-apply plugin: 'signing'
-apply from: "$rootDir/gradle/jacoco.gradle"
-apply from: "$rootDir/gradle/static-analysis.gradle"
-apply from: "$rootDir/gradle/deploy.gradle"
 
 android {
     compileSdkVersion api_level as int
@@ -26,7 +21,7 @@ android {
         minSdkVersion min_api_level as int
         targetSdkVersion api_level as int
         versionCode 1
-        versionName versionToDeploy
+        versionName version_to_deploy as String
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'proguard-rules.txt'
     }
@@ -90,3 +85,7 @@ dependencies {
     implementation "com.squareup.picasso:picasso:$picasso"
     api "com.mercadopago:tracking:3.0.2-noop-2"
 }
+
+apply from: "$rootDir/gradle/jacoco.gradle"
+apply from: "$rootDir/gradle/static-analysis.gradle"
+apply from: "$rootDir/gradle/deploy.gradle"
