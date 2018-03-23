@@ -4,6 +4,7 @@ ext {
     espressoVersion = '3.0.1'
     okHttpIdlingVersion = '1.0.0'
     mockitoCoreVersion = '1.10.19'
+    androidRunner = '1.0.1'
 }
 
 group = 'com.mercadopago.android.testlib'
@@ -39,6 +40,8 @@ android {
 
 dependencies {
     compile "junit:junit:$junit"
+    compile "com.android.support.test:runner:$androidRunner"
+    compile "com.android.support.test:rules:$androidRunner"
     compile "com.squareup.spoon:spoon-client:$spoonClientVersion"
     compile "com.android.support.test.espresso:espresso-core:$espressoVersion"
     compile "com.android.support.test.espresso:espresso-contrib:$espressoVersion"

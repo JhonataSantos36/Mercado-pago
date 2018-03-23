@@ -52,10 +52,11 @@ android {
 }
 
 dependencies {
-    androidTestImplementation project(':testCheckout')
+    androidTestImplementation project(":testLib")
 
     testImplementation "junit:junit:$junit"
     testImplementation "org.mockito:mockito-core:$mockito_version"
+
 
     implementation "com.android.support:cardview-v7:$support_library_version"
     implementation "com.android.support:recyclerview-v7:$support_library_version"
