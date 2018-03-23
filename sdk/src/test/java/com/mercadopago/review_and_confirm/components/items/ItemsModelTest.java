@@ -29,6 +29,7 @@ public class ItemsModelTest {
 
     @Mock
     private Item itemWithDescription;
+
     @Mock
     private Item itemWithoutDescription;
 
@@ -50,6 +51,18 @@ public class ItemsModelTest {
         itemList.add(itemWithoutDescription);
         ItemsModel model = new ItemsModel(ITEM_CURRENCY_ID, itemList);
         Assert.assertEquals(0, model.itemsModelList.size());
+    }
+
+    @Test
+    public void whenUniqueItemDoesntHaveDescriptionAndQuantityIsTwoThenCreateComponent() {
+        when(itemWithoutDescription.getDescription()).thenReturn("");
+        when(itemWithoutDescription.getQuantity()).thenReturn(2);
+
+        List<Item> itemList = new ArrayList<>();
+        itemList.add(itemWithoutDescription);
+        ItemsModel model = new ItemsModel(ITEM_CURRENCY_ID, itemList);
+
+        Assert.assertEquals(1, model.itemsModelList.size());
     }
 
     @Test

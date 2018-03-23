@@ -47,7 +47,7 @@ public class ItemsModel implements Parcelable {
                                final Item item,
                                final boolean hasMultipleItems,
                                final String currencyId) {
-        if (hasMultipleItems || TextUtils.isNotEmpty(item.getDescription())) {
+        if (hasMultipleItems || TextUtils.isNotEmpty(item.getDescription()) || item.getQuantity() > 1) {
             toReturn.add(createItemModel(item, hasMultipleItems, currencyId));
         }
     }
