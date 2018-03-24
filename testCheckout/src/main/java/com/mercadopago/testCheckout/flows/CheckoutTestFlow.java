@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.testCheckout.input.Card;
+import com.mercadopago.testCheckout.pages.CongratsPage;
 import com.mercadopago.testCheckout.pages.PaymentMethodPage;
 
 public class CheckoutTestFlow {
@@ -25,14 +26,14 @@ public class CheckoutTestFlow {
         this.builder = builder;
     }
 
-    public void runCreditCardPaymentFlowNoInstallments(Card card) {
+    public CongratsPage runCreditCardPaymentFlowNoInstallments(Card card) {
         PaymentMethodPage paymentMethodPage = new PaymentMethodPage();
 
         if (builder != null) {
             paymentMethodPage.start(builder);
         }
 
-        paymentMethodPage.selectCard()
+        return paymentMethodPage.selectCard()
                 .selectCreditCard()
                 .enterCreditCardNumber(card.cardNumber())
                 .enterCardholderName(card.cardHolderName())
