@@ -19,12 +19,12 @@ public class InstructionsActionsProps {
     }
 
     public InstructionsActionsProps(@NonNull Builder builder) {
-        this.instructionActions = builder.instructionsActions;
+        instructionActions = builder.instructionsActions;
     }
 
     public Builder toBuilder() {
         return new InstructionsActionsProps.Builder()
-                .setInstructionsActions(this.instructionActions);
+                .setInstructionsActions(instructionActions);
     }
 
     public static class Builder {

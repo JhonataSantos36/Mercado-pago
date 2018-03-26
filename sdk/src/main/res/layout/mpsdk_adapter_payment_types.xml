@@ -21,6 +21,6 @@
             tools:text="payment type"/>
     </FrameLayout>
 
-    <include layout="@layout/mpsdk_view_dashed_line_separator"/>
+    <include layout="@layout/mpsdk_view_separator_dashed_line"/>
 
 </LinearLayout>

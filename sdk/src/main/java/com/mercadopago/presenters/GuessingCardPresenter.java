@@ -111,10 +111,10 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
 
     public GuessingCardPresenter() {
         super();
-        this.mShowBankDeals = true;
-        this.mDiscountEnabled = false;
-        this.mShowDiscount = false;
-        this.mEraseSpace = true;
+        mShowBankDeals = true;
+        mDiscountEnabled = false;
+        mShowDiscount = false;
+        mEraseSpace = true;
     }
 
     public void initialize() {
@@ -150,7 +150,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public void setCurrentNumberLength(int currentNumberLength) {
-        this.mCurrentNumberLength = currentNumberLength;
+        mCurrentNumberLength = currentNumberLength;
     }
 
     public FailureRecovery getFailureRecovery() {
@@ -158,7 +158,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public void setFailureRecovery(FailureRecovery failureRecovery) {
-        this.mFailureRecovery = failureRecovery;
+        mFailureRecovery = failureRecovery;
     }
 
     public String getPublicKey() {
@@ -166,11 +166,11 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public void setPublicKey(String publicKey) {
-        this.mPublicKey = publicKey;
+        mPublicKey = publicKey;
     }
 
     public void setSiteId(String siteId) {
-        this.mSiteId = siteId;
+        mSiteId = siteId;
     }
 
     public PaymentRecovery getPaymentRecovery() {
@@ -178,7 +178,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public void setPaymentRecovery(PaymentRecovery paymentRecovery) {
-        this.mPaymentRecovery = paymentRecovery;
+        mPaymentRecovery = paymentRecovery;
         if (recoverWithCardholder()) {
             saveCardholderName(paymentRecovery.getToken().getCardHolder().getName());
             saveIdentificationNumber(paymentRecovery.getToken().getCardHolder().getIdentification().getNumber());
@@ -202,11 +202,11 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public List<IdentificationType> getIdentificationTypes() {
-        return this.mIdentificationTypes;
+        return mIdentificationTypes;
     }
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.mPaymentMethod = paymentMethod;
+        mPaymentMethod = paymentMethod;
         if (paymentMethod == null) {
             clearCardSettings();
         }
@@ -221,11 +221,11 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public void setSecurityCodeRequired(boolean required) {
-        this.mIsSecurityCodeRequired = required;
+        mIsSecurityCodeRequired = required;
     }
 
     public void setSecurityCodeLength(int securityCodeLength) {
-        this.mSecurityCodeLength = securityCodeLength;
+        mSecurityCodeLength = securityCodeLength;
     }
 
     private void clearCardSettings() {
@@ -244,7 +244,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public void setToken(Token token) {
-        this.mToken = token;
+        mToken = token;
     }
 
     public Token getToken() {
@@ -256,7 +256,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public void setCardToken(CardToken cardToken) {
-        this.mCardToken = cardToken;
+        mCardToken = cardToken;
     }
 
     public List<PaymentMethod> getPaymentMethodList() {
@@ -264,19 +264,19 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public void setPaymentMethodList(List<PaymentMethod> paymentMethodList) {
-        this.mPaymentMethodList = paymentMethodList;
+        mPaymentMethodList = paymentMethodList;
     }
 
     public void setPaymentTypesList(List<PaymentType> paymentTypesList) {
-        this.mPaymentTypesList = paymentTypesList;
+        mPaymentTypesList = paymentTypesList;
     }
 
     public void setIdentificationTypesList(List<IdentificationType> identificationTypesList) {
-        this.mIdentificationTypes = identificationTypesList;
+        mIdentificationTypes = identificationTypesList;
     }
 
     public void setBankDealsList(List<BankDeal> bankDealsList) {
-        this.mBankDealsList = bankDealsList;
+        mBankDealsList = bankDealsList;
     }
 
     public Identification getIdentification() {
@@ -284,7 +284,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public void setIdentification(Identification identification) {
-        this.mIdentification = identification;
+        mIdentification = identification;
     }
 
     public boolean isIdentificationNumberRequired() {
@@ -292,7 +292,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public void setIdentificationNumberRequired(boolean identificationNumberRequired) {
-        this.mIdentificationNumberRequired = identificationNumberRequired;
+        mIdentificationNumberRequired = identificationNumberRequired;
         if (identificationNumberRequired) {
             getView().showIdentificationInput();
         }
@@ -303,7 +303,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public void setPaymentPreference(PaymentPreference paymentPreference) {
-        this.mPaymentPreference = paymentPreference;
+        mPaymentPreference = paymentPreference;
     }
 
     private void initializeCardToken() {
@@ -427,11 +427,11 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public void setDiscount(Discount discount) {
-        this.mDiscount = discount;
+        mDiscount = discount;
     }
 
     public void setPayerEmail(String payerEmail) {
-        this.mPayerEmail = payerEmail;
+        mPayerEmail = payerEmail;
     }
 
     public String getPayerEmail() {
@@ -439,35 +439,35 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public void setDiscountEnabled(Boolean discountEnabled) {
-        this.mDiscountEnabled = discountEnabled;
+        mDiscountEnabled = discountEnabled;
     }
 
     public void setDiscountAdditionalInfo(Map<String, String> discountAdditionalInfo) {
-        this.mDiscountAdditionalInfo = discountAdditionalInfo;
+        mDiscountAdditionalInfo = discountAdditionalInfo;
     }
 
     public Map<String, String> getDiscountAdditionalInfo() {
-        return this.mDiscountAdditionalInfo;
+        return mDiscountAdditionalInfo;
     }
 
     public void setMerchantDiscountBaseUrl(String merchantDiscountUrl) {
-        this.mMerchantDiscountUrl = merchantDiscountUrl;
+        mMerchantDiscountUrl = merchantDiscountUrl;
     }
 
     public String getMerchantDiscountBaseUrl() {
-        return this.mMerchantDiscountUrl;
+        return mMerchantDiscountUrl;
     }
 
     public void setMerchantBaseUrl(String merchantBaseUrl) {
-        this.mMerchantBaseUrl = merchantBaseUrl;
+        mMerchantBaseUrl = merchantBaseUrl;
     }
 
     public String getMerchantBaseUrl() {
-        return this.mMerchantBaseUrl;
+        return mMerchantBaseUrl;
     }
 
     public void setMerchantGetDiscountUri(String merchantGetDiscountUri) {
-        this.mMerchantGetDiscountUri = merchantGetDiscountUri;
+        mMerchantGetDiscountUri = merchantGetDiscountUri;
     }
 
     public String getMerchantGetDiscountUri() {
@@ -475,19 +475,19 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public Boolean getDiscountEnabled() {
-        return this.mDiscountEnabled;
+        return mDiscountEnabled;
     }
 
     public void setDirectDiscountEnabled(Boolean directDiscountEnabled) {
-        this.mDirectDiscountEnabled = directDiscountEnabled;
+        mDirectDiscountEnabled = directDiscountEnabled;
     }
 
     public void setShowDiscount(Boolean showDiscount) {
-        this.mShowDiscount = showDiscount;
+        mShowDiscount = showDiscount;
     }
 
     public Boolean getDirectDiscountEnabled() {
-        return this.mDirectDiscountEnabled;
+        return mDirectDiscountEnabled;
     }
 
     public BigDecimal getTransactionAmount() {
@@ -761,31 +761,31 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public void saveCardNumber(String cardNumber) {
-        this.mCardNumber = cardNumber;
+        mCardNumber = cardNumber;
     }
 
     public void saveCardholderName(String cardholderName) {
-        this.mCardholderName = cardholderName;
+        mCardholderName = cardholderName;
     }
 
     public void saveExpiryMonth(String expiryMonth) {
-        this.mExpiryMonth = expiryMonth;
+        mExpiryMonth = expiryMonth;
     }
 
     public void saveExpiryYear(String expiryYear) {
-        this.mExpiryYear = expiryYear;
+        mExpiryYear = expiryYear;
     }
 
     public void saveSecurityCode(String securityCode) {
-        this.mSecurityCode = securityCode;
+        mSecurityCode = securityCode;
     }
 
     public void saveIdentificationNumber(String identificationNumber) {
-        this.mIdentificationNumber = identificationNumber;
+        mIdentificationNumber = identificationNumber;
     }
 
     public void saveIdentificationType(IdentificationType identificationType) {
-        this.mIdentificationType = identificationType;
+        mIdentificationType = identificationType;
         if (identificationType != null) {
             mIdentification.setType(identificationType.getId());
             getView().setIdentificationNumberRestrictions(identificationType.getType());
@@ -793,7 +793,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public IdentificationType getIdentificationType() {
-        return this.mIdentificationType;
+        return mIdentificationType;
     }
 
     public void setIdentificationNumber(String number) {
@@ -806,7 +806,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public void setCardNumber(String cardNumber) {
-        this.mCardNumber = cardNumber;
+        mCardNumber = cardNumber;
     }
 
     public String getCardholderName() {
@@ -814,7 +814,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public void setCardholderName(String name) {
-        this.mCardholderName = name;
+        mCardholderName = name;
     }
 
     public String getExpiryMonth() {
@@ -826,11 +826,11 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public void setExpiryMonth(String expiryMonth) {
-        this.mExpiryMonth = expiryMonth;
+        mExpiryMonth = expiryMonth;
     }
 
     public void setExpiryYear(String expiryYear) {
-        this.mExpiryYear = expiryYear;
+        mExpiryYear = expiryYear;
     }
 
     public String getSecurityCode() {
@@ -968,11 +968,11 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public void setShowBankDeals(Boolean showBankDeals) {
-        this.mShowBankDeals = showBankDeals;
+        mShowBankDeals = showBankDeals;
     }
 
     public void setTransactionAmount(BigDecimal transactionAmount) {
-        this.mTransactionAmount = transactionAmount;
+        mTransactionAmount = transactionAmount;
     }
 
     public boolean isDefaultSpaceErasable() {
@@ -996,16 +996,16 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
         String merchantBaseUrl;
 
         if (TextUtil.isEmpty(mMerchantDiscountUrl)) {
-            merchantBaseUrl = this.mMerchantBaseUrl;
+            merchantBaseUrl = mMerchantBaseUrl;
         } else {
-            merchantBaseUrl = this.mMerchantDiscountUrl;
+            merchantBaseUrl = mMerchantDiscountUrl;
         }
 
         return merchantBaseUrl;
     }
 
     public void setPrivateKey(String privateKey) {
-        this.mPrivateKey = privateKey;
+        mPrivateKey = privateKey;
     }
 
     public String getPrivateKey() {
@@ -1013,7 +1013,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     public void clearSpaceErasableSettings() {
-        this.mEraseSpace = true;
+        mEraseSpace = true;
     }
 
     public boolean isPaymentMethodResolved() {

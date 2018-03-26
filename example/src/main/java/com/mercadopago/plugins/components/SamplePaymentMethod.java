@@ -13,12 +13,12 @@ public class SamplePaymentMethod extends PluginComponent<SamplePaymentMethod.Sam
         RendererFactory.register(SamplePaymentMethod.class, SamplePaymentMethodRenderer.class);
     }
 
-    private SampleResources resources;
+    private final SampleResources resources;
 
     public SamplePaymentMethod(@NonNull final Props props, final SampleResources resources) {
         super(props);
         this.resources = resources;
-        this.state = new SamplePaymentMethod.SampleState(false, null);
+        state = new SamplePaymentMethod.SampleState(false, null);
     }
 
     public void authenticate(final String password) {

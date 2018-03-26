@@ -20,8 +20,8 @@ import java.util.List;
 
 public class BankDealsAdapter extends RecyclerView.Adapter<BankDealsAdapter.ViewHolder> {
 
-    private List<BankDeal> mData;
-    private OnSelectedCallback<View> mCallback;
+    private final List<BankDeal> mData;
+    private final OnSelectedCallback<View> mCallback;
     private View.OnClickListener mListener = null;
 
     public BankDealsAdapter(List<BankDeal> data, OnSelectedCallback<View> callback, View.OnClickListener listener) {

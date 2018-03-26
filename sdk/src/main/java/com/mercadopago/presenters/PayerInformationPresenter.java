@@ -9,7 +9,6 @@ import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.providers.PayerInformationProvider;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.TextUtil;
 import com.mercadopago.views.PayerInformationView;
 
 import java.util.ArrayList;
@@ -98,16 +97,16 @@ public class PayerInformationPresenter extends MvpPresenter<PayerInformationView
 
 
     public void saveIdentificationNumber(String identificationNumber) {
-        this.mIdentificationNumber = identificationNumber;
-        this.mIdentification.setNumber(identificationNumber);
+        mIdentificationNumber = identificationNumber;
+        mIdentification.setNumber(identificationNumber);
     }
 
     public void saveIdentificationName(String identificationName) {
-        this.mIdentificationName = identificationName;
+        mIdentificationName = identificationName;
     }
 
     public void saveIdentificationLastName(String identificationLastName) {
-        this.mIdentificationLastName = identificationLastName;
+        mIdentificationLastName = identificationLastName;
     }
 
     public int getIdentificationNumberMaxLength() {
@@ -120,7 +119,7 @@ public class PayerInformationPresenter extends MvpPresenter<PayerInformationView
     }
 
     public void saveIdentificationType(IdentificationType identificationType) {
-        this.mIdentificationType = identificationType;
+        mIdentificationType = identificationType;
         if (identificationType != null) {
             mIdentification.setType(identificationType.getId());
             getView().setIdentificationNumberRestrictions(identificationType.getType());
@@ -140,7 +139,7 @@ public class PayerInformationPresenter extends MvpPresenter<PayerInformationView
     }
 
     public void setFailureRecovery(FailureRecovery failureRecovery) {
-        this.mFailureRecovery = failureRecovery;
+        mFailureRecovery = failureRecovery;
     }
 
     public void recoverFromFailure() {
@@ -254,7 +253,7 @@ public class PayerInformationPresenter extends MvpPresenter<PayerInformationView
     }
 
     public IdentificationType getIdentificationType() {
-        return this.mIdentificationType;
+        return mIdentificationType;
     }
 
     public String getIdentificationNumber() {

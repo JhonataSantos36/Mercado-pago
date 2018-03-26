@@ -32,11 +32,11 @@ import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
-import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.presenters.CheckoutPresenter;
 import com.mercadopago.providers.CheckoutProvider;
 import com.mercadopago.providers.CheckoutProviderImpl;
+import com.mercadopago.review_and_confirm.ReviewAndConfirmActivity;
 import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ActionEvent;
@@ -52,6 +52,8 @@ import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;
 
+import static com.mercadopago.plugins.model.ExitAction.EXTRA_CLIENT_RES_CODE;
+
 public class CheckoutActivity extends MercadoPagoBaseActivity implements CheckoutView {
 
     private static final String MERCHANT_PUBLIC_KEY_BUNDLE = "mMerchantPublicKey";
@@ -61,6 +63,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
 
     private static final int PLUGIN_PAYMENT_PROCESSOR_REQUEST_CODE = 200;
     private static final int BUSINESS_REQUEST_CODE = 400;
+    public static final String RESULT_CODE = "resultCode";
 
     //Parameters
     protected String mMerchantPublicKey;
@@ -85,7 +88,9 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     }
 
     private void configurePresenter() {
-        CheckoutProvider provider = new CheckoutProviderImpl(this, mMerchantPublicKey, mPrivateKey, mCheckoutPresenter.getServicePreference(), mCheckoutPresenter.isESCEnabled());
+        CheckoutProvider provider =
+                new CheckoutProviderImpl(this, mMerchantPublicKey, mPrivateKey, mCheckoutPresenter.getServicePreference(),
+                        mCheckoutPresenter.isESCEnabled());
         mCheckoutPresenter.attachResourcesProvider(provider);
         mCheckoutPresenter.attachView(this);
         mCheckoutPresenter.setIdempotencyKeySeed(mMerchantPublicKey);
@@ -93,29 +98,34 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
 
     protected void getActivityParameters() {
 
-        CheckoutPreference checkoutPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("checkoutPreference"), CheckoutPreference.class);
-        PaymentResultScreenPreference paymentResultScreenPreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentResultScreenPreference"), PaymentResultScreenPreference.class);
-        ReviewScreenPreference reviewScreenPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("reviewScreenPreference"), ReviewScreenPreference.class);
-        FlowPreference flowPreference = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("flowPreference"), FlowPreference.class);
+        CheckoutPreference checkoutPreference = JsonUtil.getInstance()
+                .fromJson(getIntent().getStringExtra("checkoutPreference"), CheckoutPreference.class);
+        PaymentResultScreenPreference paymentResultScreenPreference = JsonUtil.getInstance()
+                .fromJson(getIntent().getStringExtra("paymentResultScreenPreference"),
+                        PaymentResultScreenPreference.class);
+        FlowPreference flowPreference =
+                JsonUtil.getInstance().fromJson(getIntent().getStringExtra("flowPreference"), FlowPreference.class);
 
-        Boolean binaryMode = this.getIntent().getBooleanExtra("binaryMode", false);
+        Boolean binaryMode = getIntent().getBooleanExtra("binaryMode", false);
 
         Discount discount = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("discount"), Discount.class);
-        Boolean directDiscountEnabled = this.getIntent().getBooleanExtra("directDiscountEnabled", true);
+        Boolean directDiscountEnabled = getIntent().getBooleanExtra("directDiscountEnabled", true);
 
-        PaymentData paymentDataInput = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentData"), PaymentData.class);
-        PaymentResult paymentResultInput = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentResult"), PaymentResult.class);
+        PaymentData paymentDataInput =
+                JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentData"), PaymentData.class);
+        PaymentResult paymentResultInput =
+                JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentResult"), PaymentResult.class);
 
-        mRequestedResultCode = this.getIntent().getIntExtra("resultCode", 0);
+        mRequestedResultCode = getIntent().getIntExtra("resultCode", 0);
 
-        ServicePreference servicePreference = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("servicePreference"), ServicePreference.class);
+        ServicePreference servicePreference = JsonUtil.getInstance()
+                .fromJson(getIntent().getStringExtra("servicePreference"), ServicePreference.class);
 
-        mMerchantPublicKey = this.getIntent().getStringExtra("merchantPublicKey");
+        mMerchantPublicKey = getIntent().getStringExtra("merchantPublicKey");
         mPrivateKey = checkoutPreference.getPayer() != null ? checkoutPreference.getPayer().getAccessToken() : "";
 
         mCheckoutPresenter.setCheckoutPreference(checkoutPreference);
         mCheckoutPresenter.setPaymentResultScreenPreference(paymentResultScreenPreference);
-        mCheckoutPresenter.setReviewScreenPreference(reviewScreenPreference);
         mCheckoutPresenter.setFlowPreference(flowPreference);
         mCheckoutPresenter.setBinaryMode(binaryMode);
         mCheckoutPresenter.setDiscount(discount);
@@ -136,13 +146,15 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     @Override
     public void initializeMPTracker() {
         //Initialize tracker before creating a token
-        MPTracker.getInstance().initTracker(mMerchantPublicKey, mCheckoutPresenter.getCheckoutPreference().getSite().getId(), BuildConfig.VERSION_NAME, getApplicationContext());
+        MPTracker.getInstance()
+                .initTracker(mMerchantPublicKey, mCheckoutPresenter.getCheckoutPreference().getSite().getId(),
+                        BuildConfig.VERSION_NAME, getApplicationContext());
     }
 
     @Override
     public void trackScreen() {
         final MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mMerchantPublicKey)
-                .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                .setVersion(BuildConfig.VERSION_NAME)
                 .build();
         final ActionEvent event = new ActionEvent.Builder()
                 .setFlowId(FlowHandler.getInstance().getFlowId())
@@ -173,7 +185,8 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         if (savedInstanceState != null) {
             mMerchantPublicKey = savedInstanceState.getString(MERCHANT_PUBLIC_KEY_BUNDLE);
             mRequestedResultCode = savedInstanceState.getInt(RESULT_CODE_BUNDLE, 0);
-            mCheckoutPresenter = JsonUtil.getInstance().fromJson(savedInstanceState.getString(PRESENTER_BUNDLE), CheckoutPresenter.class);
+            mCheckoutPresenter = JsonUtil.getInstance()
+                    .fromJson(savedInstanceState.getString(PRESENTER_BUNDLE), CheckoutPresenter.class);
             configurePresenter();
         }
         super.onRestoreInstanceState(savedInstanceState);
@@ -220,7 +233,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
 
     private void resolveBusinessResultActivity(final int resultCode, final Intent data) {
         if (resultCode == RESULT_OK) {
-            setResult(data.getIntExtra(BusinessPaymentResultActivity.EXTRA_CLIENT_RES_CODE, 0));
+            setResult(data.getIntExtra(EXTRA_CLIENT_RES_CODE, 0));
             finish();
         } else {
             cancelCheckout();
@@ -263,6 +276,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
      */
     private void paymentResultOk(final Intent data) {
         if (PaymentProcessorPluginActivity.isBusiness(data)) {
+            overrideTransitionIn();
             BusinessPayment businessPayment = PaymentProcessorPluginActivity.getBusinessPayment(data);
             BusinessPaymentResultActivity.start(this, businessPayment, BUSINESS_REQUEST_CODE);
         } else {
@@ -277,30 +291,32 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     }
 
     private void resolveReviewAndConfirmRequest(int resultCode, Intent data) {
-
         if (resultCode == RESULT_OK) {
             mCheckoutPresenter.onPaymentConfirmation();
         } else if (resultCode == ReviewAndConfirmActivity.RESULT_CHANGE_PAYMENT_METHOD) {
             mCheckoutPresenter.changePaymentMethod();
         } else if (resultCode == ReviewAndConfirmActivity.RESULT_CANCEL_PAYMENT) {
-            if (data != null && data.getIntExtra("resultCode", 0) != 0) {
-                Integer customResultCode = data.getIntExtra("resultCode", 0);
-                PaymentData paymentData = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentData"), PaymentData.class);
-                mCustomDataBundle = data;
-                mCheckoutPresenter.onCustomReviewAndConfirmResponse(customResultCode, paymentData);
-            } else {
-                MercadoPagoError mercadoPagoError = null;
-                if (data != null && data.getStringExtra("mercadoPagoError") != null) {
-                    mercadoPagoError = JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
-                }
-                if (mercadoPagoError == null) {
-                    mCheckoutPresenter.onReviewAndConfirmCancelPayment();
-                } else {
-                    mCheckoutPresenter.onReviewAndConfirmError(mercadoPagoError);
-                }
-            }
+            resolveCancelReviewAndConfirm(data);
         } else if (resultCode == RESULT_CANCELED) {
             mCheckoutPresenter.onReviewAndConfirmCancel();
+        }
+    }
+
+    private void resolveCancelReviewAndConfirm(final Intent data) {
+        if (data != null && data.hasExtra(EXTRA_CLIENT_RES_CODE)) {
+            Integer customResultCode = data.getIntExtra(EXTRA_CLIENT_RES_CODE, 0);
+            mCheckoutPresenter.onCustomReviewAndConfirmResponse(customResultCode);
+        } else {
+            MercadoPagoError mercadoPagoError = null;
+            if (data != null && data.getStringExtra("mercadoPagoError") != null) {
+                mercadoPagoError = JsonUtil.getInstance()
+                        .fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
+            }
+            if (mercadoPagoError == null) {
+                mCheckoutPresenter.onReviewAndConfirmCancelPayment();
+            } else {
+                mCheckoutPresenter.onReviewAndConfirmError(mercadoPagoError);
+            }
         }
     }
 
@@ -310,12 +326,14 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
             Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
             PayerCost payerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
             Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
-            PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+            PaymentMethod paymentMethod =
+                    JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
 
             mCheckoutPresenter.onCardFlowResponse(paymentMethod, issuer, payerCost, token, discount);
         } else {
-            MercadoPagoError mercadoPagoError = (data == null || data.getStringExtra("mercadoPagoError") == null) ? null :
-                    JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
+            MercadoPagoError mercadoPagoError =
+                    (data == null || data.getStringExtra("mercadoPagoError") == null) ? null :
+                            JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
             if (mercadoPagoError == null) {
                 mCheckoutPresenter.onCardFlowCancel();
             } else {
@@ -330,17 +348,21 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
             Issuer issuer = JsonUtil.getInstance().fromJson(data.getStringExtra("issuer"), Issuer.class);
             PayerCost payerCost = JsonUtil.getInstance().fromJson(data.getStringExtra("payerCost"), PayerCost.class);
             Token token = JsonUtil.getInstance().fromJson(data.getStringExtra("token"), Token.class);
-            PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+            PaymentMethod paymentMethod =
+                    JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
             Card card = JsonUtil.getInstance().fromJson(data.getStringExtra("card"), Card.class);
             Payer payer = JsonUtil.getInstance().fromJson(data.getStringExtra("payer"), Payer.class);
-            PaymentMethodSearch paymentMethodSearch = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethodSearch"), PaymentMethodSearch.class);
+            PaymentMethodSearch paymentMethodSearch =
+                    JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethodSearch"), PaymentMethodSearch.class);
             if (paymentMethodSearch != null) {
                 mCheckoutPresenter.setPaymentMethodSearch(paymentMethodSearch);
             }
 
-            mCheckoutPresenter.onPaymentMethodSelectionResponse(paymentMethod, issuer, payerCost, token, discount, card, payer);
+            mCheckoutPresenter
+                    .onPaymentMethodSelectionResponse(paymentMethod, issuer, payerCost, token, discount, card, payer);
         } else if (isErrorResult(data)) {
-            MercadoPagoError mercadoPagoError = JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
+            MercadoPagoError mercadoPagoError =
+                    JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
             mCheckoutPresenter.onPaymentMethodSelectionError(mercadoPagoError);
         } else {
             mCheckoutPresenter.onPaymentMethodSelectionCancel();
@@ -358,20 +380,20 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         final CheckoutStore store = CheckoutStore.getInstance();
         final PaymentMethodInfo paymentMethodInfo = store.getSelectedPaymentMethodInfo(this);
 
-        MercadoPagoComponents.Activities.ReviewAndConfirmBuilder builder = new MercadoPagoComponents.Activities.ReviewAndConfirmBuilder()
-                .setActivity(this)
-                .setMerchantPublicKey(mMerchantPublicKey)
-                .setSite(mCheckoutPresenter.getCheckoutPreference().getSite())
-                .setReviewScreenPreference(mCheckoutPresenter.getReviewScreenPreference())
-                .setPaymentMethod(mCheckoutPresenter.getSelectedPaymentMethod())
-                .setIssuer(mCheckoutPresenter.getIssuer())
-                .setPayerCost(mCheckoutPresenter.getSelectedPayerCost())
-                .setAmount(mCheckoutPresenter.getCheckoutPreference().getAmount())
-                .setSite(mCheckoutPresenter.getCheckoutPreference().getSite())
-                .setEditionEnabled(!mCheckoutPresenter.isUniquePaymentMethod())
-                .setDiscountEnabled(mCheckoutPresenter.isDiscountEnabled())
-                .setItems(mCheckoutPresenter.getCheckoutPreference().getItems())
-                .setTermsAndConditionsEnabled(!isUserLogged());
+        MercadoPagoComponents.Activities.ReviewAndConfirmBuilder builder =
+                new MercadoPagoComponents.Activities.ReviewAndConfirmBuilder()
+                        .setActivity(this)
+                        .setMerchantPublicKey(mMerchantPublicKey)
+                        .setSite(mCheckoutPresenter.getCheckoutPreference().getSite())
+                        .setPaymentMethod(mCheckoutPresenter.getSelectedPaymentMethod())
+                        .setIssuer(mCheckoutPresenter.getIssuer())
+                        .setPayerCost(mCheckoutPresenter.getSelectedPayerCost())
+                        .setAmount(mCheckoutPresenter.getCheckoutPreference().getAmount())
+                        .setSite(mCheckoutPresenter.getCheckoutPreference().getSite())
+                        .setHasExtraPaymentMethods(!mCheckoutPresenter.isUniquePaymentMethod())
+                        .setDiscountEnabled(mCheckoutPresenter.isDiscountEnabled())
+                        .setItems(mCheckoutPresenter.getCheckoutPreference().getItems())
+                        .setTermsAndConditionsEnabled(!isUserLogged());
 
         if (mCheckoutPresenter.isDiscountEnabled() && mCheckoutPresenter.isDiscountValid()) {
             builder.setDiscount(mCheckoutPresenter.getDiscount());
@@ -382,8 +404,10 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         } else if (paymentMethodInfo != null) { //Plugin payment method selected
             builder.setPaymentMethodDescriptionInfo(paymentMethodInfo.name);
             builder.setPaymentMethodCommentInfo(paymentMethodInfo.description);
-        } else if (!PaymentTypes.ACCOUNT_MONEY.equals(mCheckoutPresenter.getSelectedPaymentMethod().getPaymentTypeId())) {
-            PaymentMethodSearchItem paymentMethodSearchItem = mCheckoutPresenter.getPaymentMethodSearch().getSearchItemByPaymentMethod(mCheckoutPresenter.getSelectedPaymentMethod());
+        } else if (!PaymentTypes.ACCOUNT_MONEY
+                .equals(mCheckoutPresenter.getSelectedPaymentMethod().getPaymentTypeId())) {
+            PaymentMethodSearchItem paymentMethodSearchItem = mCheckoutPresenter.getPaymentMethodSearch()
+                    .getSearchItemByPaymentMethod(mCheckoutPresenter.getSelectedPaymentMethod());
             if (paymentMethodSearchItem != null) {
                 builder.setPaymentMethodCommentInfo(paymentMethodSearchItem.getComment());
                 builder.setPaymentMethodDescriptionInfo(paymentMethodSearchItem.getDescription());
@@ -406,7 +430,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
 
     @Override
     public void showPaymentMethodSelection() {
-        if (this.isActive()) {
+        if (isActive()) {
             new MercadoPagoComponents.Activities.PaymentVaultActivityBuilder()
                     .setActivity(this)
                     .setMerchantPublicKey(mMerchantPublicKey)
@@ -432,7 +456,9 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
 
     @Override
     public void showPaymentResult(PaymentResult paymentResult) {
-        BigDecimal amount = mCheckoutPresenter.getCreatedPayment() == null ? mCheckoutPresenter.getCheckoutPreference().getAmount() : mCheckoutPresenter.getCreatedPayment().getTransactionAmount();
+        BigDecimal amount =
+                mCheckoutPresenter.getCreatedPayment() == null ? mCheckoutPresenter.getCheckoutPreference().getAmount()
+                        : mCheckoutPresenter.getCreatedPayment().getTransactionAmount();
 
         new MercadoPagoComponents.Activities.PaymentResultActivityBuilder()
                 .setMerchantPublicKey(mMerchantPublicKey)
@@ -452,7 +478,8 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     }
 
     private boolean isUserLogged() {
-        return mCheckoutPresenter.getCheckoutPreference().getPayer() != null && !TextUtil.isEmpty(mCheckoutPresenter.getCheckoutPreference().getPayer().getAccessToken());
+        return mCheckoutPresenter.getCheckoutPreference().getPayer() != null &&
+                !TextUtil.isEmpty(mCheckoutPresenter.getCheckoutPreference().getPayer().getAccessToken());
     }
 
     private void resolvePaymentResultRequest(int resultCode, Intent data) {
@@ -494,6 +521,7 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         finish();
     }
 
+    @Override
     public void finishWithPaymentResult(Integer resultCode, Payment payment) {
         Intent intent = new Intent();
         if (mCustomDataBundle != null) {
@@ -576,15 +604,11 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
     }
 
     @Override
-    public void cancelCheckout(Integer resultCode, PaymentData paymentData, Boolean paymentMethodEdited) {
+    public void cancelCheckout(Integer resultCode, Boolean paymentMethodEdited) {
         Intent intent = new Intent();
-        if (mCustomDataBundle != null) {
-            intent.putExtras(mCustomDataBundle);
-        }
         intent.putExtra("paymentMethodChanged", paymentMethodEdited);
-        intent.putExtra("paymentData", JsonUtil.getInstance().toJson(paymentData));
         setResult(resultCode, intent);
-        this.finish();
+        finish();
     }
 
     @Override

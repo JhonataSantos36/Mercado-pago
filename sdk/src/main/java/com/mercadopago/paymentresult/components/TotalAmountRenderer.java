@@ -19,7 +19,6 @@ public class TotalAmountRenderer extends Renderer<TotalAmount> {
         final View bodyView = inflate(R.layout.mpsdk_total_amount_component, parent);
         final MPTextView amountTitleTextView = bodyView.findViewById(R.id.mpsdkAmountTitle);
         final MPTextView amountDetailTextView = bodyView.findViewById(R.id.mpsdkAmountDetail);
-
         setText(amountTitleTextView, component.getAmountTitle());
         setText(amountDetailTextView, component.getAmountDetail());
 

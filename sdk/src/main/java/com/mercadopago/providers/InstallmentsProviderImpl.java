@@ -34,9 +34,9 @@ public class InstallmentsProviderImpl implements InstallmentsProvider {
         this.merchantBaseUrl = merchantBaseUrl;
         this.merchantDiscountBaseUrl = merchantDiscountBaseUrl;
         this.merchantGetDiscountUri = merchantGetDiscountUri;
-        this.mDiscountAdditionalInfo = discountAdditionalInfo;
+        mDiscountAdditionalInfo = discountAdditionalInfo;
 
-        this.mercadoPago = new MercadoPagoServicesAdapter.Builder()
+        mercadoPago = new MercadoPagoServicesAdapter.Builder()
                 .setContext(context)
                 .setPublicKey(publicKey)
                 .setPrivateKey(privateKey)

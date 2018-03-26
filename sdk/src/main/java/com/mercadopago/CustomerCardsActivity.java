@@ -85,18 +85,18 @@ public class CustomerCardsActivity extends MercadoPagoBaseActivity implements Cu
             Type listType = new TypeToken<List<Card>>() {
             }.getType();
 
-            cards = gson.fromJson(this.getIntent().getStringExtra("cards"), listType);
+            cards = gson.fromJson(getIntent().getStringExtra("cards"), listType);
         } catch (Exception ex) {
             cards = null;
         }
 
-        mMerchantBaseUrl = this.getIntent().getStringExtra("merchantBaseUrl");
-        mMerchantGetCustomerUri = this.getIntent().getStringExtra("merchantGetCustomerUri");
-        mMerchantAccessToken = this.getIntent().getStringExtra("merchantAccessToken");
+        mMerchantBaseUrl = getIntent().getStringExtra("merchantBaseUrl");
+        mMerchantGetCustomerUri = getIntent().getStringExtra("merchantGetCustomerUri");
+        mMerchantAccessToken = getIntent().getStringExtra("merchantAccessToken");
 
-        mPresenter.setCustomTitle(this.getIntent().getStringExtra("title"));
-        mPresenter.setSelectionConfirmPromptText(this.getIntent().getStringExtra("selectionConfirmPromptText"));
-        mPresenter.setCustomActionMessage(this.getIntent().getStringExtra("customActionMessage"));
+        mPresenter.setCustomTitle(getIntent().getStringExtra("title"));
+        mPresenter.setSelectionConfirmPromptText(getIntent().getStringExtra("selectionConfirmPromptText"));
+        mPresenter.setCustomActionMessage(getIntent().getStringExtra("customActionMessage"));
         mPresenter.setCards(cards);
     }
 
@@ -106,14 +106,14 @@ public class CustomerCardsActivity extends MercadoPagoBaseActivity implements Cu
 
     protected void initializeControls() {
         initializeToolbar();
-        mSavedCardsContainer = (ViewGroup) findViewById(R.id.mpsdkRegularLayout);
+        mSavedCardsContainer = findViewById(R.id.mpsdkRegularLayout);
     }
 
     private void initializeToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
+        Toolbar toolbar = findViewById(R.id.mpsdkToolbar);
         setSupportActionBar(toolbar);
 
-        mTitle = (TextView) findViewById(R.id.mpsdkToolbarTitle);
+        mTitle = findViewById(R.id.mpsdkToolbarTitle);
         if (!TextUtils.isEmpty(mPresenter.getCustomTitle())) {
             mTitle.setText(mPresenter.getCustomTitle());
         }

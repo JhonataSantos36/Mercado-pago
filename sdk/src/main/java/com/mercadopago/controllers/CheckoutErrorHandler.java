@@ -28,7 +28,7 @@ public class CheckoutErrorHandler {
      *   View with ID: mpsdkExit - Any view that will cancel the action in progress.
      */
     public void setCustomErrorLayout(@LayoutRes int layout) {
-        this.customErrorLayout = layout;
+        customErrorLayout = layout;
     }
 
     public boolean hasCustomErrorLayout() {

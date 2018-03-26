@@ -25,7 +25,7 @@ public class IdentificationType {
     }
 
     public void setId(String Id) {
-        this.id = Id;
+        id = Id;
     }
 
     public String getName() {
@@ -33,7 +33,7 @@ public class IdentificationType {
     }
 
     public void setName(String Name) {
-        this.name = Name;
+        name = Name;
     }
 
     public String getType() {
@@ -41,7 +41,7 @@ public class IdentificationType {
     }
 
     public void setType(String Type) {
-        this.type = Type;
+        type = Type;
     }
 
     public Integer getMinLength() {
@@ -49,7 +49,7 @@ public class IdentificationType {
     }
 
     public void setMinLength(Integer MinLength) {
-        this.minLength = MinLength;
+        minLength = MinLength;
     }
 
     public Integer getMaxLength() {
@@ -57,6 +57,6 @@ public class IdentificationType {
     }
 
     public void setMaxLength(Integer MaxLength) {
-        this.maxLength = MaxLength;
+        maxLength = MaxLength;
     }
 }

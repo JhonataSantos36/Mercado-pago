@@ -18,25 +18,25 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
     private final String title;
     private final Status status;
     private final boolean hasPaymentMethod;
-    private final ButtonAction buttonActionPrimary;
-    private final ButtonAction buttonActionSecondary;
+    private final ExitAction exitActionPrimary;
+    private final ExitAction exitActionSecondary;
 
     private BusinessPayment(Builder builder) {
-        this.help = builder.help;
-        this.title = builder.title;
-        this.status = builder.status;
-        this.iconId = builder.iconId;
-        this.hasPaymentMethod = builder.hasPaymentMethod;
-        this.buttonActionPrimary = builder.buttonPrimary;
-        this.buttonActionSecondary = builder.buttonSecondary;
+        help = builder.help;
+        title = builder.title;
+        status = builder.status;
+        iconId = builder.iconId;
+        hasPaymentMethod = builder.hasPaymentMethod;
+        exitActionPrimary = builder.buttonPrimary;
+        exitActionSecondary = builder.buttonSecondary;
     }
 
     protected BusinessPayment(Parcel in) {
         iconId = in.readInt();
         title = in.readString();
         hasPaymentMethod = in.readByte() != 0;
-        buttonActionPrimary = in.readParcelable(ButtonAction.class.getClassLoader());
-        buttonActionSecondary = in.readParcelable(ButtonAction.class.getClassLoader());
+        exitActionPrimary = in.readParcelable(ExitAction.class.getClassLoader());
+        exitActionSecondary = in.readParcelable(ExitAction.class.getClassLoader());
         status = Status.fromName(in.readString());
         help = in.readString();
     }
@@ -68,8 +68,8 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
         dest.writeInt(iconId);
         dest.writeString(title);
         dest.writeByte((byte) (hasPaymentMethod ? 1 : 0));
-        dest.writeParcelable(buttonActionPrimary, flags);
-        dest.writeParcelable(buttonActionSecondary, flags);
+        dest.writeParcelable(exitActionPrimary, flags);
+        dest.writeParcelable(exitActionSecondary, flags);
         dest.writeString(status.name);
         dest.writeString(help);
     }
@@ -86,24 +86,16 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
         return title;
     }
 
-    public boolean hasPrimaryButton() {
-        return buttonActionPrimary != null;
-    }
-
-    public boolean hasSecondaryButton() {
-        return buttonActionSecondary != null;
-    }
-
     public boolean hasHelp() {
         return TextUtils.isNotEmpty(help);
     }
 
-    public ButtonAction getSecondaryAction() {
-        return buttonActionSecondary;
+    public ExitAction getSecondaryAction() {
+        return exitActionSecondary;
     }
 
-    public ButtonAction getPrimaryAction() {
-        return buttonActionPrimary;
+    public ExitAction getPrimaryAction() {
+        return exitActionPrimary;
     }
 
     public String getHelp() {
@@ -152,9 +144,9 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
         private final String title;
 
         // Optional values
-        private boolean hasPaymentMethod;
-        private ButtonAction buttonPrimary;
-        private ButtonAction buttonSecondary;
+        private final boolean hasPaymentMethod;
+        private ExitAction buttonPrimary;
+        private ExitAction buttonSecondary;
         private String help;
 
         public Builder(@NonNull Status status,
@@ -163,39 +155,41 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
             this.title = title;
             this.status = status;
             this.iconId = iconId;
-            this.hasPaymentMethod = false;
-            this.buttonPrimary = null;
-            this.buttonSecondary = null;
-            this.help = null;
+            hasPaymentMethod = false;
+            buttonPrimary = null;
+            buttonSecondary = null;
+            help = null;
         }
 
         public BusinessPayment build() {
+            if (buttonPrimary == null && buttonSecondary == null)
+                throw new IllegalStateException("At least one button should be provided for BusinessPayment");
             return new BusinessPayment(this);
         }
 
         /**
-         * if button action is set, then a big primary button
+         * if Exit action is set, then a big primary button
          * will appear and the click action will trigger a resCode
-         * that will be the same of the Button action added.
+         * that will be the same of the Exit action added.
          *
-         * @param buttonAction a {@link ButtonAction }
+         * @param exitAction a {@link ExitAction }
          * @return builder
          */
-        public Builder setPrimaryButton(@Nullable ButtonAction buttonAction) {
-            this.buttonPrimary = buttonAction;
+        public Builder setPrimaryButton(@Nullable ExitAction exitAction) {
+            buttonPrimary = exitAction;
             return this;
         }
 
         /**
-         * if button action is set, then a small secondary button
+         * if Exit action is set, then a small secondary button
          * will appear and the click action will trigger a resCode
-         * that will be the same of the Button action added.
+         * that will be the same of the Exit action added.
          *
-         * @param buttonAction a {@link ButtonAction }
+         * @param exitAction a {@link ExitAction }
          * @return builder
          */
-        public Builder setSecondaryButton(@Nullable ButtonAction buttonAction) {
-            this.buttonSecondary = buttonAction;
+        public Builder setSecondaryButton(@Nullable ExitAction exitAction) {
+            buttonSecondary = exitAction;
             return this;
         }
 

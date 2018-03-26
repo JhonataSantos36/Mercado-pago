@@ -27,24 +27,24 @@ public class PaymentResultProps {
     public final String processingMode;
 
     public PaymentResultProps(@NonNull final Builder builder) {
-        this.paymentResult = builder.paymentResult;
-        this.headerMode = builder.headerMode;
-        this.instruction = builder.instruction;
-        this.headerAmountFormatter = builder.headerAmountFormatter;
-        this.bodyAmountFormatter = builder.bodyAmountFormatter;
-        this.loading = builder.loading;
-        this.processingMode = builder.processingMode;
+        paymentResult = builder.paymentResult;
+        headerMode = builder.headerMode;
+        instruction = builder.instruction;
+        headerAmountFormatter = builder.headerAmountFormatter;
+        bodyAmountFormatter = builder.bodyAmountFormatter;
+        loading = builder.loading;
+        processingMode = builder.processingMode;
     }
 
     public Builder toBuilder() {
         return new Builder()
-                .setPaymentResult(this.paymentResult)
-                .setHeaderMode(this.headerMode)
-                .setInstruction(this.instruction)
-                .setHeaderAmountFormatter(this.headerAmountFormatter)
-                .setBodyAmountFormatter(this.bodyAmountFormatter)
-                .setLoading(this.loading)
-                .setProcessingMode(this.processingMode);
+                .setPaymentResult(paymentResult)
+                .setHeaderMode(headerMode)
+                .setInstruction(instruction)
+                .setHeaderAmountFormatter(headerAmountFormatter)
+                .setBodyAmountFormatter(bodyAmountFormatter)
+                .setLoading(loading)
+                .setProcessingMode(processingMode);
     }
 
     public boolean hasCustomizedTitle() {

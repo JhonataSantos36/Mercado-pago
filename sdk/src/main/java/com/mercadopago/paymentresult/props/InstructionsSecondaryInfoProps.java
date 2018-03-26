@@ -17,12 +17,12 @@ public class InstructionsSecondaryInfoProps {
     }
 
     public InstructionsSecondaryInfoProps(@NonNull final Builder builder) {
-        this.secondaryInfo = builder.secondaryInfo;
+        secondaryInfo = builder.secondaryInfo;
     }
 
     public Builder toBuilder() {
         return new InstructionsSecondaryInfoProps.Builder()
-                .setSecondaryInfo(this.secondaryInfo);
+                .setSecondaryInfo(secondaryInfo);
     }
 
     public static final class Builder {

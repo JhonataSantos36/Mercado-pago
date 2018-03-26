@@ -24,7 +24,7 @@ public class PayerInformationProviderImpl implements PayerInformationProvider {
 
     public PayerInformationProviderImpl(Context context, String publicKey, String payerAccessToken) {
         this.context = context;
-        this.mercadoPago = new MercadoPagoServicesAdapter.Builder()
+        mercadoPago = new MercadoPagoServicesAdapter.Builder()
                 .setContext(context)
                 .setPublicKey(publicKey)
                 .setPrivateKey(payerAccessToken)

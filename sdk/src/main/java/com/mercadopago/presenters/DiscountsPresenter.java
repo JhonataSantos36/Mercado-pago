@@ -26,7 +26,7 @@ public class DiscountsPresenter extends MvpPresenter<DiscountsActivityView, Disc
 
     @Override
     public void attachView(DiscountsActivityView discountsView) {
-        this.mDiscountsView = discountsView;
+        mDiscountsView = discountsView;
     }
 
     public void initialize() {
@@ -106,31 +106,31 @@ public class DiscountsPresenter extends MvpPresenter<DiscountsActivityView, Disc
     }
 
     public Discount getDiscount() {
-        return this.mDiscount;
+        return mDiscount;
     }
 
     public void setMerchantPublicKey(String publicKey) {
-        this.mPublicKey = publicKey;
+        mPublicKey = publicKey;
     }
 
     public void setPayerEmail(String payerEmail) {
-        this.mPayerEmail = payerEmail;
+        mPayerEmail = payerEmail;
     }
 
     public void setDiscount(Discount discount) {
-        this.mDiscount = discount;
+        mDiscount = discount;
     }
 
     public void setTransactionAmount(BigDecimal transactionAmount) {
-        this.mTransactionAmount = transactionAmount;
+        mTransactionAmount = transactionAmount;
     }
 
     public void setDirectDiscountEnabled(Boolean directDiscountEnabled) {
-        this.mDirectDiscountEnabled = directDiscountEnabled;
+        mDirectDiscountEnabled = directDiscountEnabled;
     }
 
     public Boolean getDirectDiscountEnabled() {
-        return this.mDirectDiscountEnabled;
+        return mDirectDiscountEnabled;
     }
 
     public String getCurrencyId() {
@@ -146,7 +146,7 @@ public class DiscountsPresenter extends MvpPresenter<DiscountsActivityView, Disc
     }
 
     public String getPublicKey() {
-        return this.mPublicKey;
+        return mPublicKey;
     }
 
     private boolean isEmpty(String discountCode) {

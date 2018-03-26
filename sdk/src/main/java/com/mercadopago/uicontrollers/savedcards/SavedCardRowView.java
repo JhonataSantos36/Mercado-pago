@@ -17,10 +17,10 @@ import com.mercadopago.util.MercadoPagoUtil;
  */
 public class SavedCardRowView implements SavedCardView {
 
-    private Integer mSelectionImageResId;
-    private Card mCard;
-    private PaymentMethod mPaymentMethod;
-    private Context mContext;
+    private final Integer mSelectionImageResId;
+    private final Card mCard;
+    private final PaymentMethod mPaymentMethod;
+    private final Context mContext;
     private View mSeparator;
     private View mView;
     private MPTextView mDescription;
@@ -42,9 +42,9 @@ public class SavedCardRowView implements SavedCardView {
 
     @Override
     public void initializeControls() {
-        mDescription = (MPTextView) mView.findViewById(R.id.mpsdkDescription);
-        mIcon = (ImageView) mView.findViewById(R.id.mpsdkImage);
-        mEditHint = (ImageView) mView.findViewById(R.id.mpsdkEditHint);
+        mDescription = mView.findViewById(R.id.mpsdkDescription);
+        mIcon = mView.findViewById(R.id.mpsdkImage);
+        mEditHint = mView.findViewById(R.id.mpsdkEditHint);
         mSeparator = mView.findViewById(R.id.mpsdkSeparator);
     }
 

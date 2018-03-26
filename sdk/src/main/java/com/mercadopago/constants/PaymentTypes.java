@@ -19,10 +19,27 @@ public class PaymentTypes {
     public static String ACCOUNT_MONEY = "account_money";
     public static String PLUGIN = "payment_method_plugin";
 
-    private PaymentTypes(){}
+    private PaymentTypes() {
+    }
+
+    public static boolean isCardPaymentMethod(String paymentType) {
+        return paymentType != null &&
+                (paymentType.equals(PaymentTypes.CREDIT_CARD) ||
+                        paymentType.equals(PaymentTypes.DEBIT_CARD) ||
+                        paymentType.equals(PaymentTypes.PREPAID_CARD));
+    }
+
+    public static boolean isAccountMoney(String type) {
+        return type != null && type.equals(PaymentTypes.ACCOUNT_MONEY);
+    }
+
+    public static boolean isPlugin(String type) {
+        return type != null && (type.equals(PaymentTypes.ACCOUNT_MONEY)
+                || type.equals(PaymentTypes.PLUGIN));
+    }
 
     public static List<String> getAllPaymentTypes() {
-        return new ArrayList<String>(){{
+        return new ArrayList<String>() {{
             add(CREDIT_CARD);
             add(DEBIT_CARD);
             add(PREPAID_CARD);

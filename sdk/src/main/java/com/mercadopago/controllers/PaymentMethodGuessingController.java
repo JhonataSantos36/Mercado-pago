@@ -12,17 +12,17 @@ import java.util.List;
 public class PaymentMethodGuessingController {
 
     private String mSavedBin;
-    private List<PaymentMethod> mAllPaymentMethods;
+    private final List<PaymentMethod> mAllPaymentMethods;
     private List<PaymentMethod> mGuessedPaymentMethods;
-    private List<String> mExcludedPaymentTypes;
-    private String mPaymentTypeId;
+    private final List<String> mExcludedPaymentTypes;
+    private final String mPaymentTypeId;
 
     public PaymentMethodGuessingController(List<PaymentMethod> paymentMethods,
                                            String paymentTypeId, List<String> excludedPaymentTypes) {
-        this.mAllPaymentMethods = paymentMethods;
-        this.mExcludedPaymentTypes = excludedPaymentTypes;
-        this.mPaymentTypeId = paymentTypeId;
-        this.mSavedBin = "";
+        mAllPaymentMethods = paymentMethods;
+        mExcludedPaymentTypes = excludedPaymentTypes;
+        mPaymentTypeId = paymentTypeId;
+        mSavedBin = "";
     }
 
     public String getPaymentTypeId() {
@@ -57,7 +57,7 @@ public class PaymentMethodGuessingController {
         }
         saveBin(bin);
         mGuessedPaymentMethods = MercadoPagoUtil
-                .getValidPaymentMethodsForBin(mSavedBin, this.mAllPaymentMethods);
+                .getValidPaymentMethodsForBin(mSavedBin, mAllPaymentMethods);
         mGuessedPaymentMethods = getValidPaymentMethodForType(mPaymentTypeId, mGuessedPaymentMethods);
         if (mGuessedPaymentMethods.size() > 1) {
             mGuessedPaymentMethods = filterByPaymentType(mExcludedPaymentTypes, mGuessedPaymentMethods);

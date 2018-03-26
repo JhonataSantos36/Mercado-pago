@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 public class SavedESCCardToken extends SavedCardToken {
 
     @SerializedName("require_esc")
-    private boolean requireESC;
+    private final boolean requireESC;
     private String esc;
 
     public SavedESCCardToken(String cardId, String securityCode, boolean requireESC) {

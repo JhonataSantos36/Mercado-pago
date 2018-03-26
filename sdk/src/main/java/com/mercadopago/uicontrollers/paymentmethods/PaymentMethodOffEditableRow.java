@@ -19,7 +19,7 @@ public class PaymentMethodOffEditableRow implements PaymentMethodViewController 
 
     private PaymentMethod mPaymentMethod;
     private PaymentMethodSearchItem mItem;
-    private Context mContext;
+    private final Context mContext;
     private View mSeparator;
     private View mView;
     private MPTextView mDescription;
@@ -91,9 +91,9 @@ public class PaymentMethodOffEditableRow implements PaymentMethodViewController 
 
     @Override
     public void initializeControls() {
-        mComment = (MPTextView) mView.findViewById(R.id.mpsdkComment);
-        mDescription = (MPTextView) mView.findViewById(R.id.mpsdkDescription);
-        mIcon = (ImageView) mView.findViewById(R.id.mpsdkImage);
+        mComment = mView.findViewById(R.id.mpsdkComment);
+        mDescription = mView.findViewById(R.id.mpsdkDescription);
+        mIcon = mView.findViewById(R.id.mpsdkImage);
         mEditHint = mView.findViewById(R.id.mpsdkEditHint);
         mSeparator = mView.findViewById(R.id.mpsdkSeparator);
 

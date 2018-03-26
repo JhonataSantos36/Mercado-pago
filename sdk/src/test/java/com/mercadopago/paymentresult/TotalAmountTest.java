@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 
 import static org.mockito.Mockito.mock;
 
@@ -36,7 +37,10 @@ public class TotalAmountTest {
         final BodyAmountFormatter amountFormatter = new BodyAmountFormatter("ARS", new BigDecimal(1000));
         final TotalAmount component = getTotalAmountComponent(payerCost, amountFormatter);
 
-        amountTitle = component.props.payerCost.getInstallments() + "x " + component.props.amountFormatter.formatNumber(component.props.payerCost.getInstallmentAmount(), component.props.amountFormatter.getCurrencyId());
+        amountTitle = String.format(Locale.getDefault(),
+                "%dx %s",
+                component.props.payerCost.getInstallments(),
+                component.props.amountFormatter.formatNumber(component.props.payerCost.getInstallmentAmount()));
         Assert.assertTrue(component.getAmountTitle().equals(amountTitle));
     }
 
@@ -47,7 +51,7 @@ public class TotalAmountTest {
         final BodyAmountFormatter amountFormatter = new BodyAmountFormatter("ARS", new BigDecimal(1000));
         final TotalAmount component = getTotalAmountComponent(payerCost, amountFormatter);
 
-        amountTitle = component.props.amountFormatter.formatNumber(component.props.amountFormatter.getAmount(), component.props.amountFormatter.getCurrencyId());
+        amountTitle = component.props.amountFormatter.formatNumber(component.props.amountFormatter.getAmount());
         Assert.assertTrue(component.getAmountTitle().equals(amountTitle));
     }
 
@@ -69,7 +73,9 @@ public class TotalAmountTest {
         final TotalAmount component =
                 getTotalAmountComponent(payerCost, amountFormatter);
 
-        amountDetail = "(" + component.props.amountFormatter.formatNumber(component.props.payerCost.getTotalAmount(), component.props.amountFormatter.getCurrencyId()) + ")";
+        amountDetail = String.format(Locale.getDefault(),
+                "(%s)",
+                component.props.amountFormatter.formatNumber(component.props.payerCost.getTotalAmount()));
 
         Assert.assertTrue(component.getAmountDetail().equals(amountDetail));
     }

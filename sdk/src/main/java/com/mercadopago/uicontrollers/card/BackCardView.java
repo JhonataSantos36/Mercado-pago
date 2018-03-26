@@ -29,7 +29,7 @@ public class BackCardView {
 
     public static final int NEUTRAL_CARD_COLOR = R.color.mpsdk_white;
 
-    private Context mContext;
+    private final Context mContext;
     private View mView;
     private String mSize;
 
@@ -44,27 +44,27 @@ public class BackCardView {
     private ImageView mCardImageView;
 
     public BackCardView(Context context) {
-        this.mContext = context;
-        this.mSecurityCodeLength = CARD_SECURITY_CODE_DEFAULT_LENGTH;
+        mContext = context;
+        mSecurityCodeLength = CARD_SECURITY_CODE_DEFAULT_LENGTH;
     }
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.mPaymentMethod = paymentMethod;
+        mPaymentMethod = paymentMethod;
     }
 
     public void setSize(String size) {
-        this.mSize = size;
+        mSize = size;
     }
 
     public void setSecurityCodeLength(int securityCodeLength) {
-        this.mSecurityCodeLength = securityCodeLength;
+        mSecurityCodeLength = securityCodeLength;
     }
 
     public void initializeControls() {
-        mCardContainer = (FrameLayout) mView.findViewById(R.id.mpsdkCardBackContainer);
-        mCardBorder = (ImageView) mView.findViewById(R.id.mpsdkCardShadowBorder);
-        mCardSecurityCodeTextView = (MPTextView) mView.findViewById(R.id.mpsdkCardSecurityCodeViewBack);
-        mCardImageView = (ImageView) mView.findViewById(R.id.mpsdkCardImageView);
+        mCardContainer = mView.findViewById(R.id.mpsdkCardBackContainer);
+        mCardBorder = mView.findViewById(R.id.mpsdkCardShadowBorder);
+        mCardSecurityCodeTextView = mView.findViewById(R.id.mpsdkCardSecurityCodeViewBack);
+        mCardImageView = mView.findViewById(R.id.mpsdkCardImageView);
         if (mSize != null) {
             resize();
         }

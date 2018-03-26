@@ -7,6 +7,6 @@ public class Device {
     public Fingerprint fingerprint;
 
     public Device(Context context) {
-        this.fingerprint = new Fingerprint(context);
+        fingerprint = new Fingerprint(context);
     }
 }

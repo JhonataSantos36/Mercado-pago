@@ -3,6 +3,7 @@
     <string name="app_name">MP Android SDK Samples</string>
     <string name="welcome_title">Check these integration options. From simple to full payment flows.</string>
     <string name="welcome_text">Try our Checkout, or create a custom one using our UI components or our services. </string>
+    <string name="select_checkout">Select a configuration</string>
 
     <string name="step1_choice_description">You can collect data through a few screens or use an unique form that will automatically fill the most it can.</string>
     <string name="step3_choice_description">A bank selection screen can be added to the simple flow, or use the guessing form.</string>

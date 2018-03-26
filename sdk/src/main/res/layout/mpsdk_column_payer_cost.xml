@@ -40,7 +40,6 @@
             android:layout_gravity="center"
             android:textColor="@color/mpsdk_base_text"
             android:textSize="18dp"
-            android:visibility="visible"
             tools:text="1040"/>
     </LinearLayout>
 </LinearLayout>

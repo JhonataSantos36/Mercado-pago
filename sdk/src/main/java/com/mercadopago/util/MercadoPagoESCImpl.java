@@ -20,7 +20,7 @@ public class MercadoPagoESCImpl implements MercadoPagoESC {
     private static final String METHOD_DELETE_ALL_ESC = "deleteAllESC";
     private static final String METHOD_GET_SAVED_CARD_IDS = "getSavedCardIds";
 
-    private Context context;
+    private final Context context;
     private Object actualClass;
     private boolean escEnabled;
 
@@ -28,7 +28,7 @@ public class MercadoPagoESCImpl implements MercadoPagoESC {
         this.context = context;
         this.escEnabled = escEnabled;
         if (escEnabled && isESCAvailable()) {
-            this.actualClass = getESCClass();
+            actualClass = getESCClass();
         } else {
             this.escEnabled = false;
         }

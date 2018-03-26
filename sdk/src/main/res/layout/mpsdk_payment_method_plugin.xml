@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/mpsdk_review_payment_method_background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/mpsdk_l_margin"
+    android:paddingEnd="@dimen/mpsdk_m_margin"
+    android:paddingStart="@dimen/mpsdk_m_margin"
+    android:paddingTop="@dimen/mpsdk_l_margin">
+
+    <include
+        layout="@layout/mpsdk_view_rounded_icon"
+        android:layout_width="@dimen/mpsdk_m_height"
+        android:layout_height="@dimen/mpsdk_m_height"/>
+
+    <com.mercadopago.customviews.MPTextView
+        android:id="@+id/title"
+        style="@style/HeaderTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/mpsdk_s_margin"
+        android:gravity="center_horizontal"
+        tools:text="@string/lorem_ipsum"/>
+
+</LinearLayout>

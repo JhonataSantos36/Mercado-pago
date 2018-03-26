@@ -26,7 +26,7 @@ public class PaymentMethodSearchItem {
     private List<PaymentMethodSearchItem> children;
     private String childrenHeader;
     private Boolean showIcon;
-    private @DrawableRes int icon;
+    @DrawableRes private int icon;
 
     public PaymentMethodSearchItem() {
 
@@ -84,7 +84,7 @@ public class PaymentMethodSearchItem {
     }
 
     public String getChildrenHeader() {
-        return this.childrenHeader;
+        return childrenHeader;
     }
 
     public boolean hasChildren() {
@@ -104,15 +104,15 @@ public class PaymentMethodSearchItem {
     }
 
     public boolean isPaymentType() {
-        return type != null && type.equals(TYPE_PAYMENT_TYPE);
+        return TYPE_PAYMENT_TYPE.equals(type);
     }
 
     public boolean isPaymentMethod() {
-        return type != null && type.equals(TYPE_PAYMENT_METHOD);
+        return TYPE_PAYMENT_METHOD.equals(type);
     }
 
     public boolean isGroup() {
-        return type != null && type.equals(TYPE_GROUP);
+        return TYPE_GROUP.equals(type);
     }
 
     public void setChildrenHeader(String childrenHeader) {

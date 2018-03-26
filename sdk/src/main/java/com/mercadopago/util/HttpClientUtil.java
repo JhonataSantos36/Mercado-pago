@@ -15,7 +15,7 @@ public class HttpClientUtil {
     private static OkHttpClient client;
     private static OkHttpClient customClient;
 
-    public synchronized static OkHttpClient getClient(Context context, int connectTimeout, int readTimeout, int writeTimeout) {
+    public static synchronized OkHttpClient getClient(Context context, int connectTimeout, int readTimeout, int writeTimeout) {
 
         if (customClientSet()) {
             return customClient;

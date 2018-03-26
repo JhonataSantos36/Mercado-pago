@@ -3,6 +3,7 @@ package com.mercadopago.model;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mercadopago.util.TextUtil;
 
 import java.util.Date;
 
@@ -27,6 +28,7 @@ public class Token implements CardInformation {
     private Cardholder cardholder;
     private String esc;
 
+    @Override
     public Integer getSecurityCodeLength() {
         return securityCodeLength;
     }
@@ -35,6 +37,7 @@ public class Token implements CardInformation {
         this.securityCodeLength = securityCodeLength;
     }
 
+    @Override
     public Integer getExpirationMonth() {
         return expirationMonth;
     }
@@ -43,6 +46,7 @@ public class Token implements CardInformation {
         this.expirationMonth = expirationMonth;
     }
 
+    @Override
     public Integer getExpirationYear() {
         return expirationYear;
     }
@@ -139,6 +143,7 @@ public class Token implements CardInformation {
         this.publicKey = publicKey;
     }
 
+    @Override
     public String getFirstSixDigits() {
         return firstSixDigits;
     }
@@ -147,6 +152,7 @@ public class Token implements CardInformation {
         this.firstSixDigits = firstSixDigits;
     }
 
+    @Override
     public String getLastFourDigits() {
         return lastFourDigits;
     }
@@ -155,6 +161,7 @@ public class Token implements CardInformation {
         this.lastFourDigits = lastFourDigits;
     }
 
+    @Override
     public Cardholder getCardHolder() {
         return cardholder;
     }
@@ -181,5 +188,9 @@ public class Token implements CardInformation {
 
         Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).serializeNulls().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
         return gson.toJson(this);
+    }
+
+    public boolean isTokenValid() {
+        return getLastFourDigits() != null && !TextUtil.isEmpty(getLastFourDigits());
     }
 }

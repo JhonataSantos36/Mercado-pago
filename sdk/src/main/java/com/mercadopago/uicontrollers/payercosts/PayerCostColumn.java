@@ -2,7 +2,6 @@ package com.mercadopago.uicontrollers.payercosts;
 
 import android.content.Context;
 import android.text.Spanned;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +10,6 @@ import android.widget.LinearLayout;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.PayerCost;
-import com.mercadopago.model.Site;
 import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.InstallmentsUtil;
 
@@ -22,46 +19,46 @@ import java.math.BigDecimal;
  * Created by vaserber on 10/25/16.
  */
 
-public class PayerCostColumn implements PayerCostViewController {
+public class PayerCostColumn {
 
-    private final Site mSite;
-    private PayerCost mPayerCost;
-    private String mCurrencyId;
+    private final String mSiteId;
+    private final String mCurrencyId;
 
-    private Context mContext;
+    private final Context mContext;
     private View mView;
     private MPTextView mInstallmentsTextView;
     private MPTextView mZeroRateText;
     private MPTextView mTotalText;
 
-    public PayerCostColumn(Context context, Site site) {
-        this.mContext = context;
-        this.mCurrencyId = site.getCurrencyId();
-        this.mSite = site;
+    private final BigDecimal installmentsRate;
+    private final BigDecimal payerCostTotalAmount;
+    private final BigDecimal installmentsAmount;
+    private final Integer installments;
+
+    public PayerCostColumn(Context context, String currencyId, String siteId,
+                           BigDecimal installmentsRate, Integer installments,
+                           BigDecimal payerCostTotalAmount, BigDecimal installmentsAmount) {
+        mContext = context;
+        mCurrencyId = currencyId;
+        mSiteId = siteId;
+        this.installmentsRate = installmentsRate;
+        this.installments = installments;
+        this.payerCostTotalAmount = payerCostTotalAmount;
+        this.installmentsAmount = installmentsAmount;
     }
 
-    @Override
-    public void drawPayerCost(PayerCost payerCost) {
-        drawBasicPayerCost(payerCost);
-        setAmountWithRateText();
-        alignCenter();
-    }
-
-    @Override
-    public void drawPayerCostWithoutTotal(PayerCost payerCost) {
-        drawBasicPayerCost(payerCost);
+    public void drawPayerCostWithoutTotal() {
+        drawBasicPayerCost();
         hideTotalAmount();
         alignRight();
     }
 
-    private void drawBasicPayerCost(PayerCost payerCost) {
-        mPayerCost = payerCost;
-
+    private void drawBasicPayerCost() {
         setInstallmentsText();
 
-        if (!InstallmentsUtil.shouldWarnAboutBankInterests(mSite)) {
-            if (payerCost.getInstallmentRate().compareTo(BigDecimal.ZERO) == 0) {
-                if (payerCost.getInstallments() > 1) {
+        if (!InstallmentsUtil.shouldWarnAboutBankInterests(mSiteId)) {
+            if (installmentsRate.compareTo(BigDecimal.ZERO) == 0) {
+                if (installments > 1) {
                     mZeroRateText.setVisibility(View.VISIBLE);
                 } else {
                     mZeroRateText.setVisibility(View.GONE);
@@ -70,57 +67,52 @@ public class PayerCostColumn implements PayerCostViewController {
         }
     }
 
-    @Override
-    public void setSmallTextSize() {
-        mInstallmentsTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.mpsdk_payer_cost_small_text));
-        mZeroRateText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.mpsdk_payer_cost_total_small_text));
-        mTotalText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.mpsdk_payer_cost_total_small_text));
+    public void drawPayerCost() {
+        drawBasicPayerCost();
+        setAmountWithRateText();
+        alignCenter();
     }
 
     private void setAmountWithRateText() {
         mTotalText.setVisibility(View.VISIBLE);
         StringBuilder sb = new StringBuilder();
         sb.append("(");
-        sb.append(CurrenciesUtil.formatNumber(mPayerCost.getTotalAmount(), mCurrencyId));
+        sb.append(CurrenciesUtil.formatNumber(payerCostTotalAmount, mCurrencyId));
         sb.append(")");
-        Spanned spannedFullAmountText = CurrenciesUtil.formatCurrencyInText(mPayerCost.getTotalAmount(),
+        Spanned spannedFullAmountText = CurrenciesUtil.formatCurrencyInText(payerCostTotalAmount,
                 mCurrencyId, sb.toString(), false, true);
         mTotalText.setText(spannedFullAmountText);
     }
 
     private void setInstallmentsText() {
         StringBuilder sb = new StringBuilder();
-        sb.append(mPayerCost.getInstallments());
+        sb.append(installments);
         sb.append(" ");
         sb.append(mContext.getString(R.string.mpsdk_installments_by));
         sb.append(" ");
 
-        sb.append(CurrenciesUtil.formatNumber(mPayerCost.getInstallmentAmount(), mCurrencyId));
-        Spanned spannedInstallmentsText = CurrenciesUtil.formatCurrencyInText(mPayerCost.getInstallmentAmount(),
+        sb.append(CurrenciesUtil.formatNumber(installmentsAmount, mCurrencyId));
+        Spanned spannedInstallmentsText = CurrenciesUtil.formatCurrencyInText(installmentsAmount,
                 mCurrencyId, sb.toString(), false, true);
         mInstallmentsTextView.setText(spannedInstallmentsText);
     }
 
-    @Override
     public void setOnClickListener(View.OnClickListener listener) {
         mView.setOnClickListener(listener);
     }
 
-    @Override
     public void initializeControls() {
-        mInstallmentsTextView = (MPTextView) mView.findViewById(R.id.mpsdkInstallmentsText);
-        mZeroRateText = (MPTextView) mView.findViewById(R.id.mpsdkInstallmentsZeroRate);
-        mTotalText = (MPTextView) mView.findViewById(R.id.mpsdkInstallmentsTotalAmount);
+        mInstallmentsTextView = mView.findViewById(R.id.mpsdkInstallmentsText);
+        mZeroRateText = mView.findViewById(R.id.mpsdkInstallmentsZeroRate);
+        mTotalText = mView.findViewById(R.id.mpsdkInstallmentsTotalAmount);
     }
 
-    @Override
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
         mView = LayoutInflater.from(mContext)
                 .inflate(R.layout.mpsdk_column_payer_cost, parent, attachToRoot);
         return mView;
     }
 
-    @Override
     public View getView() {
         return mView;
     }

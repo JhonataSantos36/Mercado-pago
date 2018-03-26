@@ -12,7 +12,8 @@ public abstract class PaymentProcessor {
         return true;
     }
 
-    public abstract @NonNull
+    @NonNull
+    public abstract
     PluginComponent createPaymentComponent(@NonNull final PluginComponent.Props props,
                                            @NonNull final Context context);
 }

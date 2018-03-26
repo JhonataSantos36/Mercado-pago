@@ -14,9 +14,9 @@ public class GenericPayment implements PluginPayment {
     public final PaymentData paymentData;
 
     public GenericPayment(final Long paymentId,
-                          final @NonNull String status,
-                          final @NonNull String statusDetail,
-                          final @NonNull PaymentData paymentData) {
+                          @NonNull final String status,
+                          @NonNull final String statusDetail,
+                          @NonNull final PaymentData paymentData) {
 
         this.paymentId = paymentId;
         this.status = status;

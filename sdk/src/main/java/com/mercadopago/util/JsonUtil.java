@@ -7,7 +7,7 @@ import com.google.gson.GsonBuilder;
 public class JsonUtil {
 
     private static JsonUtil mInstance = null;
-    private Gson mGson;
+    private final Gson mGson;
 
     protected JsonUtil() {
         mGson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).serializeNulls().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();

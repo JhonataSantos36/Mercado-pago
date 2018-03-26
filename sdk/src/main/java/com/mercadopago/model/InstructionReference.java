@@ -51,8 +51,8 @@ public class InstructionReference {
         if (fieldValue != null) {
             for (String string : fieldValue) {
                 stringBuilder.append(string);
-                if (fieldValue.indexOf(string) != fieldValue.size() - 1 && !TextUtils.isEmpty(this.separator)) {
-                    stringBuilder.append(this.separator);
+                if (fieldValue.indexOf(string) != fieldValue.size() - 1 && !TextUtils.isEmpty(separator)) {
+                    stringBuilder.append(separator);
                 }
             }
         }
@@ -60,15 +60,15 @@ public class InstructionReference {
     }
 
     public boolean hasLabel() {
-        return this.getLabel() != null && !this.getLabel().isEmpty();
+        return getLabel() != null && !getLabel().isEmpty();
     }
 
     public boolean hasValue() {
-        return this.getFieldValue() != null && this.getFieldValue().size() != 0;
+        return getFieldValue() != null && getFieldValue().size() != 0;
     }
 
     public boolean hasComment() {
-        return this.comment != null && !this.comment.isEmpty();
+        return comment != null && !comment.isEmpty();
     }
 
     public boolean isNumericReference() {

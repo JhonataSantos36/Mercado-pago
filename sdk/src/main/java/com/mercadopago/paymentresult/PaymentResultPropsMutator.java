@@ -24,7 +24,7 @@ public class PaymentResultPropsMutator implements Mutator, PaymentResultPropsVie
 
     @Override
     public void setPropsListener(MutatorPropsListener listener) {
-        this.propsListener = listener;
+        propsListener = listener;
     }
 
     //headerAmountFormatter can be null
@@ -60,6 +60,7 @@ public class PaymentResultPropsMutator implements Mutator, PaymentResultPropsVie
      * notificaciones condicionales. Esta no es la forma adecuada de hacerlo hay que definir algún
      * mecanismo de transacciones para eso. Mejor no tener el feature a tener algo mal implementado.
      */
+    @Override
     @Deprecated
     public void notifyPropsChanged() {
         if (propsListener != null) {

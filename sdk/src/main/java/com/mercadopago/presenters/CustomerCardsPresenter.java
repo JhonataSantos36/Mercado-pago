@@ -102,7 +102,7 @@ public class CustomerCardsPresenter extends MvpPresenter<CustomerCardsView, Cust
     }
 
     public void setCards(List<Card> cards) {
-        this.mCards = cards;
+        mCards = cards;
     }
 
     public String getCustomTitle() {
@@ -110,7 +110,7 @@ public class CustomerCardsPresenter extends MvpPresenter<CustomerCardsView, Cust
     }
 
     public void setCustomTitle(String customTitle) {
-        this.mCustomTitle = customTitle;
+        mCustomTitle = customTitle;
     }
 
     public String getSelectionConfirmPromptText() {
@@ -118,14 +118,14 @@ public class CustomerCardsPresenter extends MvpPresenter<CustomerCardsView, Cust
     }
 
     public void setSelectionConfirmPromptText(String selectionConfirmPromptText) {
-        this.mSelectionConfirmPromptText = selectionConfirmPromptText;
+        mSelectionConfirmPromptText = selectionConfirmPromptText;
     }
 
     public void setCustomActionMessage(String customActionMessage) {
-        this.mActionMessage = customActionMessage;
+        mActionMessage = customActionMessage;
     }
 
     public void setFailureRecovery(FailureRecovery failureRecovery) {
-        this.mFailureRecovery = failureRecovery;
+        mFailureRecovery = failureRecovery;
     }
 }

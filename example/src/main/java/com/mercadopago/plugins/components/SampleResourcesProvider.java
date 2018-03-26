@@ -2,15 +2,11 @@ package com.mercadopago.plugins.components;
 
 import android.content.Context;
 
-import com.mercadopago.examples.R;
-
-/**
- * Created by nfortuna on 1/10/18.
- */
+import com.mercadopago.example.R;
 
 public class SampleResourcesProvider implements SampleResources {
 
-    private Context context;
+    private final Context context;
 
     public SampleResourcesProvider(Context context) {
         this.context = context;
