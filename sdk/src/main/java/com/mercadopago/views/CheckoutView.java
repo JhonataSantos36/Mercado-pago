@@ -40,7 +40,7 @@ public interface CheckoutView extends MvpView {
 
     void cancelCheckout(MercadoPagoError mercadoPagoError);
 
-    void cancelCheckout(Integer customResultCode, PaymentData paymentData, Boolean paymentMethodEdited);
+    void cancelCheckout(Integer customResultCode, Boolean paymentMethodEdited);
 
     void startPaymentRecoveryFlow(PaymentRecovery paymentRecovery);
 

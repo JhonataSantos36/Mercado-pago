@@ -1,6 +1,7 @@
 package com.mercadopago.hooks;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -12,7 +13,7 @@ import com.mercadopago.components.RendererFactory;
 public abstract class HookRenderer<T extends HookComponent> extends Renderer<T> {
 
     @Override
-    public View render(final T component, final Context context, final ViewGroup parent) {
+    public View render(@NonNull final T component, @NonNull final Context context, final ViewGroup parent) {
         final ViewGroup view = (ViewGroup) inflate(R.layout.mpsdk_hooks_layout, parent);
 
         RendererFactory.create(context, component.getToolbarComponent()).render(view);

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="rn:oasis:names:tc:xliff:document:1.2">
 
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet</string>
+
     <!-- Banks deals -->
     <string name="mpsdk_empty_bank_deals">No tienes ninguna promoción disponible</string>
     <string name="mpsdk_bank">banco</string>
@@ -216,6 +218,7 @@
     <string name="mpsdk_zero_rate">Sin interés</string>
     <string name="mpsdk_exit_label">Salir</string>
     <string name="mpsdk_cancel_payment">Cancelar Pago</string>
+    <string name="mpsdk_cancel">Cancelar</string>
     <string name="mpsdk_input_button_back">Anterior</string>
     <string name="mpsdk_input_button_next">Continuar</string>
     <string name="mpsdk_hour">hora</string>
@@ -258,6 +261,7 @@
     <string name="mpsdk_review_off_text_6">Pagarás %1$s en\n%2$s</string>
     <string name="mpsdk_homebanking">Home Banking de</string>
     <string name="mpsdk_your_atm">cajero automático de</string>
+    <string name="mpsdk_review_item_quantity">Cantidad:</string>
     <string name="mpsdk_review_product_quantity">Cantidad: %1$s</string>
     <string name="mpsdk_review_product_price">Precio unitario: %1$s</string>
     <string name="mpsdk_activity_checkout_title">Revisa si está todo bien</string>
@@ -316,5 +320,4 @@
     <string name="mpsdk_bolbradesco_rejection_text">Intenta otro medio de pago</string>
 
     <string name="mpsdk_empty_string"></string>
-    <string name="lorem_ipsum">Lorem ipsum</string>
 </resources>

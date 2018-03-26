@@ -25,8 +25,7 @@ public class PaymentMethod implements Serializable {
     private BigDecimal maxAllowedAmount;
     private Integer accreditationTime;
     private String merchantAccountId;
-    private @DrawableRes
-    Integer icon = R.drawable.mpsdk_none;
+    @DrawableRes private Integer icon = R.drawable.mpsdk_none;
 
     public PaymentMethod() {
 
@@ -90,12 +89,8 @@ public class PaymentMethod implements Serializable {
 
     public boolean isSecurityCodeRequired(String bin) {
         Setting setting = Setting.getSettingByBin(settings, bin);
-        if ((setting != null) && (setting.getSecurityCode() != null) &&
-                (setting.getSecurityCode().getLength() != 0)) {
-            return true;
-        } else {
-            return false;
-        }
+        return (setting != null) && (setting.getSecurityCode() != null) &&
+            (setting.getSecurityCode().getLength() != 0);
     }
 
     public boolean isIdentificationTypeRequired() {
@@ -120,7 +115,7 @@ public class PaymentMethod implements Serializable {
 
     public boolean isValidForBin(String bin) {
 
-        return (Setting.getSettingByBin(this.getSettings(), bin) != null);
+        return (Setting.getSettingByBin(getSettings(), bin) != null);
     }
 
     public String getStatus() {

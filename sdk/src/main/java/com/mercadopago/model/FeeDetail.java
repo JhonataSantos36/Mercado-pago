@@ -33,7 +33,7 @@ public class FeeDetail implements Serializable {
         this.type = type;
     }
 
-    public Boolean isFinancialFree() {
-        return type != null && type.equals("financing_fee");
+    public Boolean isFinancialFree(){
+        return "financing_fee".equals(type);
     }
 }

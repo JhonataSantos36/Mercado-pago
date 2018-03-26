@@ -26,7 +26,7 @@ public class ReviewPaymentMethodsPresenter extends MvpPresenter<ReviewPaymentMet
     }
 
     public void setSupportedPaymentMethods(List<PaymentMethod> supportedPaymentMethods) {
-        this.mSupportedPaymentMethods = supportedPaymentMethods;
+        mSupportedPaymentMethods = supportedPaymentMethods;
     }
 
     private void validateParameters() throws IllegalStateException {

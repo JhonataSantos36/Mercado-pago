@@ -20,7 +20,6 @@ import com.mercadopago.model.Site;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.plugins.PaymentMethodPlugin;
-import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.providers.PaymentVaultProvider;
 import com.mercadopago.util.ApiUtil;
@@ -60,7 +59,6 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     private boolean hook1Displayed = false;
 
     /**
-     *
      * @deprecated Account money is a plugin now.
      */
     @Deprecated
@@ -201,9 +199,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
     private void initPaymentMethodSearch() {
 
-        getView().initializeMPTracker();
-
-        getView().trackInitialScreen();
+        trackInitialScreen();
 
         getView().setTitle(getResourcesProvider().getTitle());
 
@@ -261,7 +257,6 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
             Payer payer = new Payer();
             payer.setAccessToken(mPayerAccessToken);
 
-
             getResourcesProvider().getPaymentMethodSearch(getTransactionAmount(), mPaymentPreference, payer, mSite, new OnResourcesRetrievedCallback<PaymentMethodSearch>() {
 
                 @Override
@@ -293,8 +288,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     private void showSelectedItemChildren() {
-        getView().initializeMPTracker();
-        getView().trackChildrenScreen();
+        trackChildrenScreen();
 
         getView().setTitle(mSelectedSearchItem.getChildrenHeader());
         getView().showSearchItems(mSelectedSearchItem.getChildren(), getPaymentMethodSearchItemSelectionCallback());
@@ -341,25 +335,9 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     private void showAvailableOptions() {
+        List<PaymentMethodPlugin> paymentMethodPluginList = CheckoutStore.getInstance().getPaymentMethodPluginList();
 
-        final List<PaymentMethodInfo> pluginUpItems = new ArrayList<>();
-        final List<PaymentMethodInfo> pluginDownItems = new ArrayList<>();
-        final List<PaymentMethodPlugin> paymentMethodPlugins = CheckoutStore.getInstance().getPaymentMethodPluginList();
-
-        if (paymentMethodPlugins != null && !paymentMethodPlugins.isEmpty()) {
-            for (PaymentMethodPlugin plugin : paymentMethodPlugins) {
-                final PaymentMethodInfo info = getView().getPaymentMethodInfo(plugin);
-                if (info != null) {
-                    if (PaymentMethodPlugin.POSIION_TOP.equalsIgnoreCase(plugin.displayOrder())) {
-                        pluginUpItems.add(info);
-                    } else if (PaymentMethodPlugin.POSIION_BOTTOM.equalsIgnoreCase(plugin.displayOrder())) {
-                        pluginDownItems.add(info);
-                    }
-                }
-            }
-        }
-
-        getView().showPluginOptions(pluginUpItems);
+        getView().showPluginOptions(paymentMethodPluginList, PaymentMethodPlugin.POSIION_TOP);
 
         if (mPaymentMethodSearch.hasCustomSearchItems()) {
             List<CustomSearchItem> shownCustomItems;
@@ -378,7 +356,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
             getView().showSearchItems(mPaymentMethodSearch.getGroups(), getPaymentMethodSearchItemSelectionCallback());
         }
 
-        getView().showPluginOptions(pluginDownItems);
+        getView().showPluginOptions(paymentMethodPluginList, PaymentMethodPlugin.POSIION_BOTTOM);
     }
 
     private OnSelectedCallback<PaymentMethodSearchItem> getPaymentMethodSearchItemSelectionCallback() {
@@ -559,11 +537,11 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     public void setPayerAccessToken(String payerAccessToken) {
-        this.mPayerAccessToken = payerAccessToken;
+        mPayerAccessToken = payerAccessToken;
     }
 
     public void setDiscount(Discount discount) {
-        this.mDiscount = discount;
+        mDiscount = discount;
     }
 
     public Discount getDiscount() {
@@ -571,7 +549,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     public void setPayerEmail(String payerEmail) {
-        this.mPayerEmail = payerEmail;
+        mPayerEmail = payerEmail;
     }
 
     public String getPayerEmail() {
@@ -579,35 +557,35 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     public void setInstallmentsReviewEnabled(Boolean installmentReviewEnabled) {
-        this.mInstallmentsReviewEnabled = installmentReviewEnabled;
+        mInstallmentsReviewEnabled = installmentReviewEnabled;
     }
 
     public Boolean getInstallmentsReviewEnabled() {
-        return this.mInstallmentsReviewEnabled;
+        return mInstallmentsReviewEnabled;
     }
 
     public void setDiscountEnabled(Boolean discountEnabled) {
-        this.mDiscountEnabled = discountEnabled;
+        mDiscountEnabled = discountEnabled;
     }
 
     public void setDirectDiscountEnabled(Boolean directDiscountEnabled) {
-        this.mDirectDiscountEnabled = directDiscountEnabled;
+        mDirectDiscountEnabled = directDiscountEnabled;
     }
 
     public Boolean getDirectDiscountEnabled() {
-        return this.mDirectDiscountEnabled;
+        return mDirectDiscountEnabled;
     }
 
     public Boolean getDiscountEnabled() {
-        return this.mDiscountEnabled;
+        return mDiscountEnabled;
     }
 
     public void setMaxSavedCards(int maxSavedCards) {
-        this.mMaxSavedCards = maxSavedCards;
+        mMaxSavedCards = maxSavedCards;
     }
 
     public void setShowAllSavedCardsEnabled(boolean showAll) {
-        this.mShowAllSavedCardsEnabled = showAll;
+        mShowAllSavedCardsEnabled = showAll;
     }
 
     public void recoverFromFailure() {
@@ -668,11 +646,23 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     /**
-     *
      * @deprecated Account money is a plugin now.
      */
     @Deprecated
     public PaymentMethod getAccountMoneyPaymentMethod() {
         return accountMoneyPaymentMethod;
     }
+
+
+    public void trackInitialScreen() {
+        getResourcesProvider().trackInitialScreen(mPaymentMethodSearch, mSite.getId());
+    }
+
+    public void trackChildrenScreen() {
+        getResourcesProvider().trackChildrenScreen(mSelectedSearchItem, mSite.getId());
+    }
+
+
+
+
 }

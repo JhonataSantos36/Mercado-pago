@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<PaymentMethodSearchItemAdapter.ViewHolder> {
 
-    private List<PaymentMethodSearchViewController> mItems;
+    private final List<PaymentMethodSearchViewController> mItems;
 
     public PaymentMethodSearchItemAdapter() {
         mItems = new ArrayList<>();
@@ -48,8 +48,8 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
     }
 
     public void clear() {
-        int size = this.mItems.size();
-        this.mItems.clear();
+        int size = mItems.size();
+        mItems.clear();
         notifyItemRangeRemoved(0, size);
     }
 
@@ -59,7 +59,7 @@ public class PaymentMethodSearchItemAdapter extends RecyclerView.Adapter<Payment
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private CustomViewController mViewController;
+        private final CustomViewController mViewController;
 
         public ViewHolder(CustomViewController viewController) {
             super(viewController.getView());

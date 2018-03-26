@@ -33,6 +33,7 @@ public class PaymentMethodInfoController implements PaymentMethodSearchViewContr
         mItem = item;
     }
 
+    @Override
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
         mView = LayoutInflater.from(mContext)
                 .inflate(R.layout.mpsdk_row_pm_info_item, parent, attachToRoot);
@@ -48,12 +49,14 @@ public class PaymentMethodInfoController implements PaymentMethodSearchViewContr
         return mView;
     }
 
+    @Override
     public void initializeControls() {
         mName = mView.findViewById(R.id.mpsdk_name);
         mDescription = mView.findViewById(R.id.mpsdk_description);
         mIcon = mView.findViewById(R.id.mpsdk_image);
     }
 
+    @Override
     public void draw() {
 
         if (TextUtils.isEmpty(mItem.name)) {

@@ -19,7 +19,6 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Token;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.tracker.MPTrackingContext;
-import com.mercadopago.tracking.utils.TrackingUtil;
 import com.mercadopago.util.ApiUtil;
 
 import java.math.BigDecimal;
@@ -40,7 +39,7 @@ public class GuessingCardProviderImpl implements GuessingCardProvider {
     public GuessingCardProviderImpl(Context context, String publicKey, String privateKey) {
         this.context = context;
         this.publicKey = publicKey;
-        this.mercadoPago = new MercadoPagoServicesAdapter.Builder()
+        mercadoPago = new MercadoPagoServicesAdapter.Builder()
                 .setContext(context)
                 .setPublicKey(publicKey)
                 .setPrivateKey(privateKey)
@@ -51,7 +50,7 @@ public class GuessingCardProviderImpl implements GuessingCardProvider {
     public MPTrackingContext getTrackingContext() {
         if (trackingContext == null) {
             trackingContext = new MPTrackingContext.Builder(context, publicKey)
-                    .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                    .setVersion(BuildConfig.VERSION_NAME)
                     .build();
         }
         return trackingContext;

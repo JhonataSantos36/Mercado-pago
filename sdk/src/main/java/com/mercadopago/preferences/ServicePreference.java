@@ -9,37 +9,37 @@ import java.util.Map;
 public class ServicePreference {
 
     @SerializedName("default_base_url")
-    private String defaultBaseURL;
+    private final String defaultBaseURL;
 
     @SerializedName("gateway_base_url")
-    private String gatewayBaseURL;
+    private final String gatewayBaseURL;
 
     @SerializedName("get_customer_url")
-    private String getCustomerURL;
+    private final String getCustomerURL;
 
     @SerializedName("create_payment_url")
-    private String createPaymentURL;
+    private final String createPaymentURL;
 
     @SerializedName("create_checkout_preference_url")
-    private String createCheckoutPreferenceURL;
+    private final String createCheckoutPreferenceURL;
 
     @SerializedName("get_merchant_discount_url")
-    private String getMerchantDiscountBaseURL;
+    private final String getMerchantDiscountBaseURL;
 
     @SerializedName("get_customer_uri")
-    private String getCustomerURI;
+    private final String getCustomerURI;
 
     @SerializedName("create_payment_uri")
-    private String createPaymentURI;
+    private final String createPaymentURI;
 
     @SerializedName("create_checkout_preference_uri")
-    private String createCheckoutPreferenceURI;
+    private final String createCheckoutPreferenceURI;
 
     @SerializedName("get_merchant_discount_uri")
-    private String getMerchantDiscountURI;
+    private final String getMerchantDiscountURI;
 
     @SerializedName("processing_mode")
-    private String processingMode;
+    private final String processingMode;
 
     private Map<String, String> getCustomerAdditionalInfo;
     private Map<String, Object> createPaymentAdditionalInfo;
@@ -48,22 +48,22 @@ public class ServicePreference {
 
     private ServicePreference(Builder builder) {
 
-        this.defaultBaseURL = builder.defaultBaseURL;
-        this.gatewayBaseURL = builder.gatewayBaseURL;
+        defaultBaseURL = builder.defaultBaseURL;
+        gatewayBaseURL = builder.gatewayBaseURL;
 
-        this.getCustomerURL = builder.getCustomerURL;
-        this.createPaymentURL = builder.createPaymentURL;
-        this.createCheckoutPreferenceURL = builder.createCheckoutPreferenceURL;
-        this.getMerchantDiscountBaseURL = builder.getMerchantDiscountBaseURL;
-        this.getCustomerURI = builder.getCustomerURI;
-        this.createPaymentURI = builder.createPaymentURI;
-        this.createCheckoutPreferenceURI = builder.createCheckoutPreferenceURI;
-        this.getMerchantDiscountURI = builder.getMerchantDiscountURI;
-        this.getCustomerAdditionalInfo = builder.getCustomerAdditionalInfo;
-        this.createPaymentAdditionalInfo = builder.createPaymentAdditionalInfo;
-        this.createCheckoutPreferenceAdditionalInfo = builder.createCheckoutPreferenceAdditionalInfo;
-        this.getDiscountAdditionalInfo = builder.getDiscountAdditionalInfo;
-        this.processingMode = builder.processingMode;
+        getCustomerURL = builder.getCustomerURL;
+        createPaymentURL = builder.createPaymentURL;
+        createCheckoutPreferenceURL = builder.createCheckoutPreferenceURL;
+        getMerchantDiscountBaseURL = builder.getMerchantDiscountBaseURL;
+        getCustomerURI = builder.getCustomerURI;
+        createPaymentURI = builder.createPaymentURI;
+        createCheckoutPreferenceURI = builder.createCheckoutPreferenceURI;
+        getMerchantDiscountURI = builder.getMerchantDiscountURI;
+        getCustomerAdditionalInfo = builder.getCustomerAdditionalInfo;
+        createPaymentAdditionalInfo = builder.createPaymentAdditionalInfo;
+        createCheckoutPreferenceAdditionalInfo = builder.createCheckoutPreferenceAdditionalInfo;
+        getDiscountAdditionalInfo = builder.getDiscountAdditionalInfo;
+        processingMode = builder.processingMode;
     }
 
     public String getDefaultBaseURL() {
@@ -75,19 +75,19 @@ public class ServicePreference {
     }
 
     public String getGetCustomerURL() {
-        return this.getCustomerURL;
+        return getCustomerURL;
     }
 
     public String getCreatePaymentURL() {
-        return this.createPaymentURL;
+        return createPaymentURL;
     }
 
     public String getCreateCheckoutPreferenceURL() {
-        return this.createCheckoutPreferenceURL;
+        return createCheckoutPreferenceURL;
     }
 
     public String getGetMerchantDiscountBaseURL() {
-        return this.getMerchantDiscountBaseURL;
+        return getMerchantDiscountBaseURL;
     }
 
     public String getGetCustomerURI() {
@@ -109,31 +109,31 @@ public class ServicePreference {
     public String getProcessingModeString() { return processingMode; }
 
     public Map<String, String> getGetCustomerAdditionalInfo() {
-        if (this.getCustomerAdditionalInfo == null) {
-            this.getCustomerAdditionalInfo = new HashMap<>();
+        if (getCustomerAdditionalInfo == null) {
+            getCustomerAdditionalInfo = new HashMap<>();
         }
-        return this.getCustomerAdditionalInfo;
+        return getCustomerAdditionalInfo;
     }
 
     public Map<String, Object> getCreatePaymentAdditionalInfo() {
-        if (this.createPaymentAdditionalInfo == null) {
-          this.createPaymentAdditionalInfo = new HashMap<>();
+        if (createPaymentAdditionalInfo == null) {
+            createPaymentAdditionalInfo = new HashMap<>();
         }
-        return this.createPaymentAdditionalInfo;
+        return createPaymentAdditionalInfo;
     }
 
     public Map<String, Object> getCreateCheckoutPreferenceAdditionalInfo() {
-        if (this.createCheckoutPreferenceAdditionalInfo == null) {
-            this.createCheckoutPreferenceAdditionalInfo = new HashMap<>();
+        if (createCheckoutPreferenceAdditionalInfo == null) {
+            createCheckoutPreferenceAdditionalInfo = new HashMap<>();
         }
-        return this.createCheckoutPreferenceAdditionalInfo;
+        return createCheckoutPreferenceAdditionalInfo;
     }
 
     public Map<String, String> getGetDiscountAdditionalInfo() {
-        if (this.getDiscountAdditionalInfo == null) {
-            this.getDiscountAdditionalInfo = new HashMap<>();
+        if (getDiscountAdditionalInfo == null) {
+            getDiscountAdditionalInfo = new HashMap<>();
         }
-        return this.getDiscountAdditionalInfo;
+        return getDiscountAdditionalInfo;
     }
 
     public boolean hasGetCustomerURL() {
@@ -188,7 +188,7 @@ public class ServicePreference {
         public Builder setGetCustomerURL(String getCustomerURL, String getCustomerURI, Map<String, String> additionalInfo) {
             this.getCustomerURL = getCustomerURL;
             this.getCustomerURI = getURI(getCustomerURI);
-            this.getCustomerAdditionalInfo = additionalInfo;
+            getCustomerAdditionalInfo = additionalInfo;
             return this;
         }
 
@@ -201,7 +201,7 @@ public class ServicePreference {
         public Builder setCreatePaymentURL(String createPaymentURL, String createPaymentURI, Map<String, Object> additionalInfo) {
             this.createPaymentURL = createPaymentURL;
             this.createPaymentURI = getURI(createPaymentURI);
-            this.createPaymentAdditionalInfo = additionalInfo;
+            createPaymentAdditionalInfo = additionalInfo;
             return this;
         }
 
@@ -214,14 +214,14 @@ public class ServicePreference {
         public Builder setCreateCheckoutPreferenceURL(String createCheckoutPreferenceURL, String createCheckoutPreferenceURI, Map<String, Object> additionalInfo) {
             this.createCheckoutPreferenceURL = createCheckoutPreferenceURL;
             this.createCheckoutPreferenceURI = getURI(createCheckoutPreferenceURI);
-            this.createCheckoutPreferenceAdditionalInfo = additionalInfo;
+            createCheckoutPreferenceAdditionalInfo = additionalInfo;
             return this;
         }
 
         public Builder setDiscountURL(String getMerchantDiscountBaseURL, String getMerchantDiscountURI, Map<String, String> additionalInfo) {
             this.getMerchantDiscountBaseURL = getMerchantDiscountBaseURL;
             this.getMerchantDiscountURI = getMerchantDiscountURI;
-            this.getDiscountAdditionalInfo = additionalInfo;
+            getDiscountAdditionalInfo = additionalInfo;
             return this;
         }
 
@@ -236,23 +236,23 @@ public class ServicePreference {
         }
 
         public Builder setAggregatorAsProcessingMode() {
-            this.processingMode = ProcessingModes.AGGREGATOR;
+            processingMode = ProcessingModes.AGGREGATOR;
             return this;
         }
 
         public Builder setGatewayAsProcessingMode() {
-            this.processingMode = ProcessingModes.GATEWAY;
+            processingMode = ProcessingModes.GATEWAY;
             return this;
         }
 
         public Builder setHybridAsProcessingMode() {
-            this.processingMode = ProcessingModes.HYBRID;
+            processingMode = ProcessingModes.HYBRID;
             return this;
         }
 
         public ServicePreference build() {
-            if (this.processingMode == null) {
-                this.processingMode = ProcessingModes.AGGREGATOR;
+            if (processingMode == null) {
+                processingMode = ProcessingModes.AGGREGATOR;
             }
             return new ServicePreference(this);
         }

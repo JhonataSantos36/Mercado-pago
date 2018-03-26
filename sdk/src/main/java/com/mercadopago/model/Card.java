@@ -18,6 +18,7 @@ public class Card implements CardInformation, Serializable {
     private PaymentMethod paymentMethod;
     private SecurityCode securityCode;
 
+    @Override
     public Cardholder getCardHolder() {
         return cardHolder;
     }
@@ -50,6 +51,7 @@ public class Card implements CardInformation, Serializable {
         this.dateLastUpdated = dateLastUpdated;
     }
 
+    @Override
     public Integer getExpirationMonth() {
         return expirationMonth;
     }
@@ -58,6 +60,7 @@ public class Card implements CardInformation, Serializable {
         this.expirationMonth = expirationMonth;
     }
 
+    @Override
     public Integer getExpirationYear() {
         return expirationYear;
     }
@@ -66,6 +69,7 @@ public class Card implements CardInformation, Serializable {
         this.expirationYear = expirationYear;
     }
 
+    @Override
     public String getFirstSixDigits() {
         return firstSixDigits;
     }
@@ -95,6 +99,7 @@ public class Card implements CardInformation, Serializable {
         this.issuer = issuer;
     }
 
+    @Override
     public String getLastFourDigits() {
         return lastFourDigits;
     }
@@ -122,11 +127,7 @@ public class Card implements CardInformation, Serializable {
     public boolean isSecurityCodeRequired() {
 
         if (securityCode != null) {
-            if (securityCode.getLength() != 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return securityCode.getLength() != 0;
         } else {
             return false;
         }

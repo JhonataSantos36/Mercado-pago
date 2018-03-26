@@ -3,12 +3,14 @@ package com.mercadopago.providers;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Payer;
 import com.mercadopago.model.PaymentMethodSearch;
+import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.mvp.ResourcesProvider;
 import com.mercadopago.preferences.PaymentPreference;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 /**
  * Created by mreverter on 1/30/17.
@@ -34,4 +36,9 @@ public interface PaymentVaultProvider extends ResourcesProvider {
     String getStandardErrorMessage();
 
     String getEmptyPaymentMethodsErrorMessage();
+
+    void trackInitialScreen(PaymentMethodSearch paymentMethodSearch, String siteId);
+
+    void trackChildrenScreen(PaymentMethodSearchItem paymentMethodSearchItem, String siteId);
+
 }

@@ -20,12 +20,12 @@ public class PayerCostsAdapter extends RecyclerView.Adapter<PayerCostsAdapter.Vi
 
     private final Site mSite;
     private List<PayerCost> mInstallmentsList;
-    private OnSelectedCallback<Integer> mCallback;
+    private final OnSelectedCallback<Integer> mCallback;
 
     public PayerCostsAdapter(Site site, OnSelectedCallback<Integer> callback) {
-        this.mSite = site;
-        this.mInstallmentsList = new ArrayList<>();
-        this.mCallback = callback;
+        mSite = site;
+        mInstallmentsList = new ArrayList<>();
+        mCallback = callback;
     }
 
     public void addResults(List<PayerCost> list) {
@@ -49,7 +49,10 @@ public class PayerCostsAdapter extends RecyclerView.Adapter<PayerCostsAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         PayerCost payerCost = mInstallmentsList.get(position);
         holder.mPayerCostRow.setSmallTextSize();
-        holder.mPayerCostRow.drawPayerCost(payerCost);
+        holder.mPayerCostRow.drawPayerCost(payerCost.getInstallmentRate(),
+                payerCost.getInstallments(),
+                payerCost.getTotalAmount(),
+                payerCost.getInstallmentAmount());
     }
 
     @Override

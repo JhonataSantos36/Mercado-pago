@@ -1,3 +1,9 @@
+## VERSION 3.8.1
+
+_20_02_2018_
+
+* Fix: Gson dependency fix
+
 ## VERSION 3.8.0
 
 _28_12_2017_

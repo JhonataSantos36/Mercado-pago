@@ -17,6 +17,7 @@ public class ExampleHooks extends DefaultCheckoutHooks {
                 return new PaymentTypeConfirm(props.toBuilder()
                         .setToolbarTitle("Payment Type").build());
             }
+
             @Override
             public boolean isEnabled() {
                 return true; ///default is true, no need to override

@@ -105,15 +105,15 @@ public class IssuersPresenter extends MvpPresenter<IssuersActivityView, IssuersP
     }
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.mPaymentMethod = paymentMethod;
+        mPaymentMethod = paymentMethod;
     }
 
     public PaymentMethod getPaymentMethod() {
-        return this.mPaymentMethod;
+        return mPaymentMethod;
     }
 
     public void setIssuers(List<Issuer> issuers) {
-        this.mIssuers = issuers;
+        mIssuers = issuers;
     }
 
     public CardInfo getCardInfo() {
@@ -121,15 +121,15 @@ public class IssuersPresenter extends MvpPresenter<IssuersActivityView, IssuersP
     }
 
     public void setFailureRecovery(FailureRecovery failureRecovery) {
-        this.mFailureRecovery = failureRecovery;
+        mFailureRecovery = failureRecovery;
     }
 
     public FailureRecovery getFailureRecovery() {
-        return this.mFailureRecovery;
+        return mFailureRecovery;
     }
 
     public void setCardInfo(CardInfo cardInfo) {
-        this.mCardInfo = cardInfo;
+        mCardInfo = cardInfo;
 
         if (mCardInfo != null) {
             mBin = mCardInfo.getFirstSixDigits();

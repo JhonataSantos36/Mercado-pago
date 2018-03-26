@@ -18,7 +18,6 @@ import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
 import com.mercadopago.plugins.PaymentMethodPlugin;
-import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.PaymentVaultPresenter;
@@ -1193,6 +1192,16 @@ public class PaymentVaultPresenterTest {
         public String getEmptyPaymentMethodsErrorMessage() {
             return EMPTY_PAYMENT_METHODS;
         }
+
+        @Override
+        public void trackInitialScreen(PaymentMethodSearch paymentMethodSearch, String siteId) {
+
+        }
+
+        @Override
+        public void trackChildrenScreen(PaymentMethodSearchItem paymentMethodSearchItem, String siteId) {
+
+        }
     }
 
     private class MockedView implements PaymentVaultView {
@@ -1247,7 +1256,7 @@ public class PaymentVaultPresenterTest {
         }
 
         @Override
-        public void showPluginOptions(List<PaymentMethodInfo> items) {
+        public void showPluginOptions(List<PaymentMethodPlugin> items, String position) {
 
         }
 
@@ -1311,33 +1320,13 @@ public class PaymentVaultPresenterTest {
         }
 
         @Override
-        public void trackChildrenScreen() {
-            //Not yet tested
-        }
-
-        @Override
-        public void initializeMPTracker() {
-            //Not yet tested
-        }
-
-        @Override
         public void showHook(Hook hook, int code) {
             //Not yet tested
         }
 
         @Override
-        public PaymentMethodInfo getPaymentMethodInfo(PaymentMethodPlugin plugin) {
-            return null;
-        }
-
-        @Override
         public void showPaymentMethodPluginConfiguration() {
 
-        }
-
-        @Override
-        public void trackInitialScreen() {
-            //Not yet tested
         }
 
         private void simulateItemSelection(int index) {

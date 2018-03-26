@@ -11,7 +11,7 @@ public class PayerIntent {
     }
 
     public Payer getPayer() {
-        return this.payer;
+        return payer;
     }
 
     public void setPayer(Payer payer) {

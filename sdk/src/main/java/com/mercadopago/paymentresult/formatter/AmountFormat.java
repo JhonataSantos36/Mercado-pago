@@ -20,12 +20,12 @@ public class AmountFormat {
     protected BigDecimal amount;
     protected String paymentMethodName;
 
-    public AmountFormat(String currencyId, BigDecimal amount) {
+    public AmountFormat(final String currencyId, final BigDecimal amount) {
         this.currencyId = currencyId;
         this.amount = amount;
     }
 
-    public AmountFormat(String currencyId, BigDecimal amount, String paymentMethodName) {
+    public AmountFormat(final String currencyId, final BigDecimal amount, final String paymentMethodName) {
         this.currencyId = currencyId;
         this.amount = amount;
         this.paymentMethodName = paymentMethodName;
@@ -43,7 +43,7 @@ public class AmountFormat {
         return paymentMethodName;
     }
 
-    public String formatNumber(boolean hasSpace) {
+    public String formatNumber(final boolean hasSpace) {
         // Get currency configuration
         Currency currency = CurrenciesUtil.currenciesList.get(currencyId);
 
@@ -72,7 +72,7 @@ public class AmountFormat {
         }
     }
 
-    protected String getDecimals(String amountText) {
+    protected String getDecimals(final String amountText) {
         Currency currency = CurrenciesUtil.currenciesList.get(currencyId);
         int decimalDivisionIndex = amountText.indexOf(currency.getDecimalSeparator());
         String decimals = null;
@@ -82,7 +82,7 @@ public class AmountFormat {
         return decimals;
     }
 
-    protected String getWholeNumber(String amountText) {
+    protected String getWholeNumber(final String amountText) {
         Currency currency = CurrenciesUtil.currenciesList.get(currencyId);
         int decimalDivisionIndex = amountText.indexOf(currency.getDecimalSeparator());
         String wholeNumber;
@@ -99,7 +99,7 @@ public class AmountFormat {
         return currency.getSymbol().length();
     }
 
-    protected CharSequence insertSpannedAmountInText(String title, SpannableStringBuilder spannedAmount) {
+    protected CharSequence insertSpannedAmountInText(final String title, final SpannableStringBuilder spannedAmount) {
         Currency currency = CurrenciesUtil.currenciesList.get(currencyId);
 
         String formattedAmount = formatNumber(true);

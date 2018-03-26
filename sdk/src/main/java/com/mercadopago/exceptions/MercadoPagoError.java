@@ -13,7 +13,7 @@ public class MercadoPagoError implements Serializable {
     private String errorDetail;
     private String requestOrigin;
     private ApiException apiException;
-    private boolean recoverable;
+    private final boolean recoverable;
 
     public MercadoPagoError(String message, boolean recoverable) {
         this.message = message;
@@ -22,14 +22,14 @@ public class MercadoPagoError implements Serializable {
 
     public MercadoPagoError(String message, String detail, boolean recoverable) {
         this.message = message;
-        this.errorDetail = detail;
+        errorDetail = detail;
         this.recoverable = recoverable;
     }
 
     public MercadoPagoError(ApiException apiException, String requestOrigin) {
         this.apiException = apiException;
         this.requestOrigin = requestOrigin;
-        this.recoverable = apiException.isRecoverable();
+        recoverable = apiException.isRecoverable();
     }
 
     public ApiException getApiException() {

@@ -34,6 +34,7 @@ public class PaymentMethodSearchOption implements PaymentMethodSearchViewControl
         mItem = item;
     }
 
+    @Override
     public View inflateInParent(ViewGroup parent, boolean attachToRoot) {
         mView = LayoutInflater.from(mContext)
                 .inflate(R.layout.mpsdk_row_pm_search_item, parent, attachToRoot);
@@ -48,10 +49,11 @@ public class PaymentMethodSearchOption implements PaymentMethodSearchViewControl
         return mView;
     }
 
+    @Override
     public void initializeControls() {
-        mDescription = (MPTextView) mView.findViewById(R.id.mpsdkDescription);
-        mComment = (MPTextView) mView.findViewById(R.id.mpsdkComment);
-        mIcon = (ImageView) mView.findViewById(R.id.mpsdkImage);
+        mDescription = mView.findViewById(R.id.mpsdkDescription);
+        mComment = mView.findViewById(R.id.mpsdkComment);
+        mIcon = mView.findViewById(R.id.mpsdkImage);
 
     }
 
@@ -61,6 +63,7 @@ public class PaymentMethodSearchOption implements PaymentMethodSearchViewControl
                 item.getId().equals(PaymentTypes.PREPAID_CARD)));
     }
 
+    @Override
     public void draw() {
         if (mItem.hasDescription()) {
             mDescription.setVisibility(View.VISIBLE);

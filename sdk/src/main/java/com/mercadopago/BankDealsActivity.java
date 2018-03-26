@@ -57,7 +57,7 @@ public class BankDealsActivity extends MercadoPagoActivity {
 
     protected void trackInitialScreen() {
         MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mMerchantPublicKey)
-                .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                .setVersion(BuildConfig.VERSION_NAME)
                 .build();
         ScreenViewEvent event = new ScreenViewEvent.Builder()
                 .setFlowId(FlowHandler.getInstance().getFlowId())
@@ -94,14 +94,14 @@ public class BankDealsActivity extends MercadoPagoActivity {
         try {
             Type listType = new TypeToken<List<BankDeal>>() {
             }.getType();
-            mBankDeals = JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("bankDeals"), listType);
+            mBankDeals = JsonUtil.getInstance().getGson().fromJson(getIntent().getStringExtra("bankDeals"), listType);
         } catch (Exception ex) {
             mBankDeals = null;
         }
     }
 
     private void initializeToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.mpsdkToolbar);
+        mToolbar = findViewById(R.id.mpsdkToolbar);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -179,9 +179,7 @@ public class BankDealsActivity extends MercadoPagoActivity {
 
     private void showSelectedBankDealTerms(View view) {
         BankDeal selectedBankDeal = (BankDeal) view.getTag();
-        Intent intent = new Intent(getActivity(), TermsAndConditionsActivity.class);
-        intent.putExtra("bankDealLegals", selectedBankDeal.getLegals());
-        startActivity(intent);
+        TermsAndConditionsActivity.startWithBankDealLegals(this, selectedBankDeal.getLegals());
     }
 
     protected void solveBankDeals(List<BankDeal> bankDeals) {

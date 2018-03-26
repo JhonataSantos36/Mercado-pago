@@ -13,8 +13,9 @@ import com.mercadopago.plugins.PaymentMethodPlugin;
 import com.mercadopago.plugins.PaymentProcessor;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.preferences.CheckoutPreference;
-import com.mercadopago.util.TextUtil;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
+import com.mercadopago.review_and_confirm.models.ReviewAndConfirmPreferences;
+import com.mercadopago.util.TextUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +29,7 @@ public class CheckoutStore {
     //Preferences
     private PaymentResultScreenPreference paymentResultScreenPreference;
     private CheckoutPreference checkoutPreference;
+    private ReviewAndConfirmPreferences reviewAndConfirmPreferences;
 
     //Config
     private DataInitializationTask dataInitializationTask;
@@ -63,6 +65,10 @@ public class CheckoutStore {
         return paymentResultScreenPreference;
     }
 
+    public ReviewAndConfirmPreferences getReviewAndConfirmPreferences() {
+        return reviewAndConfirmPreferences == null ? new ReviewAndConfirmPreferences.Builder().build() : reviewAndConfirmPreferences;
+    }
+
     public void setPaymentResultScreenPreference(PaymentResultScreenPreference paymentResultScreenPreference) {
         this.paymentResultScreenPreference = paymentResultScreenPreference;
     }
@@ -79,7 +85,9 @@ public class CheckoutStore {
         this.dataInitializationTask = dataInitializationTask;
     }
 
-    public List<PaymentMethodPlugin> getPaymentMethodPluginList() {
+    @NonNull
+    public
+    List<PaymentMethodPlugin> getPaymentMethodPluginList() {
         return paymentMethodPluginList;
     }
 
@@ -191,7 +199,7 @@ public class CheckoutStore {
     }
 
     public void addPaymentPlugins(@NonNull final PaymentProcessor paymentProcessor, @NonNull final String paymentMethod) {
-        this.paymentPlugins.put(paymentMethod, paymentProcessor);
+        paymentPlugins.put(paymentMethod, paymentProcessor);
     }
 
     public PaymentData getPaymentData() {
@@ -216,6 +224,10 @@ public class CheckoutStore {
 
     public void setPaymentResult(PaymentResult paymentResult) {
         this.paymentResult = paymentResult;
+    }
+
+    public void setReviewAndConfirmPreferences(final ReviewAndConfirmPreferences reviewAndConfirmPreferences) {
+        this.reviewAndConfirmPreferences = reviewAndConfirmPreferences;
     }
 
     public void reset() {

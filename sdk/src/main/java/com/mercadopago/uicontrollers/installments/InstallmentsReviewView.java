@@ -19,9 +19,9 @@ import com.mercadopago.util.CurrenciesUtil;
 public class InstallmentsReviewView implements InstallmentsView {
 
     //Local vars
-    private Context mContext;
-    private PayerCost mPayerCost;
-    private String mCurrencyId;
+    private final Context mContext;
+    private final PayerCost mPayerCost;
+    private final String mCurrencyId;
 
     //Views
     private View mView;
@@ -82,11 +82,11 @@ public class InstallmentsReviewView implements InstallmentsView {
 
     @Override
     public void initializeControls() {
-        mInstallmentsContinueButton = (FrameLayout) mView.findViewById(R.id.mpsdkInstallmentsContinueButton);
-        mContinueTextButton = (MPTextView) mView.findViewById(R.id.mpsdkInstallmentsButtonText);
-        mInstallmentsAmount = (MPTextView) mView.findViewById(R.id.mpsdkInstallmentsAmount);
-        mTotalAmount = (MPTextView) mView.findViewById(R.id.mpsdkReviewTotalAmount);
-        mCftpercent = (MPTextView) mView.findViewById(R.id.mpsdkCftpercent);
+        mInstallmentsContinueButton = mView.findViewById(R.id.mpsdkInstallmentsContinueButton);
+        mContinueTextButton = mView.findViewById(R.id.mpsdkInstallmentsButtonText);
+        mInstallmentsAmount = mView.findViewById(R.id.mpsdkInstallmentsAmount);
+        mTotalAmount = mView.findViewById(R.id.mpsdkReviewTotalAmount);
+        mCftpercent = mView.findViewById(R.id.mpsdkCftpercent);
     }
 
     @Override

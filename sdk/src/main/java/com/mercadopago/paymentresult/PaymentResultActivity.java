@@ -25,14 +25,6 @@ import com.mercadopago.paymentresult.components.Body;
 import com.mercadopago.paymentresult.components.BodyError;
 import com.mercadopago.paymentresult.components.BodyErrorRenderer;
 import com.mercadopago.paymentresult.components.BodyRenderer;
-import com.mercadopago.paymentresult.components.Footer;
-import com.mercadopago.paymentresult.components.FooterContainer;
-import com.mercadopago.paymentresult.components.FooterContainerRenderer;
-import com.mercadopago.paymentresult.components.FooterRenderer;
-import com.mercadopago.paymentresult.components.Header;
-import com.mercadopago.paymentresult.components.HeaderRenderer;
-import com.mercadopago.paymentresult.components.Icon;
-import com.mercadopago.paymentresult.components.IconRenderer;
 import com.mercadopago.paymentresult.components.InstructionReferenceComponent;
 import com.mercadopago.paymentresult.components.InstructionReferenceRenderer;
 import com.mercadopago.paymentresult.components.Instructions;
@@ -111,8 +103,6 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
 
 
         RendererFactory.register(Body.class, BodyRenderer.class);
-        RendererFactory.register(FooterContainer.class, FooterContainerRenderer.class);
-        RendererFactory.register(Footer.class, FooterRenderer.class);
         RendererFactory.register(LoadingComponent.class, LoadingRenderer.class);
         RendererFactory.register(Instructions.class, InstructionsRenderer.class);
         RendererFactory.register(InstructionsSubtitle.class, InstructionsSubtitleRenderer.class);
@@ -282,6 +272,7 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
         startActivity(browserIntent);
     }
 
+    @Override
     public void finishWithResult(int resultCode) {
         final Intent intent = new Intent();
         intent.putExtra("resultCode", resultCode);
@@ -310,7 +301,7 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
     @Override
     public void trackScreen(ScreenViewEvent event) {
         MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, merchantPublicKey)
-                .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                .setVersion(BuildConfig.VERSION_NAME)
                 .build();
 
         mpTrackingContext.trackEvent(event);

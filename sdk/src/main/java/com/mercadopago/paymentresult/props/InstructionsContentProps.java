@@ -17,12 +17,12 @@ public class InstructionsContentProps {
     }
 
     public InstructionsContentProps(@NonNull final Builder builder) {
-        this.instruction = builder.instruction;
+        instruction = builder.instruction;
     }
 
     public Builder toBuilder() {
         return new Builder()
-                .setInstruction(this.instruction);
+                .setInstruction(instruction);
     }
 
     public static class Builder {

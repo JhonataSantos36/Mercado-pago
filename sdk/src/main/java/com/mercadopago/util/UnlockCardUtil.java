@@ -33,7 +33,7 @@ public class UnlockCardUtil {
             return null;
         }
 
-        return mSiteId + "_" + mIssuerId.toString();
+        return mSiteId + "_" + mIssuerId;
 
     }
 

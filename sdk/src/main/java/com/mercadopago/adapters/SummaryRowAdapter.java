@@ -19,12 +19,12 @@ import java.util.List;
  * Created by mromar on 9/11/17.
  */
 public class SummaryRowAdapter extends RecyclerView.Adapter<SummaryRowAdapter.ViewHolder> {
-    private List<SummaryRow> mSummaryRows;
-    private OnSelectedCallback<Integer> mCallback;
+    private final List<SummaryRow> mSummaryRows;
+    private final OnSelectedCallback<Integer> mCallback;
 
     public SummaryRowAdapter(OnSelectedCallback<Integer> callback) {
-        this.mSummaryRows = new ArrayList<>();
-        this.mCallback = callback;
+        mSummaryRows = new ArrayList<>();
+        mCallback = callback;
     }
 
     public void addResults(List<SummaryRow> list) {

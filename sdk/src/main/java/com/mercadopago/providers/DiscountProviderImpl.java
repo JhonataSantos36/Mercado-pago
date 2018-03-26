@@ -33,13 +33,13 @@ public class DiscountProviderImpl implements DiscountsProvider {
 
     private final MercadoPagoServicesAdapter mercadoPago;
 
-    private Context context;
-    private String merchantBaseUrl;
-    private String merchantDiscountUrl;
-    private String merchantGetDiscountUri;
-    private Map<String, String> discountAdditionalInfo;
+    private final Context context;
+    private final String merchantBaseUrl;
+    private final String merchantDiscountUrl;
+    private final String merchantGetDiscountUri;
+    private final Map<String, String> discountAdditionalInfo;
 
-    private ServicePreference servicePreference;
+    private final ServicePreference servicePreference;
 
     public DiscountProviderImpl(Context context, String publicKey, String merchantBaseUrl, String merchantDiscountUrl, String merchantGetDiscountUri, Map<String, String> discountAdditionalInfo) {
         this.context = context;
@@ -47,7 +47,7 @@ public class DiscountProviderImpl implements DiscountsProvider {
         this.merchantDiscountUrl = merchantDiscountUrl;
         this.merchantGetDiscountUri = merchantGetDiscountUri;
         this.discountAdditionalInfo = discountAdditionalInfo;
-        this.servicePreference = CustomServicesHandler.getInstance().getServicePreference();
+        servicePreference = CustomServicesHandler.getInstance().getServicePreference();
 
         if (publicKey == null) throw new IllegalStateException("public key not found");
         if (context == null) throw new IllegalStateException("context not found");
@@ -183,7 +183,7 @@ public class DiscountProviderImpl implements DiscountsProvider {
         if (TextUtil.isEmpty(merchantDiscountUrl)) {
             merchantBaseUrl = this.merchantBaseUrl;
         } else {
-            merchantBaseUrl = this.merchantDiscountUrl;
+            merchantBaseUrl = merchantDiscountUrl;
         }
 
         return merchantBaseUrl;

@@ -15,7 +15,7 @@ public class CardTokenException extends Exception {
     public static final int INVALID_CARD_NUMBER_INCOMPLETE = 7;
     public static final int INVALID_PAYMENT_METHOD = 8;
 
-    private int errorCode;
+    private final int errorCode;
     private String extraParams;
 
     public CardTokenException(int errorCode) {
@@ -28,10 +28,10 @@ public class CardTokenException extends Exception {
     }
 
     public int getErrorCode() {
-        return this.errorCode;
+        return errorCode;
     }
 
     public String getExtraParams() {
-        return this.extraParams;
+        return extraParams;
     }
 }

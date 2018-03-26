@@ -26,7 +26,6 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
-                tools:src="@drawable/amex"
                 android:adjustViewBounds="true"
                 android:id="@+id/mpsdkImage"
                 android:maxWidth="40dp"
@@ -47,7 +46,6 @@
             android:layout_width="15dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            tools:src="@drawable/arrow_right"
             android:adjustViewBounds="true"/>
     </LinearLayout>
     <View

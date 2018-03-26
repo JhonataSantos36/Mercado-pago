@@ -198,6 +198,7 @@
     <string name="mpsdk_zero_rate">Sem juros</string>
     <string name="mpsdk_exit_label">Sair</string>
     <string name="mpsdk_cancel_payment">Cancelar pagamento</string>
+    <string name="mpsdk_cancel">Cancelar</string>
     <string name="mpsdk_input_button_back">Anterior</string>
     <string name="mpsdk_input_button_next">Continuar</string>
     <string name="mpsdk_hour">hora</string>
@@ -238,6 +239,7 @@
     <string name="mpsdk_review_off_text_6">Você pagará %1$s em\n%2$s</string>
     <string name="mpsdk_homebanking">Internet Banking de</string>
     <string name="mpsdk_your_atm">caixa eletrônico de</string>
+    <string name="mpsdk_review_item_quantity">Quantidade:</string>
     <string name="mpsdk_review_product_quantity">Quantidade: %1$s</string>
     <string name="mpsdk_review_product_price">Preço unitário: %1$s</string>
     <string name="mpsdk_activity_checkout_title">Revise se está tudo correto</string>

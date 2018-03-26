@@ -11,7 +11,7 @@
     android:layout_marginRight="25dp"
     android:layout_marginStart="25dp"
     android:layout_marginTop="16dp"
-    android:background="@color/mpsdk_summary_background_color"
+    android:background="@color/mpsdk_review_summary_background"
     android:orientation="vertical">
 
     <FrameLayout
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
-            android:background="@color/mpsdk_summary_background_color"
+            android:background="@color/mpsdk_review_summary_background"
             android:descendantFocusability="afterDescendants"
             android:gravity="center_horizontal"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
@@ -141,7 +141,7 @@
         tools:text="No incluye intereses bancarios" />
 
     <com.mercadopago.customviews.MPTextView
-        android:id="@+id/mpsdkCFT"
+        android:id="@+id/disclaimer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"

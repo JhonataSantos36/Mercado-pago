@@ -24,12 +24,12 @@ public class AccreditationComment extends Component<AccreditationComment.Props, 
         }
 
         public Props(@NonNull final Builder builder) {
-            this.comment = builder.comment;
+            comment = builder.comment;
         }
 
         public Builder toBuilder() {
             return new Props.Builder()
-                    .setComment(this.comment);
+                    .setComment(comment);
         }
 
         public static final class Builder {

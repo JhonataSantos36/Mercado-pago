@@ -31,7 +31,7 @@ public class ToolbarRenderer extends Renderer<ToolbarComponent> {
 
         } else {
 
-            final TextView titleView = (TextView) view.findViewById(R.id.title);
+            final TextView titleView = view.findViewById(R.id.title);
 
             activity.setSupportActionBar(toolbar);
             activity.getSupportActionBar().setDisplayShowTitleEnabled(false);

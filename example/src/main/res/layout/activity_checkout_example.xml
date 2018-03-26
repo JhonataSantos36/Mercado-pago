@@ -62,6 +62,14 @@
                 android:layout_marginTop="25dp"
                 android:text="@string/mpsdk_continue_label" />
 
+            <com.mercadopago.customviews.MPButton
+                android:id="@+id/select_checkout"
+                style="@style/mpsdk_button_normal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/mpsdk_button_height"
+                android:layout_marginTop="25dp"
+                android:text="@string/select_checkout" />
+
             <TextView
                 android:id="@+id/jsonConfigButton"
                 android:layout_width="match_parent"
@@ -72,13 +80,6 @@
                 android:text="@string/json_config_button_text"
                 android:textColor="@color/mpsdk_background_blue" />
 
-            <CheckBox
-                android:id="@+id/hooks_enabled"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/enable_hooks"
-                android:textSize="14sp" />
 
         </LinearLayout>
 
