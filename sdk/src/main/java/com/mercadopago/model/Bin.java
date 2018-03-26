@@ -1,6 +1,8 @@
 package com.mercadopago.model;
 
-public class Bin {
+import java.io.Serializable;
+
+public class Bin implements Serializable {
 
     private String exclusionPattern;
     private String installmentsPattern;

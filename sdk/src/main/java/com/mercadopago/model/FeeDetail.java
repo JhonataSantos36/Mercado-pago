@@ -1,8 +1,9 @@
 package com.mercadopago.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class FeeDetail {
+public class FeeDetail implements Serializable {
 
     private BigDecimal amount;
     private String feePayer;
@@ -32,7 +33,7 @@ public class FeeDetail {
         this.type = type;
     }
 
-    public Boolean isFinancialFree(){
+    public Boolean isFinancialFree() {
         return type != null && type.equals("financing_fee");
     }
 }

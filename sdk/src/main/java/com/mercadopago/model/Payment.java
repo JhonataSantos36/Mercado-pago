@@ -1,18 +1,17 @@
 package com.mercadopago.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-public class Payment {
+public class Payment implements Serializable {
 
     private Boolean binaryMode;
     private String callForAuthorizeId;
     private Boolean captured;
-    private Card card;
     private String collectorId;
-    private BigDecimal couponAmount;
     private String currencyId;
     private Date dateApproved;
     private Date dateCreated;
@@ -20,7 +19,6 @@ public class Payment {
     private String description;
     private Long differentialPricingId;
     private String externalReference;
-    private List<FeeDetail> feeDetails;
     private Long id;
     private Integer installments;
     private Integer issuerId;
@@ -29,17 +27,20 @@ public class Payment {
     private Date moneyReleaseDate;
     private String notificationUrl;
     private String operationType;
-    private Order order;
-    private Payer payer;
     private String paymentMethodId;
     private String paymentTypeId;
-    private List<Refund> refunds;
     private String statementDescriptor;
     private String status;
     private String statusDetail;
+    private BigDecimal couponAmount;
     private BigDecimal transactionAmount;
     private BigDecimal transactionAmountRefunded;
+    private List<FeeDetail> feeDetails;
+    private Order order;
+    private Payer payer;
     private TransactionDetails transactionDetails;
+    private List<Refund> refunds;
+    private Card card;
 
     public Boolean getBinaryMode() {
         return binaryMode;

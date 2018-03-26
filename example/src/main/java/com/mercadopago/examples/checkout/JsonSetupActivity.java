@@ -1,13 +1,11 @@
 package com.mercadopago.examples.checkout;
 
-import com.google.gson.JsonSyntaxException;
-
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
@@ -19,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.google.gson.JsonSyntaxException;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.CheckoutConfiguration;
@@ -91,19 +90,19 @@ public class JsonSetupActivity extends AppCompatActivity {
     }
 
     private void startCheckout() {
-        MercadoPagoCheckout.Builder checkoutBuilder = new MercadoPagoCheckout.Builder();
 
-        checkoutBuilder.setActivity(this);
-        if (!TextUtil.isEmpty(mConfiguration.getPublicKey())) {
-            checkoutBuilder.setPublicKey(mConfiguration.getPublicKey());
-        }
+        CheckoutPreference preference;
 
         if (!TextUtil.isEmpty(mConfiguration.getPrefId())) {
-            checkoutBuilder.setCheckoutPreference(new CheckoutPreference(mConfiguration.getPrefId()));
+            preference = new CheckoutPreference(mConfiguration.getPrefId());
         } else {
-            CheckoutPreference preference = createCheckoutPreference(mConfiguration);
-            checkoutBuilder.setCheckoutPreference(preference);
+            preference = createCheckoutPreference(mConfiguration);
         }
+
+        MercadoPagoCheckout.Builder checkoutBuilder =
+                new MercadoPagoCheckout.Builder(this,
+                        mConfiguration.getPublicKey(),
+                        preference);
 
         if (mConfiguration.getServicePreference() != null) {
             completeServicePreferenceWithDefaultValues();

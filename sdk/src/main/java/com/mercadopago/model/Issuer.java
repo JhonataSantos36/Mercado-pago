@@ -1,11 +1,14 @@
 package com.mercadopago.model;
 
-public class Issuer {
+import java.io.Serializable;
+
+public class Issuer implements Serializable {
 
     private Long id;
     private String name;
 
-    public Issuer() {}
+    public Issuer() {
+    }
 
     public Issuer(Long id, String name) {
 

@@ -2,10 +2,12 @@ package com.mercadopago.exceptions;
 
 import com.mercadopago.model.ApiException;
 
+import java.io.Serializable;
+
 /**
  * Created by mromar on 3/2/16.
  */
-public class MercadoPagoError {
+public class MercadoPagoError implements Serializable {
 
     private String message;
     private String errorDetail;

@@ -1,6 +1,8 @@
 package com.mercadopago.model;
 
-public class SecurityCode {
+import java.io.Serializable;
+
+public class SecurityCode implements Serializable {
 
     private String cardLocation;
     private Integer length;

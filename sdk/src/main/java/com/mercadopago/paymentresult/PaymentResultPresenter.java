@@ -1,6 +1,5 @@
 package com.mercadopago.paymentresult;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.callbacks.FailureRecovery;
@@ -11,6 +10,7 @@ import com.mercadopago.components.LinkAction;
 import com.mercadopago.components.NextAction;
 import com.mercadopago.components.RecoverPaymentAction;
 import com.mercadopago.components.ResultCodeAction;
+import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.Instruction;
 import com.mercadopago.model.Instructions;
@@ -299,7 +299,7 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
     @Override
     public void onAction(@NonNull final Action action) {
         if (action instanceof NextAction) {
-            navigator.finishWithResult(Activity.RESULT_OK);
+            navigator.finishWithResult(MercadoPagoCheckout.PAYMENT_RESULT_CODE);
         } else if (action instanceof ResultCodeAction) {
             navigator.finishWithResult(((ResultCodeAction) action).resultCode);
         } else if (action instanceof ChangePaymentMethodAction) {

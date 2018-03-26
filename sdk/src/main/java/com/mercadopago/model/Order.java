@@ -1,6 +1,8 @@
 package com.mercadopago.model;
 
-public class Order {
+import java.io.Serializable;
+
+public class Order implements Serializable {
 
     private Long id;
     private String type;

@@ -7,10 +7,11 @@ import com.mercadopago.R;
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class PaymentMethod {
+public class PaymentMethod implements Serializable {
 
     private List<String> additionalInfoNeeded;
     private String id;
@@ -24,7 +25,8 @@ public class PaymentMethod {
     private BigDecimal maxAllowedAmount;
     private Integer accreditationTime;
     private String merchantAccountId;
-    private @DrawableRes Integer icon = R.drawable.mpsdk_none;
+    private @DrawableRes
+    Integer icon = R.drawable.mpsdk_none;
 
     public PaymentMethod() {
 

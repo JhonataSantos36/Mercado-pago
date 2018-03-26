@@ -36,6 +36,9 @@ import java.util.Map;
 
 public class MercadoPagoCheckout {
 
+    public static final String EXTRA_PAYMENT_KEY = "payment";
+    public static final String EXTRA_ERROR_KEY = "mercadoPagoError";
+
     public static final int CHECKOUT_REQUEST_CODE = 5;
     public static final int PAYMENT_DATA_RESULT_CODE = 6;
     public static final int PAYMENT_RESULT_CODE = 7;
@@ -130,7 +133,7 @@ public class MercadoPagoCheckout {
 
     private void validate(Integer resultCode) throws IllegalStateException {
         if (context == null && activity == null) {
-            throw new IllegalStateException("activity not set");
+            throw new IllegalStateException("context is not set");
         }
         if (TextUtil.isEmpty(publicKey)) {
             throw new IllegalStateException("public key not set");
@@ -229,18 +232,22 @@ public class MercadoPagoCheckout {
         private String lightFontPath;
         private String monoFontPath;
 
-        public Builder setActivity(Activity activity) {
-            this.activity = activity;
-            return this;
+        public Builder(@NonNull final Context context,
+                       @NonNull final String publicKey,
+                       @NonNull final CheckoutPreference checkoutPreference) {
+
+            if (context instanceof Activity) {
+                this.activity = (Activity) context;
+            } else {
+                this.context = context;
+            }
+
+            this.publicKey = publicKey;
+            this.checkoutPreference = checkoutPreference;
         }
 
         public Builder setPublicKey(String publicKey) {
             this.publicKey = publicKey.trim();
-            return this;
-        }
-
-        public Builder setCheckoutPreference(CheckoutPreference checkoutPreference) {
-            this.checkoutPreference = checkoutPreference;
             return this;
         }
 

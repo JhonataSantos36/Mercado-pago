@@ -3,7 +3,6 @@ package com.mercadopago.examples.checkout;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
@@ -16,12 +15,7 @@ import com.mercadopago.customviews.MPButton;
 import com.mercadopago.examples.R;
 import com.mercadopago.examples.utils.ExamplesUtils;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.hooks.ExampleHooks;
 import com.mercadopago.model.Payment;
-import com.mercadopago.plugins.DataInitializationTask;
-import com.mercadopago.plugins.MainPaymentProcessor;
-import com.mercadopago.plugins.SamplePaymentMethodPlugin;
-import com.mercadopago.plugins.SamplePaymentProcessor;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -80,25 +74,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         final Map<String, Object> defaultData = new HashMap<>();
         defaultData.put("amount", 120f);
 
-        final MercadoPagoCheckout.Builder builder = new MercadoPagoCheckout.Builder()
-                .setActivity(this)
-                .setPublicKey(mPublicKey)
-                .setCheckoutPreference(getCheckoutPreference())
-                .addPaymentMethodPlugin(
-                        new SamplePaymentMethodPlugin(),
-                        new SamplePaymentProcessor()
-                )
-                .setPaymentProcessor(new MainPaymentProcessor())
-                .setDataInitializationTask(new DataInitializationTask(defaultData) {
-                    @Override
-                    public void onLoadData(@NonNull final Map<String, Object> data) {
-                        data.put("user", "Nico");
-                    }
-                });
-
-        if (mHooksEnabled.isChecked()) {
-            builder.setCheckoutHooks(new ExampleHooks());
-        }
+        final MercadoPagoCheckout.Builder builder = new MercadoPagoCheckout.Builder(this, mPublicKey, getCheckoutPreference());
 
         builder.startForPayment();
     }
@@ -112,15 +88,18 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         LayoutUtil.showRegularLayout(this);
 
         if (requestCode == MercadoPagoCheckout.CHECKOUT_REQUEST_CODE) {
-            if (resultCode == MercadoPagoCheckout.PAYMENT_RESULT_CODE) {
-                Payment payment = JsonUtil.getInstance().fromJson(data.getStringExtra("payment"), Payment.class);
-                Toast.makeText(mActivity, "Pago con status: " + payment.getStatus(), Toast.LENGTH_SHORT).show();
-            } else if (resultCode == RESULT_CANCELED) {
-                if (data != null && data.getStringExtra("mercadoPagoError") != null) {
-                    MercadoPagoError mercadoPagoError = JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
+            if (resultCode == RESULT_CANCELED) {
+                if (data != null && data.hasExtra(MercadoPagoCheckout.EXTRA_ERROR_KEY)) {
+                    MercadoPagoError mercadoPagoError = JsonUtil.getInstance().fromJson(data.getStringExtra(MercadoPagoCheckout.EXTRA_ERROR_KEY), MercadoPagoError.class);
                     Toast.makeText(mActivity, "Error: " + mercadoPagoError.getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(mActivity, "Cancel", Toast.LENGTH_SHORT).show();
+                }
+
+            } else if (resultCode == MercadoPagoCheckout.PAYMENT_RESULT_CODE) {
+                if (data != null && data.getExtras() != null && data.getExtras().containsKey(MercadoPagoCheckout.EXTRA_PAYMENT_KEY)) {
+                    Payment payment = (Payment) data.getExtras().getSerializable(MercadoPagoCheckout.EXTRA_PAYMENT_KEY);
+                    Toast.makeText(mActivity, "Pago con status: " + payment.getStatus(), Toast.LENGTH_SHORT).show();
                 }
             }
         }
