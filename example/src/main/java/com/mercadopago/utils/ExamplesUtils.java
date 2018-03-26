@@ -19,7 +19,6 @@ import com.mercadopago.plugins.model.BusinessPayment;
 import com.mercadopago.plugins.model.ExitAction;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.review_and_confirm.models.ReviewAndConfirmPreferences;
-import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
 import java.util.ArrayList;
@@ -93,15 +92,15 @@ public class ExamplesUtils {
 
         if (requestCode == MercadoPagoCheckout.CHECKOUT_REQUEST_CODE) {
             if (resultCode == MercadoPagoCheckout.PAYMENT_RESULT_CODE) {
-                Payment payment = JsonUtil.getInstance().fromJson(data.getStringExtra("payment"), Payment.class);
+                Payment payment = (Payment) data.getExtras().getSerializable(MercadoPagoCheckout.EXTRA_PAYMENT_KEY);
                 Toast.makeText(context, new StringBuilder()
                         .append(PAYMENT_WITH_STATUS_MESSAGE)
                         .append(payment.getStatus()), Toast.LENGTH_LONG)
                         .show();
 
             } else if (resultCode == RESULT_CANCELED) {
-                if (data != null && data.getStringExtra("mercadoPagoError") != null) {
-                    MercadoPagoError mercadoPagoError = JsonUtil.getInstance().fromJson(data.getStringExtra("mercadoPagoError"), MercadoPagoError.class);
+                if (data != null && data.getStringExtra(MercadoPagoCheckout.EXTRA_ERROR_KEY) != null) {
+                    MercadoPagoError mercadoPagoError = (MercadoPagoError) data.getExtras().getSerializable(MercadoPagoCheckout.EXTRA_ERROR_KEY);
                     Toast.makeText(context, "Error: " + mercadoPagoError.getMessage(), Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(context, new StringBuilder()
@@ -193,10 +192,7 @@ public class ExamplesUtils {
         final Map<String, Object> defaultData = new HashMap<>();
         defaultData.put("amount", 120f);
 
-        return new Builder()
-                .setActivity(activity)
-                .setPublicKey(DUMMY_MERCHANT_PUBLIC_KEY)
-                .setCheckoutPreference(new CheckoutPreference(DUMMY_PREFERENCE_ID))
+        return new Builder(activity, DUMMY_MERCHANT_PUBLIC_KEY, new CheckoutPreference(DUMMY_PREFERENCE_ID))
                 .setDataInitializationTask(new DataInitializationTask(defaultData) {
                     @Override
                     public void onLoadData(@NonNull final Map<String, Object> data) {

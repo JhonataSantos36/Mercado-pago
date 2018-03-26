@@ -65,6 +65,7 @@ public class MercadoPagoCheckout {
 
     private MercadoPagoCheckout(Builder builder) {
         activity = builder.activity;
+        context = builder.context;
         publicKey = builder.publicKey;
         paymentData = builder.paymentData;
         checkoutPreference = builder.checkoutPreference;
@@ -146,7 +147,7 @@ public class MercadoPagoCheckout {
 
     private Boolean hasPaymentResultDiscount() {
         return paymentResult != null && paymentResult.getPaymentData() != null &&
-            paymentResult.getPaymentData().getDiscount() != null;
+                paymentResult.getPaymentData().getDiscount() != null;
     }
 
     private Boolean hasDiscount() {
@@ -185,6 +186,7 @@ public class MercadoPagoCheckout {
     }
 
     public static class Builder {
+        private Context context;
         private Activity activity;
         private String publicKey;
         private Boolean binaryMode = false;
