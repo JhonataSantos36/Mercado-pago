@@ -41,24 +41,24 @@ public class PaymentMethodProps {
     }
 
     public PaymentMethodProps(@NonNull final Builder builder) {
-        this.paymentMethod = builder.paymentMethod;
-        this.payerCost = builder.payerCost;
-        this.issuer = builder.issuer;
-        this.token = builder.token;
-        this.disclaimer = builder.disclaimer;
-        this.amountFormatter = builder.amountFormatter;
-        this.discount = builder.discount;
+        paymentMethod = builder.paymentMethod;
+        payerCost = builder.payerCost;
+        issuer = builder.issuer;
+        token = builder.token;
+        disclaimer = builder.disclaimer;
+        amountFormatter = builder.amountFormatter;
+        discount = builder.discount;
     }
 
     public Builder toBuilder() {
         return new Builder()
-                .setPaymentMethod(this.paymentMethod)
-                .setPayerCost(this.payerCost)
-                .setIssuer(this.issuer)
-                .setToken(this.token)
-                .setDisclaimer(this.disclaimer)
-                .setAmountFormatter(this.amountFormatter)
-                .setDiscount(this.discount);
+                .setPaymentMethod(paymentMethod)
+                .setPayerCost(payerCost)
+                .setIssuer(issuer)
+                .setToken(token)
+                .setDisclaimer(disclaimer)
+                .setAmountFormatter(amountFormatter)
+                .setDiscount(discount);
     }
 
     public static class Builder {

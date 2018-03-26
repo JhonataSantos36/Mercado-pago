@@ -23,16 +23,16 @@ public class TotalAmountProps {
     }
 
     public TotalAmountProps(@NonNull final Builder builder) {
-        this.amountFormatter = builder.amountFormatter;
-        this.payerCost = builder.payerCost;
-        this.discount = builder.discount;
+        amountFormatter = builder.amountFormatter;
+        payerCost = builder.payerCost;
+        discount = builder.discount;
     }
 
     public Builder toBuilder() {
         return new Builder()
-                .setAmountFormatter(this.amountFormatter)
-                .setPayerCost(this.payerCost)
-                .setDiscount(this.discount);
+                .setAmountFormatter(amountFormatter)
+                .setPayerCost(payerCost)
+                .setDiscount(discount);
     }
 
     public static class Builder {

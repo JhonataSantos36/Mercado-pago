@@ -23,7 +23,7 @@ public class MPProgressBar extends FrameLayout {
 
     private final boolean autostart;
 
-    private MPLoadingSpinner spinner;
+    private final MPLoadingSpinner spinner;
 
     public MPProgressBar(final Context context) {
         this(context, null);
@@ -38,7 +38,7 @@ public class MPProgressBar extends FrameLayout {
 
         LayoutInflater.from(context).inflate(R.layout.mpsdk_mp_progress_bar, this);
 
-        spinner = (MPLoadingSpinner) findViewById(R.id.ui_spinner);
+        spinner = findViewById(R.id.ui_spinner);
 
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.MPProgressBar, defStyleAttr, 0);
 

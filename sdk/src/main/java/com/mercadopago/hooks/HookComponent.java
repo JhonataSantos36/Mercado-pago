@@ -29,20 +29,20 @@ public abstract class HookComponent<T> extends Component<HookComponent.Props, T>
         public final boolean toolbarVisible;
 
         public Props(@NonNull final Builder builder) {
-            this.data = builder.data;
-            this.paymentTypeId = builder.paymentTypeId;
-            this.paymentData = builder.paymentData;
-            this.toolbarTitle = builder.toolbarTitle;
-            this.toolbarVisible = builder.toolbarVisible;
+            data = builder.data;
+            paymentTypeId = builder.paymentTypeId;
+            paymentData = builder.paymentData;
+            toolbarTitle = builder.toolbarTitle;
+            toolbarVisible = builder.toolbarVisible;
         }
 
         public Builder toBuilder() {
             return new Builder()
-                .setData(this.data)
-                .setPaymentTypeId(this.paymentTypeId)
-                .setPaymentData(this.paymentData)
-                .setToolbarTitle(this.toolbarTitle)
-                .setToolbarVisible(this.toolbarVisible);
+                .setData(data)
+                .setPaymentTypeId(paymentTypeId)
+                .setPaymentData(paymentData)
+                .setToolbarTitle(toolbarTitle)
+                .setToolbarVisible(toolbarVisible);
         }
 
         public static class Builder {

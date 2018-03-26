@@ -180,9 +180,9 @@
         <item name="windowActionBarOverlay">true</item>
     </style>
 
-    <style name="Theme.MercadoPagoTheme.Modal" parent="Theme.MercadoPagoTheme.NoActionBar"/>
+    <style name="Theme.MercadoPagoTheme.Modal" parent="Theme.MercadoPagoTheme.NoActionBar" />
 
-    <style name="Theme.ProcessMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar"/>
+    <style name="Theme.ProcessMercadoPagoTheme.NoActionbar" parent="Theme.MercadoPagoTheme.NoActionBar" />
 
     <style name="Theme.MercadoPagoTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
@@ -198,10 +198,28 @@
         <item name="android:textColor">@color/mpsdk_background_blue</item>
     </style>
 
-    <style name="TextButtonBlue">
+    <style name="HeaderTitleText">
+        <item name="android:textSize">@dimen/mpsdk_l_text</item>
+        <item name="android:textColor">@color/mpsdk_black</item>
+    </style>
+
+    <style name="TimeText">
+        <item name="android:textColor">@color/mpsdk_brownish_grey</item>
+        <item name="android:textSize">@dimen/mpsdk_xs_text</item>
+        <item name="android:drawablePadding">@dimen/mpsdk_xxxs_margin</item>
+        <item name="android:drawableLeft">@drawable/mpsdk_time</item>
+        <item name="android:drawableStart">@drawable/mpsdk_time</item>
+    </style>
+
+    <style name="TextLinkButton">
         <item name="android:textSize">@dimen/mpsdk_m_text</item>
-        <item name="android:textColor">@color/mpsdk_blue_button</item>
+        <item name="android:textColor">@color/mpsdk_link</item>
         <item name="android:text">@string/mpsdk_change_payment</item>
+    </style>
+
+    <style name="HeaderSubtitleText">
+        <item name="android:textSize">@dimen/mpsdk_s_text</item>
+        <item name="android:textColor">@color/mpsdk_brownish_grey</item>
     </style>
 
 </resources>

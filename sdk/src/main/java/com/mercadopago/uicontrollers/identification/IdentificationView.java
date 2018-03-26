@@ -36,7 +36,7 @@ public abstract class IdentificationView {
     protected IdentificationType mIdentificationType;
 
     public IdentificationView(Context context) {
-        this.mContext = context;
+        mContext = context;
     }
 
     public abstract View inflateInParent(ViewGroup parent, boolean attachToRoot);
@@ -51,11 +51,11 @@ public abstract class IdentificationView {
     }
 
     public void setIdentificationNumber(String number) {
-        this.mIdentificationNumber = number;
+        mIdentificationNumber = number;
     }
 
     public void setIdentificationType(IdentificationType identificationType) {
-        this.mIdentificationType = identificationType;
+        mIdentificationType = identificationType;
     }
 
     public void show() {

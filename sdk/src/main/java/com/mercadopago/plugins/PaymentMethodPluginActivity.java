@@ -20,6 +20,10 @@ import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 
+/**
+ * Created by nfortuna on 12/13/17.
+ */
+
 public class PaymentMethodPluginActivity extends AppCompatActivity implements ActionDispatcher {
 
     private static final String SCREEN_NAME_CONFIG_PAYMENT_METHOD_PLUGIN = "CONFIG_PAYMENT_METHOD";
@@ -78,7 +82,7 @@ public class PaymentMethodPluginActivity extends AppCompatActivity implements Ac
         String screenName = SCREEN_NAME_CONFIG_PAYMENT_METHOD_PLUGIN + "_" + id;
 
         MPTrackingContext mTrackingContext = new MPTrackingContext.Builder(this, mPublicKey)
-                .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                .setVersion(BuildConfig.VERSION_NAME)
                 .build();
 
         ScreenViewEvent event = new ScreenViewEvent.Builder()

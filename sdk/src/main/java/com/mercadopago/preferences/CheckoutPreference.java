@@ -40,17 +40,17 @@ public class CheckoutPreference {
     private String conceptId;
 
     public CheckoutPreference(String checkoutPreferenceId) {
-        this.id = checkoutPreferenceId;
+        id = checkoutPreferenceId;
     }
 
     private CheckoutPreference(Builder builder) {
-        this.items = builder.items;
-        this.expirationDateFrom = builder.expirationDateFrom;
-        this.expirationDateTo = builder.expirationDateTo;
-        this.localPreferenceSite = builder.localPreferenceSite;
-        this.marketplaceFee = builder.marketplaceFee;
-        this.shippingCost = builder.shippingCost;
-        this.operationType = builder.operationType;
+        items = builder.items;
+        expirationDateFrom = builder.expirationDateFrom;
+        expirationDateTo = builder.expirationDateTo;
+        localPreferenceSite = builder.localPreferenceSite;
+        marketplaceFee = builder.marketplaceFee;
+        shippingCost = builder.shippingCost;
+        operationType = builder.operationType;
         differentialPricingId = builder.differentialPricingId;
         conceptAmount = builder.conceptAmount;
         conceptId = builder.conceptId;
@@ -69,23 +69,23 @@ public class CheckoutPreference {
     }
 
     public void validate() throws CheckoutPreferenceException {
-        if (this.hasId() && !this.itemsValid()) {
+        if (hasId() && !itemsValid()) {
             throw new CheckoutPreferenceException(CheckoutPreferenceException.INVALID_ITEM);
-        } else if (this.hasId() && !this.hasEmail()) {
+        } else if (hasId() && !hasEmail()) {
             throw new CheckoutPreferenceException(CheckoutPreferenceException.NO_EMAIL_FOUND);
-        } else if (this.isExpired()) {
+        } else if (isExpired()) {
             throw new CheckoutPreferenceException(CheckoutPreferenceException.EXPIRED_PREFERENCE);
-        } else if (!this.isActive()) {
+        } else if (!isActive()) {
             throw new CheckoutPreferenceException(CheckoutPreferenceException.INACTIVE_PREFERENCE);
-        } else if (!this.validInstallmentsPreference()) {
+        } else if (!validInstallmentsPreference()) {
             throw new CheckoutPreferenceException(CheckoutPreferenceException.INVALID_INSTALLMENTS);
-        } else if (!this.validPaymentTypeExclusion()) {
+        } else if (!validPaymentTypeExclusion()) {
             throw new CheckoutPreferenceException(CheckoutPreferenceException.EXCLUDED_ALL_PAYMENT_TYPES);
         }
     }
 
     private boolean hasEmail() {
-        return this.payer != null && !isEmpty(this.payer.getEmail());
+        return payer != null && !isEmpty(payer.getEmail());
     }
 
     public boolean validPaymentTypeExclusion() {
@@ -100,7 +100,7 @@ public class CheckoutPreference {
 
         boolean valid = true;
 
-        if (this.items == null || this.items.isEmpty() || items.get(0) == null) {
+        if (items == null || items.isEmpty() || items.get(0) == null) {
             valid = false;
         } else if (isEmpty(items.get(0).getCurrencyId())) {
             valid = false;
@@ -162,11 +162,11 @@ public class CheckoutPreference {
     }
 
     public void setExpirationDate(Date date) {
-        this.expirationDateTo = date;
+        expirationDateTo = date;
     }
 
     public void setActiveFrom(Date date) {
-        this.expirationDateFrom = date;
+        expirationDateFrom = date;
     }
 
     public Site getLocalPreferenceSite() {
@@ -340,9 +340,9 @@ public class CheckoutPreference {
     }
 
     public static class Builder {
-        private List<Item> items;
-        private List<String> excludedPaymentMethods;
-        private List<String> excludedPaymentTypes;
+        private final List<Item> items;
+        private final List<String> excludedPaymentMethods;
+        private final List<String> excludedPaymentTypes;
         private Integer maxInstallments;
         private Integer defaultInstallments;
         private String payerEmail;
@@ -366,7 +366,7 @@ public class CheckoutPreference {
 
         public Builder addItem(Item item) {
             if (item != null) {
-                this.items.add(item);
+                items.add(item);
             }
             return this;
         }
@@ -380,28 +380,28 @@ public class CheckoutPreference {
 
         public Builder addExcludedPaymentMethod(String paymentMethodId) {
             if (paymentMethodId != null) {
-                this.excludedPaymentMethods.add(paymentMethodId);
+                excludedPaymentMethods.add(paymentMethodId);
             }
             return this;
         }
 
         public Builder addExcludedPaymentMethods(List<String> paymentMethodIds) {
             if (paymentMethodIds != null) {
-                this.excludedPaymentMethods.addAll(paymentMethodIds);
+                excludedPaymentMethods.addAll(paymentMethodIds);
             }
             return this;
         }
 
         public Builder addExcludedPaymentType(String paymentTypeId) {
             if (paymentTypeId != null) {
-                this.excludedPaymentTypes.add(paymentTypeId);
+                excludedPaymentTypes.add(paymentTypeId);
             }
             return this;
         }
 
         public Builder addExcludedPaymentTypes(List<String> paymentTypeIds) {
             if (paymentTypeIds != null) {
-                this.excludedPaymentTypes.addAll(paymentTypeIds);
+                excludedPaymentTypes.addAll(paymentTypeIds);
             }
             return this;
         }
@@ -422,17 +422,17 @@ public class CheckoutPreference {
         }
 
         public Builder setSite(Site site) {
-            this.localPreferenceSite = site;
+            localPreferenceSite = site;
             return this;
         }
 
         public Builder setExpirationDate(Date date) {
-            this.expirationDateTo = date;
+            expirationDateTo = date;
             return this;
         }
 
         public Builder setActiveFrom(Date date) {
-            this.expirationDateFrom = date;
+            expirationDateFrom = date;
             return this;
         }
 
@@ -442,7 +442,7 @@ public class CheckoutPreference {
         }
 
         public Builder enableAccountMoney() {
-            this.excludeAccountMoney = false;
+            excludeAccountMoney = false;
             return this;
         }
 

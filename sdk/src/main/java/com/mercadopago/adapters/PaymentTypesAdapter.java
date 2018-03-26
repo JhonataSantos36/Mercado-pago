@@ -19,12 +19,12 @@ import java.util.List;
  */
 public class PaymentTypesAdapter extends RecyclerView.Adapter<PaymentTypesAdapter.ViewHolder> {
 
-    private List<PaymentType> mPaymentTypes;
-    private OnSelectedCallback<Integer> mCallback;
+    private final List<PaymentType> mPaymentTypes;
+    private final OnSelectedCallback<Integer> mCallback;
 
     public PaymentTypesAdapter(OnSelectedCallback<Integer> callback) {
-        this.mPaymentTypes = new ArrayList<>();
-        this.mCallback = callback;
+        mPaymentTypes = new ArrayList<>();
+        mCallback = callback;
     }
 
     public void addResults(List<PaymentType> list) {

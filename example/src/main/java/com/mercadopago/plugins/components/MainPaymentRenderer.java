@@ -5,16 +5,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mercadopago.components.Renderer;
-import com.mercadopago.examples.R;
-
-/**
- * Created by nfortuna on 12/13/17.
- */
+import com.mercadopago.example.R;
 
 public class MainPaymentRenderer extends Renderer<MainPayment> {
 
     @Override
     public View render(final MainPayment component, final Context context, final ViewGroup parent) {
-        return inflate(R.layout.mpsdk_main_payment_procesor, parent);
+        return inflate(R.layout.main_payment_procesor, parent);
     }
 }

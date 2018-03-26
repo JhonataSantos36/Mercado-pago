@@ -59,7 +59,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
     private final Context context;
     private final MercadoPagoServicesAdapter mercadoPagoServicesAdapter;
     private final String publicKey;
-    private MercadoPagoESC mercadoPagoESC;
+    private final MercadoPagoESC mercadoPagoESC;
     private String siteId;
     private Handler mHandler;
 
@@ -80,7 +80,7 @@ public class CheckoutProviderImpl implements CheckoutProvider {
                 .setServicePreference(servicePreference)
                 .build();
 
-        this.mercadoPagoESC = new MercadoPagoESCImpl(context, escEnabled);
+        mercadoPagoESC = new MercadoPagoESCImpl(context, escEnabled);
     }
 
     public void setSiteId(String siteId) {

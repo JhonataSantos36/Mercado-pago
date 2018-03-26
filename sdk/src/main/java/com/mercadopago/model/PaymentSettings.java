@@ -4,12 +4,12 @@ import java.util.List;
 
 public class PaymentSettings {
 
-    private Integer defaultInstallments;
-    private Integer maxAcceptedInstallments;
-    private String defaultPaymentTypeId;
-    private String defaultPaymentMethodId;
-    private List<String> excludedPaymentMethodsIds;
-    private List<String> excludedPaymentTypesIds;
+    private final Integer defaultInstallments;
+    private final Integer maxAcceptedInstallments;
+    private final String defaultPaymentTypeId;
+    private final String defaultPaymentMethodId;
+    private final List<String> excludedPaymentMethodsIds;
+    private final List<String> excludedPaymentTypesIds;
 
     public PaymentSettings(Integer defaultInstallments, Integer maxAcceptedInstallments,
                            String defaultPaymentTypeId, String defaultPaymentMethodId,

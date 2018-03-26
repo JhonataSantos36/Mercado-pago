@@ -62,7 +62,7 @@ public class ApiException {
     public boolean containsCause(String code) {
         boolean found = false;
         if (cause != null && code != null) {
-            for (Cause currentCause : this.cause) {
+            for (Cause currentCause : cause) {
                 if (code.equals(currentCause.getCode())) {
                     found = true;
                     break;

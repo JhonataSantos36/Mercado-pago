@@ -22,12 +22,12 @@ public class InstructionReferenceComponent extends Component<InstructionReferenc
         public final InstructionReference reference;
 
         public Props(final Builder builder) {
-            this.reference = builder.reference;
+            reference = builder.reference;
         }
 
         public Builder toBuilder(){
             return new Props.Builder()
-                    .setReference(this.reference);
+                    .setReference(reference);
         }
 
         public static class Builder {

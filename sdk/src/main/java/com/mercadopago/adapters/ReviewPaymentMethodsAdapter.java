@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class ReviewPaymentMethodsAdapter extends RecyclerView.Adapter<ReviewPaymentMethodsAdapter.ViewHolder> {
 
-    private List<PaymentMethod> mPaymentMethods;
+    private final List<PaymentMethod> mPaymentMethods;
 
     public ReviewPaymentMethodsAdapter(List<PaymentMethod> paymentMethods) {
         mPaymentMethods = paymentMethods;
@@ -50,8 +50,8 @@ public class ReviewPaymentMethodsAdapter extends RecyclerView.Adapter<ReviewPaym
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView mPaymentMethodImage;
-        private MPTextView mPaymentMethodName;
+        private final ImageView mPaymentMethodImage;
+        private final MPTextView mPaymentMethodName;
 
 
         public ViewHolder(View v) {

@@ -14,10 +14,10 @@ public class CardExpiryDateTextWatcher implements TextWatcher {
     private static final int MONTH_LENGTH = 2;
     private static final int YEAR_START_INDEX = 3;
 
-    private CardExpiryDateEditTextCallback mEditTextCallback;
+    private final CardExpiryDateEditTextCallback mEditTextCallback;
 
     public CardExpiryDateTextWatcher(CardExpiryDateEditTextCallback editTextCallback) {
-        this.mEditTextCallback = editTextCallback;
+        mEditTextCallback = editTextCallback;
     }
 
     @Override

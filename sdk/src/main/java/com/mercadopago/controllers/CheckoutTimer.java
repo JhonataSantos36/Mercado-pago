@@ -26,13 +26,13 @@ public class CheckoutTimer implements Timer {
     private String mCurrentTime = "";
 
     //Observer var
-    private List<TimerObserver> timerObservers = new ArrayList<TimerObserver>();
+    private final List<TimerObserver> timerObservers = new ArrayList<TimerObserver>();
     private CheckoutTimer.FinishListener mFinishListener;
 
     private CheckoutTimer() {
     }
 
-    synchronized public static CheckoutTimer getInstance() {
+    public static synchronized CheckoutTimer getInstance() {
         if (mCountDownTimerInstance == null) {
             mCountDownTimerInstance = new com.mercadopago.controllers.CheckoutTimer();
         }
@@ -40,6 +40,7 @@ public class CheckoutTimer implements Timer {
     }
 
     //If timer is counting down, this method reset the countdown
+    @Override
     public void start(long seconds) {
         if (isCountDownTimerOn) {
             mCountDownTimer.cancel();
@@ -53,6 +54,7 @@ public class CheckoutTimer implements Timer {
         }
     }
 
+    @Override
     public void stop() {
         isCountDownTimerOn = false;
         if (mCountDownTimer != null) {
@@ -65,7 +67,7 @@ public class CheckoutTimer implements Timer {
             mShowHours = true;
         }
 
-        this.mMilliSeconds = convertToMilliSeconds(seconds);
+        mMilliSeconds = convertToMilliSeconds(seconds);
         createCountDownTimer();
     }
 
@@ -79,6 +81,7 @@ public class CheckoutTimer implements Timer {
         }
     }
 
+    @Override
     public void finishCheckout() {
         for (TimerObserver timerObserver : timerObservers) {
             timerObserver.onFinish();
@@ -143,12 +146,14 @@ public class CheckoutTimer implements Timer {
         return String.valueOf(number);
     }
 
+    @Override
     public void setOnFinishListener(com.mercadopago.controllers.CheckoutTimer.FinishListener finishListener) {
         mFinishListener = finishListener;
     }
 
+    @Override
     public Boolean isTimerEnabled() {
-        return this.isCountDownTimerOn;
+        return isCountDownTimerOn;
     }
 
     public String getCurrentTime() {

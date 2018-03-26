@@ -59,7 +59,7 @@ public class ReviewPaymentMethodsActivity extends MercadoPagoBaseActivity implem
             Gson gson = new Gson();
             Type listType = new TypeToken<List<PaymentMethod>>() {
             }.getType();
-            supportedPaymentMethods = gson.fromJson(this.getIntent().getStringExtra("paymentMethods"), listType);
+            supportedPaymentMethods = gson.fromJson(getIntent().getStringExtra("paymentMethods"), listType);
         } catch (Exception ex) {
             showError(new MercadoPagoError(mPresenter.getResourcesProvider().getStandardErrorMessage(), false), "");
         }
@@ -81,8 +81,8 @@ public class ReviewPaymentMethodsActivity extends MercadoPagoBaseActivity implem
     }
 
     protected void initializeControls() {
-        mPaymentMethodsView = (RecyclerView) findViewById(R.id.mpsdkReviewPaymentMethodsView);
-        mTryOtherCardButton = (FrameLayout) findViewById(R.id.tryOtherCardButton);
+        mPaymentMethodsView = findViewById(R.id.mpsdkReviewPaymentMethodsView);
+        mTryOtherCardButton = findViewById(R.id.tryOtherCardButton);
     }
 
     @Override

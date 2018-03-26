@@ -33,6 +33,6 @@ public class FeeDetail {
     }
 
     public Boolean isFinancialFree(){
-        return type != null && type.equals("financing_fee");
+        return "financing_fee".equals(type);
     }
 }

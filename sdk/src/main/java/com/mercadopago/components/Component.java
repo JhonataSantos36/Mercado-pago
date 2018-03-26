@@ -60,8 +60,8 @@ public class Component<T, S> {
     public void setState(@NonNull final S state) {
         if (isViewAttached()) {
             this.state = state;
-            if (this.dispatcher != null) {
-                this.dispatcher.dispatch(new PropsUpdatedAction());
+            if (dispatcher != null) {
+                dispatcher.dispatch(new PropsUpdatedAction());
             }
         }
     }

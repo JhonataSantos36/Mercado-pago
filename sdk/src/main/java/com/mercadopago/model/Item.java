@@ -29,14 +29,14 @@ public class Item {
 
     public Item(String description, BigDecimal amount) {
         this.description = description;
-        this.quantity = 1;
-        this.unitPrice = amount;
+        quantity = 1;
+        unitPrice = amount;
     }
 
     public Item(String description, BigDecimal amount, String pictureUrl) {
         this.description = description;
-        this.quantity = 1;
-        this.unitPrice = amount;
+        quantity = 1;
+        unitPrice = amount;
         this.pictureUrl = pictureUrl;
     }
 
@@ -102,5 +102,9 @@ public class Item {
 
     public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public boolean hasCardinality() {
+        return quantity != null && quantity > 1;
     }
 }

@@ -86,11 +86,8 @@ public class MercadoPagoUtil {
 
     public static boolean isCard(String paymentTypeId) {
 
-        if ((paymentTypeId != null) && (paymentTypeId.equals("credit_card") || paymentTypeId.equals("debit_card") || paymentTypeId.equals("prepaid_card"))) {
-            return true;
-        } else {
-            return false;
-        }
+        return (paymentTypeId != null) && (paymentTypeId.equals("credit_card") || paymentTypeId.equals("debit_card") ||
+            paymentTypeId.equals("prepaid_card"));
     }
 
     public static String getAccreditationTimeMessage(Context context, int milliseconds) {

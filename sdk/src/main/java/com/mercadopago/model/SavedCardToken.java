@@ -21,7 +21,7 @@ public class SavedCardToken {
     }
 
     public void setDevice(Context context) {
-        this.device = new Device(context);
+        device = new Device(context);
     }
 
     public String getCardId() {
@@ -29,7 +29,7 @@ public class SavedCardToken {
     }
 
     public void setCardId(String cardNumber) {
-        this.cardId = cardNumber;
+        cardId = cardNumber;
     }
 
     public String getSecurityCode() {

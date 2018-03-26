@@ -10,12 +10,11 @@ import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.ComponentManager;
 import com.mercadopago.plugins.components.BusinessPaymentContainer;
 import com.mercadopago.plugins.model.BusinessPayment;
-import com.mercadopago.plugins.model.ButtonAction;
+import com.mercadopago.plugins.model.ExitAction;
 
 public class BusinessPaymentResultActivity extends AppCompatActivity implements ActionDispatcher {
 
     private static final String EXTRA_BUSINESS_PAYMENT = "extra_business_payment";
-    public static final String EXTRA_CLIENT_RES_CODE = "extra_res_code";
 
     public static void start(final AppCompatActivity activity,
                              final BusinessPayment businessPayment,
@@ -51,14 +50,16 @@ public class BusinessPaymentResultActivity extends AppCompatActivity implements 
 
     @Override
     public void dispatch(final Action action) {
-        if (action instanceof ButtonAction) {
-            int resCode = ((ButtonAction) action).getResCode();
-            Intent intent = new Intent();
-            intent.putExtra(EXTRA_CLIENT_RES_CODE, resCode);
-            setResult(RESULT_OK, intent);
-            finish();
+        if (action instanceof ExitAction) {
+            processCustomExit((ExitAction) action);
         } else {
             throw new UnsupportedOperationException("this Action class can't be executed in this screen");
         }
+    }
+
+    private void processCustomExit(final ExitAction action) {
+        Intent intent = action.toIntent();
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

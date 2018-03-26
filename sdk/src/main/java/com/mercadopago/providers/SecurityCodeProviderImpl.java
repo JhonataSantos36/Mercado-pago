@@ -29,7 +29,7 @@ public class SecurityCodeProviderImpl implements SecurityCodeProvider {
 
     private final Context mContext;
     private final MercadoPagoServicesAdapter mMercadoPagoServicesAdapter;
-    private MercadoPagoESC mercadoPagoESC;
+    private final MercadoPagoESC mercadoPagoESC;
 
     private static final String TOKEN_AND_CARD_NOT_SET_MESSAGE = "token and card can't both be null";
     private static final String TOKEN_AND_CARD_WITHOUT_RECOVERY_SET_MESSAGE = "can't set token and card at the same time without payment recovery";
@@ -37,7 +37,7 @@ public class SecurityCodeProviderImpl implements SecurityCodeProvider {
     private static final String CARD_INFO_NOT_SET = "card info can't be null";
 
     public SecurityCodeProviderImpl(Context context, String publicKey, String privateKey, boolean escEnabled) {
-        this.mContext = context;
+        mContext = context;
 
         mMercadoPagoServicesAdapter = new MercadoPagoServicesAdapter.Builder()
                 .setContext(context)
@@ -45,7 +45,7 @@ public class SecurityCodeProviderImpl implements SecurityCodeProvider {
                 .setPrivateKey(privateKey)
                 .build();
 
-        this.mercadoPagoESC = new MercadoPagoESCImpl(context, escEnabled);
+        mercadoPagoESC = new MercadoPagoESCImpl(context, escEnabled);
     }
 
     @Override

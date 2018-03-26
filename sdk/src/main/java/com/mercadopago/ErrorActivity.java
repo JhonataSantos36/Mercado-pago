@@ -56,13 +56,13 @@ public class ErrorActivity extends MercadoPagoBaseActivity {
     }
 
     private void getActivityParameters() {
-        this.mMercadoPagoError = JsonUtil.getInstance().fromJson(getIntent().getStringExtra(ErrorUtil.ERROR_EXTRA_KEY), MercadoPagoError.class);
-        this.mPublicKey = getIntent().getStringExtra(ErrorUtil.PUBLIC_KEY_EXTRA);
+        mMercadoPagoError = JsonUtil.getInstance().fromJson(getIntent().getStringExtra(ErrorUtil.ERROR_EXTRA_KEY), MercadoPagoError.class);
+        mPublicKey = getIntent().getStringExtra(ErrorUtil.PUBLIC_KEY_EXTRA);
     }
 
     private void trackScreen() {
         MPTrackingContext mpTrackingContext = new MPTrackingContext.Builder(this, mPublicKey)
-                .setCheckoutVersion(BuildConfig.VERSION_NAME)
+                .setVersion(BuildConfig.VERSION_NAME)
                 .build();
 
         ScreenViewEvent.Builder builder = new ScreenViewEvent.Builder()
@@ -76,15 +76,15 @@ public class ErrorActivity extends MercadoPagoBaseActivity {
                 ApiException apiException = mMercadoPagoError.getApiException();
 
                 if (apiException.getStatus() != null) {
-                    builder.addMetaData(TrackingUtil.METADATA_ERROR_STATUS, String.valueOf(apiException.getStatus()));
+                    builder.addProperty(TrackingUtil.PROPERTY_ERROR_STATUS, String.valueOf(apiException.getStatus()));
                 }
                 if (apiException.getCause() != null && !apiException.getCause().isEmpty() && apiException.getCause().get(0).getCode() != null) {
-                    builder.addMetaData(TrackingUtil.METADATA_ERROR_CODE, String.valueOf(apiException.getCause().get(0).getCode()));
+                    builder.addProperty(TrackingUtil.PROPERTY_ERROR_CODE, String.valueOf(apiException.getCause().get(0).getCode()));
                 }
             }
 
             if (mMercadoPagoError.getRequestOrigin() != null && !mMercadoPagoError.getRequestOrigin().isEmpty()) {
-                builder.addMetaData(TrackingUtil.METADATA_ERROR_REQUEST, mMercadoPagoError.getRequestOrigin());
+                builder.addProperty(TrackingUtil.PROPERTY_ERROR_REQUEST, mMercadoPagoError.getRequestOrigin());
             }
         }
 
@@ -94,10 +94,10 @@ public class ErrorActivity extends MercadoPagoBaseActivity {
     }
 
     private void initializeControls() {
-        this.mErrorMessageTextView = (TextView) findViewById(R.id.mpsdkErrorMessage);
-        this.mRetryView = findViewById(R.id.mpsdkErrorRetry);
-        this.mExit = findViewById(R.id.mpsdkExit);
-        this.mExit.setOnClickListener(new View.OnClickListener() {
+        mErrorMessageTextView = findViewById(R.id.mpsdkErrorMessage);
+        mRetryView = findViewById(R.id.mpsdkErrorRetry);
+        mExit = findViewById(R.id.mpsdkExit);
+        mExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -113,7 +113,7 @@ public class ErrorActivity extends MercadoPagoBaseActivity {
             message = mMercadoPagoError.getMessage();
         }
 
-        this.mErrorMessageTextView.setText(message);
+        mErrorMessageTextView.setText(message);
 
         if (mMercadoPagoError.isRecoverable()) {
             mRetryView.setOnClickListener(new View.OnClickListener() {

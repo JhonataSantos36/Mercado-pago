@@ -11,7 +11,7 @@ import java.util.List;
 public class SummaryDetail {
 
     private String title;
-    private String summaryItemType;
+    private final String summaryItemType;
     private Integer textColor;
     private List<SummaryItemDetail> summaryItemDetails;
 
@@ -19,7 +19,7 @@ public class SummaryDetail {
         this.title = title;
         this.summaryItemType = summaryItemType;
         this.textColor = textColor;
-        this.summaryItemDetails = new ArrayList<>();
+        summaryItemDetails = new ArrayList<>();
     }
 
     public String getTitle() {
@@ -39,7 +39,7 @@ public class SummaryDetail {
     }
 
     public void addAmountDetail(SummaryItemDetail summaryItemDetail) {
-        this.summaryItemDetails.add(summaryItemDetail);
+        summaryItemDetails.add(summaryItemDetail);
     }
 
     public Integer getTextColor() {
@@ -51,13 +51,13 @@ public class SummaryDetail {
     }
 
     public String getSummaryItemType() {
-        return this.summaryItemType;
+        return summaryItemType;
     }
 
     public BigDecimal getTotalAmount() {
         BigDecimal totalAmount = new BigDecimal(0);
 
-        for (SummaryItemDetail summaryItemDetail : this.summaryItemDetails) {
+        for (SummaryItemDetail summaryItemDetail : summaryItemDetails) {
             totalAmount = totalAmount.add(summaryItemDetail.getAmount());
         }
 

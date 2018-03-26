@@ -32,7 +32,6 @@ import com.mercadopago.plugins.DataInitializationTask;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
-import com.mercadopago.preferences.ReviewScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.providers.CheckoutProvider;
 import com.mercadopago.util.ApiUtil;
@@ -51,7 +50,6 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
     private CheckoutPreference mCheckoutPreference;
     private PaymentResultScreenPreference mPaymentResultScreenPreference;
-    private ReviewScreenPreference mReviewScreenPreference;
     private FlowPreference mFlowPreference;
     private ServicePreference mServicePreference;
     private Boolean mBinaryMode;
@@ -770,8 +768,8 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         getView().backToPaymentMethodSelection();
     }
 
-    public void onCustomReviewAndConfirmResponse(final Integer customResultCode, final PaymentData paymentData) {
-        getView().cancelCheckout(customResultCode, paymentData, mPaymentMethodEdited);
+    public void onCustomReviewAndConfirmResponse(final Integer customResultCode) {
+        getView().cancelCheckout(customResultCode, mPaymentMethodEdited);
     }
 
     public void onCustomPaymentResultResponse(final Integer customResultCode) {
@@ -885,7 +883,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     private String createNewTransactionId() {
-        return String.valueOf(mIdempotencyKeySeed + Calendar.getInstance().getTimeInMillis());
+        return mIdempotencyKeySeed + Calendar.getInstance().getTimeInMillis();
     }
 
     private boolean existsTransactionId() {
@@ -898,10 +896,6 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
     public void setIdempotencyKeySeed(final String idempotencyKeySeed) {
         mIdempotencyKeySeed = idempotencyKeySeed;
-    }
-
-    public ReviewScreenPreference getReviewScreenPreference() {
-        return mReviewScreenPreference;
     }
 
     public PaymentMethod getSelectedPaymentMethod() {
@@ -933,51 +927,47 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     public void setCheckoutPreference(final CheckoutPreference checkoutPreference) {
-        this.mCheckoutPreference = checkoutPreference;
+        mCheckoutPreference = checkoutPreference;
     }
 
     public void setPaymentResultScreenPreference(final PaymentResultScreenPreference paymentResultScreenPreference) {
-        this.mPaymentResultScreenPreference = paymentResultScreenPreference;
+        mPaymentResultScreenPreference = paymentResultScreenPreference;
     }
 
     public void setServicePreference(final ServicePreference servicePreference) {
         if (servicePreference != null) {
-            this.mServicePreference = servicePreference;
+            mServicePreference = servicePreference;
         }
-    }
-
-    public void setReviewScreenPreference(final ReviewScreenPreference reviewScreenPreference) {
-        this.mReviewScreenPreference = reviewScreenPreference;
     }
 
     public void setFlowPreference(final FlowPreference flowPreference) {
         if (flowPreference != null) {
-            this.mFlowPreference = flowPreference;
+            mFlowPreference = flowPreference;
         }
     }
 
     public void setBinaryMode(Boolean binaryMode) {
-        this.mBinaryMode = binaryMode;
+        mBinaryMode = binaryMode;
     }
 
     public void setDiscount(Discount discount) {
-        this.mDiscount = discount;
+        mDiscount = discount;
     }
 
     public void setDirectDiscountEnabled(final Boolean directDiscountEnabled) {
-        this.mDirectDiscountEnabled = directDiscountEnabled;
+        mDirectDiscountEnabled = directDiscountEnabled;
     }
 
     public void setPaymentDataInput(final PaymentData paymentDataInput) {
-        this.mPaymentDataInput = paymentDataInput;
+        mPaymentDataInput = paymentDataInput;
     }
 
     public void setPaymentResultInput(final PaymentResult paymentResultInput) {
-        this.mPaymentResultInput = paymentResultInput;
+        mPaymentResultInput = paymentResultInput;
     }
 
     public void setRequestedResult(final Integer requestedResult) {
-        this.mRequestedResult = requestedResult;
+        mRequestedResult = requestedResult;
     }
 
     public CheckoutPreference getCheckoutPreference() {
@@ -989,7 +979,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     public void setPaymentMethodSearch(final PaymentMethodSearch paymentMethodSearch) {
-        this.mPaymentMethodSearch = paymentMethodSearch;
+        mPaymentMethodSearch = paymentMethodSearch;
     }
 
     public Discount getDiscount() {

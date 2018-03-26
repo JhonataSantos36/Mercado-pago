@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mpsdkCheckoutTermsAndConditions"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/mpsdk_s_margin"
+    android:paddingBottom="@dimen/mpsdk_s_margin"
+    android:background="@color/mpsdk_white"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:orientation="vertical">
+
+    <com.mercadopago.customviews.MPTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/mpsdk_text_terms_and_conditions_start"
+        android:textColor="@color/mpsdk_color_payer_costs"
+        android:textSize="@dimen/mpsdk_xxs_text"
+        app:font_style="regular" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <com.mercadopago.customviews.MPTextView
+            android:id="@+id/mpsdkReviewTermsAndConditions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mpsdk_text_terms_and_conditions_linked"
+            android:textColor="@color/mpsdk_link"
+            android:textSize="@dimen/mpsdk_xxs_text"
+            app:font_style="regular" />
+
+        <com.mercadopago.customviews.MPTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_marginStart="3dp"
+            android:text="@string/mpsdk_text_terms_and_conditions_end"
+            android:textColor="@color/mpsdk_color_payer_costs"
+            android:textSize="@dimen/mpsdk_xxs_text"
+            app:font_style="regular" />
+
+    </LinearLayout>
+
+</LinearLayout>

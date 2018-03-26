@@ -19,7 +19,7 @@ public class BodyError extends Component<BodyErrorProps, Void> {
 
     public BodyError(@NonNull BodyErrorProps props, @NonNull ActionDispatcher dispatcher, @NonNull final PaymentResultProvider provider) {
         super(props, dispatcher);
-        this.resourcesProvider = provider;
+        resourcesProvider = provider;
     }
 
     public String getTitle() {

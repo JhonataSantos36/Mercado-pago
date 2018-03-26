@@ -68,9 +68,9 @@ public class MPTextView extends AppCompatTextView {
 
     private void readAttr(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MPTextView);
-        this.mFontStyle = a.getString(R.styleable.MPTextView_font_style);
-        if (this.mFontStyle == null) {
-            this.mFontStyle = REGULAR;
+        mFontStyle = a.getString(R.styleable.MPTextView_font_style);
+        if (mFontStyle == null) {
+            mFontStyle = REGULAR;
         }
         a.recycle();
     }

@@ -22,7 +22,7 @@ public abstract class MvpPresenter<V extends MvpView, R extends ResourcesProvide
     }
 
     public void attachView(V view) {
-        this.mView = new WeakReference<>(view);
+        mView = new WeakReference<>(view);
     }
 
     public void detachView() {

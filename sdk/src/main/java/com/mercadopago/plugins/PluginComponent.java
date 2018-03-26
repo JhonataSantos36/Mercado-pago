@@ -37,20 +37,20 @@ public abstract class PluginComponent<T> extends Component<PluginComponent.Props
         public final CheckoutPreference checkoutPreference;
 
         public Props(@NonNull final PluginComponent.Props.Builder builder) {
-            this.data = builder.data;
-            this.toolbarTitle = builder.toolbarTitle;
-            this.toolbarVisible = builder.toolbarVisible;
-            this.paymentData = builder.paymentData;
-            this.checkoutPreference = builder.checkoutPreference;
+            data = builder.data;
+            toolbarTitle = builder.toolbarTitle;
+            toolbarVisible = builder.toolbarVisible;
+            paymentData = builder.paymentData;
+            checkoutPreference = builder.checkoutPreference;
         }
 
         public Builder toBuilder() {
             return new Builder()
-                    .setData(this.data)
-                    .setToolbarVisible(this.toolbarVisible)
-                    .setToolbarTitle(this.toolbarTitle)
-                    .setPaymentData(this.paymentData)
-                    .setCheckoutPreference(this.checkoutPreference);
+                    .setData(data)
+                    .setToolbarVisible(toolbarVisible)
+                    .setToolbarTitle(toolbarTitle)
+                    .setPaymentData(paymentData)
+                    .setCheckoutPreference(checkoutPreference);
         }
 
         public static class Builder {
