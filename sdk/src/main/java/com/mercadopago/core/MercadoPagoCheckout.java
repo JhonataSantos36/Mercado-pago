@@ -220,11 +220,6 @@ public class MercadoPagoCheckout {
             this.checkoutPreference = checkoutPreference;
         }
 
-        public Builder setPublicKey(String publicKey) {
-            this.publicKey = publicKey.trim();
-            return this;
-        }
-
         public Builder setDiscount(Discount discount) {
             this.discount = discount;
             return this;
