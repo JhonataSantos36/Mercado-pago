@@ -53,7 +53,7 @@ public class MercadoPagoServices {
     private static final String MP_API_BASE_URL = "https://api.mercadopago.com";
 
     private static final String PAYMENT_RESULT_API_VERSION = "1.4";
-    private static final String PAYMENT_METHODS_OPTIONS_API_VERSION = "1.4";
+    private static final String PAYMENT_METHODS_OPTIONS_API_VERSION = "1.5";
 
     public static final int DEFAULT_CONNECT_TIMEOUT = 10;
     public static final int DEFAULT_READ_TIMEOUT = 20;
