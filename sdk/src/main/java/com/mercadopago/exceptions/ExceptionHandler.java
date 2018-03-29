@@ -3,10 +3,9 @@ package com.mercadopago.exceptions;
 import android.content.Context;
 
 import com.mercadopago.R;
+import com.mercadopago.lite.exceptions.CardTokenException;
+import com.mercadopago.lite.exceptions.CheckoutPreferenceException;
 
-/**
- * Created by mromar on 3/2/16.
- */
 public class ExceptionHandler {
 
     public static String getErrorMessage(Context context, CheckoutPreferenceException exception) {

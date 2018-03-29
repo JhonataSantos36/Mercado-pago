@@ -1,5 +1,7 @@
 package com.mercadopago.model;
 
+import com.mercadopago.lite.model.Payment;
+
 /**
  * Created by vaserber on 2/13/17.
  */

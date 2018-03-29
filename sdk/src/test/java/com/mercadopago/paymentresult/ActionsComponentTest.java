@@ -2,8 +2,8 @@ package com.mercadopago.paymentresult;
 
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.mocks.Instructions;
-import com.mercadopago.model.Instruction;
-import com.mercadopago.model.InstructionActionInfo;
+import com.mercadopago.lite.model.Instruction;
+import com.mercadopago.lite.model.InstructionAction;
 import com.mercadopago.paymentresult.components.InstructionsAction;
 import com.mercadopago.paymentresult.components.InstructionsActions;
 import com.mercadopago.paymentresult.props.InstructionsActionsProps;
@@ -45,8 +45,8 @@ public class ActionsComponentTest {
 
         Assert.assertNotNull(actionComponentsList);
         for (InstructionsAction action: actionComponentsList) {
-            InstructionActionInfo actionInfo = action.props.instructionActionInfo;
-            Assert.assertEquals(actionInfo.getTag(), InstructionActionInfo.Tags.LINK);
+            InstructionAction actionInfo = action.props.instructionAction;
+            Assert.assertEquals(actionInfo.getTag(), InstructionAction.Tags.LINK);
         }
     }
 

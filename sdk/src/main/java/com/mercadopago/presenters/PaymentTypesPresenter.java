@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentType;
+import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.lite.model.PaymentType;
 import com.mercadopago.views.PaymentTypesActivityView;
 
 import java.util.List;

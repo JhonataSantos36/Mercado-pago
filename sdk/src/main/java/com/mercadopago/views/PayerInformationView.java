@@ -1,7 +1,7 @@
 package com.mercadopago.views;
 
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.IdentificationType;
+import com.mercadopago.lite.model.IdentificationType;
 import com.mercadopago.mvp.MvpView;
 
 import java.util.List;

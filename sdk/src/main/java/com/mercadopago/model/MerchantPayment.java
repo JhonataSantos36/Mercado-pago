@@ -2,6 +2,8 @@ package com.mercadopago.model;
 
 import android.support.annotation.NonNull;
 
+import com.mercadopago.lite.model.Payer;
+
 import java.math.BigDecimal;
 
 public class MerchantPayment {

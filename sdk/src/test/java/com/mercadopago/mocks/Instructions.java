@@ -1,6 +1,6 @@
 package com.mercadopago.mocks;
 
-import com.mercadopago.model.Instruction;
+import com.mercadopago.lite.model.Instruction;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ResourcesUtil;
 

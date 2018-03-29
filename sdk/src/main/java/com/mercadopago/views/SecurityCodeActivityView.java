@@ -1,8 +1,8 @@
 package com.mercadopago.views;
 
-import com.mercadopago.exceptions.CardTokenException;
+import com.mercadopago.lite.exceptions.CardTokenException;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.ApiException;
+import com.mercadopago.lite.exceptions.ApiException;
 import com.mercadopago.mvp.MvpView;
 
 /**

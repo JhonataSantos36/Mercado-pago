@@ -2,10 +2,10 @@ package com.mercadopago.tracker;
 
 import android.support.annotation.NonNull;
 
-import com.mercadopago.constants.PaymentTypes;
-import com.mercadopago.model.CustomSearchItem;
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodSearch;
+import com.mercadopago.lite.model.PaymentTypes;
+import com.mercadopago.lite.model.CustomSearchItem;
+import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.lite.model.PaymentMethodSearch;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
 
 import java.util.List;

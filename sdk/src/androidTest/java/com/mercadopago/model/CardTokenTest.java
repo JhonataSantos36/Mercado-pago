@@ -2,8 +2,11 @@ package com.mercadopago.model;
 
 import com.mercadopago.CheckoutActivity;
 import com.mercadopago.R;
-import com.mercadopago.exceptions.CardTokenException;
+import com.mercadopago.lite.exceptions.CardTokenException;
 import com.mercadopago.exceptions.ExceptionHandler;
+import com.mercadopago.lite.model.CardToken;
+import com.mercadopago.lite.model.IdentificationType;
+import com.mercadopago.lite.model.PaymentMethod;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
 

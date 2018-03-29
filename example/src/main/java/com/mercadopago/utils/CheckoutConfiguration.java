@@ -1,11 +1,11 @@
 package com.mercadopago.utils;
 
 import com.google.gson.annotations.SerializedName;
-import com.mercadopago.constants.Sites;
-import com.mercadopago.model.Item;
-import com.mercadopago.model.Site;
+import com.mercadopago.lite.model.Sites;
+import com.mercadopago.lite.model.Item;
+import com.mercadopago.lite.model.Site;
 import com.mercadopago.preferences.FlowPreference;
-import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.lite.preferences.ServicePreference;
 import com.mercadopago.util.TextUtil;
 
 import java.util.List;

@@ -4,7 +4,7 @@ import com.mercadopago.callbacks.CallbackHolder;
 import com.mercadopago.callbacks.PaymentCallback;
 import com.mercadopago.callbacks.PaymentDataCallback;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.Payment;
+import com.mercadopago.lite.model.Payment;
 import com.mercadopago.model.PaymentData;
 
 import junit.framework.Assert;

@@ -3,7 +3,7 @@ package com.mercadopago.paymentresult;
 import android.content.Context;
 
 import com.mercadopago.R;
-import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.lite.model.PaymentMethod;
 import com.mercadopago.util.ResourceUtil;
 
 public class PaymentMethodProviderImpl implements PaymentMethodProvider {

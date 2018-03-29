@@ -9,7 +9,7 @@ import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.SummaryItemType;
 import com.mercadopago.model.SummaryRow;
-import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.lite.util.CurrenciesUtil;
 
 /**
  * Created by mromar on 9/11/17.

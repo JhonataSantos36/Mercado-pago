@@ -1,16 +1,15 @@
 package com.mercadopago.providers;
 
-import com.mercadopago.model.Discount;
-import com.mercadopago.model.Payer;
-import com.mercadopago.model.PaymentMethodSearch;
-import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.model.Site;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.lite.model.Discount;
+import com.mercadopago.lite.model.Payer;
+import com.mercadopago.lite.model.PaymentMethodSearch;
+import com.mercadopago.lite.model.PaymentMethodSearchItem;
+import com.mercadopago.lite.model.Site;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.mvp.ResourcesProvider;
-import com.mercadopago.preferences.PaymentPreference;
+import com.mercadopago.lite.preferences.PaymentPreference;
 
 import java.math.BigDecimal;
-import java.util.Set;
 
 /**
  * Created by mreverter on 1/30/17.
@@ -19,9 +18,9 @@ import java.util.Set;
 public interface PaymentVaultProvider extends ResourcesProvider {
     String getTitle();
 
-    void getPaymentMethodSearch(BigDecimal amount, PaymentPreference paymentPreference, Payer payer, Site site, OnResourcesRetrievedCallback<PaymentMethodSearch> onResourcesRetrievedCallback);
+    void getPaymentMethodSearch(BigDecimal amount, PaymentPreference paymentPreference, Payer payer, Site site, TaggedCallback<PaymentMethodSearch> taggedCallback);
 
-    void getDirectDiscount(String amount, String payerEmail, OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback);
+    void getDirectDiscount(String amount, String payerEmail, TaggedCallback<Discount> taggedCallback);
 
     String getInvalidSiteConfigurationErrorMessage();
 

@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.mercadopago.core.MercadoPagoCheckout;
-import com.mercadopago.core.Settings;
+import com.mercadopago.lite.core.Settings;
 import com.mercadopago.example.R;
 import com.mercadopago.utils.ExamplesUtils;
 import com.mercadopago.tracking.constants.TrackingEnvironments;

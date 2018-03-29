@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
-import com.mercadopago.model.InstructionReference;
+import com.mercadopago.lite.model.InstructionReference;
 
 /**
  * Created by vaserber on 11/13/17.

@@ -6,33 +6,33 @@ import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
-import com.mercadopago.exceptions.CheckoutPreferenceException;
+import com.mercadopago.lite.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.hooks.Hook;
 import com.mercadopago.hooks.HookHelper;
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.Campaign;
-import com.mercadopago.model.Card;
-import com.mercadopago.model.Cause;
+import com.mercadopago.lite.exceptions.ApiException;
+import com.mercadopago.lite.model.Card;
+import com.mercadopago.lite.model.Cause;
+import com.mercadopago.lite.model.Discount;
+import com.mercadopago.lite.model.Issuer;
+import com.mercadopago.lite.model.Payer;
+import com.mercadopago.lite.model.PayerCost;
+import com.mercadopago.lite.model.Payment;
+import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.lite.model.Token;
+import com.mercadopago.lite.model.Campaign;
 import com.mercadopago.model.Customer;
-import com.mercadopago.model.Discount;
-import com.mercadopago.model.Issuer;
-import com.mercadopago.model.Payer;
-import com.mercadopago.model.PayerCost;
-import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentData;
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodSearch;
+import com.mercadopago.lite.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentResult;
-import com.mercadopago.model.Token;
 import com.mercadopago.mvp.MvpPresenter;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.plugins.DataInitializationTask;
-import com.mercadopago.preferences.CheckoutPreference;
+import com.mercadopago.lite.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
-import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.lite.preferences.ServicePreference;
 import com.mercadopago.providers.CheckoutProvider;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
@@ -211,11 +211,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     private void getDiscountCampaigns() {
-        getResourcesProvider().getDiscountCampaigns(onCampaignsRetrieved());
-    }
-
-    private OnResourcesRetrievedCallback<List<Campaign>> onCampaignsRetrieved() {
-        return new OnResourcesRetrievedCallback<List<Campaign>>() {
+        getResourcesProvider().getDiscountCampaigns(new TaggedCallback<List<Campaign>>(ApiUtil.RequestOrigin.GET_CAMPAIGNS) {
             @Override
             public void onSuccess(List<Campaign> campaigns) {
                 if (isViewAttached()) {
@@ -230,8 +226,9 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
                     retrievePaymentMethodSearch();
                 }
             }
-        };
+        });
     }
+
 
     private void analyzeCampaigns(final List<Campaign> campaigns) {
         boolean directDiscountFound = false;
@@ -264,7 +261,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
     private void getDirectDiscount(final boolean couponDiscountFound) {
         String payerEmail = mCheckoutPreference.getPayer() == null ? "" : mCheckoutPreference.getPayer().getEmail();
-        getResourcesProvider().getDirectDiscount(mCheckoutPreference.getAmount(), payerEmail, new OnResourcesRetrievedCallback<Discount>() {
+        getResourcesProvider().getDirectDiscount(mCheckoutPreference.getAmount(), payerEmail, new TaggedCallback<Discount>(ApiUtil.RequestOrigin.GET_DIRECT_DISCOUNT) {
             @Override
             public void onSuccess(final Discount discount) {
                 if (isViewAttached()) {
@@ -314,8 +311,8 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         return amount;
     }
 
-    private OnResourcesRetrievedCallback<PaymentMethodSearch> onPaymentMethodSearchRetrieved() {
-        return new OnResourcesRetrievedCallback<PaymentMethodSearch>() {
+    private TaggedCallback<PaymentMethodSearch> onPaymentMethodSearchRetrieved() {
+        return new TaggedCallback<PaymentMethodSearch>(ApiUtil.RequestOrigin.PAYMENT_METHOD_SEARCH) {
             @Override
             public void onSuccess(final PaymentMethodSearch paymentMethodSearch) {
                 if (isViewAttached()) {
@@ -333,8 +330,8 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         };
     }
 
-    private OnResourcesRetrievedCallback<Customer> onCustomerRetrieved() {
-        return new OnResourcesRetrievedCallback<Customer>() {
+    private TaggedCallback<Customer> onCustomerRetrieved() {
+        return new TaggedCallback<Customer>(ApiUtil.RequestOrigin.PAYMENT_METHOD_SEARCH) {
             @Override
             public void onSuccess(final Customer customer) {
                 if (customer != null) {
@@ -451,7 +448,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     private void retrieveCheckoutPreference() {
-        getResourcesProvider().getCheckoutPreference(mCheckoutPreference.getId(), new OnResourcesRetrievedCallback<CheckoutPreference>() {
+        getResourcesProvider().getCheckoutPreference(mCheckoutPreference.getId(), new TaggedCallback<CheckoutPreference>(ApiUtil.RequestOrigin.GET_PREFERENCE) {
 
             @Override
             public void onSuccess(final CheckoutPreference checkoutPreference) {
@@ -548,7 +545,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         } else {
             final String transactionId = getTransactionID();
             getResourcesProvider().createPayment(transactionId, mCheckoutPreference,
-                    paymentData, mBinaryMode, mCustomerId, new OnResourcesRetrievedCallback<Payment>() {
+                    paymentData, mBinaryMode, mCustomerId, new TaggedCallback<Payment>(ApiUtil.RequestOrigin.CREATE_PAYMENT) {
                         @Override
                         public void onSuccess(final Payment payment) {
                             mCreatedPayment = payment;

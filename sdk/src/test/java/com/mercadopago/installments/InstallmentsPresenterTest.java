@@ -1,22 +1,21 @@
 package com.mercadopago.installments;
 
 import com.mercadopago.callbacks.OnSelectedCallback;
-import com.mercadopago.constants.Sites;
+import com.mercadopago.lite.model.Sites;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.mocks.Installments;
 import com.mercadopago.mocks.Issuers;
 import com.mercadopago.mocks.PayerCosts;
 import com.mercadopago.mocks.PaymentMethods;
-import com.mercadopago.model.Card;
+import com.mercadopago.lite.model.Card;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.model.Discount;
-import com.mercadopago.model.Installment;
-import com.mercadopago.model.Issuer;
-import com.mercadopago.model.PayerCost;
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.Site;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
-import com.mercadopago.preferences.PaymentPreference;
+import com.mercadopago.lite.model.Discount;
+import com.mercadopago.lite.model.Installment;
+import com.mercadopago.lite.model.Issuer;
+import com.mercadopago.lite.model.PayerCost;
+import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.mvp.TaggedCallback;
+import com.mercadopago.lite.preferences.PaymentPreference;
 import com.mercadopago.presenters.InstallmentsPresenter;
 import com.mercadopago.providers.InstallmentsProvider;
 import com.mercadopago.views.InstallmentsActivityView;
@@ -754,11 +753,11 @@ public class InstallmentsPresenterTest {
         }
 
         @Override
-        public void getInstallments(String bin, BigDecimal amount, Long issuerId, String paymentMethodId, OnResourcesRetrievedCallback<List<Installment>> onResourcesRetrievedCallback) {
+        public void getInstallments(String bin, BigDecimal amount, Long issuerId, String paymentMethodId, TaggedCallback<List<Installment>> taggedCallback) {
             if (shouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
-                onResourcesRetrievedCallback.onSuccess(successfulResponse);
+                taggedCallback.onSuccess(successfulResponse);
             }
         }
 

@@ -2,11 +2,11 @@ package com.mercadopago.paymentresult.props;
 
 import android.support.annotation.NonNull;
 
-import com.mercadopago.model.Discount;
-import com.mercadopago.model.Issuer;
-import com.mercadopago.model.PayerCost;
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.Token;
+import com.mercadopago.lite.model.Discount;
+import com.mercadopago.lite.model.Issuer;
+import com.mercadopago.lite.model.PayerCost;
+import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.lite.model.Token;
 import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;
 
 /**

@@ -6,10 +6,10 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.mercadopago.constants.Sites;
+import com.mercadopago.lite.model.Sites;
 import com.mercadopago.model.Customer;
-import com.mercadopago.model.Discount;
-import com.mercadopago.model.PaymentMethodSearch;
+import com.mercadopago.lite.model.Discount;
+import com.mercadopago.lite.model.PaymentMethodSearch;
 import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;

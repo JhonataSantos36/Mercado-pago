@@ -4,11 +4,11 @@ import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.mocks.Issuers;
 import com.mercadopago.mocks.PaymentMethods;
-import com.mercadopago.model.Card;
+import com.mercadopago.lite.model.Card;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.model.Issuer;
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.lite.model.Issuer;
+import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.presenters.IssuersPresenter;
 import com.mercadopago.providers.IssuersProvider;
 import com.mercadopago.views.IssuersActivityView;
@@ -278,12 +278,12 @@ public class IssuersPresenterTest {
         }
 
         @Override
-        public void getIssuers(String paymentMethodId, String bin, OnResourcesRetrievedCallback<List<Issuer>> onResourcesRetrievedCallback) {
+        public void getIssuers(String paymentMethodId, String bin, TaggedCallback<List<Issuer>> taggedCallback) {
 
             if (shouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
-                onResourcesRetrievedCallback.onSuccess(successfulResponse);
+                taggedCallback.onSuccess(successfulResponse);
             }
         }
 

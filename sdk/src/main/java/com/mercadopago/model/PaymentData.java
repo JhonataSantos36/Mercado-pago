@@ -1,5 +1,12 @@
 package com.mercadopago.model;
 
+import com.mercadopago.lite.model.Discount;
+import com.mercadopago.lite.model.Issuer;
+import com.mercadopago.lite.model.Payer;
+import com.mercadopago.lite.model.PayerCost;
+import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.lite.model.Token;
+
 import java.math.BigDecimal;
 
 /**

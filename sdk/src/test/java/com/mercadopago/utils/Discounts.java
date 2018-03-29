@@ -1,12 +1,8 @@
 package com.mercadopago.utils;
 
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.Discount;
+import com.mercadopago.lite.exceptions.ApiException;
+import com.mercadopago.lite.model.Discount;
 import com.mercadopago.util.JsonUtil;
-
-/**
- * Created by mromar on 2/9/17.
- */
 
 public class Discounts {
 

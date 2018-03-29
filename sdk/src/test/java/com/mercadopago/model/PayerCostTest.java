@@ -1,5 +1,7 @@
 package com.mercadopago.model;
 
+import com.mercadopago.lite.model.PayerCost;
+
 import org.junit.Test;
 
 import java.math.BigDecimal;

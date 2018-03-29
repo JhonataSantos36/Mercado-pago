@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.Site;
-import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.lite.model.Site;
+import com.mercadopago.lite.util.CurrenciesUtil;
 import com.mercadopago.util.InstallmentsUtil;
 
 import java.math.BigDecimal;

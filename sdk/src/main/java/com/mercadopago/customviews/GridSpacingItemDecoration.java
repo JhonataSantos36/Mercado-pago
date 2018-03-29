@@ -1,12 +1,8 @@
-package com.mercadopago.decorations;
+package com.mercadopago.customviews;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-
-/**
- * Created by mreverter on 10/24/16.
- */
 
 public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 

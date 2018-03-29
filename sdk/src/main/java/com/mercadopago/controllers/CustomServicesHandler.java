@@ -1,6 +1,6 @@
 package com.mercadopago.controllers;
 
-import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.lite.preferences.ServicePreference;
 
 public class CustomServicesHandler {
     private static CustomServicesHandler mInstance;

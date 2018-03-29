@@ -1,10 +1,8 @@
 package com.mercadopago.exceptions;
 
-import com.mercadopago.model.ApiException;
 
-/**
- * Created by mromar on 3/2/16.
- */
+import com.mercadopago.lite.exceptions.ApiException;
+
 public class MercadoPagoError {
 
     private String message;

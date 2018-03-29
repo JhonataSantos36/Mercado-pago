@@ -2,7 +2,7 @@ package com.mercadopago.uicontrollers.issuers;
 
 import android.view.View;
 
-import com.mercadopago.model.Issuer;
+import com.mercadopago.lite.model.Issuer;
 import com.mercadopago.uicontrollers.CustomViewController;
 
 /**

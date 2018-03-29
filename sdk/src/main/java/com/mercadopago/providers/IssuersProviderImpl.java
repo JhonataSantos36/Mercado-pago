@@ -3,13 +3,10 @@ package com.mercadopago.providers;
 import android.content.Context;
 
 import com.mercadopago.R;
-import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPagoServicesAdapter;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.Issuer;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
-import com.mercadopago.util.ApiUtil;
+import com.mercadopago.lite.model.Issuer;
+import com.mercadopago.mvp.TaggedCallback;
 
 import java.util.List;
 
@@ -25,26 +22,12 @@ public class IssuersProviderImpl implements IssuersProvider {
     public IssuersProviderImpl(Context context, String publicKey, String privateKey) {
         this.context = context;
 
-        mercadoPago = new MercadoPagoServicesAdapter.Builder()
-                .setContext(context)
-                .setPublicKey(publicKey)
-                .setPrivateKey(privateKey)
-                .build();
+        mercadoPago = new MercadoPagoServicesAdapter(context, publicKey, privateKey);
     }
 
     @Override
-    public void getIssuers(String paymentMethodId, String bin, final OnResourcesRetrievedCallback<List<Issuer>> onResourcesRetrievedCallback) {
-        mercadoPago.getIssuers(paymentMethodId, bin, new Callback<List<Issuer>>() {
-            @Override
-            public void success(List<Issuer> issuers) {
-                onResourcesRetrievedCallback.onSuccess(issuers);
-            }
-
-            @Override
-            public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_ISSUERS));
-            }
-        });
+    public void getIssuers(String paymentMethodId, String bin, final TaggedCallback<List<Issuer>> taggedCallback) {
+        mercadoPago.getIssuers(paymentMethodId, bin, taggedCallback);
     }
 
     @Override

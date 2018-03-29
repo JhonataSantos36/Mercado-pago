@@ -7,7 +7,7 @@ import android.widget.BaseAdapter;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.IdentificationType;
+import com.mercadopago.lite.model.IdentificationType;
 
 import java.util.List;
 

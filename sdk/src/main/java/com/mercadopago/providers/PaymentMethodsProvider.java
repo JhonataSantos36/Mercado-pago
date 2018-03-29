@@ -1,7 +1,7 @@
 package com.mercadopago.providers;
 
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.mvp.ResourcesProvider;
 
 import java.util.List;
@@ -11,5 +11,5 @@ import java.util.List;
  */
 
 public interface PaymentMethodsProvider extends ResourcesProvider{
-    void getPaymentMethods(OnResourcesRetrievedCallback<List<PaymentMethod>> resourcesRetrievedCallback);
+    void getPaymentMethods(TaggedCallback<List<PaymentMethod>> resourcesRetrievedCallback);
 }

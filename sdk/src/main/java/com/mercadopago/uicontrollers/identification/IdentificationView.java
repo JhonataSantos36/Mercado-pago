@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.IdentificationType;
+import com.mercadopago.lite.model.IdentificationType;
 import com.mercadopago.util.ScaleUtil;
 
 /**

@@ -6,7 +6,8 @@ import android.text.TextWatcher;
 import com.mercadopago.callbacks.PaymentMethodSelectionCallback;
 import com.mercadopago.callbacks.card.CardNumberEditTextCallback;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
-import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.lite.model.Bin;
+import com.mercadopago.lite.model.PaymentMethod;
 import com.mercadopago.util.MercadoPagoUtil;
 
 import java.util.List;
@@ -53,10 +54,10 @@ public class CardNumberTextWatcher implements TextWatcher {
         mEditTextCallback.toggleLineColorOnError(false);
         if (mController == null) return;
         String number = s.toString().replaceAll("\\s", "");
-        if (number.length() == MercadoPagoUtil.BIN_LENGTH - 1) {
+        if (number.length() == Bin.BIN_LENGTH - 1) {
             mPaymentSelectionCallback.onPaymentMethodCleared();
-        } else if (number.length() == MercadoPagoUtil.BIN_LENGTH) {
-            mBin = number.subSequence(0, MercadoPagoUtil.BIN_LENGTH).toString();
+        } else if (number.length() == Bin.BIN_LENGTH) {
+            mBin = number.subSequence(0, Bin.BIN_LENGTH).toString();
             List<PaymentMethod> list = mController.guessPaymentMethodsByBin(mBin);
             mPaymentSelectionCallback.onPaymentMethodListSet(list, mBin);
         }

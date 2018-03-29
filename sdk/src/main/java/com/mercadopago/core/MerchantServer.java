@@ -2,13 +2,13 @@ package com.mercadopago.core;
 
 import android.content.Context;
 
-import com.mercadopago.adapters.ErrorHandlingCallAdapter;
-import com.mercadopago.callbacks.Callback;
+import com.mercadopago.lite.adapters.ErrorHandlingCallAdapter;
+import com.mercadopago.lite.callbacks.Callback;
 import com.mercadopago.model.Customer;
-import com.mercadopago.model.Discount;
+import com.mercadopago.lite.model.Discount;
 import com.mercadopago.model.MerchantPayment;
-import com.mercadopago.model.Payment;
-import com.mercadopago.preferences.CheckoutPreference;
+import com.mercadopago.lite.model.Payment;
+import com.mercadopago.lite.preferences.CheckoutPreference;
 import com.mercadopago.services.MerchantService;
 import com.mercadopago.util.HttpClientUtil;
 import com.mercadopago.util.JsonUtil;
@@ -28,15 +28,14 @@ public class MerchantServer {
         service.createPreference(ripFirstSlash(merchantCreatePreferenceUri), checkoutData).enqueue(callback);
     }
 
+    public static void createPayment(Context context, String merchantBaseUrl, String merchantCreatePaymentUri, MerchantPayment payment, Callback<Payment> callback) {
+        MerchantService service = getService(context, merchantBaseUrl);
+        service.createPayment(ripFirstSlash(merchantCreatePaymentUri), payment).enqueue(callback);
+    }
+
     public static void getCustomer(Context context, String merchantBaseUrl, String merchantGetCustomerUri, String merchantAccessToken, Callback<Customer> callback) {
         MerchantService service = getService(context, merchantBaseUrl);
         service.getCustomer(ripFirstSlash(merchantGetCustomerUri), merchantAccessToken).enqueue(callback);
-    }
-
-    public static void createPayment(Context context, String merchantBaseUrl, String merchantCreatePaymentUri, MerchantPayment payment, Callback<Payment> callback) {
-
-        MerchantService service = getService(context, merchantBaseUrl);
-        service.createPayment(ripFirstSlash(merchantCreatePaymentUri), payment).enqueue(callback);
     }
 
     public static void getDirectDiscount(String transactionAmount, String payerEmail, Context context, String merchantBaseUrl, String merchantGetDirectDiscountUri, Map<String, String> discountAdditionalInfo, Callback<Discount> callback) {

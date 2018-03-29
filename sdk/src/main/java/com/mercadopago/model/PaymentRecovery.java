@@ -1,5 +1,11 @@
 package com.mercadopago.model;
 
+import com.mercadopago.lite.model.Issuer;
+import com.mercadopago.lite.model.PayerCost;
+import com.mercadopago.lite.model.Payment;
+import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.lite.model.Token;
+
 public class PaymentRecovery {
     private final Token mToken;
     private final String mStatusDetail;

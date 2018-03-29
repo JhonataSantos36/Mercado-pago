@@ -1,8 +1,5 @@
 package com.mercadopago.constants;
 
-/**
- * Created by mromar on 6/21/16.
- */
 public class PaymentMethods {
 
     /**

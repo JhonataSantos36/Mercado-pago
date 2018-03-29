@@ -1,6 +1,7 @@
 package com.mercadopago.cardvault;
 
-import com.mercadopago.constants.Sites;
+import com.mercadopago.lite.exceptions.ApiException;
+import com.mercadopago.lite.model.Sites;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.mocks.Cards;
 import com.mercadopago.mocks.Installments;
@@ -8,19 +9,18 @@ import com.mercadopago.mocks.Issuers;
 import com.mercadopago.mocks.PayerCosts;
 import com.mercadopago.mocks.PaymentMethods;
 import com.mercadopago.mocks.Tokens;
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.Card;
-import com.mercadopago.model.Discount;
-import com.mercadopago.model.Installment;
-import com.mercadopago.model.Issuer;
-import com.mercadopago.model.PayerCost;
-import com.mercadopago.model.Payment;
-import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.lite.model.Card;
+import com.mercadopago.lite.model.Discount;
+import com.mercadopago.lite.model.Installment;
+import com.mercadopago.lite.model.Issuer;
+import com.mercadopago.lite.model.PayerCost;
+import com.mercadopago.lite.model.Payment;
+import com.mercadopago.lite.model.PaymentMethod;
 import com.mercadopago.model.PaymentRecovery;
-import com.mercadopago.model.SavedESCCardToken;
-import com.mercadopago.model.Token;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
-import com.mercadopago.preferences.PaymentPreference;
+import com.mercadopago.lite.model.SavedESCCardToken;
+import com.mercadopago.lite.model.Token;
+import com.mercadopago.mvp.TaggedCallback;
+import com.mercadopago.lite.preferences.PaymentPreference;
 import com.mercadopago.presenters.CardVaultPresenter;
 import com.mercadopago.providers.CardVaultProvider;
 import com.mercadopago.views.CardVaultView;
@@ -977,20 +977,20 @@ public class CardVaultPresenterTest {
         }
 
         @Override
-        public void getInstallmentsAsync(String bin, Long issuerId, String paymentMethodId, BigDecimal amount, OnResourcesRetrievedCallback<List<Installment>> onResourcesRetrievedCallback) {
+        public void getInstallmentsAsync(String bin, Long issuerId, String paymentMethodId, BigDecimal amount, TaggedCallback<List<Installment>> taggedCallback) {
             if (shouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
-                onResourcesRetrievedCallback.onSuccess(successfulResponse);
+                taggedCallback.onSuccess(successfulResponse);
             }
         }
 
         @Override
-        public void createESCTokenAsync(SavedESCCardToken escCardToken, OnResourcesRetrievedCallback<Token> onResourcesRetrievedCallback) {
+        public void createESCTokenAsync(SavedESCCardToken escCardToken, TaggedCallback<Token> taggedCallback) {
             if (shouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
-                onResourcesRetrievedCallback.onSuccess(successfulTokenResponse);
+                taggedCallback.onSuccess(successfulTokenResponse);
             }
         }
 

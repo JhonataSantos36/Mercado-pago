@@ -2,13 +2,9 @@ package com.mercadopago.components;
 
 import android.support.annotation.NonNull;
 
-import com.mercadopago.preferences.CheckoutPreference;
+import com.mercadopago.lite.preferences.CheckoutPreference;
 
 import java.util.Map;
-
-/**
- * Created by mromar on 11/22/17.
- */
 
 public class CustomComponent extends Component<CustomComponent.Props, Void> {
 

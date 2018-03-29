@@ -1,9 +1,11 @@
 package com.mercadopago.checkout;
 
-import com.mercadopago.constants.Sites;
+import com.mercadopago.lite.exceptions.ApiException;
+import com.mercadopago.lite.model.Cause;
+import com.mercadopago.lite.model.Sites;
 import com.mercadopago.controllers.Timer;
 import com.mercadopago.core.MercadoPagoCheckout;
-import com.mercadopago.exceptions.CheckoutPreferenceException;
+import com.mercadopago.lite.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.hooks.Hook;
 import com.mercadopago.mocks.Cards;
@@ -15,27 +17,25 @@ import com.mercadopago.mocks.PaymentMethodSearchs;
 import com.mercadopago.mocks.PaymentMethods;
 import com.mercadopago.mocks.Payments;
 import com.mercadopago.mocks.Tokens;
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.Campaign;
-import com.mercadopago.model.Card;
-import com.mercadopago.model.Cause;
+import com.mercadopago.lite.model.Campaign;
+import com.mercadopago.lite.model.Card;
 import com.mercadopago.model.Customer;
-import com.mercadopago.model.Discount;
-import com.mercadopago.model.Identification;
-import com.mercadopago.model.Issuer;
-import com.mercadopago.model.Item;
-import com.mercadopago.model.Payer;
-import com.mercadopago.model.PayerCost;
-import com.mercadopago.model.Payment;
+import com.mercadopago.lite.model.Discount;
+import com.mercadopago.lite.model.Identification;
+import com.mercadopago.lite.model.Issuer;
+import com.mercadopago.lite.model.Item;
+import com.mercadopago.lite.model.Payer;
+import com.mercadopago.lite.model.PayerCost;
+import com.mercadopago.lite.model.Payment;
 import com.mercadopago.model.PaymentData;
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodSearch;
+import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.lite.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentResult;
-import com.mercadopago.model.Site;
-import com.mercadopago.model.Token;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
-import com.mercadopago.preferences.CheckoutPreference;
+import com.mercadopago.lite.model.Site;
+import com.mercadopago.lite.model.Token;
+import com.mercadopago.mvp.TaggedCallback;
+import com.mercadopago.lite.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.presenters.CheckoutPresenter;
 import com.mercadopago.providers.CheckoutProvider;
@@ -2026,25 +2026,25 @@ public class CheckoutPresenterTest {
         }
 
         @Override
-        public void getCheckoutPreference(String checkoutPreferenceId, OnResourcesRetrievedCallback<CheckoutPreference> onResourcesRetrievedCallback) {
+        public void getCheckoutPreference(String checkoutPreferenceId, TaggedCallback<CheckoutPreference> taggedCallback) {
             checkoutPreferenceRequested = true;
-            onResourcesRetrievedCallback.onSuccess(preference);
+            taggedCallback.onSuccess(preference);
         }
 
         @Override
-        public void getDiscountCampaigns(OnResourcesRetrievedCallback<List<Campaign>> callback) {
+        public void getDiscountCampaigns(TaggedCallback<List<Campaign>> callback) {
             this.campaignsRequested = true;
             callback.onSuccess(campaigns);
         }
 
         @Override
-        public void getDirectDiscount(BigDecimal amount, String payerEmail, OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
+        public void getDirectDiscount(BigDecimal amount, String payerEmail, TaggedCallback<Discount> taggedCallback) {
             this.directDiscountRequested = true;
-            onResourcesRetrievedCallback.onSuccess(null);
+            taggedCallback.onSuccess(null);
         }
 
         @Override
-        public void getPaymentMethodSearch(BigDecimal amount, List<String> excludedPaymentTypes, List<String> excludedPaymentMethods, Payer payer, Site site, OnResourcesRetrievedCallback<PaymentMethodSearch> onPaymentMethodSearchRetrievedCallback, OnResourcesRetrievedCallback<Customer> onCustomerRetrievedCallback) {
+        public void getPaymentMethodSearch(BigDecimal amount, List<String> excludedPaymentTypes, List<String> excludedPaymentMethods, Payer payer, Site site, TaggedCallback<PaymentMethodSearch> onPaymentMethodSearchRetrievedCallback, TaggedCallback<Customer> onCustomerRetrievedCallback) {
             this.paymentMethodSearchRequested = true;
             onPaymentMethodSearchRetrievedCallback.onSuccess(paymentMethodSearchResponse);
             if (customerResponse != null) {
@@ -2063,16 +2063,16 @@ public class CheckoutPresenterTest {
         }
 
         @Override
-        public void createPayment(String transactionId, CheckoutPreference checkoutPreference, PaymentData paymentData, Boolean binaryMode, String customerId, OnResourcesRetrievedCallback<Payment> onResourcesRetrievedCallback) {
+        public void createPayment(String transactionId, CheckoutPreference checkoutPreference, PaymentData paymentData, Boolean binaryMode, String customerId, TaggedCallback<Payment> taggedCallback) {
             this.paymentMethodPaid = paymentData.getPaymentMethod();
             this.transactionId = transactionId;
             this.paymentCustomerId = customerId;
             this.paymentRequested = true;
             this.payerPosted = paymentData.getPayer();
             if (shouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
-                onResourcesRetrievedCallback.onSuccess(paymentResponse);
+                taggedCallback.onSuccess(paymentResponse);
             }
         }
 

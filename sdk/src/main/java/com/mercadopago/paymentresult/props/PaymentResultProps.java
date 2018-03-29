@@ -4,8 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.mercadopago.core.CheckoutStore;
-import com.mercadopago.model.Instruction;
-import com.mercadopago.model.Payment;
+import com.mercadopago.lite.model.Instruction;
+import com.mercadopago.lite.model.Payment;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;
 import com.mercadopago.paymentresult.formatter.HeaderTitleFormatter;

@@ -10,7 +10,7 @@ import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.components.RendererFactory;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.lite.util.CurrenciesUtil;
 
 import static com.mercadopago.util.TextUtils.isEmpty;
 

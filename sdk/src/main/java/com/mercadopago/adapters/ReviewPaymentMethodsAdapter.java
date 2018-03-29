@@ -8,7 +8,7 @@ import android.widget.ImageView;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.lite.model.PaymentMethod;
 import com.mercadopago.util.MercadoPagoUtil;
 
 import java.util.List;

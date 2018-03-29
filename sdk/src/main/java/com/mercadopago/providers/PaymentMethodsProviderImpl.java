@@ -2,19 +2,11 @@ package com.mercadopago.providers;
 
 import android.content.Context;
 
-import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPagoServicesAdapter;
-import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
-import com.mercadopago.util.ApiUtil;
+import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.mvp.TaggedCallback;
 
 import java.util.List;
-
-/**
- * Created by mreverter on 1/5/17.
- */
 
 public class PaymentMethodsProviderImpl implements PaymentMethodsProvider {
     private final MercadoPagoServicesAdapter mercadoPago;
@@ -26,29 +18,11 @@ public class PaymentMethodsProviderImpl implements PaymentMethodsProvider {
             throw new IllegalStateException("context not set");
         }
 
-        mercadoPago = createMercadoPago(context, publicKey);
+        mercadoPago = new MercadoPagoServicesAdapter(context, publicKey);
     }
 
     @Override
-    public void getPaymentMethods(final OnResourcesRetrievedCallback<List<PaymentMethod>> resourcesRetrievedCallback) {
-        mercadoPago.getPaymentMethods(new Callback<List<PaymentMethod>>() {
-            @Override
-            public void success(List<PaymentMethod> paymentMethods) {
-                resourcesRetrievedCallback.onSuccess(paymentMethods);
-            }
-
-            @Override
-            public void failure(ApiException apiException) {
-                MercadoPagoError exception = new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_PAYMENT_METHODS);
-                resourcesRetrievedCallback.onFailure(exception);
-            }
-        });
-    }
-
-    protected MercadoPagoServicesAdapter createMercadoPago(Context context, String publicKey) {
-        return new MercadoPagoServicesAdapter.Builder()
-                .setContext(context)
-                .setPublicKey(publicKey)
-                .build();
+    public void getPaymentMethods(final TaggedCallback<List<PaymentMethod>> resourcesRetrievedCallback) {
+        mercadoPago.getPaymentMethods(resourcesRetrievedCallback);
     }
 }

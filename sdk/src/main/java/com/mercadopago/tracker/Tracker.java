@@ -1,12 +1,13 @@
 package com.mercadopago.tracker;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 
 import com.mercadopago.BuildConfig;
 import com.mercadopago.core.CheckoutStore;
-import com.mercadopago.model.PaymentMethodSearch;
-import com.mercadopago.model.PaymentMethodSearchItem;
+import com.mercadopago.lite.model.PaymentMethodSearch;
+import com.mercadopago.lite.model.PaymentMethodSearchItem;
 import com.mercadopago.plugins.PaymentMethodPlugin;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.review_and_confirm.models.PaymentModel;
@@ -112,7 +113,10 @@ public class Tracker {
         mpTrackingContext.trackEvent(actionEvent);
     }
 
-    public static void trackPaymentVaultScreen(final Context context, final String merchantPublicKey, final PaymentMethodSearch paymentMethodSearch, final Set<String> escCardIds) {
+    public static void trackPaymentVaultScreen(final Context context,
+                                               final String merchantPublicKey,
+                                               final PaymentMethodSearch paymentMethodSearch,
+                                               final Set<String> escCardIds) {
 
         trackingStrategy = TrackingUtil.REALTIME_STRATEGY;
 
@@ -143,7 +147,7 @@ public class Tracker {
             }
     }
 
-    private static String getFormattedPaymentMethodsForTracking(final Context context, final PaymentMethodSearch paymentMethodSearch, final Set<String> escCardIds) {
+    private static String getFormattedPaymentMethodsForTracking(final Context context, @NonNull final PaymentMethodSearch paymentMethodSearch, final Set<String> escCardIds) {
         List<PaymentMethodPlugin> paymentMethodPluginList = CheckoutStore.getInstance().getPaymentMethodPluginList();
         List<PaymentMethodInfo> pluginsPaymentMethodInfo = PaymentMethodInfo.getPluginsPaymentMethodInfo(context, paymentMethodPluginList);
 

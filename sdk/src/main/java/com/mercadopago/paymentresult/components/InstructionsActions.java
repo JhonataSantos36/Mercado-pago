@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
-import com.mercadopago.model.InstructionActionInfo;
+import com.mercadopago.lite.model.InstructionAction;
 import com.mercadopago.paymentresult.props.InstructionsActionsProps;
 
 import java.util.ArrayList;
@@ -23,11 +23,11 @@ public class InstructionsActions extends Component<InstructionsActionsProps, Voi
     public List<InstructionsAction> getActionComponents() {
         List<InstructionsAction> componentList = new ArrayList<>();
 
-        for (InstructionActionInfo actionInfo: props.instructionActions) {
+        for (InstructionAction actionInfo: props.instructionActions) {
 
-            if (actionInfo.getTag().equals(InstructionActionInfo.Tags.LINK)) {
+            if (actionInfo.getTag().equals(InstructionAction.Tags.LINK)) {
                 final InstructionsAction.Prop actionProp = new InstructionsAction.Prop.Builder()
-                        .setInstructionActionInfo(actionInfo)
+                        .setInstructionAction(actionInfo)
                         .build();
                 final InstructionsAction component = new InstructionsAction(actionProp, getDispatcher());
                 componentList.add(component);

@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
 import com.mercadopago.components.RecoverPaymentAction;
-import com.mercadopago.model.Payment;
+import com.mercadopago.lite.model.Payment;
 import com.mercadopago.paymentresult.PaymentResultProvider;
 import com.mercadopago.paymentresult.props.BodyErrorProps;
 

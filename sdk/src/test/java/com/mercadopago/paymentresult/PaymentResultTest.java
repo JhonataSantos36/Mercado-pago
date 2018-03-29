@@ -2,16 +2,16 @@ package com.mercadopago.paymentresult;
 
 import android.support.annotation.NonNull;
 
-import com.mercadopago.constants.Sites;
+import com.mercadopago.lite.exceptions.ApiException;
+import com.mercadopago.lite.model.Sites;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.mocks.PaymentMethods;
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.Instruction;
-import com.mercadopago.model.Instructions;
-import com.mercadopago.model.Payment;
+import com.mercadopago.lite.model.Instruction;
+import com.mercadopago.lite.model.Instructions;
+import com.mercadopago.lite.model.Payment;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;
 import com.mercadopago.paymentresult.formatter.HeaderTitleFormatter;
 import com.mercadopago.tracking.model.ScreenViewEvent;
@@ -339,7 +339,7 @@ public class PaymentResultTest {
         private String STANDARD_ERROR_MESSAGE = "Algo salió mal";
 
         @Override
-        public void getInstructionsAsync(Long paymentId, String paymentTypeId, OnResourcesRetrievedCallback<Instructions> onResourcesRetrievedCallback) {
+        public void getInstructionsAsync(Long paymentId, String paymentTypeId, TaggedCallback<Instructions> taggedCallback) {
 
         }
 

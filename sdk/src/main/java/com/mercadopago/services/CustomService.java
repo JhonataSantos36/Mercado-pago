@@ -1,10 +1,10 @@
 package com.mercadopago.services;
 
-import com.mercadopago.adapters.MPCall;
+import com.mercadopago.lite.adapters.MPCall;
 import com.mercadopago.model.Customer;
-import com.mercadopago.model.Discount;
-import com.mercadopago.model.Payment;
-import com.mercadopago.preferences.CheckoutPreference;
+import com.mercadopago.lite.model.Discount;
+import com.mercadopago.lite.model.Payment;
+import com.mercadopago.lite.preferences.CheckoutPreference;
 
 import java.util.Map;
 
@@ -15,10 +15,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
-
-/**
- * Created by vaserber on 1/24/17.
- */
 
 public interface CustomService {
 

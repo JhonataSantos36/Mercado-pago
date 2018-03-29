@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.CustomSearchItem;
+import com.mercadopago.lite.model.CustomSearchItem;
 import com.mercadopago.util.MercadoPagoUtil;
 
 /**

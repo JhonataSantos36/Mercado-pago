@@ -1,7 +1,7 @@
 package com.mercadopago.cardvault;
 
 import com.mercadopago.mocks.IdentificationTypes;
-import com.mercadopago.model.IdentificationType;
+import com.mercadopago.lite.model.IdentificationType;
 import com.mercadopago.util.MPCardMaskUtil;
 
 import junit.framework.Assert;

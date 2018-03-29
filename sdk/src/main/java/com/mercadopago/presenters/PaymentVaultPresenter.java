@@ -3,27 +3,27 @@ package com.mercadopago.presenters;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.constants.PaymentMethods;
-import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.hooks.Hook;
 import com.mercadopago.hooks.HookHelper;
-import com.mercadopago.model.Card;
-import com.mercadopago.model.CustomSearchItem;
-import com.mercadopago.model.Discount;
-import com.mercadopago.model.Payer;
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodSearch;
-import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.model.Site;
+import com.mercadopago.lite.model.Card;
+import com.mercadopago.lite.model.CustomSearchItem;
+import com.mercadopago.lite.model.Discount;
+import com.mercadopago.lite.model.Payer;
+import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.lite.model.PaymentMethodSearch;
+import com.mercadopago.lite.model.PaymentMethodSearchItem;
+import com.mercadopago.lite.model.PaymentTypes;
+import com.mercadopago.lite.model.Site;
+import com.mercadopago.lite.preferences.PaymentPreference;
+import com.mercadopago.lite.util.CurrenciesUtil;
 import com.mercadopago.mvp.MvpPresenter;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.plugins.PaymentMethodPlugin;
-import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.providers.PaymentVaultProvider;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.CurrenciesUtil;
 import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.views.PaymentVaultView;
 
@@ -124,7 +124,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
 
     private void getDirectDiscount() {
         getView().showProgress();
-        getResourcesProvider().getDirectDiscount(mAmount.toString(), mPayerEmail, new OnResourcesRetrievedCallback<Discount>() {
+        getResourcesProvider().getDirectDiscount(mAmount.toString(), mPayerEmail, new TaggedCallback<Discount>(ApiUtil.RequestOrigin.GET_DIRECT_DISCOUNT) {
             @Override
             public void onSuccess(Discount discount) {
                 mDiscount = discount;
@@ -257,7 +257,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
             Payer payer = new Payer();
             payer.setAccessToken(mPayerAccessToken);
 
-            getResourcesProvider().getPaymentMethodSearch(getTransactionAmount(), mPaymentPreference, payer, mSite, new OnResourcesRetrievedCallback<PaymentMethodSearch>() {
+            getResourcesProvider().getPaymentMethodSearch(getTransactionAmount(), mPaymentPreference, payer, mSite, new TaggedCallback<PaymentMethodSearch>(ApiUtil.RequestOrigin.GET_PAYMENT_METHODS) {
 
                 @Override
                 public void onSuccess(PaymentMethodSearch paymentMethodSearch) {

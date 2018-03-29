@@ -1,1 +1,3 @@
 include ':sdk', ':example'
+include ':services'
+project(':services').projectDir = new File('../px-android_services/services')

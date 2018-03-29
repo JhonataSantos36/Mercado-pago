@@ -3,13 +3,9 @@ package com.mercadopago.paymentresult;
 import android.content.Context;
 
 import com.mercadopago.R;
-import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPagoServicesAdapter;
-import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.Instructions;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
-import com.mercadopago.util.ApiUtil;
+import com.mercadopago.lite.model.Instructions;
+import com.mercadopago.mvp.TaggedCallback;
 
 
 public class PaymentResultProviderImpl implements PaymentResultProvider {
@@ -18,27 +14,12 @@ public class PaymentResultProviderImpl implements PaymentResultProvider {
 
     public PaymentResultProviderImpl(Context context, String publicKey, String privateKey) {
         this.context = context;
-
-        mercadoPago = new MercadoPagoServicesAdapter.Builder()
-            .setContext(context)
-            .setPublicKey(publicKey)
-            .setPrivateKey(privateKey)
-            .build();
+        mercadoPago = new MercadoPagoServicesAdapter(context, publicKey, privateKey);
     }
 
     @Override
-    public void getInstructionsAsync(Long paymentId, String paymentTypeId, final OnResourcesRetrievedCallback<Instructions> onResourcesRetrievedCallback) {
-        mercadoPago.getInstructions(paymentId, paymentTypeId, new Callback<Instructions>() {
-            @Override
-            public void success(Instructions instructions) {
-                onResourcesRetrievedCallback.onSuccess(instructions);
-            }
-
-            @Override
-            public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_INSTRUCTIONS));
-            }
-        });
+    public void getInstructionsAsync(Long paymentId, String paymentTypeId, final TaggedCallback<Instructions> taggedCallback) {
+        mercadoPago.getInstructions(paymentId, paymentTypeId, taggedCallback);
     }
 
     @Override

@@ -17,35 +17,36 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentMethodSearchItemAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
+import com.mercadopago.lite.model.PaymentTypes;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.decorations.GridSpacingItemDecoration;
+import com.mercadopago.customviews.GridSpacingItemDecoration;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.hooks.Hook;
 import com.mercadopago.hooks.HookActivity;
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.Card;
-import com.mercadopago.model.CustomSearchItem;
-import com.mercadopago.model.Discount;
-import com.mercadopago.model.Issuer;
-import com.mercadopago.model.Payer;
-import com.mercadopago.model.PayerCost;
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodSearch;
-import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.model.Site;
-import com.mercadopago.model.Token;
+import com.mercadopago.lite.exceptions.ApiException;
+import com.mercadopago.lite.model.Card;
+import com.mercadopago.lite.model.CustomSearchItem;
+import com.mercadopago.lite.model.Discount;
+import com.mercadopago.lite.model.Issuer;
+import com.mercadopago.lite.model.Payer;
+import com.mercadopago.lite.model.PayerCost;
+import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.lite.model.PaymentMethodSearch;
+import com.mercadopago.lite.model.PaymentMethodSearchItem;
+import com.mercadopago.lite.model.Site;
+import com.mercadopago.lite.model.Token;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.plugins.PaymentMethodPlugin;
 import com.mercadopago.plugins.PaymentMethodPluginActivity;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.preferences.FlowPreference;
-import com.mercadopago.preferences.PaymentPreference;
-import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.lite.preferences.PaymentPreference;
+import com.mercadopago.lite.preferences.ServicePreference;
 import com.mercadopago.presenters.PaymentVaultPresenter;
 import com.mercadopago.providers.PaymentVaultProviderImpl;
 import com.mercadopago.uicontrollers.FontCache;
@@ -364,7 +365,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         } else {
 
             final PaymentMethodInfo paymentMethodInfo = store.getSelectedPaymentMethodInfo(this);
-            finishPaymentMethodSelection(new PaymentMethod(paymentMethodInfo));
+            finishPaymentMethodSelection(new PaymentMethod(paymentMethodInfo.id, paymentMethodInfo.name, PaymentTypes.PLUGIN));
             overrideTransitionOut();
         }
     }
@@ -422,7 +423,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
             if (resultCode == RESULT_OK) {
                 final PaymentMethodInfo paymentMethodInfo =
                         CheckoutStore.getInstance().getSelectedPaymentMethodInfo(this);
-                finishPaymentMethodSelection(new PaymentMethod(paymentMethodInfo));
+                finishPaymentMethodSelection(new PaymentMethod(paymentMethodInfo.id, paymentMethodInfo.name, PaymentTypes.PLUGIN));
             } else {
                 overrideTransitionOut();
             }

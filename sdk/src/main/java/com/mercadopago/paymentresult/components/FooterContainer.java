@@ -12,7 +12,7 @@ import com.mercadopago.components.RecoverPaymentAction;
 import com.mercadopago.components.RendererFactory;
 import com.mercadopago.components.ResultCodeAction;
 import com.mercadopago.core.CheckoutStore;
-import com.mercadopago.model.Payment;
+import com.mercadopago.lite.model.Payment;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.paymentresult.PaymentResultProvider;
 import com.mercadopago.preferences.PaymentResultScreenPreference;

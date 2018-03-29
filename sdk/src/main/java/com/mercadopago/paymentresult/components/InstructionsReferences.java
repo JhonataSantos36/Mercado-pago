@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
-import com.mercadopago.model.InstructionReference;
+import com.mercadopago.lite.model.InstructionReference;
 import com.mercadopago.paymentresult.props.InstructionsReferencesProps;
 
 import java.util.ArrayList;

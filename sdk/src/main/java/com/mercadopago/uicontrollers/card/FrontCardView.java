@@ -17,7 +17,8 @@ import android.widget.TextView;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.lite.model.Bin;
+import com.mercadopago.lite.model.PaymentMethod;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MPAnimationUtils;
 import com.mercadopago.util.MPCardMaskUtil;
@@ -184,7 +185,7 @@ public class FrontCardView {
     public void drawEditingCardNumber(String cardNumber) {
         if (cardNumber == null || cardNumber.length() == 0) {
             mCardNumberTextView.setText(BASE_NUMBER_CARDHOLDER);
-        } else if (cardNumber.length() < MercadoPagoUtil.BIN_LENGTH || mPaymentMethod == null) {
+        } else if (cardNumber.length() < Bin.BIN_LENGTH || mPaymentMethod == null) {
             mCardNumberTextView.setText(MPCardMaskUtil.buildNumberWithMask(CARD_NUMBER_MAX_LENGTH, cardNumber));
         } else {
             mCardNumberTextView.setText(MPCardMaskUtil.buildNumberWithMask(mCardNumberLength, cardNumber));

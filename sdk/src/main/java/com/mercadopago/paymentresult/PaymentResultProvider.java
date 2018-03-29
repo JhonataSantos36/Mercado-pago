@@ -1,12 +1,12 @@
 package com.mercadopago.paymentresult;
 
-import com.mercadopago.model.Instructions;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.lite.model.Instructions;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.mvp.ResourcesProvider;
 
 public interface PaymentResultProvider extends ResourcesProvider {
 
-    void getInstructionsAsync(Long paymentId, String paymentTypeId, final OnResourcesRetrievedCallback<Instructions> onResourcesRetrievedCallback);
+    void getInstructionsAsync(Long paymentId, String paymentTypeId, final TaggedCallback<Instructions> taggedCallback);
 
     String getStandardErrorMessage();
 

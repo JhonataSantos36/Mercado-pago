@@ -1,12 +1,12 @@
 package com.mercadopago.providers;
 
-import com.mercadopago.exceptions.CardTokenException;
-import com.mercadopago.model.Card;
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.SavedCardToken;
-import com.mercadopago.model.SavedESCCardToken;
-import com.mercadopago.model.Token;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.lite.exceptions.CardTokenException;
+import com.mercadopago.lite.model.Card;
+import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.lite.model.SavedCardToken;
+import com.mercadopago.lite.model.SavedESCCardToken;
+import com.mercadopago.lite.model.Token;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.mvp.ResourcesProvider;
 
 /**
@@ -25,13 +25,13 @@ public interface SecurityCodeProvider extends ResourcesProvider {
 
     String getTokenAndCardWithoutRecoveryCantBeBothSetMessage();
 
-    void cloneToken(final String tokenId, final OnResourcesRetrievedCallback<Token> onResourcesRetrievedCallback);
+    void cloneToken(final String tokenId, final TaggedCallback<Token> taggedCallback);
 
-    void putSecurityCode(String securityCode, String tokenId, OnResourcesRetrievedCallback<Token> onResourcesRetrievedCallback);
+    void putSecurityCode(String securityCode, String tokenId, TaggedCallback<Token> taggedCallback);
 
-    void createToken(final SavedCardToken savedCardToken, final OnResourcesRetrievedCallback<Token> onResourcesRetrievedCallback);
+    void createToken(final SavedCardToken savedCardToken, final TaggedCallback<Token> taggedCallback);
 
-    void createToken(final SavedESCCardToken savedESCCardToken, final OnResourcesRetrievedCallback<Token> onResourcesRetrievedCallback);
+    void createToken(final SavedESCCardToken savedESCCardToken, final TaggedCallback<Token> taggedCallback);
 
     void validateSecurityCodeFromToken(String mSecurityCode, PaymentMethod mPaymentMethod, String firstSixDigits) throws CardTokenException;
 

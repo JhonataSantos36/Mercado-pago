@@ -2,8 +2,8 @@ package com.mercadopago.paymentresult.props;
 
 import android.support.annotation.NonNull;
 
-import com.mercadopago.model.Discount;
-import com.mercadopago.model.PayerCost;
+import com.mercadopago.lite.model.Discount;
+import com.mercadopago.lite.model.PayerCost;
 import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;
 
 /**

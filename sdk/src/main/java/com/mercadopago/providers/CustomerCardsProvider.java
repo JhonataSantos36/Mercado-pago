@@ -1,7 +1,7 @@
 package com.mercadopago.providers;
 
 import com.mercadopago.model.Customer;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.mvp.ResourcesProvider;
 
 /**
@@ -10,7 +10,7 @@ import com.mercadopago.mvp.ResourcesProvider;
 
 public interface CustomerCardsProvider extends ResourcesProvider {
 
-    void getCustomer(OnResourcesRetrievedCallback<Customer> onResourcesRetrievedCallback);
+    void getCustomer(TaggedCallback<Customer> taggedCallback);
 
     String getLastDigitsLabel();
 

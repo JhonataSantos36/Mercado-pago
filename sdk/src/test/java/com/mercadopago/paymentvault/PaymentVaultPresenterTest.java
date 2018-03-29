@@ -2,24 +2,24 @@ package com.mercadopago.paymentvault;
 
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.constants.PaymentMethods;
-import com.mercadopago.constants.PaymentTypes;
-import com.mercadopago.constants.Sites;
+import com.mercadopago.lite.exceptions.ApiException;
+import com.mercadopago.lite.model.PaymentTypes;
+import com.mercadopago.lite.model.Sites;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.hooks.Hook;
 import com.mercadopago.mocks.PaymentMethodSearchs;
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.Card;
-import com.mercadopago.model.CustomSearchItem;
-import com.mercadopago.model.Discount;
-import com.mercadopago.model.Payer;
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodSearch;
-import com.mercadopago.model.PaymentMethodSearchItem;
-import com.mercadopago.model.Site;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.lite.model.Card;
+import com.mercadopago.lite.model.CustomSearchItem;
+import com.mercadopago.lite.model.Discount;
+import com.mercadopago.lite.model.Payer;
+import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.lite.model.PaymentMethodSearch;
+import com.mercadopago.lite.model.PaymentMethodSearchItem;
+import com.mercadopago.lite.model.Site;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.plugins.PaymentMethodPlugin;
 import com.mercadopago.preferences.FlowPreference;
-import com.mercadopago.preferences.PaymentPreference;
+import com.mercadopago.lite.preferences.PaymentPreference;
 import com.mercadopago.presenters.PaymentVaultPresenter;
 import com.mercadopago.providers.PaymentVaultProvider;
 import com.mercadopago.utils.Discounts;
@@ -1141,20 +1141,20 @@ public class PaymentVaultPresenterTest {
         }
 
         @Override
-        public void getPaymentMethodSearch(BigDecimal amount, PaymentPreference paymentPreference, Payer payer, Site site, OnResourcesRetrievedCallback<PaymentMethodSearch> onResourcesRetrievedCallback) {
+        public void getPaymentMethodSearch(BigDecimal amount, PaymentPreference paymentPreference, Payer payer, Site site, TaggedCallback<PaymentMethodSearch> taggedCallback) {
             if (shouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
-                onResourcesRetrievedCallback.onSuccess(successfulResponse);
+                taggedCallback.onSuccess(successfulResponse);
             }
         }
 
         @Override
-        public void getDirectDiscount(String amount, String payerEmail, OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
+        public void getDirectDiscount(String amount, String payerEmail, TaggedCallback<Discount> taggedCallback) {
             if (shouldDiscountFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
-                onResourcesRetrievedCallback.onSuccess(successfulDiscountResponse);
+                taggedCallback.onSuccess(successfulDiscountResponse);
             }
         }
 

@@ -2,19 +2,19 @@ package com.mercadopago.presenters;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
-import com.mercadopago.exceptions.CardTokenException;
+import com.mercadopago.lite.exceptions.CardTokenException;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.Card;
+import com.mercadopago.lite.model.Card;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.lite.model.PaymentMethod;
 import com.mercadopago.model.PaymentRecovery;
-import com.mercadopago.model.SavedCardToken;
-import com.mercadopago.model.SavedESCCardToken;
-import com.mercadopago.model.SecurityCode;
-import com.mercadopago.model.Setting;
-import com.mercadopago.model.Token;
+import com.mercadopago.lite.model.SavedCardToken;
+import com.mercadopago.lite.model.SavedESCCardToken;
+import com.mercadopago.lite.model.SecurityCode;
+import com.mercadopago.lite.model.Setting;
+import com.mercadopago.lite.model.Token;
 import com.mercadopago.mvp.MvpPresenter;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.providers.SecurityCodeProvider;
 import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.util.ApiUtil;
@@ -236,7 +236,7 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
     private void cloneToken() {
         getView().showLoadingView();
 
-        getResourcesProvider().cloneToken(mToken.getId(), new OnResourcesRetrievedCallback<Token>() {
+        getResourcesProvider().cloneToken(mToken.getId(), new TaggedCallback<Token>(ApiUtil.RequestOrigin.CREATE_TOKEN) {
             @Override
             public void onSuccess(Token token) {
                 mToken = token;
@@ -262,7 +262,7 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
 
     public void putSecurityCode() {
 
-        getResourcesProvider().putSecurityCode(mSecurityCode, mToken.getId(), new OnResourcesRetrievedCallback<Token>() {
+        getResourcesProvider().putSecurityCode(mSecurityCode, mToken.getId(), new TaggedCallback<Token>(ApiUtil.RequestOrigin.CREATE_TOKEN) {
             @Override
             public void onSuccess(Token token) {
                 resolveTokenCreation(token);
@@ -287,7 +287,7 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
     private void createToken(final SavedCardToken savedCardToken) {
         getView().showLoadingView();
 
-        getResourcesProvider().createToken(savedCardToken, new OnResourcesRetrievedCallback<Token>() {
+        getResourcesProvider().createToken(savedCardToken, new TaggedCallback<Token>(ApiUtil.RequestOrigin.CREATE_TOKEN) {
             @Override
             public void onSuccess(Token token) {
                 resolveTokenCreation(token);
@@ -313,7 +313,7 @@ public class SecurityCodePresenter extends MvpPresenter<SecurityCodeActivityView
     private void createESCToken(final SavedESCCardToken savedESCCardToken) {
         getView().showLoadingView();
 
-        getResourcesProvider().createToken(savedESCCardToken, new OnResourcesRetrievedCallback<Token>() {
+        getResourcesProvider().createToken(savedESCCardToken, new TaggedCallback<Token>(ApiUtil.RequestOrigin.CREATE_TOKEN) {
             @Override
             public void onSuccess(Token token) {
                 resolveTokenCreation(token);

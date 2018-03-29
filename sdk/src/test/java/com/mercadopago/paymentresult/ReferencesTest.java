@@ -2,7 +2,7 @@ package com.mercadopago.paymentresult;
 
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.mocks.Instructions;
-import com.mercadopago.model.Instruction;
+import com.mercadopago.lite.model.Instruction;
 import com.mercadopago.paymentresult.components.InstructionReferenceComponent;
 import com.mercadopago.paymentresult.components.InstructionsReferences;
 import com.mercadopago.paymentresult.props.InstructionsReferencesProps;

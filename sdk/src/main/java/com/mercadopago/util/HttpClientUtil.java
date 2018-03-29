@@ -2,7 +2,7 @@ package com.mercadopago.util;
 
 import android.content.Context;
 
-import com.mercadopago.core.Settings;
+import com.mercadopago.lite.core.Settings;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;

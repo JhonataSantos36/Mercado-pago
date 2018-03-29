@@ -1,5 +1,6 @@
 package com.mercadopago.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -9,7 +10,8 @@ import android.view.ViewGroup;
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.PaymentType;
+import com.mercadopago.lite.model.PaymentTypes;
+import com.mercadopago.lite.model.PaymentType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +50,20 @@ public class PaymentTypesAdapter extends RecyclerView.Adapter<PaymentTypesAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         PaymentType paymentType = mPaymentTypes.get(position);
-        holder.mPaymentTypeIdTextView.setText(paymentType.toString(holder.mPaymentTypeIdTextView.getContext()));
+        holder.mPaymentTypeIdTextView.setText(paymentTypeName(paymentType, holder.mPaymentTypeIdTextView.getContext()));
+    }
+
+    public String paymentTypeName(final PaymentType paymentType,
+                                  final Context context) {
+        String ans = "";
+        if (paymentType.getId().equals(PaymentTypes.CREDIT_CARD)) {
+            ans = context.getString(R.string.mpsdk_credit_payment_type);
+        } else if (paymentType.getId().equals(PaymentTypes.DEBIT_CARD)) {
+            ans = context.getString(R.string.mpsdk_debit_payment_type);
+        } else if (paymentType.getId().equals(PaymentTypes.PREPAID_CARD)) {
+            ans = context.getString(R.string.mpsdk_form_card_title_payment_type_prepaid);
+        }
+        return ans;
     }
 
 

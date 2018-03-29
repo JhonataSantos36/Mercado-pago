@@ -5,9 +5,9 @@ import android.support.annotation.NonNull;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
 import com.mercadopago.components.CustomComponent;
-import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.lite.model.PaymentTypes;
 import com.mercadopago.core.CheckoutStore;
-import com.mercadopago.model.Payment;
+import com.mercadopago.lite.model.Payment;
 import com.mercadopago.paymentresult.PaymentMethodProvider;
 import com.mercadopago.paymentresult.PaymentResultProvider;
 import com.mercadopago.paymentresult.props.BodyErrorProps;
@@ -47,25 +47,25 @@ public class Body extends Component<PaymentResultBodyProps, Void> {
                 isPaymentTypeOn(props.paymentData.getPaymentMethod());
     }
 
-    private boolean isPaymentTypeOn(final com.mercadopago.model.PaymentMethod paymentMethod) {
+    private boolean isPaymentTypeOn(final com.mercadopago.lite.model.PaymentMethod paymentMethod) {
         return isCardType(paymentMethod)
                 || isAccountMoney(paymentMethod)
                 || isPluginType(paymentMethod);
     }
 
-    private boolean isCardType(final com.mercadopago.model.PaymentMethod paymentMethod) {
+    private boolean isCardType(final com.mercadopago.lite.model.PaymentMethod paymentMethod) {
         return paymentMethod != null && paymentMethod.getPaymentTypeId() != null &&
                 paymentMethod.getPaymentTypeId().equals(PaymentTypes.CREDIT_CARD) ||
                 paymentMethod.getPaymentTypeId().equals(PaymentTypes.DEBIT_CARD) ||
                 paymentMethod.getPaymentTypeId().equals(PaymentTypes.PREPAID_CARD);
     }
 
-    private boolean isAccountMoney(final com.mercadopago.model.PaymentMethod paymentMethod) {
+    private boolean isAccountMoney(final com.mercadopago.lite.model.PaymentMethod paymentMethod) {
         return paymentMethod != null && paymentMethod.getPaymentTypeId() != null
                 && paymentMethod.getPaymentTypeId().equals(PaymentTypes.ACCOUNT_MONEY);
     }
 
-    private boolean isPluginType(final com.mercadopago.model.PaymentMethod paymentMethod) {
+    private boolean isPluginType(final com.mercadopago.lite.model.PaymentMethod paymentMethod) {
         return PaymentTypes.PLUGIN.equalsIgnoreCase(paymentMethod.getPaymentTypeId());
     }
 
@@ -120,7 +120,7 @@ public class Body extends Component<PaymentResultBodyProps, Void> {
     }
 
     public boolean hasReceipt() {
-        final com.mercadopago.model.PaymentMethod paymentMethod = props.paymentData.getPaymentMethod();
+        final com.mercadopago.lite.model.PaymentMethod paymentMethod = props.paymentData.getPaymentMethod();
         return props.paymentId != null && props.isReceiptEnabled() && props.paymentData != null
                 && isStatusApproved() && isPaymentTypeOn(paymentMethod);
     }

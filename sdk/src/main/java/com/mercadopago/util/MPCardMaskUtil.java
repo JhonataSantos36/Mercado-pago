@@ -1,6 +1,6 @@
 package com.mercadopago.util;
 
-import com.mercadopago.model.IdentificationType;
+import com.mercadopago.lite.model.IdentificationType;
 
 /**
  * Created by vaserber on 8/3/16.

@@ -1,9 +1,10 @@
 package com.mercadopago.guessing;
 
-import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.lite.model.PaymentTypes;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
-import com.mercadopago.exceptions.CardTokenException;
+import com.mercadopago.lite.exceptions.CardTokenException;
 import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.lite.exceptions.ApiException;
 import com.mercadopago.mocks.BankDeals;
 import com.mercadopago.mocks.Cards;
 import com.mercadopago.mocks.DummyCard;
@@ -12,21 +13,20 @@ import com.mercadopago.mocks.Issuers;
 import com.mercadopago.mocks.PayerCosts;
 import com.mercadopago.mocks.PaymentMethods;
 import com.mercadopago.mocks.Tokens;
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.BankDeal;
-import com.mercadopago.model.CardToken;
-import com.mercadopago.model.Discount;
-import com.mercadopago.model.Identification;
-import com.mercadopago.model.IdentificationType;
-import com.mercadopago.model.Installment;
-import com.mercadopago.model.Issuer;
-import com.mercadopago.model.PayerCost;
-import com.mercadopago.model.Payment;
-import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.lite.model.BankDeal;
+import com.mercadopago.lite.model.CardToken;
+import com.mercadopago.lite.model.Discount;
+import com.mercadopago.lite.model.Identification;
+import com.mercadopago.lite.model.IdentificationType;
+import com.mercadopago.lite.model.Installment;
+import com.mercadopago.lite.model.Issuer;
+import com.mercadopago.lite.model.PayerCost;
+import com.mercadopago.lite.model.Payment;
+import com.mercadopago.lite.model.PaymentMethod;
 import com.mercadopago.model.PaymentRecovery;
-import com.mercadopago.model.Token;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
-import com.mercadopago.preferences.PaymentPreference;
+import com.mercadopago.lite.model.Token;
+import com.mercadopago.mvp.TaggedCallback;
+import com.mercadopago.lite.preferences.PaymentPreference;
 import com.mercadopago.presenters.GuessingCardPresenter;
 import com.mercadopago.providers.GuessingCardProvider;
 import com.mercadopago.tracker.MPTrackingContext;
@@ -40,7 +40,6 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
@@ -1504,74 +1503,56 @@ public class GuessingCardPresenterTest {
         }
 
         @Override
-        public void getInstallmentsAsync(String bin, BigDecimal amount, Long issuerId, String paymentMethodId, OnResourcesRetrievedCallback<List<Installment>> onResourcesRetrievedCallback) {
+        public void getInstallmentsAsync(String bin, BigDecimal amount, Long issuerId, String paymentMethodId, TaggedCallback<List<Installment>> taggedCallback) {
             if (shouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
-                onResourcesRetrievedCallback.onSuccess(successfulInstallmentsResponse);
+                taggedCallback.onSuccess(successfulInstallmentsResponse);
             }
         }
 
         @Override
-        public void getIdentificationTypesAsync(OnResourcesRetrievedCallback<List<IdentificationType>> onResourcesRetrievedCallback) {
+        public void getIdentificationTypesAsync(TaggedCallback<List<IdentificationType>> taggedCallback) {
             if (shouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
-                onResourcesRetrievedCallback.onSuccess(successfulIdentificationTypesResponse);
+                taggedCallback.onSuccess(successfulIdentificationTypesResponse);
             }
         }
 
         @Override
-        public void getBankDealsAsync(OnResourcesRetrievedCallback<List<BankDeal>> onResourcesRetrievedCallback) {
+        public void getBankDealsAsync(TaggedCallback<List<BankDeal>> taggedCallback) {
             if (shouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
-                onResourcesRetrievedCallback.onSuccess(successfulBankDealsResponse);
+                taggedCallback.onSuccess(successfulBankDealsResponse);
             }
         }
 
         @Override
-        public void createTokenAsync(CardToken cardToken, OnResourcesRetrievedCallback<Token> onResourcesRetrievedCallback) {
+        public void createTokenAsync(CardToken cardToken, TaggedCallback<Token> taggedCallback) {
             if (shouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
-                onResourcesRetrievedCallback.onSuccess(successfulTokenResponse);
+                taggedCallback.onSuccess(successfulTokenResponse);
             }
         }
 
         @Override
-        public void getIssuersAsync(String paymentMethodId, String bin, OnResourcesRetrievedCallback<List<Issuer>> onResourcesRetrievedCallback) {
+        public void getIssuersAsync(String paymentMethodId, String bin, TaggedCallback<List<Issuer>> taggedCallback) {
             if (shouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
-                onResourcesRetrievedCallback.onSuccess(successfulIssuersResponse);
+                taggedCallback.onSuccess(successfulIssuersResponse);
             }
         }
 
         @Override
-        public void getDirectDiscountAsync(String transactionAmount, String payerEmail, String merchantDiscountUrl, String merchantDiscountUri, Map<String, String> discountAdditionalInfo, OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
+        public void getPaymentMethodsAsync(TaggedCallback<List<PaymentMethod>> taggedCallback) {
             if (shouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
-                onResourcesRetrievedCallback.onSuccess(successfulDiscountResponse);
-            }
-        }
-
-        @Override
-        public void getMPDirectDiscount(String transactionAmount, String payerEmail, OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
-            if (shouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
-            } else {
-                onResourcesRetrievedCallback.onSuccess(successfulDiscountResponse);
-            }
-        }
-
-        @Override
-        public void getPaymentMethodsAsync(OnResourcesRetrievedCallback<List<PaymentMethod>> onResourcesRetrievedCallback) {
-            if (shouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
-            } else {
-                onResourcesRetrievedCallback.onSuccess(successfulPaymentMethodsResponse);
+                taggedCallback.onSuccess(successfulPaymentMethodsResponse);
             }
         }
     }

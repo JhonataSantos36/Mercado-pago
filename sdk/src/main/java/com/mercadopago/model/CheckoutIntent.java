@@ -1,5 +1,7 @@
 package com.mercadopago.model;
 
+import com.mercadopago.lite.model.Item;
+
 public class CheckoutIntent {
 
     private Item item;

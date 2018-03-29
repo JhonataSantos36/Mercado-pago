@@ -1,9 +1,9 @@
 package com.mercadopago.controllers;
 
-import com.mercadopago.constants.PaymentTypes;
-import com.mercadopago.model.CardInformation;
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.Setting;
+import com.mercadopago.lite.model.PaymentTypes;
+import com.mercadopago.lite.model.CardInformation;
+import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.lite.model.Setting;
 import com.mercadopago.util.MercadoPagoUtil;
 
 import java.util.ArrayList;

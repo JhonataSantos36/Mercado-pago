@@ -8,7 +8,7 @@ import android.widget.ImageView;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.model.Issuer;
+import com.mercadopago.lite.model.Issuer;
 
 /**
  * Created by vaserber on 10/11/16.

@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.lite.util.CurrenciesUtil;
 
 /**
  * Created by mromar on 2/28/18.

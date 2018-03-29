@@ -1,5 +1,8 @@
 package com.mercadopago.model;
 
+import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.lite.model.PaymentMethodSearch;
+import com.mercadopago.lite.model.PaymentMethodSearchItem;
 import com.mercadopago.test.StaticMock;
 import com.mercadopago.util.JsonUtil;
 

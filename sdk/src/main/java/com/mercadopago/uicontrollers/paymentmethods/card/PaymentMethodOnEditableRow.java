@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mercadopago.R;
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.Token;
+import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.lite.model.Token;
 
 /**
  * Created by mreverter on 12/5/16.

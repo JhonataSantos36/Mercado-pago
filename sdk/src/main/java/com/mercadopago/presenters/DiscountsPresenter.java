@@ -1,10 +1,11 @@
 package com.mercadopago.presenters;
 
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.Discount;
+import com.mercadopago.lite.model.Discount;
 import com.mercadopago.mvp.MvpPresenter;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.providers.DiscountsProvider;
+import com.mercadopago.util.ApiUtil;
 import com.mercadopago.views.DiscountsActivityView;
 
 import java.math.BigDecimal;
@@ -51,7 +52,7 @@ public class DiscountsPresenter extends MvpPresenter<DiscountsActivityView, Disc
     }
 
     private void getDirectDiscount() {
-        getResourcesProvider().getDirectDiscount(mTransactionAmount.toString(), mPayerEmail, new OnResourcesRetrievedCallback<Discount>() {
+        getResourcesProvider().getDirectDiscount(mTransactionAmount.toString(), mPayerEmail, new TaggedCallback<Discount>(ApiUtil.RequestOrigin.GET_DIRECT_DISCOUNT) {
             @Override
             public void onSuccess(Discount discount) {
                 mDiscount = discount;
@@ -68,7 +69,7 @@ public class DiscountsPresenter extends MvpPresenter<DiscountsActivityView, Disc
     private void getCodeDiscount(final String discountCode) {
         mDiscountsView.showProgressBar();
 
-        getResourcesProvider().getCodeDiscount(mTransactionAmount.toString(), mPayerEmail, discountCode, new OnResourcesRetrievedCallback<Discount>() {
+        getResourcesProvider().getCodeDiscount(mTransactionAmount.toString(), mPayerEmail, discountCode, new TaggedCallback<Discount>(ApiUtil.RequestOrigin.GET_CODE_DISCOUNT) {
             @Override
             public void onSuccess(Discount discount) {
                 mDiscountsView.setSoftInputModeSummary();
@@ -83,7 +84,7 @@ public class DiscountsPresenter extends MvpPresenter<DiscountsActivityView, Disc
             @Override
             public void onFailure(MercadoPagoError error) {
                 mDiscountsView.hideProgressBar();
-                if(error.isApiException()) {
+                if (error.isApiException()) {
                     String errorMessage = getResourcesProvider().getApiErrorMessage(error.getApiException().getError());
                     mDiscountsView.showCodeInputError(errorMessage);
                 } else {

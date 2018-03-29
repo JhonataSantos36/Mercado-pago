@@ -6,8 +6,10 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.mercadopago.CheckoutActivity;
 import com.mercadopago.R;
-import com.mercadopago.exceptions.CardTokenException;
+import com.mercadopago.lite.exceptions.CardTokenException;
 import com.mercadopago.exceptions.ExceptionHandler;
+import com.mercadopago.lite.model.Card;
+import com.mercadopago.lite.model.SavedCardToken;
 import com.mercadopago.test.StaticMock;
 
 import org.junit.Rule;

@@ -3,8 +3,8 @@ package com.mercadopago.paymentresult.formatter;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 
-import com.mercadopago.model.Currency;
-import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.lite.model.Currency;
+import com.mercadopago.lite.util.CurrenciesUtil;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;

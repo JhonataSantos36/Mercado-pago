@@ -3,22 +3,22 @@ package com.mercadopago.presenters;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.Card;
+import com.mercadopago.lite.exceptions.ApiException;
+import com.mercadopago.lite.model.Cause;
+import com.mercadopago.lite.model.Card;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.model.Cause;
-import com.mercadopago.model.Discount;
-import com.mercadopago.model.Installment;
-import com.mercadopago.model.Issuer;
-import com.mercadopago.model.PayerCost;
-import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.lite.model.Discount;
+import com.mercadopago.lite.model.Installment;
+import com.mercadopago.lite.model.Issuer;
+import com.mercadopago.lite.model.PayerCost;
+import com.mercadopago.lite.model.PaymentMethod;
 import com.mercadopago.model.PaymentRecovery;
-import com.mercadopago.model.SavedESCCardToken;
-import com.mercadopago.model.Site;
-import com.mercadopago.model.Token;
+import com.mercadopago.lite.model.SavedESCCardToken;
+import com.mercadopago.lite.model.Site;
+import com.mercadopago.lite.model.Token;
 import com.mercadopago.mvp.MvpPresenter;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
-import com.mercadopago.preferences.PaymentPreference;
+import com.mercadopago.mvp.TaggedCallback;
+import com.mercadopago.lite.preferences.PaymentPreference;
 import com.mercadopago.providers.CardVaultProvider;
 import com.mercadopago.tracking.utils.TrackingUtil;
 import com.mercadopago.util.ApiUtil;
@@ -362,10 +362,13 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
         Long issuerId = mCard.getIssuer() == null ? null : mCard.getIssuer().getId();
         String paymentMethodId = card.getPaymentMethod() == null ? "" : card.getPaymentMethod().getId();
 
-        getResourcesProvider().getInstallmentsAsync(bin, issuerId, paymentMethodId, getTotalAmount(), new OnResourcesRetrievedCallback<List<Installment>>() {
+        getResourcesProvider().getInstallmentsAsync(bin, issuerId, paymentMethodId, getTotalAmount(),
+                new TaggedCallback<List<Installment>>(ApiUtil.RequestOrigin.GET_INSTALLMENTS) {
             @Override
             public void onSuccess(final List<Installment> installments) {
-                resolveInstallmentsList(installments);
+                if (viewAttached()) {
+                    resolveInstallmentsList(installments);
+                }
             }
 
             @Override
@@ -573,7 +576,7 @@ public class CardVaultPresenter extends MvpPresenter<CardVaultView, CardVaultPro
 
             mESCCardToken = new SavedESCCardToken(mCard.getId(), "", true, mESC);
 
-            getResourcesProvider().createESCTokenAsync(mESCCardToken, new OnResourcesRetrievedCallback<Token>() {
+            getResourcesProvider().createESCTokenAsync(mESCCardToken, new TaggedCallback<Token>(ApiUtil.RequestOrigin.CREATE_TOKEN) {
                 @Override
                 public void onSuccess(final Token token) {
                     mToken = token;

@@ -6,35 +6,35 @@ import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
 import com.mercadopago.core.CheckoutStore;
-import com.mercadopago.exceptions.CardTokenException;
+import com.mercadopago.lite.exceptions.CardTokenException;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.BankDeal;
-import com.mercadopago.model.CardInformation;
-import com.mercadopago.model.CardToken;
-import com.mercadopago.model.Cardholder;
-import com.mercadopago.model.Discount;
-import com.mercadopago.model.Identification;
-import com.mercadopago.model.IdentificationType;
-import com.mercadopago.model.Installment;
-import com.mercadopago.model.Issuer;
-import com.mercadopago.model.PayerCost;
-import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.lite.exceptions.ApiException;
+import com.mercadopago.lite.model.Bin;
+import com.mercadopago.lite.model.BankDeal;
+import com.mercadopago.lite.model.CardInformation;
+import com.mercadopago.lite.model.CardToken;
+import com.mercadopago.lite.model.Cardholder;
+import com.mercadopago.lite.model.Discount;
+import com.mercadopago.lite.model.Identification;
+import com.mercadopago.lite.model.IdentificationType;
+import com.mercadopago.lite.model.Installment;
+import com.mercadopago.lite.model.Issuer;
+import com.mercadopago.lite.model.PayerCost;
+import com.mercadopago.lite.model.PaymentMethod;
 import com.mercadopago.model.PaymentRecovery;
-import com.mercadopago.model.PaymentType;
-import com.mercadopago.model.SecurityCode;
-import com.mercadopago.model.Setting;
-import com.mercadopago.model.Token;
+import com.mercadopago.lite.model.PaymentType;
+import com.mercadopago.lite.model.SecurityCode;
+import com.mercadopago.lite.model.Setting;
+import com.mercadopago.lite.model.Token;
 import com.mercadopago.mvp.MvpPresenter;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
-import com.mercadopago.preferences.PaymentPreference;
+import com.mercadopago.mvp.TaggedCallback;
+import com.mercadopago.lite.preferences.PaymentPreference;
 import com.mercadopago.providers.GuessingCardProvider;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.uicontrollers.card.CardView;
 import com.mercadopago.uicontrollers.card.FrontCardView;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.MPCardMaskUtil;
-import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.util.TextUtil;
 import com.mercadopago.views.GuessingCardActivityView;
 
@@ -42,10 +42,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-/**
- * Created by vaserber on 10/13/16.
- */
 
 public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView, GuessingCardProvider> {
 
@@ -520,7 +516,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     private void getPaymentMethodsAsync() {
-        getResourcesProvider().getPaymentMethodsAsync(new OnResourcesRetrievedCallback<List<PaymentMethod>>() {
+        getResourcesProvider().getPaymentMethodsAsync(new TaggedCallback<List<PaymentMethod>>(ApiUtil.RequestOrigin.GET_PAYMENT_METHODS) {
             @Override
             public void onSuccess(List<PaymentMethod> paymentMethods) {
                 resolvePaymentMethodsAsync(paymentMethods);
@@ -550,7 +546,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     public void resolvePaymentMethodListSet(List<PaymentMethod> paymentMethodList, String bin) {
         saveBin(bin);
         if (paymentMethodList.isEmpty()) {
-            getView().setCardNumberInputMaxLength(MercadoPagoUtil.BIN_LENGTH);
+            getView().setCardNumberInputMaxLength(Bin.BIN_LENGTH);
             setInvalidCardMessage();
         } else if (paymentMethodList.size() == 1) {
             onPaymentMethodSet(paymentMethodList.get(0));
@@ -660,7 +656,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     private void getIdentificationTypesAsync() {
-        getResourcesProvider().getIdentificationTypesAsync(new OnResourcesRetrievedCallback<List<IdentificationType>>() {
+        getResourcesProvider().getIdentificationTypesAsync(new TaggedCallback<List<IdentificationType>>(ApiUtil.RequestOrigin.GET_IDENTIFICATION_TYPES) {
             @Override
             public void onSuccess(List<IdentificationType> identificationTypes) {
                 resolveIdentificationTypes(identificationTypes);
@@ -696,7 +692,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     private void getBankDealsAsync() {
-        getResourcesProvider().getBankDealsAsync(new OnResourcesRetrievedCallback<List<BankDeal>>() {
+        getResourcesProvider().getBankDealsAsync(new TaggedCallback<List<BankDeal>>(ApiUtil.RequestOrigin.GET_BANK_DEALS) {
             @Override
             public void onSuccess(List<BankDeal> bankDeals) {
                 resolveBankDeals(bankDeals);
@@ -853,9 +849,9 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
         mCardToken.setCardNumber(getCardNumber());
         try {
             if (mPaymentMethod == null) {
-                if (getCardNumber() == null || getCardNumber().length() < MercadoPagoUtil.BIN_LENGTH) {
+                if (getCardNumber() == null || getCardNumber().length() < Bin.BIN_LENGTH) {
                     throw new CardTokenException(CardTokenException.INVALID_CARD_NUMBER_INCOMPLETE);
-                } else if (getCardNumber().length() == MercadoPagoUtil.BIN_LENGTH) {
+                } else if (getCardNumber().length() == Bin.BIN_LENGTH) {
                     throw new CardTokenException(CardTokenException.INVALID_PAYMENT_METHOD);
                 } else {
                     throw new CardTokenException(CardTokenException.INVALID_PAYMENT_METHOD);
@@ -1025,7 +1021,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     private void createToken() {
-        getResourcesProvider().createTokenAsync(mCardToken, new OnResourcesRetrievedCallback<Token>() {
+        getResourcesProvider().createTokenAsync(mCardToken, new TaggedCallback<Token>(ApiUtil.RequestOrigin.CREATE_TOKEN) {
             @Override
             public void onSuccess(Token token) {
                 resolveTokenRequest(token);
@@ -1073,7 +1069,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     private void getIssuers() {
-        getResourcesProvider().getIssuersAsync(mPaymentMethod.getId(), mBin, new OnResourcesRetrievedCallback<List<Issuer>>() {
+        getResourcesProvider().getIssuersAsync(mPaymentMethod.getId(), mBin, new TaggedCallback<List<Issuer>>(ApiUtil.RequestOrigin.GET_ISSUERS) {
             @Override
             public void onSuccess(List<Issuer> issuers) {
                 resolveIssuersList(issuers);
@@ -1102,7 +1098,7 @@ public class GuessingCardPresenter extends MvpPresenter<GuessingCardActivityView
     }
 
     private void getInstallments() {
-        getResourcesProvider().getInstallmentsAsync(mBin, getTransactionAmount(), mIssuer.getId(), mPaymentMethod.getId(), new OnResourcesRetrievedCallback<List<Installment>>() {
+        getResourcesProvider().getInstallmentsAsync(mBin, getTransactionAmount(), mIssuer.getId(), mPaymentMethod.getId(), new TaggedCallback<List<Installment>>(ApiUtil.RequestOrigin.GET_INSTALLMENTS) {
             @Override
             public void onSuccess(List<Installment> installments) {
                 resolveInstallments(installments);

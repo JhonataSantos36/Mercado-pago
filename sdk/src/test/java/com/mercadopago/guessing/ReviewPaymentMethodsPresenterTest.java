@@ -2,7 +2,7 @@ package com.mercadopago.guessing;
 
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.mocks.PaymentMethods;
-import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.lite.model.PaymentMethod;
 import com.mercadopago.presenters.ReviewPaymentMethodsPresenter;
 import com.mercadopago.providers.ReviewPaymentMethodsProvider;
 import com.mercadopago.views.ReviewPaymentMethodsView;

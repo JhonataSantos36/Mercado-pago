@@ -1,9 +1,9 @@
 package com.mercadopago.providers;
 
-import com.mercadopago.model.Installment;
-import com.mercadopago.model.SavedESCCardToken;
-import com.mercadopago.model.Token;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.lite.model.Installment;
+import com.mercadopago.lite.model.SavedESCCardToken;
+import com.mercadopago.lite.model.Token;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.mvp.ResourcesProvider;
 
 import java.math.BigDecimal;
@@ -27,9 +27,9 @@ public interface CardVaultProvider extends ResourcesProvider {
 
     String getMultipleInstallmentsForIssuerErrorMessage();
 
-    void getInstallmentsAsync(final String bin, final Long issuerId, final String paymentMethodId, final BigDecimal amount, final OnResourcesRetrievedCallback<List<Installment>> onResourcesRetrievedCallback);
+    void getInstallmentsAsync(final String bin, final Long issuerId, final String paymentMethodId, final BigDecimal amount, final TaggedCallback<List<Installment>> taggedCallback);
 
-    void createESCTokenAsync(final SavedESCCardToken escCardToken, final OnResourcesRetrievedCallback<Token> onResourcesRetrievedCallback);
+    void createESCTokenAsync(final SavedESCCardToken escCardToken, final TaggedCallback<Token> taggedCallback);
 
     String findESCSaved(String cardId);
 

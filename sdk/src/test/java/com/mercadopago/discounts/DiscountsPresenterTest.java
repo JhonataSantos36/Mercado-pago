@@ -1,8 +1,7 @@
 package com.mercadopago.discounts;
 
-import com.mercadopago.model.Campaign;
-import com.mercadopago.model.Discount;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.lite.model.Discount;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.presenters.DiscountsPresenter;
 import com.mercadopago.providers.DiscountsProvider;
 import com.mercadopago.views.DiscountsActivityView;
@@ -10,8 +9,6 @@ import com.mercadopago.views.DiscountsActivityView;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
@@ -152,18 +149,13 @@ public class DiscountsPresenterTest {
     private class DiscountMockedResourcesProvider implements DiscountsProvider {
 
         @Override
-        public void getDirectDiscount(String transactionAmount, String payerEmail, OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
-            onResourcesRetrievedCallback.onSuccess(new Discount());
+        public void getDirectDiscount(String transactionAmount, String payerEmail, TaggedCallback<Discount> taggedCallback) {
+            taggedCallback.onSuccess(new Discount());
         }
 
         @Override
-        public void getCodeDiscount(String transactionAmount, String payerEmail, String discountCode, OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
-            onResourcesRetrievedCallback.onSuccess(new Discount());
-        }
-
-        @Override
-        public void getCampaigns(OnResourcesRetrievedCallback<List<Campaign>> onResourcesRetrievedCallback) {
-            onResourcesRetrievedCallback.onSuccess(new ArrayList<Campaign>());
+        public void getCodeDiscount(String transactionAmount, String payerEmail, String discountCode, TaggedCallback<Discount> taggedCallback) {
+            taggedCallback.onSuccess(new Discount());
         }
 
         @Override
