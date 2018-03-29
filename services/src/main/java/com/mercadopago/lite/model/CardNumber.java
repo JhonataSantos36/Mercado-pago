@@ -1,7 +1,4 @@
 package com.mercadopago.lite.model;
-/**
- * Created by mromar on 10/20/17.
- */
 
 public class CardNumber {
 

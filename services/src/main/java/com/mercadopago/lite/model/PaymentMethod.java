@@ -1,11 +1,9 @@
 package com.mercadopago.lite.model;
 
+import android.support.annotation.VisibleForTesting;
+
 import java.math.BigDecimal;
 import java.util.List;
-
-/**
- * Created by mromar on 10/20/17.
- */
 
 public class PaymentMethod {
 
@@ -15,7 +13,6 @@ public class PaymentMethod {
     private String paymentTypeId;
     private String status;
     private String secureThumbnail;
-    private String thumbnail;
     private String deferredCapture;
     private List<Setting> settings;
     private BigDecimal minAllowedAmount;
@@ -24,27 +21,30 @@ public class PaymentMethod {
     private String merchantAccountId;
     private List<FinancialInstitution> financialInstitutions;
 
-    public boolean isIssuerRequired() {
-        return isAdditionalInfoNeeded("issuer_id");
+    /**
+     * Constructor for custom payment methods like plugin implementation
+     *
+     * @param id            paymentId
+     * @param name          paymentName
+     * @param paymentTypeId paymentTypeId
+     */
+    public PaymentMethod(final String id, final String name, final String paymentTypeId) {
+        this.id = id;
+        this.name = name;
+        this.paymentTypeId = paymentTypeId;
     }
 
-    private boolean isAdditionalInfoNeeded(String param) {
-        if ((additionalInfoNeeded != null) && (additionalInfoNeeded.size() > 0)) {
-            for (int i = 0; i < additionalInfoNeeded.size(); i++) {
-                if (additionalInfoNeeded.get(i).equals(param)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    /**
+     * Constructor to make exclusions
+     *
+     * @param id paymentId
+     */
+    public PaymentMethod(final String id) {
+        this.id = id;
     }
 
-    public List<String> getAdditionalInfoNeeded() {
-        return additionalInfoNeeded;
-    }
-
-    public void setAdditionalInfoNeeded(List<String> additionalInfoNeeded) {
-        this.additionalInfoNeeded = additionalInfoNeeded;
+    @VisibleForTesting
+    public PaymentMethod() {
     }
 
     public String getId() {
@@ -71,6 +71,69 @@ public class PaymentMethod {
         this.paymentTypeId = paymentTypeId;
     }
 
+    public List<Setting> getSettings() {
+        return settings;
+    }
+
+    public void setSettings(List<Setting> settings) {
+        this.settings = settings;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    public boolean isIssuerRequired() {
+        return isAdditionalInfoNeeded("issuer_id");
+    }
+
+    public boolean isSecurityCodeRequired(String bin) {
+        Setting setting = Setting.getSettingByBin(settings, bin);
+        return (setting != null) && (setting.getSecurityCode() != null) &&
+                (setting.getSecurityCode().getLength() != 0);
+    }
+
+    public boolean isIdentificationTypeRequired() {
+        return isAdditionalInfoNeeded("cardholder_identification_type");
+    }
+
+    public boolean isIdentificationNumberRequired() {
+        return isAdditionalInfoNeeded("cardholder_identification_number");
+    }
+
+    public List<String> getAdditionalInfoNeeded() {
+        return additionalInfoNeeded;
+    }
+
+    public void setAdditionalInfoNeeded(List<String> additionalInfoNeeded) {
+        this.additionalInfoNeeded = additionalInfoNeeded;
+    }
+
+    public List<FinancialInstitution> getFinancialInstitutions() {
+        return financialInstitutions;
+    }
+
+    public void setFinancialInstitutions(final List<FinancialInstitution> financialInstitutions) {
+        this.financialInstitutions = financialInstitutions;
+    }
+
+    private boolean isAdditionalInfoNeeded(String param) {
+
+        if ((additionalInfoNeeded != null) && (additionalInfoNeeded.size() > 0)) {
+            for (int i = 0; i < additionalInfoNeeded.size(); i++) {
+                if (additionalInfoNeeded.get(i).equals(param)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isValidForBin(String bin) {
+        return (Setting.getSettingByBin(getSettings(), bin) != null);
+    }
+
     public String getStatus() {
         return status;
     }
@@ -87,13 +150,6 @@ public class PaymentMethod {
         this.secureThumbnail = secureThumbnail;
     }
 
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
-    }
 
     public String getDeferredCapture() {
         return deferredCapture;
@@ -101,14 +157,6 @@ public class PaymentMethod {
 
     public void setDeferredCapture(String deferredCapture) {
         this.deferredCapture = deferredCapture;
-    }
-
-    public List<Setting> getSettings() {
-        return settings;
-    }
-
-    public void setSettings(List<Setting> settings) {
-        this.settings = settings;
     }
 
     public BigDecimal getMinAllowedAmount() {
@@ -127,12 +175,12 @@ public class PaymentMethod {
         this.maxAllowedAmount = maxAllowedAmount;
     }
 
-    public Integer getAccreditationTime() {
-        return accreditationTime;
-    }
-
     public void setAccreditationTime(Integer accreditationTime) {
         this.accreditationTime = accreditationTime;
+    }
+
+    public Integer getAccreditationTime() {
+        return accreditationTime;
     }
 
     public String getMerchantAccountId() {
@@ -141,13 +189,5 @@ public class PaymentMethod {
 
     public void setMerchantAccountId(String merchantAccountId) {
         this.merchantAccountId = merchantAccountId;
-    }
-
-    public List<FinancialInstitution> getFinancialInstitutions() {
-        return financialInstitutions;
-    }
-
-    public void setFinancialInstitutions(List<FinancialInstitution> financialInstitutions) {
-        this.financialInstitutions = financialInstitutions;
     }
 }

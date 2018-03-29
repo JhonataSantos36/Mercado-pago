@@ -1,7 +1,6 @@
 package com.mercadopago.lite.core;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.lite.adapters.ErrorHandlingCallAdapter;
@@ -41,7 +40,6 @@ import com.mercadopago.lite.util.JsonUtil;
 import com.mercadopago.lite.util.TextUtil;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,11 +62,10 @@ public class MercadoPagoServices {
     public static final int DEFAULT_PAYMENT_WRITE_TIMEOUT = 20;
 
     private ServicePreference mServicePreference;
-    private String mPublicKey;
-    private String mPrivateKey;
-    private Context mContext;
+    private final Context mContext;
+    private final String mPublicKey;
+    private final String mPrivateKey;
     private String mProcessingMode;
-    private Boolean mBetaEnvironment;
 
     private MercadoPagoServices(Builder builder) {
         this.mContext = builder.mContext;
@@ -76,8 +73,18 @@ public class MercadoPagoServices {
         this.mPrivateKey = builder.mPrivateKey;
         this.mServicePreference = CustomServicesHandler.getInstance().getServicePreference();
         this.mProcessingMode = mServicePreference != null ? mServicePreference.getProcessingModeString() : ProcessingModes.AGGREGATOR;
-        this.mBetaEnvironment = builder.mBetaEnvironment;
-        disableConnectionReuseIfNecessary();
+    }
+
+
+    protected MercadoPagoServices(final Context mContext,
+                                  final String mPublicKey,
+                                  final String mPrivateKey,
+                                  final CustomServicesHandler handler) {
+        this.mContext = mContext;
+        this.mPublicKey = mPublicKey;
+        this.mPrivateKey = mPrivateKey;
+        this.mServicePreference = handler.getServicePreference();
+        this.mProcessingMode = mServicePreference != null ? mServicePreference.getProcessingModeString() : ProcessingModes.AGGREGATOR;
     }
 
     public void getCheckoutPreference(String checkoutPreferenceId, Callback<CheckoutPreference> callback) {
@@ -201,43 +208,27 @@ public class MercadoPagoServices {
     }
 
     public void getCustomer(String url, String uri, @NonNull Map<String, String> additionalInfo, Callback<Customer> callback) {
-        if (additionalInfo == null) {
-            additionalInfo = new HashMap<>();
-        }
-
         CustomService customService = getCustomService(url);
         customService.getCustomer(uri, additionalInfo).enqueue(callback);
     }
 
     public void createPayment(String baseUrl, String uri, Map<String, Object> paymentData, @NonNull Map<String, String> query, Callback<Payment> callback) {
-        if (query == null) {
-            query = new HashMap<>();
-        }
         CustomService customService = getCustomService(baseUrl, DEFAULT_PAYMENT_CONNECT_TIMEOUT, DEFAULT_PAYMENT_READ_TIMEOUT, DEFAULT_PAYMENT_WRITE_TIMEOUT);
         customService.createPayment(Settings.servicesVersion, ripFirstSlash(uri), paymentData, query).enqueue(callback);
     }
 
     public void createPayment(String transactionId, String baseUrl, String uri,
                               Map<String, Object> paymentData, @NonNull Map<String, String> query, Callback<Payment> callback) {
-        if (query == null) {
-            query = new HashMap<>();
-        }
         CustomService customService = getCustomService(baseUrl, DEFAULT_PAYMENT_CONNECT_TIMEOUT, DEFAULT_PAYMENT_READ_TIMEOUT, DEFAULT_PAYMENT_WRITE_TIMEOUT);
         customService.createPayment(transactionId, ripFirstSlash(uri), paymentData, query).enqueue(callback);
     }
 
     public void getDirectDiscount(String transactionAmount, String payerEmail, String url, String uri, @NonNull Map<String, String> discountAdditionalInfo, Callback<Discount> callback) {
-        if (discountAdditionalInfo == null) {
-            discountAdditionalInfo = new HashMap<>();
-        }
         CustomService customService = getCustomService(url);
         customService.getDirectDiscount(ripFirstSlash(uri), transactionAmount, payerEmail, discountAdditionalInfo).enqueue(callback);
     }
 
     public void getCodeDiscount(String discountCode, String transactionAmount, String payerEmail, Context context, String url, String uri, @NonNull Map<String, String> discountAdditionalInfo, Callback<Discount> callback) {
-        if (discountAdditionalInfo == null) {
-            discountAdditionalInfo = new HashMap<>();
-        }
         CustomService customService = getCustomService(url);
         customService.getCodeDiscount(ripFirstSlash(uri), transactionAmount, payerEmail, discountCode, discountAdditionalInfo).enqueue(callback);
     }
@@ -295,13 +286,6 @@ public class MercadoPagoServices {
                 .build();
     }
 
-    private void disableConnectionReuseIfNecessary() {
-        // HTTP connection reuse which was buggy pre-froyo
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            System.setProperty("http.keepAlive", "false");
-        }
-    }
-
     private String getListAsString(List<String> list, String separator) {
         StringBuilder stringBuilder = new StringBuilder();
         if (list != null) {
@@ -321,43 +305,36 @@ public class MercadoPagoServices {
         private String mPublicKey;
         public String mPrivateKey;
         public ServicePreference mServicePreference;
-        private Boolean mBetaEnvironment;
 
         public Builder() {
-
             mContext = null;
             mPublicKey = null;
         }
 
         public Builder setContext(Context context) {
-
             if (context == null) throw new IllegalArgumentException("context is null");
             this.mContext = context;
             return this;
         }
 
         public Builder setPrivateKey(String key) {
-
             this.mPrivateKey = key;
             return this;
         }
 
         public Builder setPublicKey(String key) {
-
             this.mPublicKey = key;
             return this;
         }
 
         public Builder setServicePreference(ServicePreference servicePreference) {
-
             this.mServicePreference = servicePreference;
             return this;
         }
 
+        @Deprecated
         public Builder setBetaEnvironment(Boolean betaEnvironment) {
-
-            this.mBetaEnvironment = betaEnvironment;
-            return this;
+            throw new IllegalStateException("deprecated");
         }
 
         public MercadoPagoServices build() {

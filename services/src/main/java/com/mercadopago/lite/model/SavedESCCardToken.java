@@ -1,29 +1,21 @@
 package com.mercadopago.lite.model;
-import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by mromar on 10/24/17.
- */
+import com.google.gson.annotations.SerializedName;
 
 public class SavedESCCardToken extends SavedCardToken {
 
     @SerializedName("require_esc")
-    private boolean requireESC;
+    private final boolean requireESC;
     private String esc;
 
-    public boolean isRequireESC() {
-        return requireESC;
-    }
-
-    public void setRequireESC(boolean requireESC) {
+    public SavedESCCardToken(String cardId, String securityCode, boolean requireESC) {
+        super(cardId, securityCode);
         this.requireESC = requireESC;
     }
 
-    public String getEsc() {
-        return esc;
-    }
-
-    public void setEsc(String esc) {
+    public SavedESCCardToken(String cardId, String securityCode, boolean requireESC, String esc) {
+        super(cardId, securityCode);
+        this.requireESC = requireESC;
         this.esc = esc;
     }
 }

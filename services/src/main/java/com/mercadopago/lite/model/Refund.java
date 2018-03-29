@@ -1,18 +1,15 @@
 package com.mercadopago.lite.model;
+
 import com.google.gson.JsonObject;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- * Created by mromar on 10/20/17.
- */
-
 public class Refund {
 
     private BigDecimal amount;
     private Date dateCreated;
-    private String id;
+    private Long id;
     private JsonObject metadata;
     private long paymentId;
     private String source;
@@ -34,11 +31,11 @@ public class Refund {
         this.dateCreated = dateCreated;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

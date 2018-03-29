@@ -1,6 +1,4 @@
-package com.mercadopago.lite.constants;
-
-import com.mercadopago.lite.model.Site;
+package com.mercadopago.lite.model;
 
 public class Sites {
 
@@ -12,6 +10,7 @@ public class Sites {
     public static final Site VENEZUELA = new Site("MLV", "VEF");
     public static final Site USA = new Site("USA", "USD");
     public static final Site PERU = new Site("MPE", "PEN");
+
 
     private Sites() {
     }

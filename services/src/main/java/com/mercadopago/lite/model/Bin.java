@@ -1,12 +1,11 @@
 package com.mercadopago.lite.model;
-/**
- * Created by mromar on 10/20/17.
- */
 
 public class Bin {
 
+    public static final int BIN_LENGTH = 6;
+
     private String exclusionPattern;
-    private String installmentPattern;
+    private String installmentsPattern;
     private String pattern;
 
     public String getExclusionPattern() {
@@ -17,12 +16,12 @@ public class Bin {
         this.exclusionPattern = exclusionPattern;
     }
 
-    public String getInstallmentPattern() {
-        return installmentPattern;
+    public String getInstallmentsPattern() {
+        return installmentsPattern;
     }
 
-    public void setInstallmentPattern(String installmentPattern) {
-        this.installmentPattern = installmentPattern;
+    public void setInstallmentsPattern(String installmentsPattern) {
+        this.installmentsPattern = installmentsPattern;
     }
 
     public String getPattern() {

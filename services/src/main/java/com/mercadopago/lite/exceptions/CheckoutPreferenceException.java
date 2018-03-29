@@ -1,8 +1,5 @@
 package com.mercadopago.lite.exceptions;
 
-/**
- * Created by mromar on 3/2/16.
- */
 public class CheckoutPreferenceException extends Exception {
 
     public static final int INVALID_ITEM = 0;
@@ -13,13 +10,13 @@ public class CheckoutPreferenceException extends Exception {
     public static final int PREF_ID_NOT_MATCHING_REQUESTED = 5;
     public static final int NO_EMAIL_FOUND = 6;
 
-    private int errorCode;
+    private final int errorCode;
 
     public CheckoutPreferenceException(int errorCode) {
         this.errorCode = errorCode;
     }
 
     public int getErrorCode() {
-        return this.errorCode;
+        return errorCode;
     }
 }

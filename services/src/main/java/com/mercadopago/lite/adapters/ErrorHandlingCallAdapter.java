@@ -14,6 +14,7 @@ import com.mercadopago.tracking.tracker.MPTracker;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.net.SocketTimeoutException;
 
 import retrofit2.Call;
 import retrofit2.CallAdapter;
@@ -28,8 +29,8 @@ public class ErrorHandlingCallAdapter {
     public static class ErrorHandlingCallAdapterFactory extends CallAdapter.Factory {
 
         @Override
-        public CallAdapter<MPCall<?>> get(Type returnType, Annotation[] annotations,
-                                          Retrofit retrofit) {
+        public CallAdapter<MPCall<?>, MPCallAdapter> get(Type returnType, Annotation[] annotations,
+                                                         Retrofit retrofit) {
             TypeToken<?> token = TypeToken.get(returnType);
             if (token.getRawType() != MPCall.class) {
                 return null;
@@ -39,14 +40,14 @@ public class ErrorHandlingCallAdapter {
                         "MPCall must have generic type (e.g., MPCall<ResponseBody>)");
             }
             final Type responseType = ((ParameterizedType) returnType).getActualTypeArguments()[0];
-            return new CallAdapter<MPCall<?>>() {
+            return new CallAdapter<MPCall<?>, MPCallAdapter>() {
                 @Override
                 public Type responseType() {
                     return responseType;
                 }
 
                 @Override
-                public <R> MPCall<R> adapt(Call<R> call) {
+                public MPCallAdapter adapt(final Call<MPCall<?>> call) {
                     return new MPCallAdapter<>(call);
                 }
             };
@@ -104,7 +105,7 @@ public class ErrorHandlingCallAdapter {
                 @Override
                 public void onFailure(final Call<T> call, Throwable t) {
                     final Throwable th = t;
-                    if (callback.attempts++ == 3) {
+                    if (callback.attempts++ == 3 || (th instanceof SocketTimeoutException)) {
                         executeOnMainThread(new Runnable() {
                             @Override
                             public void run() {

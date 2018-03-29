@@ -1,6 +1,6 @@
 package com.mercadopago.lite.util;
 
-import com.mercadopago.lite.model.ApiException;
+import com.mercadopago.lite.exceptions.ApiException;
 
 import retrofit2.Response;
 

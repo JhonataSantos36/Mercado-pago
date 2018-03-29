@@ -5,10 +5,14 @@ import com.google.gson.annotations.SerializedName;
 public class SecurityCodeIntent {
 
     @SerializedName("security_code")
-    private String mSecurityCode;
+    private String securityCode;
 
-    public void setSecurityCode(String securityCode){
-        this.mSecurityCode = securityCode;
+    public String getSecurityCode() {
+        return securityCode;
+    }
+
+    public void setSecurityCode(String securityCode) {
+        this.securityCode = securityCode;
     }
 }
 

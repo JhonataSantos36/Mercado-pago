@@ -1,7 +1,4 @@
 package com.mercadopago.lite.model;
-/**
- * Created by mromar on 10/23/17.
- */
 
 public class PaymentType {
 
@@ -13,5 +10,12 @@ public class PaymentType {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public PaymentType() {
+    }
+
+    public PaymentType(String paymentTypeId) {
+        id = paymentTypeId;
     }
 }

@@ -3,7 +3,9 @@ package com.mercadopago.lite.controllers;
 import com.mercadopago.lite.preferences.ServicePreference;
 
 public class CustomServicesHandler {
+
     private static CustomServicesHandler mInstance;
+
     private ServicePreference servicePreference;
 
     private CustomServicesHandler(){}

@@ -1,13 +1,10 @@
 package com.mercadopago.lite.model;
-/**
- * Created by mromar on 10/20/17.
- */
 
 public class Picture {
 
     private String id;
-    private String size;
     private String secureUrl;
+    private String size;
     private String url;
 
     public String getId() {
@@ -18,20 +15,20 @@ public class Picture {
         this.id = id;
     }
 
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
     public String getSecureUrl() {
         return secureUrl;
     }
 
     public void setSecureUrl(String secureUrl) {
         this.secureUrl = secureUrl;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 
     public String getUrl() {

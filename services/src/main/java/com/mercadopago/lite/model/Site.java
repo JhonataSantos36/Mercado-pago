@@ -1,9 +1,5 @@
 package com.mercadopago.lite.model;
 
-/**
- * Created by mromar on 10/24/17.
- */
-
 public class Site {
 
     private String id;
@@ -18,12 +14,12 @@ public class Site {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getCurrencyId() {
         return currencyId;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setCurrencyId(String currencyId) {

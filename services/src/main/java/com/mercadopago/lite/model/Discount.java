@@ -1,13 +1,12 @@
 package com.mercadopago.lite.model;
-import java.math.BigDecimal;
 
-/**
- * Created by mromar on 10/20/17.
- */
+import com.mercadopago.lite.util.CurrenciesUtil;
+
+import java.math.BigDecimal;
 
 public class Discount {
 
-    private String id;
+    private Long id;
     private String name;
     private BigDecimal percentOff;
     private BigDecimal amountOff;
@@ -15,12 +14,37 @@ public class Discount {
     private String currencyId;
     private String couponCode;
     private String concept;
+    private String campaignId;
 
-    public String getId() {
+    public String getCouponCode() {
+        return couponCode;
+    }
+
+    public void setCouponCode(String couponCode) {
+        this.couponCode = couponCode;
+    }
+
+    public BigDecimal getAmountOff() {
+        return amountOff;
+    }
+
+    public BigDecimal getCouponAmount() {
+        return couponAmount;
+    }
+
+    public String getCurrencyId() {
+        return currencyId;
+    }
+
+    public void setCurrencyId(String currencyId) {
+        this.currencyId = currencyId;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -40,43 +64,47 @@ public class Discount {
         this.percentOff = percentOff;
     }
 
-    public BigDecimal getAmountOff() {
-        return amountOff;
+    public BigDecimal getAmountWithDiscount(BigDecimal amount) {
+        return amount.subtract(couponAmount);
     }
 
     public void setAmountOff(BigDecimal amountOff) {
         this.amountOff = amountOff;
     }
 
-    public BigDecimal getCouponAmount() {
-        return couponAmount;
-    }
-
     public void setCouponAmount(BigDecimal couponAmount) {
         this.couponAmount = couponAmount;
     }
 
-    public String getCurrencyId() {
-        return currencyId;
+    public Boolean hasPercentOff() {
+        return percentOff != null && !percentOff.equals(new BigDecimal(0));
     }
 
-    public void setCurrencyId(String currencyId) {
-        this.currencyId = currencyId;
-    }
-
-    public String getCouponCode() {
-        return couponCode;
-    }
-
-    public void setCouponCode(String couponCode) {
-        this.couponCode = couponCode;
+    public void setConcept(String concept) {
+        this.concept = concept;
     }
 
     public String getConcept() {
         return concept;
     }
 
-    public void setConcept(String concept) {
-        this.concept = concept;
+    public boolean isValid() {
+        return isDiscountCurrencyIdValid() && isAmountValid(couponAmount) && id != null;
+    }
+
+    private Boolean isDiscountCurrencyIdValid() {
+        return currencyId != null && CurrenciesUtil.isValidCurrency(currencyId);
+    }
+
+    private Boolean isAmountValid(BigDecimal amount) {
+        return amount != null && amount.compareTo(BigDecimal.ZERO) >= 0;
+    }
+
+    public String getCampaignId() {
+        return campaignId;
+    }
+
+    public void setCampaignId(final String campaignId) {
+        this.campaignId = campaignId;
     }
 }

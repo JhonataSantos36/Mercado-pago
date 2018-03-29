@@ -1,15 +1,9 @@
 package com.mercadopago.lite.model;
 
-import com.mercadopago.lite.constants.PaymentTypes;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-/**
- * Created by mromar on 10/20/17.
- */
 
 public class Payment {
 
@@ -17,7 +11,7 @@ public class Payment {
     private String callForAuthorizeId;
     private Boolean captured;
     private Card card;
-    private Integer collectorId;
+    private String collectorId;
     private BigDecimal couponAmount;
     private String currencyId;
     private Date dateApproved;
@@ -29,7 +23,7 @@ public class Payment {
     private List<FeeDetail> feeDetails;
     private Long id;
     private Integer installments;
-    private String issuerId;
+    private Integer issuerId;
     private Boolean liveMode;
     private Map metadata;
     private Date moneyReleaseDate;
@@ -46,7 +40,6 @@ public class Payment {
     private BigDecimal transactionAmount;
     private BigDecimal transactionAmountRefunded;
     private TransactionDetails transactionDetails;
-    private String tokenId;
 
     public Boolean getBinaryMode() {
         return binaryMode;
@@ -80,11 +73,11 @@ public class Payment {
         this.card = card;
     }
 
-    public Integer getCollectorId() {
+    public String getCollectorId() {
         return collectorId;
     }
 
-    public void setCollectorId(Integer collectorId) {
+    public void setCollectorId(String collectorId) {
         this.collectorId = collectorId;
     }
 
@@ -176,11 +169,11 @@ public class Payment {
         this.installments = installments;
     }
 
-    public String getIssuerId() {
+    public Integer getIssuerId() {
         return issuerId;
     }
 
-    public void setIssuerId(String issuerId) {
+    public void setIssuerId(Integer issuerId) {
         this.issuerId = issuerId;
     }
 
@@ -312,44 +305,91 @@ public class Payment {
         this.transactionDetails = transactionDetails;
     }
 
-    public String getTokenId() {
-        return tokenId;
-    }
-
-    public void setTokenId(String tokenId) {
-        this.tokenId = tokenId;
-    }
-
     public Boolean isCardPaymentType(String paymentTypeId) {
-        return paymentTypeId.equals(PaymentTypes.CREDIT_CARD) || paymentTypeId.equals(PaymentTypes.DEBIT_CARD) || paymentTypeId.equals(PaymentTypes.PREPAID_CARD);
+        return paymentTypeId.equals(PaymentTypes.CREDIT_CARD)
+                || paymentTypeId.equals(PaymentTypes.DEBIT_CARD)
+                || paymentTypeId.equals(PaymentTypes.PREPAID_CARD);
     }
 
-    public class Status {
-        public static final String APPROVED = "approved";
-        public static final String IN_PROCESS = "in_process";
-        public static final String REJECTED = "rejected";
-        public static final String PENDING = "pending";
+
+    public static class StatusCodes {
+        public static final String STATUS_APPROVED = "approved";
+        public static final String STATUS_IN_PROCESS = "in_process";
+        public static final String STATUS_REJECTED = "rejected";
+        public static final String STATUS_PENDING = "pending";
     }
 
-    public class StatusDetail {
-        public static final String RECOVERY = "recovery";
-        public static final String INVALID_ESC = "invalid_esc";
-        public static final String ACCREDITED = "accredited";
-        public static final String REJECTED_CALL_FOR_AUTHORIZE = "cc_rejected_call_for_authorize";
-        public static final String PENDING_CONTINGENCY = "pending_contingency";
-        public static final String PENDING_REVIEW_MANUAL = "pending_review_manual";
-        public static final String PENDING_WAITING_PAYMENT = "pending_waiting_payment";
-        public static final String REJECTED_OTHER_REASON = "cc_rejected_other_reason";
-        public static final String REJECTED_BAD_FILLED_OTHER = "cc_rejected_bad_filled_other";
-        public static final String REJECTED_BAD_FILLED_CARD_NUMBER = "cc_rejected_bad_filled_card_number";
-        public static final String REJECTED_BAD_FILLED_SECURITY_CODE = "cc_rejected_bad_filled_security_code";
-        public static final String REJECTED_BAD_FILLED_DATE = "cc_rejected_bad_filled_date";
-        public static final String REJECTED_HIGH_RISK = "rejected_high_risk";
-        public static final String REJECTED_INSUFFICIENT_AMOUNT = "cc_rejected_insufficient_amount";
-        public static final String REJECTED_MAX_ATTEMPTS = "cc_rejected_max_attempts";
-        public static final String REJECTED_DUPLICATED_PAYMENT = "cc_rejected_duplicated_payment";
-        public static final String REJECTED_CARD_DISABLED = "cc_rejected_card_disabled";
-        public static final String REJECTED_BY_BANK = "rejected_by_bank";
-        public static final String REJECTED_INSUFFICIENT_DATA = "rejected_insufficient_data";
+    public static class StatusDetail {
+        public static final String STATUS_DETAIL_ACCREDITED = "accredited";
+        public static final String STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE = "cc_rejected_call_for_authorize";
+
+        public static final String STATUS_DETAIL_PENDING_CONTINGENCY = "pending_contingency";
+        public static final String STATUS_DETAIL_PENDING_REVIEW_MANUAL = "pending_review_manual";
+        public static final String STATUS_DETAIL_PENDING_WAITING_PAYMENT = "pending_waiting_payment";
+        public static final String STATUS_DETAIL_CC_REJECTED_OTHER_REASON = "cc_rejected_other_reason";
+        public static final String STATUS_DETAIL_APPROVED_PLUGIN_PM = "approved_plugin_pm";
+        public static final String STATUS_DETAIL_CC_REJECTED_PLUGIN_PM = "cc_rejected_plugin_pm";
+
+        public static final String STATUS_DETAIL_INVALID_ESC = "invalid_esc";
+        public static final String STATUS_DETAIL_CC_REJECTED_CARD_DISABLED = "cc_rejected_card_disabled";
+        public static final String STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT = "cc_rejected_insufficient_amount";
+        public static final String STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER = "cc_rejected_bad_filled_other";
+        public static final String STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER = "cc_rejected_bad_filled_card_number";
+        public static final String STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE = "cc_rejected_bad_filled_security_code";
+        public static final String STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE = "cc_rejected_bad_filled_date";
+        public static final String STATUS_DETAIL_CC_REJECTED_DUPLICATED_PAYMENT = "cc_rejected_duplicated_payment";
+        public static final String STATUS_DETAIL_REJECTED_HIGH_RISK = "rejected_high_risk";
+        public static final String STATUS_DETAIL_CC_REJECTED_MAX_ATTEMPTS = "cc_rejected_max_attempts";
+        public static final String STATUS_DETAIL_REJECTED_REJECTED_BY_BANK = "rejected_by_bank";
+        public static final String STATUS_DETAIL_REJECTED_REJECTED_INSUFFICIENT_DATA = "rejected_insufficient_data";
+
+
+        public static boolean isKnownErrorDetail(String statusDetail) {
+            return STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER.equals(statusDetail)
+                    || STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE.equals(statusDetail)
+                    || STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE.equals(statusDetail)
+                    || STATUS_DETAIL_CC_REJECTED_CARD_DISABLED.equals(statusDetail)
+                    || STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER.equals(statusDetail)
+                    || STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE.equals(statusDetail)
+                    || STATUS_DETAIL_CC_REJECTED_DUPLICATED_PAYMENT.equals(statusDetail)
+                    || STATUS_DETAIL_CC_REJECTED_INSUFFICIENT_AMOUNT.equals(statusDetail)
+                    || STATUS_DETAIL_CC_REJECTED_MAX_ATTEMPTS.equals(statusDetail)
+                    || STATUS_DETAIL_INVALID_ESC.equals(statusDetail)
+                    || STATUS_DETAIL_REJECTED_HIGH_RISK.equals(statusDetail)
+                    || STATUS_DETAIL_REJECTED_REJECTED_BY_BANK.equals(statusDetail)
+                    || STATUS_DETAIL_REJECTED_REJECTED_INSUFFICIENT_DATA.equals(statusDetail);
+        }
+
+        public static boolean isPaymentStatusRecoverable(final String statusDetail) {
+            return STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER.equals(statusDetail) ||
+                    STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER.equals(statusDetail) ||
+                    STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE.equals(statusDetail) ||
+                    STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE.equals(statusDetail) ||
+                    STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE.equals(statusDetail) ||
+                    STATUS_DETAIL_INVALID_ESC.equals(statusDetail) ||
+                    STATUS_DETAIL_CC_REJECTED_CARD_DISABLED.equals(statusDetail);
+        }
+
+        public static boolean isStatusDetailRecoverable(String statusDetail) {
+            return statusDetail != null && (STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE.equals(statusDetail) ||
+                    STATUS_DETAIL_INVALID_ESC.equals(statusDetail) ||
+                    STATUS_DETAIL_CC_REJECTED_CARD_DISABLED.equals(statusDetail));
+        }
+
+        public static boolean isRecoverablePaymentStatus(String paymentStatus, String paymentStatusDetail) {
+            return Payment.StatusCodes.STATUS_REJECTED.equals(paymentStatus)
+                    && isPaymentStatusRecoverable(paymentStatusDetail);
+        }
+
+        public static boolean isBadFilled(final String statusDetail) {
+            return STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE
+                    .equals(statusDetail)
+                    || STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE
+                    .equals(statusDetail)
+                    || STATUS_DETAIL_CC_REJECTED_BAD_FILLED_OTHER
+                    .equals(statusDetail)
+                    || STATUS_DETAIL_CC_REJECTED_BAD_FILLED_CARD_NUMBER
+                    .equals(statusDetail);
+        }
     }
 }

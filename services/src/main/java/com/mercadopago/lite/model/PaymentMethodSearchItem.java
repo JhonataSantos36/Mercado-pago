@@ -1,11 +1,14 @@
 package com.mercadopago.lite.model;
+
+import android.support.annotation.DrawableRes;
+
 import java.util.List;
 
-/**
- * Created by mromar on 10/20/17.
- */
-
 public class PaymentMethodSearchItem {
+
+    private static final String TYPE_PAYMENT_METHOD = "payment_method";
+    private static final String TYPE_PAYMENT_TYPE = "payment_type";
+    private static final String TYPE_GROUP = "group";
 
     private String id;
     private String type;
@@ -14,6 +17,11 @@ public class PaymentMethodSearchItem {
     private List<PaymentMethodSearchItem> children;
     private String childrenHeader;
     private Boolean showIcon;
+    @DrawableRes
+    private int icon;
+
+    public PaymentMethodSearchItem() {
+    }
 
     public String getId() {
         return id;
@@ -59,6 +67,34 @@ public class PaymentMethodSearchItem {
         return childrenHeader;
     }
 
+    public boolean hasChildren() {
+        return children != null && children.size() != 0;
+    }
+
+    public boolean hasDescription() {
+        return description != null && !description.isEmpty();
+    }
+
+    public boolean isIconRecommended() {
+        return showIcon != null ? showIcon : false;
+    }
+
+    public boolean hasComment() {
+        return comment != null && !comment.isEmpty();
+    }
+
+    public boolean isPaymentType() {
+        return TYPE_PAYMENT_TYPE.equals(type);
+    }
+
+    public boolean isPaymentMethod() {
+        return TYPE_PAYMENT_METHOD.equals(type);
+    }
+
+    public boolean isGroup() {
+        return TYPE_GROUP.equals(type);
+    }
+
     public void setChildrenHeader(String childrenHeader) {
         this.childrenHeader = childrenHeader;
     }
@@ -69,5 +105,13 @@ public class PaymentMethodSearchItem {
 
     public void setShowIcon(Boolean showIcon) {
         this.showIcon = showIcon;
+    }
+
+    public int getIcon() {
+        return icon;
+    }
+
+    public void setIcon(int icon) {
+        this.icon = icon;
     }
 }

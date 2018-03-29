@@ -2,10 +2,6 @@ package com.mercadopago.lite.model;
 
 import java.util.List;
 
-/**
- * Created by mromar on 10/20/17.
- */
-
 public class Installment {
 
     private Issuer issuer;

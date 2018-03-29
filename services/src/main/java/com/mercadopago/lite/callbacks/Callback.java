@@ -1,6 +1,6 @@
 package com.mercadopago.lite.callbacks;
 
-import com.mercadopago.lite.model.ApiException;
+import com.mercadopago.lite.exceptions.ApiException;
 
 /**
  * Created by mromar on 10/20/17.

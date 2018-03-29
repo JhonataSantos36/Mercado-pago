@@ -1,12 +1,18 @@
 package com.mercadopago.lite.model;
-/**
- * Created by mromar on 10/20/17.
- */
 
 public class Issuer {
 
     private Long id;
     private String name;
+
+    public Issuer() {
+    }
+
+    public Issuer(Long id, String name) {
+
+        this.id = id;
+        this.name = name;
+    }
 
     public Long getId() {
         return id;

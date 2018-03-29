@@ -1,9 +1,9 @@
-package com.mercadopago.lite.model;
-import java.util.List;
+package com.mercadopago.lite.exceptions;
 
-/**
- * Created by mromar on 10/20/17.
- */
+import com.mercadopago.lite.model.Cause;
+import com.mercadopago.lite.util.ApiUtil;
+
+import java.util.List;
 
 public class ApiException {
 
@@ -42,6 +42,24 @@ public class ApiException {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public boolean isRecoverable() {
+        return getStatus() == null || getStatus() != ApiUtil.StatusCodes.NOT_FOUND
+                && (getCause() == null || getCause().isEmpty());
+    }
+
+    public boolean containsCause(String code) {
+        boolean found = false;
+        if (cause != null && code != null) {
+            for (Cause currentCause : cause) {
+                if (code.equals(currentCause.getCode())) {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        return found;
     }
 
     public class ErrorCodes {

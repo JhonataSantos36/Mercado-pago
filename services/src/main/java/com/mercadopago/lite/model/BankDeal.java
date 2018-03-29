@@ -4,31 +4,19 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by mromar on 10/20/17.
- */
-
 public class BankDeal {
 
-    private String id;
     private Date dateExpired;
     private Date dateStarted;
+    private String id;
     private List<Integer> installments;
-    private Issuer issuer;
+    private CardIssuer issuer;
     private String legals;
-    private Picture picture;
     private int maxInstallments;
     private List<PaymentMethod> paymentMethods;
+    private Picture picture;
     private String recommendedMessage;
     private BigDecimal totalFinancialCost;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Date getDateExpired() {
         return dateExpired;
@@ -46,6 +34,14 @@ public class BankDeal {
         this.dateStarted = dateStarted;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public List<Integer> getInstallments() {
         return installments;
     }
@@ -54,11 +50,11 @@ public class BankDeal {
         this.installments = installments;
     }
 
-    public Issuer getIssuer() {
+    public CardIssuer getIssuer() {
         return issuer;
     }
 
-    public void setIssuer(Issuer issuer) {
+    public void setIssuer(CardIssuer issuer) {
         this.issuer = issuer;
     }
 
@@ -68,14 +64,6 @@ public class BankDeal {
 
     public void setLegals(String legals) {
         this.legals = legals;
-    }
-
-    public Picture getPicture() {
-        return picture;
-    }
-
-    public void setPicture(Picture picture) {
-        this.picture = picture;
     }
 
     public int getMaxInstallments() {
@@ -92,6 +80,14 @@ public class BankDeal {
 
     public void setPaymentMethods(List<PaymentMethod> paymentMethods) {
         this.paymentMethods = paymentMethods;
+    }
+
+    public Picture getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Picture picture) {
+        this.picture = picture;
     }
 
     public String getRecommendedMessage() {

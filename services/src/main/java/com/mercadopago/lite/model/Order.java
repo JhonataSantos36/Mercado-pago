@@ -1,18 +1,15 @@
 package com.mercadopago.lite.model;
-/**
- * Created by mromar on 10/20/17.
- */
 
 public class Order {
 
-    private String id;
+    private Long id;
     private String type;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

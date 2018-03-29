@@ -1,7 +1,4 @@
 package com.mercadopago.lite.model;
-/**
- * Created by mromar on 10/20/17.
- */
 
 public class IdentificationType {
 
@@ -11,43 +8,55 @@ public class IdentificationType {
     private Integer minLength;
     private Integer maxLength;
 
+    public IdentificationType() {
+    }
+
+    public IdentificationType(String id, String name, String type,
+                              Integer minLength, Integer maxLength) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.minLength = minLength;
+        this.maxLength = maxLength;
+    }
+
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(String Id) {
+        id = Id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String Name) {
+        name = Name;
     }
 
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setType(String Type) {
+        type = Type;
     }
 
     public Integer getMinLength() {
         return minLength;
     }
 
-    public void setMinLength(Integer minLength) {
-        this.minLength = minLength;
+    public void setMinLength(Integer MinLength) {
+        minLength = MinLength;
     }
 
     public Integer getMaxLength() {
         return maxLength;
     }
 
-    public void setMaxLength(Integer maxLength) {
-        this.maxLength = maxLength;
+    public void setMaxLength(Integer MaxLength) {
+        maxLength = MaxLength;
     }
 }

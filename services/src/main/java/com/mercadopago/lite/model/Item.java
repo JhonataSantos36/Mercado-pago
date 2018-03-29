@@ -1,9 +1,6 @@
 package com.mercadopago.lite.model;
-import java.math.BigDecimal;
 
-/**
- * Created by mromar on 10/20/17.
- */
+import java.math.BigDecimal;
 
 public class Item {
 
@@ -15,6 +12,33 @@ public class Item {
     private Integer quantity;
     private String title;
     private BigDecimal unitPrice;
+
+
+    public Item(String description, Integer quantity, BigDecimal unitPrice) {
+        this.description = description;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+    }
+
+    public Item(String description, Integer quantity, BigDecimal unitPrice, String pictureUrl) {
+        this.description = description;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.pictureUrl = pictureUrl;
+    }
+
+    public Item(String description, BigDecimal amount) {
+        this.description = description;
+        quantity = 1;
+        unitPrice = amount;
+    }
+
+    public Item(String description, BigDecimal amount, String pictureUrl) {
+        this.description = description;
+        quantity = 1;
+        unitPrice = amount;
+        this.pictureUrl = pictureUrl;
+    }
 
     public String getCategoryId() {
         return categoryId;
@@ -78,5 +102,9 @@ public class Item {
 
     public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
+    }
+
+    public boolean hasCardinality() {
+        return quantity != null && quantity > 1;
     }
 }

@@ -1,11 +1,8 @@
 package com.mercadopago.lite.model;
+
 import java.util.Date;
 
-/**
- * Created by mromar on 10/20/17.
- */
-
-public class Card {
+public class Card implements CardInformation {
 
     private Cardholder cardHolder;
     private String customerId;
@@ -20,6 +17,7 @@ public class Card {
     private PaymentMethod paymentMethod;
     private SecurityCode securityCode;
 
+    @Override
     public Cardholder getCardHolder() {
         return cardHolder;
     }
@@ -52,6 +50,7 @@ public class Card {
         this.dateLastUpdated = dateLastUpdated;
     }
 
+    @Override
     public Integer getExpirationMonth() {
         return expirationMonth;
     }
@@ -60,6 +59,7 @@ public class Card {
         this.expirationMonth = expirationMonth;
     }
 
+    @Override
     public Integer getExpirationYear() {
         return expirationYear;
     }
@@ -68,8 +68,14 @@ public class Card {
         this.expirationYear = expirationYear;
     }
 
+    @Override
     public String getFirstSixDigits() {
         return firstSixDigits;
+    }
+
+    @Override
+    public Integer getSecurityCodeLength() {
+        return securityCode == null ? null : securityCode.getLength();
     }
 
     public void setFirstSixDigits(String firstSixDigits) {
@@ -92,6 +98,7 @@ public class Card {
         this.issuer = issuer;
     }
 
+    @Override
     public String getLastFourDigits() {
         return lastFourDigits;
     }
@@ -114,5 +121,14 @@ public class Card {
 
     public void setSecurityCode(SecurityCode securityCode) {
         this.securityCode = securityCode;
+    }
+
+    public boolean isSecurityCodeRequired() {
+
+        if (securityCode != null) {
+            return securityCode.getLength() != 0;
+        } else {
+            return false;
+        }
     }
 }

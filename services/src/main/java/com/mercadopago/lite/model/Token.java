@@ -1,11 +1,13 @@
 package com.mercadopago.lite.model;
+
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.mercadopago.lite.util.TextUtil;
+
 import java.util.Date;
 
-/**
- * Created by mromar on 10/20/17.
- */
-
-public class Token {
+public class Token implements CardInformation {
 
     private String id;
     private String publicKey;
@@ -26,20 +28,47 @@ public class Token {
     private Cardholder cardholder;
     private String esc;
 
-    public String getId() {
-        return id;
+    @Override
+    public Integer getSecurityCodeLength() {
+        return securityCodeLength;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setSecurityCodeLength(Integer securityCodeLength) {
+        this.securityCodeLength = securityCodeLength;
     }
 
-    public String getPublicKey() {
-        return publicKey;
+    @Override
+    public Integer getExpirationMonth() {
+        return expirationMonth;
     }
 
-    public void setPublicKey(String publicKey) {
-        this.publicKey = publicKey;
+    public void setExpirationMonth(Integer expirationMonth) {
+        this.expirationMonth = expirationMonth;
+    }
+
+    @Override
+    public Integer getExpirationYear() {
+        return expirationYear;
+    }
+
+    public void setExpirationYear(Integer expirationYear) {
+        this.expirationYear = expirationYear;
+    }
+
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
     }
 
     public String getCardId() {
@@ -98,46 +127,23 @@ public class Token {
         this.truncCardNumber = truncCardNumber;
     }
 
-    public Integer getSecurityCodeLength() {
-        return securityCodeLength;
+    public String getId() {
+        return id;
     }
 
-    public void setSecurityCodeLength(Integer securityCodeLength) {
-        this.securityCodeLength = securityCodeLength;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public Integer getExpirationMonth() {
-        return expirationMonth;
+    public String getPublicKey() {
+        return publicKey;
     }
 
-    public void setExpirationMonth(Integer expirationMonth) {
-        this.expirationMonth = expirationMonth;
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
     }
 
-    public Integer getExpirationYear() {
-        return expirationYear;
-    }
-
-    public void setExpirationYear(Integer expirationYear) {
-        this.expirationYear = expirationYear;
-    }
-
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
-    public Date getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(Date dueDate) {
-        this.dueDate = dueDate;
-    }
-
+    @Override
     public String getFirstSixDigits() {
         return firstSixDigits;
     }
@@ -146,6 +152,7 @@ public class Token {
         this.firstSixDigits = firstSixDigits;
     }
 
+    @Override
     public String getLastFourDigits() {
         return lastFourDigits;
     }
@@ -154,7 +161,8 @@ public class Token {
         this.lastFourDigits = lastFourDigits;
     }
 
-    public Cardholder getCardholder() {
+    @Override
+    public Cardholder getCardHolder() {
         return cardholder;
     }
 
@@ -168,5 +176,15 @@ public class Token {
 
     public void setEsc(String esc) {
         this.esc = esc;
+    }
+
+
+    public String toJson() {
+        Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).serializeNulls().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
+        return gson.toJson(this);
+    }
+
+    public boolean isTokenValid() {
+        return getLastFourDigits() != null && !TextUtil.isEmpty(getLastFourDigits());
     }
 }
