@@ -1,17 +1,28 @@
 package com.mercadopago.lite.model;
 
+import java.util.List;
+
 public class Issuer {
 
     private Long id;
     private String name;
 
+    private List<String> labels;
+
     public Issuer() {
     }
 
     public Issuer(Long id, String name) {
-
         this.id = id;
         this.name = name;
+    }
+
+    public List<String> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(final List<String> labels) {
+        this.labels = labels;
     }
 
     public Long getId() {

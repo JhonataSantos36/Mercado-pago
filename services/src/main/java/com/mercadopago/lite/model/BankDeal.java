@@ -10,7 +10,7 @@ public class BankDeal {
     private Date dateStarted;
     private String id;
     private List<Integer> installments;
-    private CardIssuer issuer;
+    private Issuer issuer;
     private String legals;
     private int maxInstallments;
     private List<PaymentMethod> paymentMethods;
@@ -50,11 +50,11 @@ public class BankDeal {
         this.installments = installments;
     }
 
-    public CardIssuer getIssuer() {
+    public Issuer getIssuer() {
         return issuer;
     }
 
-    public void setIssuer(CardIssuer issuer) {
+    public void setIssuer(Issuer issuer) {
         this.issuer = issuer;
     }
 
