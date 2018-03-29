@@ -25,9 +25,6 @@ import java.math.BigDecimal;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 
-/**
- * Created by mreverter on 4/18/17.
- */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class PaymentVaultActivityTest {
