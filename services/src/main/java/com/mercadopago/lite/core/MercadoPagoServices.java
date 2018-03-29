@@ -78,12 +78,11 @@ public class MercadoPagoServices {
 
     protected MercadoPagoServices(final Context mContext,
                                   final String mPublicKey,
-                                  final String mPrivateKey,
-                                  final CustomServicesHandler handler) {
+                                  final String mPrivateKey) {
         this.mContext = mContext;
         this.mPublicKey = mPublicKey;
         this.mPrivateKey = mPrivateKey;
-        this.mServicePreference = handler.getServicePreference();
+        this.mServicePreference = CustomServicesHandler.getInstance().getServicePreference();
         this.mProcessingMode = mServicePreference != null ? mServicePreference.getProcessingModeString() : ProcessingModes.AGGREGATOR;
     }
 
