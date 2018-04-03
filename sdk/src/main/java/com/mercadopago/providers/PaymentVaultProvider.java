@@ -1,5 +1,7 @@
 package com.mercadopago.providers;
 
+import android.support.annotation.NonNull;
+
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Payer;
 import com.mercadopago.model.PaymentMethodSearch;
@@ -10,7 +12,6 @@ import com.mercadopago.mvp.ResourcesProvider;
 import com.mercadopago.preferences.PaymentPreference;
 
 import java.math.BigDecimal;
-import java.util.Set;
 
 /**
  * Created by mreverter on 1/30/17.
@@ -39,6 +40,6 @@ public interface PaymentVaultProvider extends ResourcesProvider {
 
     void trackInitialScreen(PaymentMethodSearch paymentMethodSearch, String siteId);
 
-    void trackChildrenScreen(PaymentMethodSearchItem paymentMethodSearchItem, String siteId);
+    void trackChildrenScreen(@NonNull PaymentMethodSearchItem paymentMethodSearchItem, @NonNull String siteId);
 
 }

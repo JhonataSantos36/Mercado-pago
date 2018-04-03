@@ -26,10 +26,10 @@ import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.MercadoPagoESC;
 import com.mercadopago.util.MercadoPagoESCImpl;
 import com.mercadopago.util.TextUtil;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class PaymentVaultProviderImpl implements PaymentVaultProvider {
 
@@ -228,7 +228,7 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
         Tracker.trackPaymentVaultScreen(context, merchantPublicKey, paymentMethodSearch, mercadoPagoESC.getESCCardIds());
     }
 
-    public void trackChildrenScreen(PaymentMethodSearchItem paymentMethodSearchItem, String siteId) {
+    public void trackChildrenScreen(@NonNull final PaymentMethodSearchItem paymentMethodSearchItem, final @NonNull String siteId) {
         initializeMPTracker(siteId);
         Tracker.trackPaymentVaultChildrenScreen(context, merchantPublicKey, paymentMethodSearchItem);
     }

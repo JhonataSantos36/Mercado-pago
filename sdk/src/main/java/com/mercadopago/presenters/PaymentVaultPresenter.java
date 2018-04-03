@@ -658,11 +658,18 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         getResourcesProvider().trackInitialScreen(mPaymentMethodSearch, mSite.getId());
     }
 
+    /**
+     * When users selects option then track payment selected method.
+     * If there is no option selected by the user then track the first available.
+     */
     public void trackChildrenScreen() {
-        getResourcesProvider().trackChildrenScreen(mSelectedSearchItem, mSite.getId());
+        if (mSelectedSearchItem != null) {
+            getResourcesProvider().trackChildrenScreen(mSelectedSearchItem, mSite.getId());
+        } else if (mPaymentMethodSearch.hasSearchItems()) {
+            getResourcesProvider().trackChildrenScreen(mPaymentMethodSearch.getGroups().get(0), mSite.getId());
+        } else {
+            throw new IllegalStateException("No payment method available to track");
+        }
     }
-
-
-
 
 }

@@ -26,15 +26,19 @@ import com.mercadopago.utils.Discounts;
 import com.mercadopago.views.PaymentVaultView;
 
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 public class PaymentVaultPresenterTest {
 
@@ -76,6 +80,53 @@ public class PaymentVaultPresenterTest {
         presenter.initialize(true);
 
         assertEquals(MockedProvider.INVALID_SITE, mockedView.errorShown.getMessage());
+    }
+
+    @Test
+    public void whenItemSelectedAvailableTrackIt() {
+        PaymentVaultView mockView = mock(PaymentVaultView.class);
+        PaymentVaultProvider mockProvider = mock(PaymentVaultProvider.class);
+        Site mockSite = mock(Site.class);
+
+        PaymentVaultPresenter presenter = new PaymentVaultPresenter();
+        presenter.attachView(mockView);
+        presenter.attachResourcesProvider(mockProvider);
+        presenter.setSite(mockSite);
+
+        PaymentMethodSearchItem mockPaymentOptions = mock(PaymentMethodSearchItem.class);
+
+        presenter.setSelectedSearchItem(mockPaymentOptions);
+
+        presenter.trackChildrenScreen();
+        verify(mockProvider).trackChildrenScreen(mockPaymentOptions, mockSite.getId());
+        verifyNoMoreInteractions(mockProvider);
+        verifyNoMoreInteractions(mockView);
+    }
+
+    @Test
+    public void whenItemSelectedNotAvailableTrackFirstOfGroup() {
+        PaymentVaultView mockView = mock(PaymentVaultView.class);
+        PaymentVaultProvider mockProvider = mock(PaymentVaultProvider.class);
+        Site mockSite = mock(Site.class);
+
+        PaymentMethodSearch mockPaymentOptions = mock(PaymentMethodSearch.class);
+        PaymentMethodSearchItem mockPaymentOptionsItem = mock(PaymentMethodSearchItem.class);
+
+        List<PaymentMethodSearchItem> paymentMethodSearchItems = Arrays.asList(mockPaymentOptionsItem);
+        when(mockPaymentOptions.getGroups()).thenReturn(paymentMethodSearchItems);
+        when(mockPaymentOptions.hasSearchItems()).thenReturn(true);
+
+        PaymentVaultPresenter presenter = new PaymentVaultPresenter();
+        presenter.attachView(mockView);
+        presenter.attachResourcesProvider(mockProvider);
+
+        presenter.setSite(mockSite);
+        presenter.setPaymentMethodSearch(mockPaymentOptions);
+
+        presenter.trackChildrenScreen();
+        verify(mockProvider).trackChildrenScreen(paymentMethodSearchItems.get(0), mockSite.getId());
+        verifyNoMoreInteractions(mockProvider);
+        verifyNoMoreInteractions(mockView);
     }
 
     @Test
@@ -1027,9 +1078,9 @@ public class PaymentVaultPresenterTest {
         items.add(boletoItem);
         items.add(anotherItem);
 
-        PaymentMethodSearch paymentMethodSearch = Mockito.mock(PaymentMethodSearch.class);
-        Mockito.when(paymentMethodSearch.getGroups()).thenReturn(items);
-        Mockito.when(paymentMethodSearch.getPaymentMethodBySearchItem(boletoItem)).thenReturn(boleto);
+        PaymentMethodSearch paymentMethodSearch = mock(PaymentMethodSearch.class);
+        when(paymentMethodSearch.getGroups()).thenReturn(items);
+        when(paymentMethodSearch.getPaymentMethodBySearchItem(boletoItem)).thenReturn(boleto);
 
         // Setup presenter
         PaymentVaultPresenter presenter = new PaymentVaultPresenter();
@@ -1070,9 +1121,9 @@ public class PaymentVaultPresenterTest {
         items.add(boletoItem);
         items.add(anotherItem);
 
-        PaymentMethodSearch paymentMethodSearch = Mockito.mock(PaymentMethodSearch.class);
-        Mockito.when(paymentMethodSearch.getGroups()).thenReturn(items);
-        Mockito.when(paymentMethodSearch.getPaymentMethodBySearchItem(boletoItem)).thenReturn(boleto);
+        PaymentMethodSearch paymentMethodSearch = mock(PaymentMethodSearch.class);
+        when(paymentMethodSearch.getGroups()).thenReturn(items);
+        when(paymentMethodSearch.getPaymentMethodBySearchItem(boletoItem)).thenReturn(boleto);
 
         Payer payer = new Payer();
 
