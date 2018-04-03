@@ -1,6 +1,7 @@
 package com.mercadopago.testlib.matchers;
 
 import android.content.res.Resources;
+import android.support.annotation.IdRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -9,9 +10,10 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 public class RecyclerViewMatcher {
+    @IdRes
     private final int recyclerViewId;
 
-    public RecyclerViewMatcher(int recyclerViewId) {
+    public RecyclerViewMatcher(@IdRes int recyclerViewId) {
         this.recyclerViewId = recyclerViewId;
     }
 
@@ -19,7 +21,7 @@ public class RecyclerViewMatcher {
         return atPositionOnView(position, -1);
     }
 
-    public Matcher<View> atPositionOnView(final int position, final int targetViewId) {
+    public Matcher<View> atPositionOnView(final int position, @IdRes final int targetViewId) {
 
         return new TypeSafeMatcher<View>() {
             Resources resources = null;

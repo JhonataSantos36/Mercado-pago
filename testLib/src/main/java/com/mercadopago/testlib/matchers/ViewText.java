@@ -4,14 +4,11 @@ import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.view.View;
 import android.widget.TextView;
+
 import org.hamcrest.Matcher;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
-
-/**
- * Created by mlombardi on 8/9/17.
- */
 
 public final class ViewText {
 
@@ -19,7 +16,7 @@ public final class ViewText {
         throw new AssertionError("Can't instantiate a utility class");
     }
 
-    public static String getTextFromMatcher( final Matcher<View> matcher){
+    public static String getTextFromMatcher(final Matcher<View> matcher) {
         final String[] stringHolder = { null };
         onView(matcher).perform(new ViewAction() {
             @Override

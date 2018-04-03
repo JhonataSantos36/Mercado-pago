@@ -3,7 +3,10 @@ package com.mercadopago.testlib;
 import android.support.test.InstrumentationRegistry;
 import java.io.InputStream;
 
-public class MockTestUtils {
+public final class MockTestUtils {
+
+    private MockTestUtils() {
+    }
 
     public static String getBody(final int rawId) {
         String body = "";
