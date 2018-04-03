@@ -7,9 +7,20 @@ import okhttp3.logging.HttpLoggingInterceptor;
 public class Settings {
     public static final HttpLoggingInterceptor.Level OKHTTP_LOGGING = HttpLoggingInterceptor.Level.NONE;
     public static String servicesVersion = "v1";
-    public static String trackingEnvironment = TrackingEnvironments.PRODUCTION;
+    private static String trackingEnvironment = TrackingEnvironments.PRODUCTION;
 
+    public static void setTrackingEnvironment(final String mode) {
+        trackingEnvironment = mode;
+    }
+
+    public static String getTrackingEnvironment() {
+        return trackingEnvironment;
+    }
+
+    @Deprecated
     public static void enableBetaServices() {
         servicesVersion = "beta";
     }
+
+
 }
