@@ -1,0 +1,75 @@
+[
+  {
+    "installments": 1,
+    "installment_rate": 0,
+    "discount_rate": 0,
+    "labels": [
+    ],
+    "min_allowed_amount": 5,
+    "max_allowed_amount": 200000,
+    "recommended_message": "1 mensualidad de $ 1,000.00 ($ 1,000.00)",
+    "installment_amount": 1000,
+    "total_amount": 1000
+  },
+  {
+    "installments": 3,
+    "installment_rate": 5.99,
+    "discount_rate": 0,
+    "labels": [
+    ],
+    "min_allowed_amount": 500,
+    "max_allowed_amount": 200000,
+    "recommended_message": "3 mensualidades de $ 353.30 ($ 1,059.90)",
+    "installment_amount": 353.3,
+    "total_amount": 1059.9
+  },
+  {
+    "installments": 6,
+    "installment_rate": 9.74,
+    "discount_rate": 0,
+    "labels": [
+    ],
+    "min_allowed_amount": 500,
+    "max_allowed_amount": 200000,
+    "recommended_message": "6 mensualidades de $ 182.89 ($ 1,097.39)",
+    "installment_amount": 182.89,
+    "total_amount": 1097.39
+  },
+  {
+    "installments": 9,
+    "installment_rate": 13.92,
+    "discount_rate": 0,
+    "labels": [
+    ],
+    "min_allowed_amount": 500,
+    "max_allowed_amount": 200000,
+    "recommended_message": "9 mensualidades de $ 126.57 ($ 1,139.20)",
+    "installment_amount": 126.57,
+    "total_amount": 1139.2
+  }
+  {
+    "installments": 12,
+    "installment_rate": 18.55,
+    "discount_rate": 0,
+    "labels": [
+      "recommended_installment"
+    ],
+    "min_allowed_amount": 500,
+    "max_allowed_amount": 200000,
+    "recommended_message": "12 mensualidades de $ 98.79 ($ 1,185.50)",
+    "installment_amount": 98.79,
+    "total_amount": 1185.5
+  },
+  {
+    "installments": 18,
+    "installment_rate": 26.67,
+    "discount_rate": 0,
+    "labels": [
+    ],
+    "min_allowed_amount": 500,
+    "max_allowed_amount": 200000,
+    "recommended_message": "18 mensualidades de $ 70.37 ($ 1,266.70)",
+    "installment_amount": 70.37,
+    "total_amount": 1266.7
+  }
+]

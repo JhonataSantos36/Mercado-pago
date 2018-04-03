@@ -1,0 +1,81 @@
+{
+  "amount_info": {
+    "thousands_separator": ".",
+    "decimal_separator": ",",
+    "symbol": "$",
+    "decimal_places": 2,
+    "amount": 10000
+  },
+  "instructions": [
+    {
+      "title": "Pay $100.00 in your closest store",
+      "references": [
+        {
+          "label": "Reference1",
+          "field_value": [
+            "123",
+            "456"
+          ],
+          "separator": "-"
+        },
+        {
+          "label": "Reference2",
+          "field_value": [
+            "654",
+            "321"
+          ],
+          "separator": " "
+        }
+      ],
+      "info": [
+        "Info for Ticket",
+        "Info second phrase"
+      ],
+      "secondary_info": [
+        "Secondary info",
+        "Secondary second phrase"
+      ],
+      "tertiary_info": [
+        "Tertiary info",
+        "Tertiary second phrase"
+      ],
+      "accreditation_message": "accreditation time",
+      "type": "ticket"
+    },
+    {
+      "title": "Pay $100.00 in your closest store",
+      "references": [
+        {
+          "label": "Reference1",
+          "field_value": [
+            "123",
+            "456"
+          ],
+          "separator": "-"
+        },
+        {
+          "label": "Reference2",
+          "field_value": [
+            "654",
+            "321"
+          ],
+          "separator": " "
+        }
+      ],
+      "info": [
+        "Info for Bank Transfer",
+        "Info second phrase"
+      ],
+      "secondary_info": [
+        "Secondary info",
+        "Secondary second phrase"
+      ],
+      "tertiary_info": [
+        "Tertiary info",
+        "Tertiary second phrase"
+      ],
+      "accreditation_message": "accreditation time",
+      "type": "bank_transfer"
+    }
+  ]
+}

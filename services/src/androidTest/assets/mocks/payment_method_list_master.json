@@ -1,0 +1,58 @@
+[
+    {
+        "accreditation_time": 1440,
+        "additional_info_needed": [
+            "cardholder_name",
+            "issuer_id"
+        ],
+        "id": "debmaster",
+        "name": "Mastercard Débito",
+        "payment_type_id": "debit_card",
+        "settings": [
+            {
+                "bin": {
+                    "exclusion_pattern": null,
+                    "installments_pattern": "^5",
+                    "pattern": "^5"
+                },
+                "card_number": {
+                    "length": 16,
+                    "validation": "standard"
+                },
+                "security_code": {
+                    "card_location": "back",
+                    "length": 3,
+                    "mode": "mandatory"
+                }
+            }
+        ]
+    },
+    {
+        "accreditation_time": 2880,
+        "additional_info_needed": [
+            "cardholder_name",
+            "issuer_id"
+        ],
+        "id": "master",
+        "name": "Mastercard",
+        "payment_type_id": "credit_card",
+        "settings": [
+            {
+                "bin": {
+                    "exclusion_pattern": null,
+                    "installments_pattern": "^(5|(2(221|222|223|224|225|226|227|228|229|23|24|25|26|27|28|29|3|4|5|6|70|71|720)))",
+                    "pattern": "^(5|(2(221|222|223|224|225|226|227|228|229|23|24|25|26|27|28|29|3|4|5|6|70|71|720)))"
+                },
+                "card_number": {
+                    "length": 16,
+                    "validation": "standard"
+                },
+                "security_code": {
+                    "card_location": "back",
+                    "length": 3,
+                    "mode": "mandatory"
+                }
+            }
+        ]
+    }
+]

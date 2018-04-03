@@ -1,0 +1,29 @@
+{
+  "groups": [
+    {
+      "children": null,
+      "children_header": null,
+      "comment": "Se acreditará al instante.",
+      "description": "",
+      "id": "rapipago",
+      "show_icon": true,
+      "type": "payment_method"
+    }
+  ],
+  "payment_methods": [
+    {
+      "id": "rapipago",
+      "name": "Rapipago",
+      "payment_type_id": "ticket",
+      "status": "active",
+      "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/rapipago.gif",
+      "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/rapipago.gif",
+      "deferred_capture": "does_not_apply",
+      "settings": [],
+      "additional_info_needed": [],
+      "min_allowed_amount": 0.01,
+      "max_allowed_amount": 60000,
+      "accreditation_time": 0
+    }
+  ]
+}
