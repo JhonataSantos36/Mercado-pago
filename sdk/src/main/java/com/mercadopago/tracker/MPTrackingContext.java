@@ -37,7 +37,7 @@ public class MPTrackingContext {
         return new AppInformation.Builder()
                 .setVersion(version)
                 .setPlatform("/mobile/android")
-                .setEnvironment(Settings.trackingEnvironment)
+                .setEnvironment(Settings.getTrackingEnvironment())
                 .build();
     }
 
