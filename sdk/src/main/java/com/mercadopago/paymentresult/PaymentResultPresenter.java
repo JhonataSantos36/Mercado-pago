@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.components.Action;
 import com.mercadopago.components.ActionsListener;
-import com.mercadopago.components.ChangePaymentMethodAction;
+import com.mercadopago.review_and_confirm.components.actions.ChangePaymentMethodAction;
 import com.mercadopago.components.LinkAction;
 import com.mercadopago.components.NextAction;
 import com.mercadopago.components.RecoverPaymentAction;
@@ -37,7 +37,7 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
     private Site site;
     private BigDecimal amount;
     private ServicePreference servicePreference;
-    private PaymentResultNavigator navigator;
+    private final PaymentResultNavigator navigator;
     private FailureRecovery failureRecovery;
     private boolean initialized = false;
 
@@ -97,14 +97,14 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
         ScreenViewEvent.Builder builder = new ScreenViewEvent.Builder()
                 .setScreenId(getScreenId())
                 .setScreenName(getScreenName())
-                .addMetaData(TrackingUtil.METADATA_PAYMENT_IS_EXPRESS, TrackingUtil.IS_EXPRESS_DEFAULT_VALUE)
-                .addMetaData(TrackingUtil.METADATA_PAYMENT_TYPE_ID, paymentResult.getPaymentData().getPaymentMethod().getPaymentTypeId())
-                .addMetaData(TrackingUtil.METADATA_PAYMENT_METHOD_ID, paymentResult.getPaymentData().getPaymentMethod().getId())
-                .addMetaData(TrackingUtil.METADATA_PAYMENT_STATUS, paymentResult.getPaymentStatus())
-                .addMetaData(TrackingUtil.METADATA_PAYMENT_STATUS_DETAIL, paymentResult.getPaymentStatusDetail())
-                .addMetaData(TrackingUtil.METADATA_PAYMENT_ID, String.valueOf(paymentResult.getPaymentId()));
+                .addProperty(TrackingUtil.PROPERTY_PAYMENT_IS_EXPRESS, TrackingUtil.IS_EXPRESS_DEFAULT_VALUE)
+                .addProperty(TrackingUtil.PROPERTY_PAYMENT_TYPE_ID, paymentResult.getPaymentData().getPaymentMethod().getPaymentTypeId())
+                .addProperty(TrackingUtil.PROPERTY_PAYMENT_METHOD_ID, paymentResult.getPaymentData().getPaymentMethod().getId())
+                .addProperty(TrackingUtil.PROPERTY_PAYMENT_STATUS, paymentResult.getPaymentStatus())
+                .addProperty(TrackingUtil.PROPERTY_PAYMENT_STATUS_DETAIL, paymentResult.getPaymentStatusDetail())
+                .addProperty(TrackingUtil.PROPERTY_PAYMENT_ID, String.valueOf(paymentResult.getPaymentId()));
         if (paymentResult.getPaymentData().getIssuer() != null && paymentResult.getPaymentData().getIssuer().getId() != null) {
-            builder.addMetaData(TrackingUtil.METADATA_ISSUER_ID, String.valueOf(paymentResult.getPaymentData().getIssuer().getId()));
+            builder.addProperty(TrackingUtil.PROPERTY_ISSUER_ID, String.valueOf(paymentResult.getPaymentData().getIssuer().getId()));
         }
         if (navigator != null) {
             navigator.trackScreen(builder.build());

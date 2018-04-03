@@ -17,7 +17,7 @@ import java.util.List;
  */
 
 public class PaymentMethodsProviderImpl implements PaymentMethodsProvider {
-    private MercadoPagoServicesAdapter mercadoPago;
+    private final MercadoPagoServicesAdapter mercadoPago;
 
     public PaymentMethodsProviderImpl(Context context, String publicKey) throws IllegalStateException {
         if (publicKey == null) {

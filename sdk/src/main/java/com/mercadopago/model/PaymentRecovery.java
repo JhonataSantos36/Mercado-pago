@@ -1,11 +1,11 @@
 package com.mercadopago.model;
 
 public class PaymentRecovery {
-    private Token mToken;
-    private String mStatusDetail;
-    private PaymentMethod mPaymentMethod;
-    private PayerCost mPayerCost;
-    private Issuer mIssuer;
+    private final Token mToken;
+    private final String mStatusDetail;
+    private final PaymentMethod mPaymentMethod;
+    private final PayerCost mPayerCost;
+    private final Issuer mIssuer;
 
     public PaymentRecovery(Token token,
                            PaymentMethod paymentMethod,

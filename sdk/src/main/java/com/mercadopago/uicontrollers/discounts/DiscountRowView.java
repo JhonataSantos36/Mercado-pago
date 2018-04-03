@@ -26,14 +26,14 @@ import static com.mercadopago.util.TextUtil.isEmpty;
 public class DiscountRowView implements DiscountView {
 
     //Local vars
-    private String mCurrencyId;
-    private BigDecimal mTransactionAmount;
-    private Context mContext;
-    private Discount mDiscount;
-    private Boolean mShortRowEnabled;
-    private Boolean mDiscountEnabled;
-    private Boolean mShowArrow;
-    private Boolean mShowSeparator;
+    private final String mCurrencyId;
+    private final BigDecimal mTransactionAmount;
+    private final Context mContext;
+    private final Discount mDiscount;
+    private final Boolean mShortRowEnabled;
+    private final Boolean mDiscountEnabled;
+    private final Boolean mShowArrow;
+    private final Boolean mShowSeparator;
 
     //Views
     private View mView;
@@ -205,15 +205,15 @@ public class DiscountRowView implements DiscountView {
 
     @Override
     public void initializeControls() {
-        mHighDiscountRow = (LinearLayout) mView.findViewById(R.id.mpsdkDiscountRow);
-        mTotalAmountTextView = (MPTextView) mView.findViewById(R.id.mpsdkTotalAmount);
-        mDiscountAmountTextView = (MPTextView) mView.findViewById(R.id.mpsdkDiscountAmount);
-        mDiscountOffTextView = (MPTextView) mView.findViewById(R.id.mpsdkDiscountOff);
-        mDiscountConcept = (MPTextView) mView.findViewById(R.id.mpsdkDiscountConcept);
-        mHasDiscountLinearLayout = (LinearLayout) mView.findViewById(R.id.mpsdkHasDiscount);
-        mHasDirectDiscountLinearLayout = (LinearLayout) mView.findViewById(R.id.mpsdkHasDirectDiscount);
-        mDiscountDetail = (LinearLayout) mView.findViewById(R.id.mpsdkDiscountDetail);
-        mDiscountArrow = (ImageView) mView.findViewById(R.id.mpsdkDiscountArrow);
+        mHighDiscountRow = mView.findViewById(R.id.mpsdkDiscountRow);
+        mTotalAmountTextView = mView.findViewById(R.id.mpsdkTotalAmount);
+        mDiscountAmountTextView = mView.findViewById(R.id.mpsdkDiscountAmount);
+        mDiscountOffTextView = mView.findViewById(R.id.mpsdkDiscountOff);
+        mDiscountConcept = mView.findViewById(R.id.mpsdkDiscountConcept);
+        mHasDiscountLinearLayout = mView.findViewById(R.id.mpsdkHasDiscount);
+        mHasDirectDiscountLinearLayout = mView.findViewById(R.id.mpsdkHasDirectDiscount);
+        mDiscountDetail = mView.findViewById(R.id.mpsdkDiscountDetail);
+        mDiscountArrow = mView.findViewById(R.id.mpsdkDiscountArrow);
         mDiscountSeparator = mView.findViewById(R.id.mpsdkDiscountSeparator);
     }
 

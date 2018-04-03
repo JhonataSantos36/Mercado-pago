@@ -26,18 +26,18 @@ public class CardVaultProviderImpl implements CardVaultProvider {
 
     private final Context context;
     private final MercadoPagoServicesAdapter mercadoPago;
-    private MercadoPagoESC mercadoPagoESC;
+    private final MercadoPagoESC mercadoPagoESC;
 
     public CardVaultProviderImpl(Context context, String publicKey, String privateKey, boolean escEnabled) {
         this.context = context;
 
-        this.mercadoPago = new MercadoPagoServicesAdapter.Builder()
+        mercadoPago = new MercadoPagoServicesAdapter.Builder()
                 .setContext(context)
                 .setPublicKey(publicKey)
                 .setPrivateKey(privateKey)
                 .build();
 
-        this.mercadoPagoESC = new MercadoPagoESCImpl(context, escEnabled);
+        mercadoPagoESC = new MercadoPagoESCImpl(context, escEnabled);
     }
 
     @Override

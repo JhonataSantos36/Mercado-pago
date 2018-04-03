@@ -16,7 +16,7 @@ public class CallbackHolder {
 
     private PaymentCallback paymentCallback;
     private PaymentDataCallback paymentDataCallback;
-    private HashMap<String, PaymentResultCallback> paymentResultCallbacks = new HashMap<>();
+    private final HashMap<String, PaymentResultCallback> paymentResultCallbacks = new HashMap<>();
 
     protected CallbackHolder() {
 

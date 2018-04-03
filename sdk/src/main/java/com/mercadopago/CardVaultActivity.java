@@ -168,7 +168,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
 
         Site site = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("site"), Site.class);
         Card card = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("card"), Card.class);
-        PaymentRecovery paymentRecovery = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentRecovery"), PaymentRecovery.class);
+        PaymentRecovery paymentRecovery = JsonUtil.getInstance().fromJson(getIntent().getStringExtra("paymentRecovery"), PaymentRecovery.class);
         BigDecimal amountValue = null;
         String amount = getIntent().getStringExtra("amount");
         String payerEmail = getIntent().getStringExtra("payerEmail");
@@ -188,7 +188,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
         try {
             Type listType = new TypeToken<List<PaymentMethod>>() {
             }.getType();
-            paymentMethods = JsonUtil.getInstance().getGson().fromJson(this.getIntent().getStringExtra("paymentMethodList"), listType);
+            paymentMethods = JsonUtil.getInstance().getGson().fromJson(getIntent().getStringExtra("paymentMethodList"), listType);
         } catch (Exception ex) {
             paymentMethods = null;
         }
@@ -280,6 +280,7 @@ public class CardVaultActivity extends AppCompatActivity implements CardVaultVie
     private void startGuessingCardActivity() {
         final Activity context = this;
         runOnUiThread(new Runnable() {
+            @Override
             public void run() {
                 new MercadoPagoComponents.Activities.GuessingCardActivityBuilder()
                         .setActivity(context)

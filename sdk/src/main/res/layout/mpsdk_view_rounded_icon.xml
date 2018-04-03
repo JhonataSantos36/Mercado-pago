@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/mpsdk_m_height"
+    android:layout_height="@dimen/mpsdk_m_height"
+    android:background="@drawable/mpsdk_light_grey_circle">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:padding="@dimen/mpsdk_xxs_margin"
+        tools:src="@drawable/mpsdk_rapipago" />
+
+</FrameLayout>

@@ -56,7 +56,7 @@ public class InstallmentsPresenter extends MvpPresenter<InstallmentsActivityView
     }
 
     private void showSiteRelatedInformation() {
-        if (InstallmentsUtil.shouldWarnAboutBankInterests(mSite)) {
+        if (mSite != null && InstallmentsUtil.shouldWarnAboutBankInterests(mSite.getId())) {
             getView().warnAboutBankInterests();
         }
     }
@@ -125,11 +125,11 @@ public class InstallmentsPresenter extends MvpPresenter<InstallmentsActivityView
     }
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.mPaymentMethod = paymentMethod;
+        mPaymentMethod = paymentMethod;
     }
 
     public void setCardInfo(CardInfo cardInfo) {
-        this.mCardInfo = cardInfo;
+        mCardInfo = cardInfo;
         if (mCardInfo != null) {
             mBin = mCardInfo.getFirstSixDigits();
         }
@@ -140,9 +140,9 @@ public class InstallmentsPresenter extends MvpPresenter<InstallmentsActivityView
     }
 
     public void setIssuer(Issuer issuer) {
-        this.mIssuer = issuer;
+        mIssuer = issuer;
         if (mIssuer != null) {
-            this.mIssuerId = mIssuer.getId();
+            mIssuerId = mIssuer.getId();
         }
     }
 
@@ -151,19 +151,19 @@ public class InstallmentsPresenter extends MvpPresenter<InstallmentsActivityView
     }
 
     public void setAmount(BigDecimal amount) {
-        this.mAmount = amount;
+        mAmount = amount;
     }
 
     public void setPayerCosts(List<PayerCost> payerCosts) {
-        this.mPayerCosts = payerCosts;
+        mPayerCosts = payerCosts;
     }
 
     public void setPaymentPreference(PaymentPreference paymentPreference) {
-        this.mPaymentPreference = paymentPreference;
+        mPaymentPreference = paymentPreference;
     }
 
     public void setFailureRecovery(FailureRecovery failureRecovery) {
-        this.mFailureRecovery = failureRecovery;
+        mFailureRecovery = failureRecovery;
     }
 
     public FailureRecovery getFailureRecovery() {
@@ -171,7 +171,7 @@ public class InstallmentsPresenter extends MvpPresenter<InstallmentsActivityView
     }
 
     public PaymentMethod getPaymentMethod() {
-        return this.mPaymentMethod;
+        return mPaymentMethod;
     }
 
     public BigDecimal getAmount() {
@@ -225,15 +225,15 @@ public class InstallmentsPresenter extends MvpPresenter<InstallmentsActivityView
     }
 
     public void setPayerEmail(String payerEmail) {
-        this.mPayerEmail = payerEmail;
+        mPayerEmail = payerEmail;
     }
 
     public Discount getDiscount() {
-        return this.mDiscount;
+        return mDiscount;
     }
 
     public void setDiscount(Discount discount) {
-        this.mDiscount = discount;
+        mDiscount = discount;
     }
 
     public String getPayerEmail() {
@@ -241,19 +241,19 @@ public class InstallmentsPresenter extends MvpPresenter<InstallmentsActivityView
     }
 
     public void setDiscountEnabled(Boolean discountEnabled) {
-        this.mDiscountEnabled = discountEnabled;
+        mDiscountEnabled = discountEnabled;
     }
 
     public Boolean getDiscountEnabled() {
-        return this.mDiscountEnabled;
+        return mDiscountEnabled;
     }
 
     public void setInstallmentsReviewEnabled(Boolean installmentReviewEnabled) {
-        this.mInstallmentsReviewEnabled = installmentReviewEnabled;
+        mInstallmentsReviewEnabled = installmentReviewEnabled;
     }
 
     public void setDirectDiscountEnabled(Boolean directDiscountEnabled) {
-        this.mDirectDiscountEnabled = directDiscountEnabled;
+        mDirectDiscountEnabled = directDiscountEnabled;
     }
 
     public Boolean getDirectDiscountEnabled() {
@@ -275,11 +275,11 @@ public class InstallmentsPresenter extends MvpPresenter<InstallmentsActivityView
     }
 
     public void setSite(Site site) {
-        this.mSite = site;
+        mSite = site;
     }
 
     public Site getSite() {
-        return this.mSite;
+        return mSite;
     }
 
     public void onItemSelected(int position) {

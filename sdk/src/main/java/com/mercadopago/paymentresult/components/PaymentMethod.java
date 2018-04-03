@@ -9,64 +9,55 @@ import com.mercadopago.paymentresult.PaymentMethodProvider;
 import com.mercadopago.paymentresult.props.PaymentMethodProps;
 import com.mercadopago.paymentresult.props.TotalAmountProps;
 
+import java.util.Locale;
+
 public class PaymentMethod extends Component<PaymentMethodProps, Void> {
 
-    private PaymentMethodProvider provider;
+    private final PaymentMethodProvider provider;
 
     public PaymentMethod(@NonNull final PaymentMethodProps props,
                          @NonNull final ActionDispatcher dispatcher,
                          @NonNull final PaymentMethodProvider provider) {
         super(props, dispatcher);
-
         this.provider = provider;
     }
 
-    public int getIconResource() {
+    int getIconResource() {
         return provider.getIconResource(props.paymentMethod);
     }
 
     public String getDescription() {
-        String description = "";
-
-        if (isCardPaymentMethod() && isTokenValid()) {
-            description = props.paymentMethod.getName() + " " + provider.getLastDigitsText() + " " + props.token.getLastFourDigits();
-        } else if (isAccountMoneyPaymentMethod()) {
-            description = provider.getAccountMoneyText();
-        } else if (props.paymentMethod != null) {
-            description = props.paymentMethod.getName();
+        if (props.paymentMethod != null) {
+            if (isValidCreditCard()) {
+                return formatCreditCardTitle();
+            } else if (PaymentTypes.isAccountMoney(props.paymentMethod.getPaymentTypeId())) {
+                return provider.getAccountMoneyText();
+            } else {
+                return props.paymentMethod.getName();
+            }
+        } else {
+            return "";
         }
+    }
 
-        return description;
+    private String formatCreditCardTitle() {
+        return String.format(Locale.getDefault(), "%s %s %s",
+                props.paymentMethod.getName(),
+                provider.getLastDigitsText(),
+                props.token.getLastFourDigits());
+    }
+
+    private boolean isValidCreditCard() {
+        return PaymentTypes.isCardPaymentMethod(props.paymentMethod.getPaymentTypeId())
+                && props.token != null
+                && props.token.isTokenValid();
     }
 
     public String getDisclaimer() {
-        String disclaimer = "";
-
-        if (isCardPaymentMethod()) {
-            disclaimer = provider.getDisclaimer(props.disclaimer);
-        }
-
-        return disclaimer;
+        return isValidCreditCard() ? provider.getDisclaimer(props.disclaimer) : "";
     }
 
-    private boolean isCardPaymentMethod() {
-        return props.paymentMethod != null && props.paymentMethod.getPaymentTypeId() != null &&
-                (props.paymentMethod.getPaymentTypeId().equals(PaymentTypes.CREDIT_CARD) ||
-                        props.paymentMethod.getPaymentTypeId().equals(PaymentTypes.DEBIT_CARD) ||
-                        props.paymentMethod.getPaymentTypeId().equals(PaymentTypes.PREPAID_CARD));
-    }
-
-    private boolean isTokenValid() {
-        return props.token != null && props.token.getLastFourDigits()
-                != null && !props.token.getLastFourDigits().isEmpty();
-    }
-
-    private boolean isAccountMoneyPaymentMethod() {
-        return props.paymentMethod != null && props.paymentMethod.getPaymentTypeId() != null &&
-                props.paymentMethod.getPaymentTypeId().equals(PaymentTypes.ACCOUNT_MONEY);
-    }
-
-    public TotalAmount getTotalAmountComponent() {
+    TotalAmount getTotalAmountComponent() {
         final TotalAmountProps totalAmountProps = new TotalAmountProps(
                 props.amountFormatter,
                 props.payerCost,

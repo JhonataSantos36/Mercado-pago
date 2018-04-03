@@ -9,4 +9,34 @@
     <color name="button_disabled">#CCCCCC</color>
     <color name="myPrimaryColor">#30cc28</color>
     <color name="examples_green">#5bcc55</color>
+
+    <!-- Customized colors -->
+    <!--
+    <color name="mpsdk_background">#FFEA78</color>
+    <color name="mpsdk_discount_summary_background">#FFDB15</color>
+    <color name="mpsdk_toolbar_text">#333333</color>
+    <color name="mpsdk_status_bar">#FFDB15</color>
+    <color name="mpsdk_modal_status_bar">#FFDB15</color>
+    <color name="mpsdk_input">#3483FA</color>
+    <color name="mpsdk_summary_text_color">#333333</color>
+    <color name="mpsdk_summary_discount_color">#39B54A</color>
+    <color name="mpsdk_summary_separator_color">#33000000</color>
+    <color name="mpsdk_review_background">#FFEA78</color>
+    <color name="mpsdk_review_toolbar_text">#333333</color>
+    <color name="mpsdk_review_component_background">#FFFFFF</color>
+    <color name="mpsdk_green_payment_result_background">#64C574</color>
+    <color name="mpsdk_red_payment_result_background">#F96061</color>
+    <color name="mpsdk_orange_payment_result_background">#FBAB60</color>
+    <color name="mpsdk_loading">#3483FA</color>
+    <color name="mpsdk_background_loading">#FFEA78</color>
+    <color name="mpsdk_color_payer_costs_no_rate">#39B54A</color>
+
+    <color name="mpsdk_review_payment_method_background">#39B54A</color>
+    <color name="mpsdk_review_summary_background">#F96061</color>
+    <color name="mpsdk_review_item_background">#3483FA</color>
+
+    <color name="mpsdk_link">#FF00FF</color>
+    <color name="mpsdk_button">#00FFFF</color>
+    -->
+
 </resources>

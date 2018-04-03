@@ -5,7 +5,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
 
-import com.mercadopago.examples.R;
+import com.mercadopago.example.R;
 import com.mercadopago.testCheckout.CheckoutResource;
 import com.mercadopago.testCheckout.flows.CheckoutTestFlow;
 import com.mercadopago.testCheckout.input.Card;
@@ -34,17 +34,13 @@ public class ExampleTest {
     public HttpResource httpResource = new CheckoutResource();
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityRule =
-            new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<CheckoutExampleActivity> mActivityRule =
+            new ActivityTestRule<>(CheckoutExampleActivity.class);
 
     @Before
     public void setUp() {
         //Go to checkout.
-        Matcher<View> ourCho = withId(R.id.startButton);
         Matcher<View> startCho = withId(R.id.continueButton);
-
-        onView(ourCho).check(matches(isDisplayed()));
-        onView(ourCho).perform(click());
         onView(startCho).check(matches(isDisplayed()));
         onView(startCho).perform(click());
     }

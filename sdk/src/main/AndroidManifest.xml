@@ -65,9 +65,6 @@
             android:name=".DiscountsActivity"
             android:theme="@style/Theme.MercadoPagoTheme.Modal"/>
         <activity
-            android:name=".ReviewAndConfirmActivity"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
-        <activity
             android:name=".ReviewPaymentMethodsActivity"
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
         <activity
@@ -84,7 +81,10 @@
             android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
         <activity
             android:name=".plugins.BusinessPaymentResultActivity"
-            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar"/>
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
+        <activity
+            android:name=".review_and_confirm.ReviewAndConfirmActivity"
+            android:theme="@style/Theme.MercadoPagoTheme.NoActionBar" />
     </application>
 
 </manifest>

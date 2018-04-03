@@ -25,15 +25,15 @@ public class HeaderProps {
     public final HeaderTitleFormatter amountFormat;
 
     private HeaderProps(@NonNull final Builder builder) {
-        this.height = builder.height;
-        this.background = builder.background;
-        this.statusBarColor = builder.statusBarColor;
-        this.iconImage = builder.iconImage;
-        this.iconUrl = builder.iconUrl;
-        this.badgeImage = builder.badgeImage;
-        this.title = builder.title;
-        this.label = builder.label;
-        this.amountFormat = builder.amountFormat;
+        height = builder.height;
+        background = builder.background;
+        statusBarColor = builder.statusBarColor;
+        iconImage = builder.iconImage;
+        iconUrl = builder.iconUrl;
+        badgeImage = builder.badgeImage;
+        title = builder.title;
+        label = builder.label;
+        amountFormat = builder.amountFormat;
     }
 
     public static HeaderProps from(@NonNull BusinessPayment businessPayment, @NonNull Context context) {
@@ -51,15 +51,15 @@ public class HeaderProps {
 
     public Builder toBuilder() {
         return new Builder()
-                .setHeight(this.height)
-                .setBackground(this.background)
-                .setStatusBarColor(this.statusBarColor)
-                .setIconImage(this.iconImage)
-                .setIconUrl(this.iconUrl)
-                .setBadgeImage(this.badgeImage)
-                .setTitle(this.title)
-                .setLabel(this.label)
-                .setAmountFormat(this.amountFormat);
+                .setHeight(height)
+                .setBackground(background)
+                .setStatusBarColor(statusBarColor)
+                .setIconImage(iconImage)
+                .setIconUrl(iconUrl)
+                .setBadgeImage(badgeImage)
+                .setTitle(title)
+                .setLabel(label)
+                .setAmountFormat(amountFormat);
     }
 
     public static class Builder {

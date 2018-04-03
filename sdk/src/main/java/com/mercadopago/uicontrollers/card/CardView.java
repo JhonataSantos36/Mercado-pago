@@ -21,15 +21,15 @@ public class CardView {
     public static final String CARD_SIDE_FRONT = "front";
     public static final String CARD_SIDE_BACK = "back";
 
-    private Context mContext;
+    private final Context mContext;
     private String mSize;
     private View mView;
 
     private FrameLayout mCardFrontContainer;
     private FrameLayout mCardBackContainer;
 
-    private FrontCardView mFrontCardView;
-    private BackCardView mBackCardView;
+    private final FrontCardView mFrontCardView;
+    private final BackCardView mBackCardView;
 
     private String mCardSideState;
 
@@ -41,14 +41,14 @@ public class CardView {
 
 
     public CardView(Context context) {
-        this.mContext = context;
-        this.mFrontCardView = new FrontCardView(mContext, CardRepresentationModes.EDIT_FRONT);
-        this.mBackCardView = new BackCardView(mContext);
+        mContext = context;
+        mFrontCardView = new FrontCardView(mContext, CardRepresentationModes.EDIT_FRONT);
+        mBackCardView = new BackCardView(mContext);
     }
 
 
     public void setSize(String size) {
-        this.mSize = size;
+        mSize = size;
         if (mSize == null) {
             mSize = CardRepresentationModes.EXTRA_BIG_SIZE;
         }
@@ -63,8 +63,8 @@ public class CardView {
     }
 
     public void initializeControls() {
-        mCardFrontContainer = (FrameLayout) mView.findViewById(R.id.mpsdkCardFrontContainerView);
-        mCardBackContainer = (FrameLayout) mView.findViewById(R.id.mpsdkCardBackContainerView);
+        mCardFrontContainer = mView.findViewById(R.id.mpsdkCardFrontContainerView);
+        mCardBackContainer = mView.findViewById(R.id.mpsdkCardBackContainerView);
         if (mSize == null) {
             mSize = CardRepresentationModes.EXTRA_BIG_SIZE;
         }
@@ -96,18 +96,18 @@ public class CardView {
     }
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
-        this.mPaymentMethod = paymentMethod;
+        mPaymentMethod = paymentMethod;
         mFrontCardView.setPaymentMethod(paymentMethod);
         mBackCardView.setPaymentMethod(paymentMethod);
     }
 
     public void setCardNumberLength(int cardNumberLength) {
-        this.mCardNumberLength = cardNumberLength;
+        mCardNumberLength = cardNumberLength;
         mFrontCardView.setCardNumberLength(cardNumberLength);
     }
 
     public void setSecurityCodeLength(int securityCodeLength) {
-        this.mSecurityCodeLength = securityCodeLength;
+        mSecurityCodeLength = securityCodeLength;
         if (mSecurityCodeLocation == null || mSecurityCodeLocation.equals(CARD_SIDE_BACK)) {
             mBackCardView.setSecurityCodeLength(securityCodeLength);
         } else {
@@ -116,7 +116,7 @@ public class CardView {
     }
 
     public void setSecurityCodeLocation(String location) {
-        this.mSecurityCodeLocation = location;
+        mSecurityCodeLocation = location;
     }
 
     public void updateCardNumberMask(String cardNumber) {

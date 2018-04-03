@@ -10,8 +10,8 @@ import com.mercadopago.components.CustomComponent;
 
 public interface CustomComponentFactory {
 
-    final String POSIION_TOP = "position_up";
-    final String POSIION_BOTTOM = "position_down";
+    String POSIION_TOP = "position_up";
+    String POSIION_BOTTOM = "position_down";
 
     @NonNull CustomComponent create(@NonNull final CustomComponent.Props props);
 

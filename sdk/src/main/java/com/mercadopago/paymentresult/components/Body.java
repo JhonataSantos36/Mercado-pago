@@ -18,7 +18,7 @@ import com.mercadopago.paymentresult.props.ReceiptProps;
 
 public class Body extends Component<PaymentResultBodyProps, Void> {
 
-    private PaymentMethodProvider paymentMethodProvider;
+    private final PaymentMethodProvider paymentMethodProvider;
     public PaymentResultProvider paymentResultProvider;
 
     public Body(@NonNull final PaymentResultBodyProps props,
@@ -107,7 +107,7 @@ public class Body extends Component<PaymentResultBodyProps, Void> {
     }
 
     private boolean isStatusApproved() {
-        return props.status != null && props.status.equals(Payment.StatusCodes.STATUS_APPROVED);
+        return Payment.StatusCodes.STATUS_APPROVED.equals(props.status);
     }
 
     public BodyError getBodyErrorComponent() {

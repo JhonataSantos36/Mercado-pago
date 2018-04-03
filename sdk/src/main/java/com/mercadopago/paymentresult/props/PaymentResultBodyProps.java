@@ -23,26 +23,26 @@ public class PaymentResultBodyProps {
     public final BodyAmountFormatter bodyAmountFormatter;
 
     public PaymentResultBodyProps(@NonNull final Builder builder) {
-        this.status = builder.status;
-        this.statusDetail = builder.statusDetail;
-        this.instruction = builder.instruction;
-        this.paymentData = builder.paymentData;
-        this.disclaimer = builder.disclaimer;
-        this.processingMode = builder.processingMode;
-        this.paymentId = builder.paymentId;
-        this.bodyAmountFormatter = builder.bodyAmountFormatter;
+        status = builder.status;
+        statusDetail = builder.statusDetail;
+        instruction = builder.instruction;
+        paymentData = builder.paymentData;
+        disclaimer = builder.disclaimer;
+        processingMode = builder.processingMode;
+        paymentId = builder.paymentId;
+        bodyAmountFormatter = builder.bodyAmountFormatter;
     }
 
     public Builder toBuilder() {
         return new Builder()
-                .setStatus(this.status)
-                .setStatusDetail(this.statusDetail)
-                .setInstruction(this.instruction)
-                .setPaymentData(this.paymentData)
-                .setDisclaimer(this.disclaimer)
-                .setProcessingMode(this.processingMode)
-                .setPaymentId(this.paymentId)
-                .setBodyAmountFormatter(this.bodyAmountFormatter);
+                .setStatus(status)
+                .setStatusDetail(statusDetail)
+                .setInstruction(instruction)
+                .setPaymentData(paymentData)
+                .setDisclaimer(disclaimer)
+                .setProcessingMode(processingMode)
+                .setPaymentId(paymentId)
+                .setBodyAmountFormatter(bodyAmountFormatter);
     }
 
     public boolean isReceiptEnabled() {

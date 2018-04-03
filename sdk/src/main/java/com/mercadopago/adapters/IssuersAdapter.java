@@ -17,12 +17,12 @@ import java.util.List;
 
 public class IssuersAdapter extends RecyclerView.Adapter<IssuersAdapter.ViewHolder> {
 
-    private List<Issuer> mIssuers;
-    private OnSelectedCallback<Integer> mCallback;
+    private final List<Issuer> mIssuers;
+    private final OnSelectedCallback<Integer> mCallback;
 
     public IssuersAdapter(OnSelectedCallback<Integer> callback) {
-        this.mIssuers = new ArrayList<>();
-        this.mCallback = callback;
+        mIssuers = new ArrayList<>();
+        mCallback = callback;
     }
 
     public void addResults(List<Issuer> list) {

@@ -209,6 +209,7 @@
     <string name="mpsdk_zero_rate">Interest free</string>
     <string name="mpsdk_exit_label">Exit</string>
     <string name="mpsdk_cancel_payment">Cancel payment</string>
+    <string name="mpsdk_cancel">Cancel</string>
     <string name="mpsdk_input_button_back">Previous</string>
     <string name="mpsdk_input_button_next">Continue</string>
     <string name="mpsdk_hour">hour</string>
@@ -238,6 +239,7 @@
     <string name="mpsdk_review_off_text_6">You will pay %1$s at\n%2$s</string>
     <string name="mpsdk_homebanking">Home Banking of</string>
     <string name="mpsdk_review_summary_total">Total</string>
+    <string name="mpsdk_review_item_quantity">Quantity:</string>
     <string name="mpsdk_review_product_quantity">Quantity: %1$s</string>
     <string name="mpsdk_review_summary_subtotal">Subtotal</string>
     <string name="mpsdk_review_summary_pay">You will pay</string>

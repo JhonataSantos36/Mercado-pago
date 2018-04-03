@@ -50,9 +50,9 @@ public abstract class PaymentMethodOnView implements PaymentMethodViewController
 
     @Override
     public void initializeControls() {
-        mDescription = (MPTextView) mView.findViewById(R.id.mpsdkDescription);
-        mIcon = (ImageView) mView.findViewById(R.id.mpsdkImage);
-        mEditHint = (ImageView) mView.findViewById(R.id.mpsdkEditHint);
+        mDescription = mView.findViewById(R.id.mpsdkDescription);
+        mIcon = mView.findViewById(R.id.mpsdkImage);
+        mEditHint = mView.findViewById(R.id.mpsdkEditHint);
         mSeparator = mView.findViewById(R.id.mpsdkSeparator);
     }
 

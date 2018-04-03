@@ -15,12 +15,12 @@ public class ReceiptProps {
     }
 
     public ReceiptProps(@NonNull final Builder builder) {
-        this.receiptId = builder.receiptId;
+        receiptId = builder.receiptId;
     }
 
     public Builder toBuilder() {
         return new Builder()
-                .setReceiptId(this.receiptId);
+                .setReceiptId(receiptId);
     }
 
     public static class Builder {

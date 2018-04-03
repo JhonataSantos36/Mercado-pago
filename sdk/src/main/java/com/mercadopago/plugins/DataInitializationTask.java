@@ -14,9 +14,9 @@ public abstract class DataInitializationTask {
     private Thread taskThread;
 
     public DataInitializationTask(@NonNull final Map<String, Object> defaultData) {
-        this.data = CheckoutStore.getInstance().getData();
-        this.data.clear();
-        this.data.putAll(defaultData);
+        data = CheckoutStore.getInstance().getData();
+        data.clear();
+        data.putAll(defaultData);
     }
 
     public void execute(final DataInitializationCallbacks callbacks) {

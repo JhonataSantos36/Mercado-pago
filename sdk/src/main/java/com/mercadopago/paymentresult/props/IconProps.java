@@ -19,9 +19,9 @@ public class IconProps {
     }
 
     public IconProps(@NonNull final Builder builder) {
-        this.iconImage = builder.iconImage;
-        this.iconUrl = builder.iconUrl;
-        this.badgeImage = builder.badgeImage;
+        iconImage = builder.iconImage;
+        iconUrl = builder.iconUrl;
+        badgeImage = builder.badgeImage;
     }
 
     public Builder toBuilder() {

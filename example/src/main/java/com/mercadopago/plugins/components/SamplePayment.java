@@ -11,11 +11,11 @@ import com.mercadopago.plugins.model.GenericPayment;
 
 public class SamplePayment extends PluginComponent<Void> {
 
-    private final Handler handler = new Handler();
-
     static {
         RendererFactory.register(SamplePayment.class, SamplePaymentRenderer.class);
     }
+
+    private final Handler handler = new Handler();
 
     public SamplePayment(@NonNull final Props props) {
         super(props);

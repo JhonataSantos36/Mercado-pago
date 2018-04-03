@@ -192,7 +192,6 @@
     <color name="mpsdk_status_bar">#008CD6</color>
     <color name="mpsdk_modal_status_bar">#404040</color>
     <color name="mpsdk_input">#009CEE</color>
-    <color name="mpsdk_summary_background_color">#FFFFFF</color>
     <color name="mpsdk_summary_text_color">#666666</color>
     <color name="mpsdk_summary_separator_color">#DEDEDE</color>
     <color name="mpsdk_summary_discount_color">#3BC280</color>
@@ -207,4 +206,8 @@
     <color name="mpsdk_loading">#009EE3</color>
     <color name="mpsdk_background_loading">#FFFFFF</color>
     <color name="mpsdk_color_payer_costs_no_rate">#3BC280</color>
+    <!--Review and confirm custom colors-->
+    <color name="mpsdk_review_payment_method_background">@color/mpsdk_light_gray</color>
+    <color name="mpsdk_review_summary_background">@color/mpsdk_white</color>
+    <color name="mpsdk_review_item_background">@color/mpsdk_light_gray</color>
 </resources>

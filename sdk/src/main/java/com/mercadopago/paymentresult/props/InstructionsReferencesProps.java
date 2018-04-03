@@ -21,14 +21,14 @@ public class InstructionsReferencesProps {
     }
 
     public InstructionsReferencesProps(@NonNull final Builder builder) {
-        this.title = builder.title;
-        this.references = builder.references;
+        title = builder.title;
+        references = builder.references;
     }
 
     public Builder toBuilder() {
         return new InstructionsReferencesProps.Builder()
-                .setTitle(this.title)
-                .setReferences(this.references);
+                .setTitle(title)
+                .setReferences(references);
     }
 
     public static class Builder {

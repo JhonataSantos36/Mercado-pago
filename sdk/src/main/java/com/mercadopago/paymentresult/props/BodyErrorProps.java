@@ -13,16 +13,16 @@ public class BodyErrorProps {
     public final String paymentMethodName;
 
     public BodyErrorProps(@NonNull final Builder builder) {
-        this.status = builder.status;
-        this.statusDetail = builder.statusDetail;
-        this.paymentMethodName = builder.paymentMethodName;
+        status = builder.status;
+        statusDetail = builder.statusDetail;
+        paymentMethodName = builder.paymentMethodName;
     }
 
     public Builder toBuilder() {
         return new Builder()
-                .setStatus(this.status)
-                .setStatusDetail(this.statusDetail)
-                .setPaymentMethodName(this.paymentMethodName);
+                .setStatus(status)
+                .setStatusDetail(statusDetail)
+                .setPaymentMethodName(paymentMethodName);
     }
 
     public static class Builder {

@@ -11,7 +11,7 @@ import java.util.Locale;
 
 public class CardToken {
 
-    private final static Calendar now = Calendar.getInstance();
+    private static final Calendar now = Calendar.getInstance();
     public static final int MIN_LENGTH_NUMBER = 10;
     public static final int MAX_LENGTH_NUMBER = 19;
 
@@ -28,12 +28,12 @@ public class CardToken {
         this.expirationMonth = expirationMonth;
         this.expirationYear = normalizeYear(expirationYear);
         this.securityCode = securityCode;
-        this.cardholder = new Cardholder();
-        this.cardholder.setName(cardholderName);
+        cardholder = new Cardholder();
+        cardholder.setName(cardholderName);
         Identification identification = new Identification();
         identification.setNumber(identificationNumber);
         identification.setType(identificationType);
-        this.cardholder.setIdentification(identification);
+        cardholder.setIdentification(identification);
     }
 
     public Cardholder getCardholder() {
@@ -57,7 +57,7 @@ public class CardToken {
     }
 
     public void setDevice(Context context) {
-        this.device = new Device(context);
+        device = new Device(context);
     }
 
     public Integer getExpirationMonth() {
@@ -179,12 +179,12 @@ public class CardToken {
 
     public static boolean validateExpMonth(Integer month) {
 
-        return (month == null) ? false : (month >= 1 && month <= 12);
+        return month != null && (month >= 1 && month <= 12);
     }
 
     public static boolean validateExpYear(Integer year) {
 
-        return (year == null) ? false : !hasYearPassed(year);
+        return year != null && !hasYearPassed(year);
     }
 
     public boolean validateIdentification() {
@@ -192,16 +192,13 @@ public class CardToken {
     }
 
     public boolean validateIdentificationType() {
-        return (cardholder == null) ? false :
-                (cardholder.getIdentification() == null) ? false :
-                        !TextUtils.isEmpty(cardholder.getIdentification().getType());
+        return cardholder != null &&
+            (cardholder.getIdentification() != null && !TextUtils.isEmpty(cardholder.getIdentification().getType()));
     }
 
     public boolean validateIdentificationNumber() {
-        return (cardholder == null) ? false :
-                (cardholder.getIdentification() == null) ? false :
-                        (!validateIdentificationType()) ? false :
-                                !TextUtils.isEmpty(cardholder.getIdentification().getNumber());
+        return cardholder != null && (cardholder.getIdentification() != null &&
+            (validateIdentificationType() && !TextUtils.isEmpty(cardholder.getIdentification().getNumber())));
     }
 
     public boolean validateIdentificationNumber(IdentificationType identificationType) {

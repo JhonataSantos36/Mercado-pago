@@ -31,7 +31,7 @@ public class PaymentMethodSearch {
     }
 
     public boolean hasSearchItems() {
-        return this.groups != null && !this.groups.isEmpty();
+        return groups != null && !groups.isEmpty();
     }
 
     public PaymentMethod getPaymentMethodBySearchItem(PaymentMethodSearchItem item) {
@@ -154,7 +154,7 @@ public class PaymentMethodSearch {
 
     public void setCards(List<Card> cards, String lastFourDigitsText) {
         if (cards != null) {
-            this.customSearchItems = new ArrayList<>();
+            customSearchItems = new ArrayList<>();
             this.cards = new ArrayList<>();
 
             for (Card card : cards) {
@@ -163,7 +163,7 @@ public class PaymentMethodSearch {
                 searchItem.setType(card.getPaymentMethod().getPaymentTypeId());
                 searchItem.setId(card.getId());
                 searchItem.setPaymentMethodId(card.getPaymentMethod().getId());
-                this.customSearchItems.add(searchItem);
+                customSearchItems.add(searchItem);
                 this.cards.add(card);
             }
         }

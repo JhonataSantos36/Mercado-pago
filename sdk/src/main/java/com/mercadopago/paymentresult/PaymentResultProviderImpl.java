@@ -19,7 +19,7 @@ public class PaymentResultProviderImpl implements PaymentResultProvider {
     public PaymentResultProviderImpl(Context context, String publicKey, String privateKey) {
         this.context = context;
 
-        this.mercadoPago = new MercadoPagoServicesAdapter.Builder()
+        mercadoPago = new MercadoPagoServicesAdapter.Builder()
             .setContext(context)
             .setPublicKey(publicKey)
             .setPrivateKey(privateKey)

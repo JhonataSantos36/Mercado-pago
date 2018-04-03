@@ -25,7 +25,7 @@ public class PaymentType {
     }
 
     public PaymentType(String paymentTypeId) {
-        this.id = paymentTypeId;
+        id = paymentTypeId;
     }
 
     public String toString(Context context) {

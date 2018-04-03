@@ -7,24 +7,24 @@ package com.mercadopago.model;
 public class CardInfo {
 
     private Integer cardNumberLength;
-    private String lastFourDigits;
-    private String firstSixDigits;
+    private final String lastFourDigits;
+    private final String firstSixDigits;
 
     public CardInfo(CardToken cardToken) {
-        this.cardNumberLength = cardToken.getCardNumber().length();
-        this.lastFourDigits = cardToken.getCardNumber().substring(cardNumberLength - 4, cardNumberLength);
-        this.firstSixDigits = cardToken.getCardNumber().substring(0, 6);
+        cardNumberLength = cardToken.getCardNumber().length();
+        lastFourDigits = cardToken.getCardNumber().substring(cardNumberLength - 4, cardNumberLength);
+        firstSixDigits = cardToken.getCardNumber().substring(0, 6);
     }
 
     public CardInfo(Token token) {
-        this.cardNumberLength = token.getCardNumberLength();
-        this.lastFourDigits = token.getLastFourDigits();
-        this.firstSixDigits = token.getFirstSixDigits();
+        cardNumberLength = token.getCardNumberLength();
+        lastFourDigits = token.getLastFourDigits();
+        firstSixDigits = token.getFirstSixDigits();
     }
 
     public CardInfo(Card card) {
-        this.lastFourDigits = card.getLastFourDigits();
-        this.firstSixDigits = card.getFirstSixDigits();
+        lastFourDigits = card.getLastFourDigits();
+        firstSixDigits = card.getFirstSixDigits();
     }
 
     public static boolean canCreateCardInfo(Token token) {
