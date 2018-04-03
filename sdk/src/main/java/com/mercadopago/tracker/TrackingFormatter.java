@@ -1,6 +1,7 @@
 package com.mercadopago.tracker;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.model.CustomSearchItem;
@@ -23,17 +24,20 @@ public class TrackingFormatter {
     private static final String ESC_PREFIX = "ESC";
 
 
-    public static String getFormattedPaymentMethodsForTracking(@NonNull PaymentMethodSearch paymentMethodSearch, @NonNull List<PaymentMethodInfo> pluginInfoList, Set<String> escCardIds) {
-        List<PaymentMethod> paymentMethods = paymentMethodSearch.getPaymentMethods();
-        List<CustomSearchItem> customSearchItems = paymentMethodSearch.getCustomSearchItems();
+    public static String getFormattedPaymentMethodsForTracking(@Nullable PaymentMethodSearch paymentMethodSearch, @NonNull List<PaymentMethodInfo> pluginInfoList, Set<String> escCardIds) {
 
         StringBuilder formatted = new StringBuilder(MAX_LENGTH);
 
         externPrefix = "";
-        formatted = formatPaymentMethods(formatted, paymentMethods);
-        formatted = formatSavedCards(formatted, customSearchItems, escCardIds);
-        formatted = formatPaymentMethodPlugins(formatted, pluginInfoList);
 
+        if (paymentMethodSearch != null) {
+            final List<PaymentMethod> paymentMethods = paymentMethodSearch.getPaymentMethods();
+            formatted = formatPaymentMethods(formatted, paymentMethods);
+            final List<CustomSearchItem> customSearchItems = paymentMethodSearch.getCustomSearchItems();
+            formatted = formatSavedCards(formatted, customSearchItems, escCardIds);
+        }
+
+        formatted = formatPaymentMethodPlugins(formatted, pluginInfoList);
 
         return formatted.toString();
     }
@@ -57,20 +61,21 @@ public class TrackingFormatter {
         return formatted;
     }
 
-    private static StringBuilder formatPaymentMethods(@NonNull StringBuilder formatted, @NonNull List<PaymentMethod> paymentMethods) {
-
-        for (PaymentMethod p : paymentMethods) {
-            formatted.append(externPrefix);
-            formatted.append(p.getId());
-            formatted.append(internPrefix);
-            formatted.append(p.getPaymentTypeId());
-            externPrefix = "|";
+    private static StringBuilder formatPaymentMethods(@NonNull StringBuilder formatted, @Nullable List<PaymentMethod> paymentMethods) {
+        if (paymentMethods != null) {
+            for (PaymentMethod p : paymentMethods) {
+                formatted.append(externPrefix);
+                formatted.append(p.getId());
+                formatted.append(internPrefix);
+                formatted.append(p.getPaymentTypeId());
+                externPrefix = "|";
+            }
         }
         return formatted;
     }
 
-    private static StringBuilder formatPaymentMethodPlugins(@NonNull StringBuilder formatted, @NonNull List<PaymentMethodInfo> pluginInfoList) {
-        if (!pluginInfoList.isEmpty()) {
+    private static StringBuilder formatPaymentMethodPlugins(@NonNull StringBuilder formatted, @Nullable List<PaymentMethodInfo> pluginInfoList) {
+        if (pluginInfoList != null) {
             for (PaymentMethodInfo info : pluginInfoList) {
                 formatted.append(externPrefix);
                 formatted.append(info.getId());
