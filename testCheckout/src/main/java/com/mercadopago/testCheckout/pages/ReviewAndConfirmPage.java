@@ -2,7 +2,7 @@ package com.mercadopago.testCheckout.pages;
 
 import android.view.View;
 
-import com.mercadopago.testCheckout.R;
+import com.mercadopago.R;
 
 import org.hamcrest.Matcher;
 
