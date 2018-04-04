@@ -331,6 +331,7 @@ public class Payment {
         public static final String STATUS_DETAIL_CC_REJECTED_BAD_FILLED_SECURITY_CODE = "cc_rejected_bad_filled_security_code";
         public static final String STATUS_DETAIL_CC_REJECTED_BAD_FILLED_DATE = "cc_rejected_bad_filled_date";
         public static final String STATUS_DETAIL_CC_REJECTED_DUPLICATED_PAYMENT = "cc_rejected_duplicated_payment";
+        public static final String STATUS_DETAIL_CC_REJECTED_HIGH_RISK = "cc_rejected_high_risk";
         public static final String STATUS_DETAIL_REJECTED_HIGH_RISK = "rejected_high_risk";
         public static final String STATUS_DETAIL_CC_REJECTED_MAX_ATTEMPTS = "cc_rejected_max_attempts";
         public static final String STATUS_DETAIL_REJECTED_REJECTED_BY_BANK = "rejected_by_bank";
