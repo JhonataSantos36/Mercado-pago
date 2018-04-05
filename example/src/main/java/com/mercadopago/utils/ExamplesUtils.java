@@ -11,6 +11,7 @@ import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoCheckout.Builder;
 import com.mercadopago.example.R;
 import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.Payment;
 import com.mercadopago.plugins.DataInitializationTask;
 import com.mercadopago.plugins.MainPaymentProcessor;
@@ -22,6 +23,7 @@ import com.mercadopago.review_and_confirm.models.ReviewAndConfirmPreferences;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +38,8 @@ public class ExamplesUtils {
     private static final String BUTTON_PRIMARY_NAME = "ButtonPrimaryName";
     private static final String BUTTON_SECONDARY_NAME = "ButtonSecondaryName";
     private static final String RESULT_CODE_MESSAGE = " Result code: ";
-    private static final String DUMMY_PREFERENCE_ID = "243962506-ad5df092-f5a2-4b99-bcc4-7578d6e71849";
+    private static final String DUMMY_PREFERENCE_ID = "243962506-0bb62e22-5c7b-425e-a0a6-c22d0f4758a9";
+    private static final String DUMMY_PREFERENCE_ID_WITH_DECIMALS = "243962506-ad5df092-f5a2-4b99-bcc4-7578d6e71849";
     private static final String DUMMY_MERCHANT_PUBLIC_KEY = "TEST-c6d9b1f9-71ff-4e05-9327-3c62468a23ee";
 
     /*
@@ -127,6 +130,7 @@ public class ExamplesUtils {
     public static List<Pair<String, Builder>> getOptions(Activity activity) {
         List<Pair<String, Builder>> options = new ArrayList<>();
 
+        options.add(new Pair<>("Discount", discountSample(activity)));
         options.add(new Pair<>("Review and Confirm - Custom exit", customExitReviewAndConfirm(activity)));
         options.add(new Pair<>("Business - Complete - Rejected", startCompleteRejectedBusiness(activity)));
         options.add(new Pair<>("Business - Complete - Approved", startCompleteApprovedBusiness(activity)));
@@ -186,7 +190,16 @@ public class ExamplesUtils {
         CustomComponent.Props props = new CustomComponent.Props(new HashMap<String, Object>(), null);
         ReviewAndConfirmPreferences preferences = new ReviewAndConfirmPreferences.Builder()
                 .setTopComponent(new SampleCustomComponent(props)).build();
-        return createBase(activity).setReviewAndConfirmPreferences(preferences);
+        return createBaseWithDecimals(activity).setReviewAndConfirmPreferences(preferences);
+    }
+
+    private static Builder discountSample(Activity activity) {
+        Discount discount = new Discount();
+        discount.setCurrencyId("ARS");
+        discount.setId(77L);
+        discount.setCouponAmount(new BigDecimal(20));
+        discount.setPercentOff(new BigDecimal(20));
+        return createBase(activity).setDiscount(discount);
     }
 
     public static Builder createBase(final Activity activity) {
@@ -197,6 +210,22 @@ public class ExamplesUtils {
                 .setActivity(activity)
                 .setPublicKey(DUMMY_MERCHANT_PUBLIC_KEY)
                 .setCheckoutPreference(new CheckoutPreference(DUMMY_PREFERENCE_ID))
+                .setDataInitializationTask(new DataInitializationTask(defaultData) {
+                    @Override
+                    public void onLoadData(@NonNull final Map<String, Object> data) {
+                        data.put("user", "Nico");
+                    }
+                });
+    }
+
+    public static Builder createBaseWithDecimals(final Activity activity) {
+        final Map<String, Object> defaultData = new HashMap<>();
+        defaultData.put("amount", 120f);
+
+        return new Builder()
+                .setActivity(activity)
+                .setPublicKey(DUMMY_MERCHANT_PUBLIC_KEY)
+                .setCheckoutPreference(new CheckoutPreference(DUMMY_PREFERENCE_ID_WITH_DECIMALS))
                 .setDataInitializationTask(new DataInitializationTask(defaultData) {
                     @Override
                     public void onLoadData(@NonNull final Map<String, Object> data) {

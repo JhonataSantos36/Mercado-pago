@@ -1,32 +1,35 @@
 package com.mercadopago.util;
 
-import android.text.Html;
+import android.support.annotation.NonNull;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.SpannedString;
+import android.text.style.RelativeSizeSpan;
 
 import com.mercadopago.model.Currency;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class CurrenciesUtil {
+public final class CurrenciesUtil {
 
-    public static final String CURRENCY_ARGENTINA = "ARS";
-    public static final String CURRENCY_BRAZIL = "BRL";
-    public static final String CURRENCY_CHILE = "CLP";
-    public static final String CURRENCY_COLOMBIA = "COP";
-    public static final String CURRENCY_MEXICO = "MXN";
-    public static final String CURRENCY_VENEZUELA = "VEF";
-    public static final String CURRENCY_USA = "USD";
-    public static final String CURRENCY_PERU = "PEN";
-    public static final String CURRENCY_URUGUAY = "UYU";
+    private static final String CURRENCY_ARGENTINA = "ARS";
+    private static final String CURRENCY_BRAZIL = "BRL";
+    private static final String CURRENCY_CHILE = "CLP";
+    private static final String CURRENCY_COLOMBIA = "COP";
+    private static final String CURRENCY_MEXICO = "MXN";
+    private static final String CURRENCY_VENEZUELA = "VEF";
+    private static final String CURRENCY_USA = "USD";
+    private static final String CURRENCY_PERU = "PEN";
+    private static final String CURRENCY_URUGUAY = "UYU";
+    public static final String ZERO_DECIMAL = "00";
 
-    protected CurrenciesUtil() {
-
+    private CurrenciesUtil() {
     }
 
     public static Map<String, Currency> currenciesList = new HashMap<String, Currency>() {{
@@ -41,138 +44,91 @@ public class CurrenciesUtil {
         put(CURRENCY_URUGUAY, new Currency(CURRENCY_URUGUAY, "Peso Uruguayo", "$", 2, ",".charAt(0), ".".charAt(0)));
     }};
 
-    public static String formatNumber(BigDecimal amount, String currencyId) {
+    public static String getLocalizedAmountWithCurrencySymbol(@NonNull BigDecimal amount,
+                                                              @NonNull String currencyId,
+                                                              boolean shouldAddSpace) {
         // Get currency configuration
-        Currency currency = currenciesList.get(currencyId);
+        Currency currency = CurrenciesUtil.currenciesList.get(currencyId);
+        String formattedAmount = getLocalizedAmount(amount, currency);
 
-        if (currency != null) {
-
-            // Set formatters
-            DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-            dfs.setDecimalSeparator(currency.getDecimalSeparator());
-            dfs.setGroupingSeparator(currency.getThousandsSeparator());
-            DecimalFormat df = new DecimalFormat();
-            df.setDecimalFormatSymbols(dfs);
-            df.setMinimumFractionDigits(currency.getDecimalPlaces());
-            df.setMaximumFractionDigits(currency.getDecimalPlaces());
-
-            // return formatted string
-            StringBuilder builder = new StringBuilder();
-            builder.append(currency.getSymbol());
+        // return formatted string
+        StringBuilder builder = new StringBuilder();
+        builder.append(currency.getSymbol());
+        if (shouldAddSpace) {
             builder.append(" ");
-            builder.append(df.format(amount));
-            return builder.toString();
-
-        } else {
-            return null;
         }
+        builder.append(formattedAmount);
+        return builder.toString();
     }
 
-    public static Spanned getFormattedAmount(BigDecimal amount, String currencyId) {
-        String originalNumber = CurrenciesUtil.formatNumber(amount, currencyId);
-        Spanned amountText = CurrenciesUtil.formatCurrencyInText(amount, currencyId, originalNumber, false, true);
-        return amountText;
+    private static String getLocalizedAmount(final @NonNull BigDecimal amount, final Currency currency) {
+        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+        dfs.setDecimalSeparator(currency.getDecimalSeparator());
+        dfs.setGroupingSeparator(currency.getThousandsSeparator());
+        DecimalFormat df = new DecimalFormat();
+        df.setDecimalFormatSymbols(dfs);
+        df.setMinimumFractionDigits(currency.getDecimalPlaces());
+        df.setMaximumFractionDigits(currency.getDecimalPlaces());
+        return df.format(amount);
     }
 
-    public static Spanned formatNumber(BigDecimal amount, String currencyId, boolean symbolUp, boolean decimalsUp) {
+    public static String getLocalizedAmountWithCurrencySymbol(BigDecimal amount, String currencyId) {
+        return getLocalizedAmountWithCurrencySymbol(amount, currencyId, true);
+    }
 
-        // Get currency configuration
+    public static Spanned getSpannedAmountWithCurrencySymbol(BigDecimal amount, String currencyId) {
+        return CurrenciesUtil.getSpannedString(amount, currencyId, false, true);
+    }
+
+    public static String getSymbol(@NonNull final String currencyId) {
         Currency currency = currenciesList.get(currencyId);
-
-        if (currency != null) {
-
-            // Set formatters
-            DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-            dfs.setDecimalSeparator(currency.getDecimalSeparator());
-            dfs.setGroupingSeparator(currency.getThousandsSeparator());
-            DecimalFormat df = new DecimalFormat();
-            df.setDecimalFormatSymbols(dfs);
-            df.setMinimumFractionDigits(currency.getDecimalPlaces());
-            df.setMaximumFractionDigits(currency.getDecimalPlaces());
-
-            // return formatted string
-            String formatedAmount = df.format(amount);
-            String spannedString = getSpannedString(currency, formatedAmount, symbolUp, decimalsUp);
-
-            return Html.fromHtml(spannedString);
-        } else {
-            return null;
-        }
+        if (currency == null) throw new IllegalStateException("invalid currencyId");
+        return currency.getSymbol();
     }
 
-    public static String getDecimals(String currencyId, String amount) {
-        Currency currency = currenciesList.get(currencyId);
-        int decimalDivisionIndex = amount.indexOf(currency.getDecimalSeparator());
+    public static Character getDecimalSeparator(@NonNull final String currencyId) {
+        return CurrenciesUtil.getCurrency(currencyId).getDecimalSeparator();
+    }
+
+    public static String getDecimals(String currencyId, BigDecimal amount) {
+        Currency currency = CurrenciesUtil.currenciesList.get(currencyId);
+        String localizedAmount = getLocalizedAmount(amount, currency);
+        int decimalDivisionIndex = localizedAmount.indexOf(currency.getDecimalSeparator());
         String decimals = null;
         if (decimalDivisionIndex != -1) {
-            decimals = amount.substring(decimalDivisionIndex + 1, amount.length());
+            decimals = localizedAmount.substring(decimalDivisionIndex + 1, localizedAmount.length());
         }
         return decimals;
     }
 
-    public static String getWholeNumber(String currencyId, String amount) {
-        Currency currency = currenciesList.get(currencyId);
-        int decimalDivisionIndex = amount.indexOf(currency.getDecimalSeparator());
+    public static String getWholeNumber(String currencyId, BigDecimal amount) {
+        Currency currency = CurrenciesUtil.currenciesList.get(currencyId);
+        String localizedAmount = getLocalizedAmount(amount, currency);
+        int decimalDivisionIndex = localizedAmount.indexOf(currency.getDecimalSeparator());
         String wholeNumber;
         if (decimalDivisionIndex == -1) {
-            wholeNumber = amount;
+            wholeNumber = localizedAmount;
         } else {
-            wholeNumber = amount.substring(0, decimalDivisionIndex);
+            wholeNumber = localizedAmount.substring(0, decimalDivisionIndex);
         }
         return wholeNumber;
     }
 
-    private static String getSpannedString(Currency currency, String formattedAmount, boolean symbolUp, boolean decimalsUp) {
-
-        if (formattedAmount.contains(currency.getSymbol())) {
-            formattedAmount = formattedAmount.replace(currency.getSymbol(), "");
+    public static Spanned getSpannedString(BigDecimal amount, String currencyId, boolean symbolUp, boolean decimalsUp) {
+        String localizedAmount = CurrenciesUtil.getLocalizedAmountWithoutZeroDecimals(currencyId, amount);
+        SpannableStringBuilder spannableAmount = new SpannableStringBuilder(localizedAmount);
+        if (decimalsUp && !CurrenciesUtil.hasZeroDecimals(currencyId, amount)) {
+            int fromDecimals = localizedAmount.indexOf(CurrenciesUtil.getDecimalSeparator(currencyId));
+            localizedAmount = localizedAmount.replace(String.valueOf(CurrenciesUtil.getDecimalSeparator(currencyId)), "");
+            spannableAmount = new SpannableStringBuilder(localizedAmount);
+            decimalsUp(currencyId, amount, spannableAmount, fromDecimals);
         }
-
-        String wholeNumber = getWholeNumber(currency.getId(), formattedAmount);
-        String decimals = getDecimals(currency.getId(), formattedAmount);
-
-        StringBuilder htmlFormatBuilder = new StringBuilder();
 
         if (symbolUp) {
-            htmlFormatBuilder.append("<sup><small><small>" + currency.getSymbol() + " </small></small></sup>");
-        } else {
-            htmlFormatBuilder.append(currency.getSymbol());
+            symbolUp(currencyId, localizedAmount, spannableAmount);
         }
-        htmlFormatBuilder.append(wholeNumber);
 
-        if (decimals != null) {
-            if (decimalsUp) {
-                htmlFormatBuilder.append("<sup><small><small> " + decimals + "</small></small></sup>");
-            } else {
-                htmlFormatBuilder.append(decimals);
-            }
-        }
-        return htmlFormatBuilder.toString();
-    }
-
-    public static Spanned formatCurrencyInText(BigDecimal amount, String currencyId, String originalText,
-                                               boolean symbolUp, boolean decimalsUp) {
-        return formatCurrencyInText("", amount, currencyId, originalText, symbolUp, decimalsUp);
-    }
-
-
-    public static Spanned formatCurrencyInText(String amountPrefix, BigDecimal amount, String currencyId, String originalText,
-                                               boolean symbolUp, boolean decimalsUp) {
-        Spanned spannedAmount;
-        Currency currency = currenciesList.get(currencyId);
-        String formattedAmount = formatNumber(amount, currencyId);
-        if (formattedAmount != null) {
-            String spannedString = getSpannedString(currency, formattedAmount, symbolUp, decimalsUp);
-
-            String formattedText = originalText;
-            if (originalText.contains(formattedAmount)) {
-                formattedText = originalText.replace(formattedAmount, amountPrefix + spannedString);
-            }
-            spannedAmount = Html.fromHtml(formattedText);
-        } else {
-            spannedAmount = Html.fromHtml(originalText);
-        }
-        return spannedAmount;
+        return new SpannedString(spannableAmount);
     }
 
 
@@ -180,11 +136,57 @@ public class CurrenciesUtil {
         return !TextUtil.isEmpty(currencyId) && currenciesList.containsKey(currencyId);
     }
 
-    public static List<Currency> getAllCurrencies() {
-        return new ArrayList<>(currenciesList.values());
-    }
-
     public static Currency getCurrency(String currencyKey) {
         return currenciesList.get(currencyKey);
+    }
+
+    public static String getLocalizedAmountWithoutZeroDecimals(@NonNull final String currencyId,
+                                                               @NonNull final BigDecimal amount) {
+        String localized = getLocalizedAmountWithCurrencySymbol(amount, currencyId);
+        if (hasZeroDecimals(currencyId, amount)) {
+            String decimals = getDecimals(currencyId, amount);
+            Character decimalSeparator = currenciesList.get(currencyId).getDecimalSeparator();
+            localized = localized.replace(String.valueOf(decimalSeparator.charValue()), "");
+            localized = localized.replace(decimals, "");
+        }
+
+        return localized;
+    }
+
+    public static boolean hasZeroDecimals(final String currencyId, final BigDecimal amount) {
+        String decimals = getDecimals(currencyId, amount);
+        return ZERO_DECIMAL.equals(decimals);
+    }
+
+    @NonNull
+    public static SpannableStringBuilder getSpannableAmountWithSymbolWithoutZeroDecimals(@NonNull final String currencyId,
+                                                                                         @NonNull final BigDecimal amount) {
+        String localizedAmount = CurrenciesUtil.getLocalizedAmountWithoutZeroDecimals(currencyId, amount);
+        SpannableStringBuilder spannableAmount = new SpannableStringBuilder(localizedAmount);
+
+        if (!CurrenciesUtil.hasZeroDecimals(currencyId, amount)) {
+            int fromDecimals = localizedAmount.indexOf(CurrenciesUtil.getDecimalSeparator(currencyId));
+            localizedAmount = localizedAmount.replace(String.valueOf(CurrenciesUtil.getDecimalSeparator(currencyId)), "");
+            spannableAmount = new SpannableStringBuilder(localizedAmount);
+            decimalsUp(currencyId, amount, spannableAmount, fromDecimals);
+        }
+
+        symbolUp(currencyId, localizedAmount, spannableAmount);
+
+
+        return spannableAmount;
+    }
+
+    private static void symbolUp(final @NonNull String currencyId, final String localizedAmount, final SpannableStringBuilder spannableAmount) {
+        int fromSymbolPosition = localizedAmount.indexOf(CurrenciesUtil.getSymbol(currencyId));
+        int toSymbolPosition = fromSymbolPosition + CurrenciesUtil.getSymbol(currencyId).length();
+        spannableAmount.setSpan(new RelativeSizeSpan(0.5f), fromSymbolPosition, toSymbolPosition, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableAmount.setSpan(new SuperscriptSpanAdjuster(0.65f), fromSymbolPosition, toSymbolPosition, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    private static void decimalsUp(final String currencyId, final BigDecimal amount, final SpannableStringBuilder spannableAmount, final int fromDecimals) {
+        int toDecimals = fromDecimals + CurrenciesUtil.getDecimals(currencyId, amount).length();
+        spannableAmount.setSpan(new RelativeSizeSpan(0.5f), fromDecimals, toDecimals, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableAmount.setSpan(new SuperscriptSpanAdjuster(0.7f), fromDecimals, toDecimals, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 }
