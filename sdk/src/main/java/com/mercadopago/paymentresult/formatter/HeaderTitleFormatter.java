@@ -24,7 +24,6 @@ public class HeaderTitleFormatter extends AmountFormat {
         }
     }
 
-    //  para poner la prata y el texto que es titulo de header + if si existe payment method + amount localizado
     private CharSequence formatTextWithOnlyAmount(String text) {
         SpannableStringBuilder spannableAmount = CurrenciesUtil.getSpannableAmountWithSymbolWithoutZeroDecimals(currencyId, amount);
         return insertSpannedAmountInText(text, spannableAmount);

@@ -76,26 +76,14 @@ public class PayerCostColumn {
 
     private void setAmountWithRateText() {
         mTotalText.setVisibility(View.VISIBLE);
-        StringBuilder sb = new StringBuilder();
-        sb.append("(");
-        sb.append(CurrenciesUtil.getLocalizedAmountWithCurrencySymbol(payerCostTotalAmount, mCurrencyId));
-        sb.append(")");
-        Spanned spannedFullAmountText = CurrenciesUtil.getSpannedString(payerCostTotalAmount,
-                mCurrencyId, false, true);
-        mTotalText.setText(TextUtils.concat(sb, spannedFullAmountText));
+        final Spanned spannedInstallmentsText = CurrenciesUtil.getSpannedAmountWithCurrencySymbol(payerCostTotalAmount, mCurrencyId);
+        mTotalText.setText(TextUtils.concat("(", spannedInstallmentsText, ")"));
     }
 
     private void setInstallmentsText() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(installments);
-        sb.append(" ");
-        sb.append(mContext.getString(R.string.mpsdk_installments_by));
-        sb.append(" ");
-
-        sb.append(CurrenciesUtil.getLocalizedAmountWithCurrencySymbol(installmentsAmount, mCurrencyId));
-        Spanned spannedInstallmentsText = CurrenciesUtil.getSpannedString(installmentsAmount,
-                mCurrencyId, false, true);
-        mInstallmentsTextView.setText(TextUtils.concat(sb, spannedInstallmentsText));
+        final Spanned spannedInstallmentsText = CurrenciesUtil.getSpannedAmountWithCurrencySymbol(installmentsAmount, mCurrencyId);
+        mInstallmentsTextView.setText(TextUtils.concat(installments.toString(), " ", mContext.getString(R.string.mpsdk_installments_by),
+            " ", spannedInstallmentsText));
     }
 
     public void setOnClickListener(View.OnClickListener listener) {

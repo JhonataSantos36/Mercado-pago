@@ -89,8 +89,6 @@ public class MercadoPagoComponents {
 
         public static final int PLUGIN_PAYMENT_METHOD_REQUEST_CODE = 100;
 
-
-
         private Activities() {
         }
 
@@ -248,9 +246,12 @@ public class MercadoPagoComponents {
             }
 
             public void startActivity() {
-                if (activity == null) throw new IllegalStateException("activity is null");
-                if (merchantPublicKey == null && payerAccessToken == null)
+                if (activity == null) {
+                    throw new IllegalStateException("activity is null");
+                }
+                if (merchantPublicKey == null && payerAccessToken == null) {
                     throw new IllegalStateException("key is null");
+                }
 
                 startPaymentVaultActivity();
             }
@@ -288,7 +289,8 @@ public class MercadoPagoComponents {
                 paymentVaultIntent.putExtra("installmentsReviewEnabled", installmentsReviewEnabled);
                 paymentVaultIntent.putExtra("merchantDiscountBaseUrl", merchantDiscountBaseUrl);
                 paymentVaultIntent.putExtra("merchantGetDiscountUri", merchantGetDiscountUri);
-                paymentVaultIntent.putExtra("discountAdditionalInfo", JsonUtil.getInstance().toJson(discountAdditionalInfo));
+                paymentVaultIntent
+                    .putExtra("discountAdditionalInfo", JsonUtil.getInstance().toJson(discountAdditionalInfo));
 
                 activity.startActivityForResult(paymentVaultIntent, PAYMENT_VAULT_REQUEST_CODE);
             }
@@ -387,26 +389,39 @@ public class MercadoPagoComponents {
             }
 
             public void startActivity() {
-                if (activity == null) throw new IllegalStateException("activity is null");
-                if (paymentMethod == null)
+                if (activity == null) {
+                    throw new IllegalStateException("activity is null");
+                }
+                if (paymentMethod == null) {
                     throw new IllegalStateException("payment method is null");
-                if (items == null) throw new IllegalStateException("items not set");
+                }
+                if (items == null) {
+                    throw new IllegalStateException("items not set");
+                }
                 if (MercadoPagoUtil.isCard(paymentMethod.getPaymentTypeId())) {
-                    if (payerCost == null)
+                    if (payerCost == null) {
                         throw new IllegalStateException("payer cost is null");
-                    if (token == null) throw new IllegalStateException("token is null");
+                    }
+                    if (token == null) {
+                        throw new IllegalStateException("token is null");
+                    }
                 }
 
                 startReviewAndConfirmActivity();
             }
 
             private void startReviewAndConfirmActivity() {
-                String title = SummaryModel.resolveTitle(items, activity.getApplicationContext().getResources().getString(R.string.mpsdk_review_summary_product), activity.getApplicationContext().getResources().getString(R.string.mpsdk_review_summary_products));
-                TermsAndConditionsModel termsAndConditionsModel = new TermsAndConditionsModel(site.getId(), termsAndConditionsEnabled);
+                String title = SummaryModel.resolveTitle(items,
+                    activity.getApplicationContext().getResources().getString(R.string.mpsdk_review_summary_product),
+                    activity.getApplicationContext().getResources().getString(R.string.mpsdk_review_summary_products));
+                TermsAndConditionsModel termsAndConditionsModel =
+                    new TermsAndConditionsModel(site.getId(), termsAndConditionsEnabled);
                 PaymentModel paymentModel = new PaymentModel(paymentMethod, token, issuer, hasExtraPaymentMethods);
                 SummaryModel summaryModel = new SummaryModel(amount, paymentMethod, site, payerCost, discount, title);
                 ItemsModel itemsModel = new ItemsModel(site.getCurrencyId(), items);
-                com.mercadopago.review_and_confirm.ReviewAndConfirmActivity.start(activity, merchantPublicKey, termsAndConditionsModel, paymentModel, summaryModel, itemsModel);
+                com.mercadopago.review_and_confirm.ReviewAndConfirmActivity
+                    .start(activity, merchantPublicKey, termsAndConditionsModel, paymentModel, summaryModel,
+                        itemsModel);
             }
         }
 
@@ -459,7 +474,6 @@ public class MercadoPagoComponents {
                 paymentMethodList = paymentMethods;
                 return this;
             }
-
 
             public CardVaultActivityBuilder setInstallmentsEnabled(Boolean installmentsEnabled) {
                 this.installmentsEnabled = installmentsEnabled;
@@ -523,12 +537,19 @@ public class MercadoPagoComponents {
 
             public void startActivity() {
 
-                if (activity == null) throw new IllegalStateException("activity is null");
-                if (merchantPublicKey == null && payerAccessToken == null)
+                if (activity == null) {
+                    throw new IllegalStateException("activity is null");
+                }
+                if (merchantPublicKey == null && payerAccessToken == null) {
                     throw new IllegalStateException("key is null");
+                }
                 if (installmentsEnabled != null && installmentsEnabled) {
-                    if (amount == null) throw new IllegalStateException("amount is null");
-                    if (site == null) throw new IllegalStateException("site is null");
+                    if (amount == null) {
+                        throw new IllegalStateException("amount is null");
+                    }
+                    if (site == null) {
+                        throw new IllegalStateException("site is null");
+                    }
                 }
                 startCardVaultActivity();
             }
@@ -681,10 +702,12 @@ public class MercadoPagoComponents {
 
             public void startActivity() {
 
-                if (activity == null) throw new IllegalStateException("activity is null");
-                if (merchantPublicKey == null && payerAccessToken == null)
+                if (activity == null) {
+                    throw new IllegalStateException("activity is null");
+                }
+                if (merchantPublicKey == null && payerAccessToken == null) {
                     throw new IllegalStateException("key is null");
-
+                }
 
                 startGuessingCardActivity();
             }
@@ -763,9 +786,12 @@ public class MercadoPagoComponents {
             }
 
             public void startActivity() {
-                if (activity == null) throw new IllegalStateException("activity is null");
-                if (merchantPublicKey == null)
+                if (activity == null) {
+                    throw new IllegalStateException("activity is null");
+                }
+                if (merchantPublicKey == null) {
                     throw new IllegalStateException("public key is null");
+                }
                 startPaymentMethodsActivity();
             }
 
@@ -818,11 +844,15 @@ public class MercadoPagoComponents {
             }
 
             public void startActivity() {
-                if (activity == null) throw new IllegalStateException("activity is null");
-                if (merchantPublicKey == null && payerAccessToken == null)
+                if (activity == null) {
+                    throw new IllegalStateException("activity is null");
+                }
+                if (merchantPublicKey == null && payerAccessToken == null) {
                     throw new IllegalStateException("key is null");
-                if (paymentMethod == null)
+                }
+                if (paymentMethod == null) {
                     throw new IllegalStateException("payment method is null");
+                }
                 startIssuersActivity();
             }
 
@@ -931,15 +961,25 @@ public class MercadoPagoComponents {
             }
 
             public void startActivity() {
-                if (activity == null) throw new IllegalStateException("activity is null");
-                if (site == null) throw new IllegalStateException("site is null");
-                if (amount == null) throw new IllegalStateException("amount is null");
+                if (activity == null) {
+                    throw new IllegalStateException("activity is null");
+                }
+                if (site == null) {
+                    throw new IllegalStateException("site is null");
+                }
+                if (amount == null) {
+                    throw new IllegalStateException("amount is null");
+                }
                 if (payerCosts == null) {
-                    if (merchantPublicKey == null && payerAccessToken == null)
+                    if (merchantPublicKey == null && payerAccessToken == null) {
                         throw new IllegalStateException("key is null");
-                    if (issuer == null) throw new IllegalStateException("issuer is null");
-                    if (paymentMethod == null)
+                    }
+                    if (issuer == null) {
+                        throw new IllegalStateException("issuer is null");
+                    }
+                    if (paymentMethod == null) {
                         throw new IllegalStateException("payment method is null");
+                    }
                 }
                 startInstallmentsActivity();
             }
@@ -1046,16 +1086,25 @@ public class MercadoPagoComponents {
             }
 
             public void startActivity() {
-                if (activity == null) throw new IllegalStateException("activity is null");
-                if (merchantPublicKey == null) throw new IllegalStateException("key is null");
-                if (cardInformation == null)
+                if (activity == null) {
+                    throw new IllegalStateException("activity is null");
+                }
+                if (merchantPublicKey == null) {
+                    throw new IllegalStateException("key is null");
+                }
+                if (cardInformation == null) {
                     throw new IllegalStateException("card info is null");
-                if (paymentMethod == null)
+                }
+                if (paymentMethod == null) {
                     throw new IllegalStateException("payment method is null");
-                if (card != null && token != null && paymentRecovery == null)
-                    throw new IllegalStateException("can't start with card and token at the same time if it's not recoverable");
-                if (card == null && token == null)
+                }
+                if (card != null && token != null && paymentRecovery == null) {
+                    throw new IllegalStateException(
+                        "can't start with card and token at the same time if it's not recoverable");
+                }
+                if (card == null && token == null) {
                     throw new IllegalStateException("card and token can't both be null");
+                }
 
                 startSecurityCodeActivity();
             }
@@ -1109,12 +1158,18 @@ public class MercadoPagoComponents {
             }
 
             public void startActivity() {
-                if (activity == null) throw new IllegalStateException("activity is null");
-                if (merchantPublicKey == null) throw new IllegalStateException("key is null");
-                if (paymentMethods == null)
+                if (activity == null) {
+                    throw new IllegalStateException("activity is null");
+                }
+                if (merchantPublicKey == null) {
+                    throw new IllegalStateException("key is null");
+                }
+                if (paymentMethods == null) {
                     throw new IllegalStateException("payment method list is null");
-                if (paymentTypes == null)
+                }
+                if (paymentTypes == null) {
                     throw new IllegalStateException("payment types list is null");
+                }
 
                 startSecurityCodeActivity();
             }
@@ -1151,9 +1206,12 @@ public class MercadoPagoComponents {
 
             public void startActivity() {
 
-                if (activity == null) throw new IllegalStateException("activity is null");
-                if (merchantPublicKey == null)
+                if (activity == null) {
+                    throw new IllegalStateException("activity is null");
+                }
+                if (merchantPublicKey == null) {
                     throw new IllegalStateException("key is null");
+                }
                 startPayerInformationActivity();
             }
 
@@ -1207,9 +1265,15 @@ public class MercadoPagoComponents {
             }
 
             public void startActivity() {
-                if (activity == null) throw new IllegalStateException("activity is null");
-                if (merchantPublicKey == null) throw new IllegalStateException("key is null");
-                if (amount == null) throw new IllegalStateException("amount is null");
+                if (activity == null) {
+                    throw new IllegalStateException("activity is null");
+                }
+                if (merchantPublicKey == null) {
+                    throw new IllegalStateException("key is null");
+                }
+                if (amount == null) {
+                    throw new IllegalStateException("amount is null");
+                }
 
                 startDiscountsActivity();
             }
@@ -1274,7 +1338,8 @@ public class MercadoPagoComponents {
                 return this;
             }
 
-            public PaymentResultActivityBuilder setPaymentResultScreenPreference(PaymentResultScreenPreference preference) {
+            public PaymentResultActivityBuilder setPaymentResultScreenPreference(
+                PaymentResultScreenPreference preference) {
                 paymentResultScreenPreference = preference;
                 return this;
             }
@@ -1295,11 +1360,15 @@ public class MercadoPagoComponents {
             }
 
             public void startActivity() {
-                if (activity == null) throw new IllegalStateException("activity is null");
-                if (paymentResult == null)
+                if (activity == null) {
+                    throw new IllegalStateException("activity is null");
+                }
+                if (paymentResult == null) {
                     throw new IllegalStateException("payment result is null");
-                if (merchantPublicKey == null)
+                }
+                if (merchantPublicKey == null) {
                     throw new IllegalStateException("public key is null");
+                }
 
                 startPaymentResultActivity();
             }
@@ -1313,7 +1382,8 @@ public class MercadoPagoComponents {
                 resultIntent.putExtra("congratsDisplay", congratsDisplay);
                 resultIntent.putExtra("paymentResult", JsonUtil.getInstance().toJson(paymentResult));
                 resultIntent.putExtra("site", JsonUtil.getInstance().toJson(site));
-                resultIntent.putExtra("paymentResultScreenPreference", JsonUtil.getInstance().toJson(paymentResultScreenPreference));
+                resultIntent.putExtra("paymentResultScreenPreference",
+                    JsonUtil.getInstance().toJson(paymentResultScreenPreference));
                 resultIntent.putExtra("servicePreference", JsonUtil.getInstance().toJson(servicePreference));
                 if (amount != null) {
                     resultIntent.putExtra("amount", amount.toString());
@@ -1351,9 +1421,12 @@ public class MercadoPagoComponents {
             }
 
             public void startActivity() {
-                if (activity == null) throw new IllegalStateException("activity is null");
-                if (merchantPublicKey == null)
+                if (activity == null) {
+                    throw new IllegalStateException("activity is null");
+                }
+                if (merchantPublicKey == null) {
                     throw new IllegalStateException("public key is null");
+                }
                 startBankDealsActivity();
             }
 
@@ -1390,14 +1463,18 @@ public class MercadoPagoComponents {
             }
 
             public void startActivity() {
-                if (activity == null)
+                if (activity == null) {
                     throw new IllegalStateException("activity is null");
-                if (publicKey == null)
+                }
+                if (publicKey == null) {
                     throw new IllegalStateException("public key is null");
-                if (paymentMethods == null)
+                }
+                if (paymentMethods == null) {
                     throw new IllegalStateException("payment methods is null");
-                if (paymentMethods.isEmpty())
+                }
+                if (paymentMethods.isEmpty()) {
                     throw new IllegalStateException("payment methods is empty");
+                }
                 startReviewPaymentMethodsActivity();
             }
 
@@ -1409,5 +1486,4 @@ public class MercadoPagoComponents {
             }
         }
     }
-
 }

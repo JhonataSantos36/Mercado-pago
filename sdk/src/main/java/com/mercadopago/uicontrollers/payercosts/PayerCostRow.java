@@ -63,28 +63,15 @@ public class PayerCostRow {
 
     private void setAmountWithRateText(BigDecimal totalAmount) {
         mTotalText.setVisibility(View.VISIBLE);
-        StringBuilder sb = new StringBuilder();
-        sb.append("(");
-        sb.append(CurrenciesUtil.getLocalizedAmountWithCurrencySymbol(totalAmount, mCurrencyId));
-        sb.append(")");
-        Spanned spannedFullAmountText = CurrenciesUtil.getSpannedString(totalAmount,
-                mCurrencyId, false, true);
-        mTotalText.setText(TextUtils.concat(sb, spannedFullAmountText));
+        final Spanned spannedInstallmentsText = CurrenciesUtil.getSpannedAmountWithCurrencySymbol(totalAmount, mCurrencyId);
+        mTotalText.setText(TextUtils.concat("(", spannedInstallmentsText, ")"));
     }
 
-    private void setInstallmentsText(Integer installments, BigDecimal installmentAmount) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(installments);
-        sb.append(" ");
-        sb.append(mContext.getString(R.string.mpsdk_installments_by));
-        sb.append(" ");
-
-        sb.append(CurrenciesUtil.getLocalizedAmountWithCurrencySymbol(installmentAmount, mCurrencyId));
-        Spanned spannedInstallmentsText = CurrenciesUtil.getSpannedString(installmentAmount,
-                mCurrencyId, false, true);
-        mInstallmentsTextView.setText(TextUtils.concat(sb, spannedInstallmentsText));
+    private void setInstallmentsText(Integer installments, BigDecimal installmentsAmount) {
+        final Spanned spannedInstallmentsText = CurrenciesUtil.getSpannedAmountWithCurrencySymbol(installmentsAmount, mCurrencyId);
+        mInstallmentsTextView.setText(TextUtils.concat(installments.toString(), " ",
+            mContext.getString(R.string.mpsdk_installments_by), " ", spannedInstallmentsText));
     }
-
 
     public void setOnClickListener(View.OnClickListener listener) {
         mView.setOnClickListener(listener);

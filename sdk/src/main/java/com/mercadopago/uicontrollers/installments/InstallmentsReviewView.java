@@ -46,29 +46,14 @@ public class InstallmentsReviewView implements InstallmentsView {
     }
 
     private void setInstallmentAmountText() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append(mPayerCost.getInstallments());
-        stringBuilder.append(" ");
-        stringBuilder.append(mContext.getString(R.string.mpsdk_installments_by));
-        stringBuilder.append(" ");
-
-        stringBuilder.append(CurrenciesUtil.getLocalizedAmountWithCurrencySymbol(mPayerCost.getInstallmentAmount(), mCurrencyId));
-        Spanned spannedInstallmentsText = CurrenciesUtil.getSpannedString(mPayerCost.getInstallmentAmount(),
-                mCurrencyId, false, true);
-        mInstallmentsAmount.setText(TextUtils.concat(stringBuilder.toString(), spannedInstallmentsText));
+        final Spanned spannedInstallmentsText = CurrenciesUtil.getSpannedAmountWithCurrencySymbol(mPayerCost.getInstallmentAmount(), mCurrencyId);
+        mInstallmentsAmount.setText(TextUtils.concat(mPayerCost.getInstallments().toString(), " ",
+            mContext.getString(R.string.mpsdk_installments_by), " ", spannedInstallmentsText));
     }
 
     private void setTotalAmountWithRateText() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("(");
-        stringBuilder.append(CurrenciesUtil.getLocalizedAmountWithCurrencySymbol(mPayerCost.getTotalAmount(), mCurrencyId));
-        stringBuilder.append(")");
-
-        Spanned spannedFullAmountText = CurrenciesUtil.getSpannedString(mPayerCost.getTotalAmount(),
-                mCurrencyId, false, true);
-
-        mTotalAmount.setText(TextUtils.concat(stringBuilder.toString(), spannedFullAmountText));
+        final Spanned spannedInstallmentsText = CurrenciesUtil.getSpannedAmountWithCurrencySymbol(mPayerCost.getTotalAmount(), mCurrencyId);
+        mTotalAmount.setText(TextUtils.concat("(", spannedInstallmentsText, ")"));
     }
 
     private void setCFTPercentText() {

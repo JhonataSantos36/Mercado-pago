@@ -101,25 +101,12 @@ public final class CurrenciesUtil {
         return decimals;
     }
 
-    public static String getWholeNumber(String currencyId, BigDecimal amount) {
-        Currency currency = CurrenciesUtil.currenciesList.get(currencyId);
-        String localizedAmount = getLocalizedAmount(amount, currency);
-        int decimalDivisionIndex = localizedAmount.indexOf(currency.getDecimalSeparator());
-        String wholeNumber;
-        if (decimalDivisionIndex == -1) {
-            wholeNumber = localizedAmount;
-        } else {
-            wholeNumber = localizedAmount.substring(0, decimalDivisionIndex);
-        }
-        return wholeNumber;
-    }
-
     public static Spanned getSpannedString(BigDecimal amount, String currencyId, boolean symbolUp, boolean decimalsUp) {
         String localizedAmount = CurrenciesUtil.getLocalizedAmountWithoutZeroDecimals(currencyId, amount);
         SpannableStringBuilder spannableAmount = new SpannableStringBuilder(localizedAmount);
         if (decimalsUp && !CurrenciesUtil.hasZeroDecimals(currencyId, amount)) {
-            int fromDecimals = localizedAmount.indexOf(CurrenciesUtil.getDecimalSeparator(currencyId));
-            localizedAmount = localizedAmount.replace(String.valueOf(CurrenciesUtil.getDecimalSeparator(currencyId)), "");
+            final int fromDecimals = localizedAmount.indexOf(CurrenciesUtil.getDecimalSeparator(currencyId)) + 1;
+            localizedAmount = localizedAmount.replace(String.valueOf(CurrenciesUtil.getDecimalSeparator(currencyId)), " ");
             spannableAmount = new SpannableStringBuilder(localizedAmount);
             decimalsUp(currencyId, amount, spannableAmount, fromDecimals);
         }
