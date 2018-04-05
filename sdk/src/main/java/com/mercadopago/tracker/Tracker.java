@@ -128,7 +128,9 @@ public class Tracker {
                 context, merchantPublicKey, properties);
     }
 
-    public static void trackPaymentVaultChildrenScreen(final Context context, final String merchantPublicKey, final PaymentMethodSearchItem selectedItem) {
+    public static void trackPaymentVaultChildrenScreen(@NonNull final Context context,
+                                                       @NonNull final String merchantPublicKey,
+                                                       @NonNull final PaymentMethodSearchItem selectedItem) {
 
             String selectedItemId = selectedItem.getId();
 
@@ -143,7 +145,6 @@ public class Tracker {
 
             } else {
                 trackScreen(TrackingUtil.SCREEN_ID_PAYMENT_VAULT, TrackingUtil.SCREEN_NAME_PAYMENT_VAULT, context, merchantPublicKey, null);
-
             }
     }
 

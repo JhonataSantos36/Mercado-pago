@@ -191,7 +191,7 @@ public class PaymentVaultProviderImpl implements PaymentVaultProvider {
         Tracker.trackPaymentVaultScreen(context, merchantPublicKey, paymentMethodSearch, mercadoPagoESC.getESCCardIds());
     }
 
-    public void trackChildrenScreen(PaymentMethodSearchItem paymentMethodSearchItem, String siteId) {
+    public void trackChildrenScreen(@NonNull final PaymentMethodSearchItem paymentMethodSearchItem, final @NonNull String siteId) {
         initializeMPTracker(siteId);
         Tracker.trackPaymentVaultChildrenScreen(context, merchantPublicKey, paymentMethodSearchItem);
     }

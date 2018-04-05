@@ -8,6 +8,7 @@ import com.mercadopago.lite.model.Site;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.mvp.ResourcesProvider;
 import com.mercadopago.lite.preferences.PaymentPreference;
+import android.support.annotation.NonNull;
 
 import java.math.BigDecimal;
 
@@ -38,6 +39,6 @@ public interface PaymentVaultProvider extends ResourcesProvider {
 
     void trackInitialScreen(PaymentMethodSearch paymentMethodSearch, String siteId);
 
-    void trackChildrenScreen(PaymentMethodSearchItem paymentMethodSearchItem, String siteId);
+    void trackChildrenScreen(@NonNull PaymentMethodSearchItem paymentMethodSearchItem, @NonNull String siteId);
 
 }

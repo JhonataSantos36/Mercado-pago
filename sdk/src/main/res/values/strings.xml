@@ -217,7 +217,7 @@
     <string name="mpsdk_text_cancel_payment_and_continue">Cancelar pago y continuar</string>
     <string name="mpsdk_zero_rate">Sin interés</string>
     <string name="mpsdk_exit_label">Salir</string>
-    <string name="mpsdk_cancel_payment">Cancelar Pago</string>
+    <string name="mpsdk_cancel_payment">Cancelar pago</string>
     <string name="mpsdk_cancel">Cancelar</string>
     <string name="mpsdk_input_button_back">Anterior</string>
     <string name="mpsdk_input_button_next">Continuar</string>
