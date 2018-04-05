@@ -133,8 +133,8 @@ public class ExamplesUtils {
         options.add(new Pair<>("Discount", discountSample(activity)));
         options.add(new Pair<>("Review and Confirm - Custom exit", customExitReviewAndConfirm(activity)));
         options.add(new Pair<>("Business - Complete - Rejected", startCompleteRejectedBusiness(activity)));
-        options.add(new Pair<>("Business - Complete - Approved", startCompleteApprovedBusiness(activity)));
-        options.add(new Pair<>("Business - Complete - Pending", startCompletePendingBusiness(activity)));
+        options.add(new Pair<>("Business - Secondary And Help - Approved", startCompleteApprovedBusiness(activity)));
+        options.add(new Pair<>("Business - Primary And Help - Pending", startCompletePendingBusiness(activity)));
         options.add(new Pair<>("Business - No help - Pending", startPendingBusinessNoHelp(activity)));
 
         return options;
@@ -149,13 +149,11 @@ public class ExamplesUtils {
                 .build();
 
         return customBusinessPayment(activity, payment);
-
     }
 
     private static Builder startCompleteApprovedBusiness(Activity activity) {
         BusinessPayment payment = new BusinessPayment.Builder(BusinessPayment.Status.APPROVED, R.drawable.mpsdk_icon_card, "Title")
                 .setHelp("Help description!")
-                .setPrimaryButton(new ExitAction(BUTTON_PRIMARY_NAME, 23))
                 .setSecondaryButton(new ExitAction(BUTTON_SECONDARY_NAME, 34))
                 .build();
 
@@ -166,7 +164,6 @@ public class ExamplesUtils {
         BusinessPayment payment = new BusinessPayment.Builder(BusinessPayment.Status.PENDING, R.drawable.mpsdk_icon_card, "Title")
                 .setHelp("Help description!")
                 .setPrimaryButton(new ExitAction(BUTTON_PRIMARY_NAME, 23))
-                .setSecondaryButton(new ExitAction(BUTTON_SECONDARY_NAME, 34))
                 .build();
 
         return customBusinessPayment(activity, payment);
