@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         mercadoPagoServices.getIssuers("visa", "450995", new Callback<List<Issuer>>() {
             @Override
-            public void success(List<com.mercadopago.lite.model.Issuer> issuers) {
+            public void success(List<Issuer> issuers) {
                 Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
             }
 

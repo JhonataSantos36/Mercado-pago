@@ -133,7 +133,8 @@ public class MercadoPagoUtil {
                 }
             }
             return validPaymentMethods;
-        } else
+        } else {
             throw new RuntimeException("Invalid bin: " + Bin.BIN_LENGTH + " digits needed, " + bin.length() + " found");
+        }
     }
 }
