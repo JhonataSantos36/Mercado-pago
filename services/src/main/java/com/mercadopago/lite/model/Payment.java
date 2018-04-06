@@ -11,7 +11,7 @@ public class Payment {
     private String callForAuthorizeId;
     private Boolean captured;
     private Card card;
-    private String collectorId;
+    private long collectorId;
     private BigDecimal couponAmount;
     private String currencyId;
     private Date dateApproved;
@@ -23,7 +23,7 @@ public class Payment {
     private List<FeeDetail> feeDetails;
     private Long id;
     private Integer installments;
-    private Integer issuerId;
+    private String issuerId;
     private Boolean liveMode;
     private Map metadata;
     private Date moneyReleaseDate;
@@ -73,11 +73,11 @@ public class Payment {
         this.card = card;
     }
 
-    public String getCollectorId() {
+    public Long getCollectorId() {
         return collectorId;
     }
 
-    public void setCollectorId(String collectorId) {
+    public void setCollectorId(Long collectorId) {
         this.collectorId = collectorId;
     }
 
@@ -169,11 +169,11 @@ public class Payment {
         this.installments = installments;
     }
 
-    public Integer getIssuerId() {
+    public String getIssuerId() {
         return issuerId;
     }
 
-    public void setIssuerId(Integer issuerId) {
+    public void setIssuerId(String issuerId) {
         this.issuerId = issuerId;
     }
 
