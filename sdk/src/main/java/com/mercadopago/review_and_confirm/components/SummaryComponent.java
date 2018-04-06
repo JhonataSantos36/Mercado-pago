@@ -10,7 +10,13 @@ import com.mercadopago.review_and_confirm.models.SummaryModel;
 
 public class SummaryComponent extends Component<SummaryComponent.SummaryProps, Void> {
 
-    public static class SummaryProps {
+    static {
+        RendererFactory.register(SummaryComponent.class, SummaryRenderer.class);
+    }
+
+    private final SummaryProvider provider;
+
+    static class SummaryProps {
         final SummaryModel summaryModel;
         final ReviewAndConfirmPreferences reviewAndConfirmPreferences;
 
@@ -20,15 +26,9 @@ public class SummaryComponent extends Component<SummaryComponent.SummaryProps, V
             this.reviewAndConfirmPreferences = reviewAndConfirmPreferences;
         }
 
-        public static SummaryProps createFrom(SummaryModel summaryModel, ReviewAndConfirmPreferences reviewAndConfirmPreferences) {
+        static SummaryProps createFrom(SummaryModel summaryModel, ReviewAndConfirmPreferences reviewAndConfirmPreferences) {
             return new SummaryProps(summaryModel, reviewAndConfirmPreferences);
         }
-    }
-
-    private final SummaryProvider provider;
-
-    static {
-        RendererFactory.register(SummaryComponent.class, SummaryRenderer.class);
     }
 
     SummaryComponent(@NonNull final SummaryComponent.SummaryProps props,

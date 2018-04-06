@@ -11,10 +11,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.mercadopago.R;
-import com.mercadopago.components.Renderer;
-import com.mercadopago.components.RendererFactory;
 import com.mercadopago.components.Button;
 import com.mercadopago.components.Footer;
+import com.mercadopago.components.Renderer;
+import com.mercadopago.components.RendererFactory;
 import com.mercadopago.paymentresult.components.Header;
 import com.mercadopago.paymentresult.props.HeaderProps;
 import com.mercadopago.plugins.model.ExitAction;
@@ -25,23 +25,61 @@ public class BusinessPaymentRenderer extends Renderer<BusinessPaymentContainer> 
                           @NonNull final Context context,
                           @Nullable final ViewGroup parent) {
 
-        LinearLayout linearLayout = createMainContainer(context);
-        ScrollView scrollView = createScrollContainer(context, linearLayout);
-        View header = addHeader(component, context, linearLayout);
+        final LinearLayout mainContentContainer = createMainContainer(context);
+        final ScrollView scrollView = createScrollContainer(context, mainContentContainer);
+        final View header = addHeader(component, context, mainContentContainer);
+        final ViewTreeObserver vto = scrollView.getViewTreeObserver();
 
         if (component.props.hasHelp()) {
-            addHelp(component.props.getHelp(), linearLayout);
+            ViewGroup help = addHelp(component.props.getHelp(), mainContentContainer);
+            vto.addOnGlobalLayoutListener(helpCorrectionListener(mainContentContainer, scrollView, help));
+        } else {
+            vto.addOnGlobalLayoutListener(noHelpCorrectionListener(mainContentContainer, scrollView, header));
         }
 
-        renderFooter(component, linearLayout, scrollView, header);
+        renderFooter(component, mainContentContainer);
 
         return scrollView;
     }
 
-    private void renderFooter(@NonNull final BusinessPaymentContainer component,
-                              final LinearLayout linearLayout,
-                              final ScrollView scrollView,
-                              final View header) {
+    private ViewTreeObserver.OnGlobalLayoutListener helpCorrectionListener(final LinearLayout mainContentContainer,
+                                                                           final ScrollView scrollView,
+                                                                           final ViewGroup help) {
+        return new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int diffHeight = calculateDiff(mainContentContainer, scrollView);
+                if (diffHeight > 0) {
+                    help.setPadding(help.getPaddingLeft(), (int) Math.ceil(diffHeight / 2f), help.getPaddingRight(),
+                            (int) Math.ceil(diffHeight / 2f));
+                }
+            }
+        };
+    }
+
+    @NonNull
+    private ViewTreeObserver.OnGlobalLayoutListener noHelpCorrectionListener(final LinearLayout mainContentContainer,
+                                                                             final ScrollView scrollView,
+                                                                             final View header) {
+        return new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                int diffHeight = calculateDiff(mainContentContainer, scrollView);
+                if (diffHeight > 0) {
+                    header.setPadding(header.getPaddingLeft(), header.getPaddingTop(), header.getPaddingRight(),
+                            (header.getPaddingBottom() + diffHeight));
+                }
+            }
+        };
+    }
+
+    private int calculateDiff(final LinearLayout mainContentContainer, final ScrollView scrollView) {
+        int linearHeight = mainContentContainer.getMeasuredHeight();
+        int scrollHeight = scrollView.getMeasuredHeight();
+        return scrollHeight - linearHeight;
+    }
+
+    private void renderFooter(@NonNull final BusinessPaymentContainer component, final LinearLayout linearLayout) {
 
         ExitAction primaryAction = component.props.getPrimaryAction();
         ExitAction secondaryAction = component.props.getSecondaryAction();
@@ -61,40 +99,17 @@ public class BusinessPaymentRenderer extends Renderer<BusinessPaymentContainer> 
         Footer footer = new Footer(new Footer.Props(primaryButtonProps, secondaryButtonProps), component.getDispatcher());
         View footerView = footer.render(linearLayout);
         linearLayout.addView(footerView);
-        configureBottomCorrection(linearLayout, scrollView, footerView, component, header);
     }
 
-    private void configureBottomCorrection(final LinearLayout linearLayout, final ScrollView scrollView,
-                                           final View footerView,
-                                           final BusinessPaymentContainer component,
-                                           final View header) {
-        final ViewTreeObserver vto = scrollView.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                int linearHeight = linearLayout.getMeasuredHeight();
-                int scrollHeight = scrollView.getMeasuredHeight();
-                if (scrollHeight > linearHeight) {
-                    int diffHeight = scrollHeight - linearHeight;
-                    if (component.props.hasHelp()) { //Alias has body
-                        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) footerView.getLayoutParams();
-                        layoutParams.setMargins(0, diffHeight, 0, 0);
-                        footerView.setLayoutParams(layoutParams);
-                    } else {
-                        header.setPadding(header.getPaddingLeft(), header.getPaddingTop(), header.getPaddingRight(), (header.getPaddingBottom() + diffHeight));
-                    }
-                }
-            }
-        });
-    }
-
-    private void addHelp(final String help, final ViewGroup parent) {
+    private ViewGroup addHelp(final String help, final ViewGroup parent) {
         final View bodyErrorView = inflate(R.layout.mpsdk_payment_result_body_error, parent);
+        ViewGroup helpContainer = bodyErrorView.findViewById(R.id.bodyErrorContainer);
         TextView errorTitle = bodyErrorView.findViewById(R.id.paymentResultBodyErrorTitle);
         TextView errorDescription = bodyErrorView.findViewById(R.id.paymentResultBodyErrorDescription);
         bodyErrorView.findViewById(R.id.paymentResultBodyErrorSecondDescription).setVisibility(View.GONE);
         errorTitle.setText(parent.getContext().getString(R.string.mpsdk_what_can_do));
         errorDescription.setText(help);
+        return helpContainer;
     }
 
     private View addHeader(@NonNull final BusinessPaymentContainer component, @NonNull final Context context,

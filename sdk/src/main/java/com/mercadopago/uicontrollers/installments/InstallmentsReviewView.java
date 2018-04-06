@@ -2,6 +2,7 @@ package com.mercadopago.uicontrollers.installments;
 
 import android.content.Context;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,22 +53,22 @@ public class InstallmentsReviewView implements InstallmentsView {
         stringBuilder.append(mContext.getString(R.string.mpsdk_installments_by));
         stringBuilder.append(" ");
 
-        stringBuilder.append(CurrenciesUtil.formatNumber(mPayerCost.getInstallmentAmount(), mCurrencyId));
-        Spanned spannedInstallmentsText = CurrenciesUtil.formatCurrencyInText(mPayerCost.getInstallmentAmount(),
-                mCurrencyId, stringBuilder.toString(), false, true);
-
-        mInstallmentsAmount.setText(spannedInstallmentsText);
+        stringBuilder.append(CurrenciesUtil.getLocalizedAmountWithCurrencySymbol(mPayerCost.getInstallmentAmount(), mCurrencyId));
+        Spanned spannedInstallmentsText = CurrenciesUtil.getSpannedString(mPayerCost.getInstallmentAmount(),
+                mCurrencyId, false, true);
+        mInstallmentsAmount.setText(TextUtils.concat(stringBuilder.toString(), spannedInstallmentsText));
     }
 
     private void setTotalAmountWithRateText() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("(");
-        stringBuilder.append(CurrenciesUtil.formatNumber(mPayerCost.getTotalAmount(), mCurrencyId));
+        stringBuilder.append(CurrenciesUtil.getLocalizedAmountWithCurrencySymbol(mPayerCost.getTotalAmount(), mCurrencyId));
         stringBuilder.append(")");
-        Spanned spannedFullAmountText = CurrenciesUtil.formatCurrencyInText(mPayerCost.getTotalAmount(),
-                mCurrencyId, stringBuilder.toString(), false, true);
 
-        mTotalAmount.setText(spannedFullAmountText);
+        Spanned spannedFullAmountText = CurrenciesUtil.getSpannedString(mPayerCost.getTotalAmount(),
+                mCurrencyId, false, true);
+
+        mTotalAmount.setText(TextUtils.concat(stringBuilder.toString(), spannedFullAmountText));
     }
 
     private void setCFTPercentText() {

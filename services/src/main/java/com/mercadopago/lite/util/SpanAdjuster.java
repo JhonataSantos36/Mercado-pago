@@ -1,19 +1,12 @@
-package com.mercadopago.util;
+package com.mercadopago.lite.util;
 
 import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;
 
-/**
- * Created by vaserber on 11/8/17.
- */
-
-public class SuperscriptSpanAdjuster extends MetricAffectingSpan {
+public class SpanAdjuster extends MetricAffectingSpan {
     double ratio = 0.5;
 
-    public SuperscriptSpanAdjuster() {
-    }
-
-    public SuperscriptSpanAdjuster(double ratio) {
+    public SpanAdjuster(double ratio) {
         this.ratio = ratio;
     }
 

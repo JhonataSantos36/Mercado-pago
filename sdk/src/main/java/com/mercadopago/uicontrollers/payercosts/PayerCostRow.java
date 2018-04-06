@@ -2,6 +2,7 @@ package com.mercadopago.uicontrollers.payercosts;
 
 import android.content.Context;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,11 +65,11 @@ public class PayerCostRow {
         mTotalText.setVisibility(View.VISIBLE);
         StringBuilder sb = new StringBuilder();
         sb.append("(");
-        sb.append(CurrenciesUtil.formatNumber(totalAmount, mCurrencyId));
+        sb.append(CurrenciesUtil.getLocalizedAmountWithCurrencySymbol(totalAmount, mCurrencyId));
         sb.append(")");
-        Spanned spannedFullAmountText = CurrenciesUtil.formatCurrencyInText(totalAmount,
-                mCurrencyId, sb.toString(), false, true);
-        mTotalText.setText(spannedFullAmountText);
+        Spanned spannedFullAmountText = CurrenciesUtil.getSpannedString(totalAmount,
+                mCurrencyId, false, true);
+        mTotalText.setText(TextUtils.concat(sb, spannedFullAmountText));
     }
 
     private void setInstallmentsText(Integer installments, BigDecimal installmentAmount) {
@@ -78,10 +79,10 @@ public class PayerCostRow {
         sb.append(mContext.getString(R.string.mpsdk_installments_by));
         sb.append(" ");
 
-        sb.append(CurrenciesUtil.formatNumber(installmentAmount, mCurrencyId));
-        Spanned spannedInstallmentsText = CurrenciesUtil.formatCurrencyInText(installmentAmount,
-                mCurrencyId, sb.toString(), false, true);
-        mInstallmentsTextView.setText(spannedInstallmentsText);
+        sb.append(CurrenciesUtil.getLocalizedAmountWithCurrencySymbol(installmentAmount, mCurrencyId));
+        Spanned spannedInstallmentsText = CurrenciesUtil.getSpannedString(installmentAmount,
+                mCurrencyId, false, true);
+        mInstallmentsTextView.setText(TextUtils.concat(sb, spannedInstallmentsText));
     }
 
 

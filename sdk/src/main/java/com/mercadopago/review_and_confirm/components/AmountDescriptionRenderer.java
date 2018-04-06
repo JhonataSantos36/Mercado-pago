@@ -23,7 +23,7 @@ public class AmountDescriptionRenderer extends Renderer<AmountDescription> {
         final MPTextView amountTextView = bodyView.findViewById(R.id.mpsdkAmount);
 
         setText(descriptionTextView, component.props.description);
-        setText(amountTextView, CurrenciesUtil.getFormattedAmount(component.props.amount, component.props.currencyId));
+        setText(amountTextView, CurrenciesUtil.getSpannedAmountWithCurrencySymbol(component.props.amount, component.props.currencyId));
 
         descriptionTextView.setTextColor(component.props.textColor);
         amountTextView.setTextColor(component.props.textColor);

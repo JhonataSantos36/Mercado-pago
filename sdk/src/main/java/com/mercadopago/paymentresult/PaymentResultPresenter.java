@@ -270,7 +270,7 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
         if (instruction == null) {
             navigator.showError(new MercadoPagoError(getResourcesProvider().getStandardErrorMessage(), false), ApiUtil.RequestOrigin.GET_INSTRUCTIONS);
         } else {
-            getView().setPropInstruction(instruction, new HeaderTitleFormatter(site.getCurrencyId(), amount), false, servicePreference.getProcessingModeString());
+            getView().setPropInstruction(instruction, new HeaderTitleFormatter(site.getCurrencyId(), amount, null), false, servicePreference.getProcessingModeString());
             getView().notifyPropsChanged();
         }
     }

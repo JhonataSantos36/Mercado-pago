@@ -80,7 +80,7 @@ public class FullSummaryRenderer extends Renderer<FullSummary> {
     }
 
     private Spanned getFormattedAmount(BigDecimal amount, String currencyId) {
-        return amount != null && !isEmpty(currencyId) ? CurrenciesUtil.getFormattedAmount(amount, currencyId) : null;
+        return amount != null && !isEmpty(currencyId) ? CurrenciesUtil.getSpannedAmountWithCurrencySymbol(amount, currencyId) : null;
     }
 
     public String getDisclaimer(FullSummary component, Context context) {

@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
@@ -278,10 +279,10 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
         if (isAmountValid(mPresenter.getCouponAmount()) && isDiscountCurrencyIdValid()) {
 
             discountAmountBuilder.append("-");
-            discountAmountBuilder.append(CurrenciesUtil.formatNumber(mPresenter.getCouponAmount(), mPresenter.getCurrencyId()));
-            discountAmount = CurrenciesUtil.formatCurrencyInText(mPresenter.getCouponAmount(), mPresenter.getCurrencyId(), discountAmountBuilder.toString(), false, true);
+            discountAmount = CurrenciesUtil.getSpannedString(mPresenter.getCouponAmount(),
+                    mPresenter.getCurrencyId(), false, true);
 
-            mReviewSummaryDiscountAmount.setText(discountAmount);
+            mReviewSummaryDiscountAmount.setText(TextUtils.concat(discountAmountBuilder, discountAmount));
             if (!TextUtil.isEmpty(mPresenter.getDiscount().getConcept())) {
                 mReviewSummaryDiscountLabel.setText(mPresenter.getDiscount().getConcept());
             }
@@ -399,9 +400,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
     }
 
     private Spanned getFormattedAmount(BigDecimal amount, String currencyId) {
-        String originalNumber = CurrenciesUtil.formatNumber(amount, currencyId);
-        Spanned amountText = CurrenciesUtil.formatCurrencyInText(amount, currencyId, originalNumber, false, true);
-        return amountText;
+        return CurrenciesUtil.getSpannedString(amount, currencyId, false, true);
     }
 
     @Override

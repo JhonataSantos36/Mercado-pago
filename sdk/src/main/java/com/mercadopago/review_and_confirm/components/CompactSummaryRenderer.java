@@ -13,10 +13,7 @@ import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.lite.util.CurrenciesUtil;
 
 import static com.mercadopago.util.TextUtils.isEmpty;
-
-/**
- * Created by mromar on 2/28/18.
- */
+import static com.mercadopago.util.TextUtils.isNotEmpty;
 
 public class CompactSummaryRenderer extends Renderer<CompactSummary> {
 
@@ -27,10 +24,10 @@ public class CompactSummaryRenderer extends Renderer<CompactSummary> {
         final MPTextView itemTitleTextView = summaryView.findViewById(R.id.mpsdkItemTitle);
         final LinearLayout disclaimerLinearLayout = summaryView.findViewById(R.id.disclaimer);
 
-        setText(totalAmountTextView, CurrenciesUtil.getFormattedAmount(component.props.getTotalAmount(), component.props.currencyId));
+        setText(totalAmountTextView, CurrenciesUtil.getSpannedAmountWithCurrencySymbol(component.props.getTotalAmount(), component.props.currencyId));
         setText(itemTitleTextView, getItemTitle(component.props.title, context));
 
-        if (!isEmpty(component.props.cftPercent)) {
+        if (isNotEmpty(component.props.cftPercent)) {
             String disclaimer = getDisclaimer(component, context);
             final Renderer disclaimerRenderer = RendererFactory.create(context, component.getDisclaimerComponent(disclaimer));
             final View disclaimerView = disclaimerRenderer.render();
@@ -48,7 +45,7 @@ public class CompactSummaryRenderer extends Renderer<CompactSummary> {
         return context.getString(R.string.mpsdk_review_summary_product);
     }
 
-    public String getDisclaimer(CompactSummary component, Context context) {
+    private String getDisclaimer(CompactSummary component, Context context) {
         StringBuilder stringBuilder = new StringBuilder();
 
         if (!isEmpty(component.props.cftPercent)) {
