@@ -48,15 +48,15 @@ public class IdentificationType {
         return minLength;
     }
 
-    public void setMinLength(Integer MinLength) {
-        minLength = MinLength;
+    public void setMinLength(Integer minLength) {
+        this.minLength = minLength;
     }
 
     public Integer getMaxLength() {
         return maxLength;
     }
 
-    public void setMaxLength(Integer MaxLength) {
-        maxLength = MaxLength;
+    public void setMaxLength(Integer maxLength) {
+        this.maxLength = maxLength;
     }
 }

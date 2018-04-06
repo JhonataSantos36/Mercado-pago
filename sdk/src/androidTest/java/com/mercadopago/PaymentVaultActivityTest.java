@@ -79,7 +79,7 @@ public class PaymentVaultActivityTest {
     private Discount getDirectDiscount() {
         Discount discount = new Discount();
         discount.setCouponAmount(new BigDecimal("100"));
-        discount.setId(123L);
+        discount.setId("123");
         discount.setAmountOff(new BigDecimal("100"));
         return discount;
     }

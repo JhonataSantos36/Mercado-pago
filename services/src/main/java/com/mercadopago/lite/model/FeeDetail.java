@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 public class FeeDetail {
 
+    private static final String FINANCING_FEE = "financing_fee";
+
     private BigDecimal amount;
     private String feePayer;
     private String type;
@@ -32,7 +34,7 @@ public class FeeDetail {
         this.type = type;
     }
 
-    public Boolean isFinancialFree() {
-        return "financing_fee".equals(type);
+    public boolean isFinancialFree() {
+        return FINANCING_FEE.equals(type);
     }
 }
