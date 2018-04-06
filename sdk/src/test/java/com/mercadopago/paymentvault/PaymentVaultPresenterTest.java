@@ -815,7 +815,7 @@ public class PaymentVaultPresenterTest {
 
         Discount discount = new Discount();
         discount.setCurrencyId("ARS");
-        discount.setId(123L);
+        discount.setId("123");
         discount.setAmountOff(new BigDecimal("10"));
         discount.setCouponAmount(new BigDecimal("10"));
         presenter.onDiscountReceived(discount);
@@ -850,7 +850,7 @@ public class PaymentVaultPresenterTest {
 
         Discount discount = new Discount();
         discount.setCurrencyId("ARS");
-        discount.setId(123L);
+        discount.setId("123");
         discount.setAmountOff(new BigDecimal("10"));
         discount.setCouponAmount(new BigDecimal("10"));
         presenter.onDiscountReceived(discount);

@@ -65,7 +65,6 @@ public class MercadoPagoServicesAdapterTest extends BaseTest<CheckoutActivity> {
     }
 
     public void testNullKey() {
-
         try {
             new MercadoPagoServicesAdapter.Builder()
                     .setContext(getApplicationContext())

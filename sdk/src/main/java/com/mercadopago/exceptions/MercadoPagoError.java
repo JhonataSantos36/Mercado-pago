@@ -45,10 +45,7 @@ public class MercadoPagoError {
     }
 
     public String getErrorDetail() {
-        if (errorDetail == null) {
-            errorDetail = "";
-        }
-        return errorDetail;
+        return errorDetail == null ? "" : errorDetail;
     }
 
     public boolean isApiException() {

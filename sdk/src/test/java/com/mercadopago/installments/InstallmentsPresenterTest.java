@@ -674,7 +674,7 @@ public class InstallmentsPresenterTest {
     private Discount getDiscount() {
         Discount discount = new Discount();
 
-        discount.setId(77L);
+        discount.setId("77");
         discount.setCurrencyId("ARS");
         discount.setCouponAmount(new BigDecimal(50));
 
@@ -684,7 +684,7 @@ public class InstallmentsPresenterTest {
     private Discount getDiscountWithoutCurrency() {
         Discount discount = new Discount();
 
-        discount.setId(77L);
+        discount.setId("77");
         discount.setCouponAmount(new BigDecimal(50));
 
         return discount;
@@ -693,7 +693,7 @@ public class InstallmentsPresenterTest {
     private Discount getDiscountWithEmptyCurrency() {
         Discount discount = new Discount();
 
-        discount.setId(77L);
+        discount.setId("77");
         discount.setCurrencyId("");
         discount.setCouponAmount(new BigDecimal(50));
 
