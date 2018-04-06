@@ -1,6 +1,6 @@
 package com.mercadopago.lite.model;
 
-public class Sites {
+public final class Sites {
 
     public static final Site ARGENTINA = new Site("MLA", "ARS");
     public static final Site BRASIL = new Site("MLB", "BRL");

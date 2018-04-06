@@ -40,9 +40,6 @@ public class CheckoutPreference {
     private BigDecimal conceptAmount;
     private String conceptId;
 
-    public CheckoutPreference() {
-    }
-
     public CheckoutPreference(String checkoutPreferenceId) {
         id = checkoutPreferenceId;
     }
