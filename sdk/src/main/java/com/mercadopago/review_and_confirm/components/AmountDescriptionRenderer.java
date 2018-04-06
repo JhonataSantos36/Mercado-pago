@@ -2,17 +2,16 @@ package com.mercadopago.review_and_confirm.components;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.customviews.MPTextView;
+import com.mercadopago.model.SummaryItemType;
 import com.mercadopago.lite.util.CurrenciesUtil;
-
-/**
- * Created by mromar on 2/28/18.
- */
 
 public class AmountDescriptionRenderer extends Renderer<AmountDescription> {
 
@@ -23,7 +22,14 @@ public class AmountDescriptionRenderer extends Renderer<AmountDescription> {
         final MPTextView amountTextView = bodyView.findViewById(R.id.mpsdkAmount);
 
         setText(descriptionTextView, component.props.description);
-        setText(amountTextView, CurrenciesUtil.getSpannedAmountWithCurrencySymbol(component.props.amount, component.props.currencyId));
+
+        final StringBuilder amountBuilder = new StringBuilder();
+        if (SummaryItemType.DISCOUNT.equals(component.props.descriptionType)) {
+            amountBuilder.append("-");
+        }
+        final Spanned spannedAmount = CurrenciesUtil.getSpannedAmountWithCurrencySymbol(component.props.amount, component.props.currencyId);
+
+        amountTextView.setText(TextUtils.concat(amountBuilder, spannedAmount));
 
         descriptionTextView.setTextColor(component.props.textColor);
         amountTextView.setTextColor(component.props.textColor);

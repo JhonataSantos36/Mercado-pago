@@ -280,7 +280,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
 
             discountAmountBuilder.append("-");
             discountAmount = CurrenciesUtil.getSpannedString(mPresenter.getCouponAmount(),
-                    mPresenter.getCurrencyId(), false, true);
+                mPresenter.getCurrencyId(), false, true);
 
             mReviewSummaryDiscountAmount.setText(TextUtils.concat(discountAmountBuilder, discountAmount));
             if (!TextUtil.isEmpty(mPresenter.getDiscount().getConcept())) {
