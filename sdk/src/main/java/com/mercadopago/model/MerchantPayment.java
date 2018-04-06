@@ -2,29 +2,14 @@ package com.mercadopago.model;
 
 import android.support.annotation.NonNull;
 
-import com.mercadopago.lite.model.Payer;
-
-import java.math.BigDecimal;
-
 public class MerchantPayment {
 
-    private Payer payer;
     private Long cardIssuerId;
     private String cardToken;
-    private Long campaignId;
+    private String campaignId;
     private Integer installments;
     private String paymentMethodId;
-    private final BigDecimal transactionAmount;
 
-    public MerchantPayment(BigDecimal transactionAmount, Integer installments, Long cardIssuerId, String cardToken,
-                           String paymentMethodId, Long campaignId) {
-        this.transactionAmount = transactionAmount;
-        this.installments = installments;
-        this.cardIssuerId = cardIssuerId;
-        this.cardToken = cardToken;
-        this.paymentMethodId = paymentMethodId;
-        this.campaignId = campaignId;
-    }
 
     public MerchantPayment(@NonNull PaymentData paymentData) {
         if (paymentData.getPayerCost() != null) {
@@ -46,9 +31,6 @@ public class MerchantPayment {
         if (paymentData.getIssuer() != null) {
             cardIssuerId = paymentData.getIssuer().getId();
         }
-
-        payer = paymentData.getPayer();
-        transactionAmount = paymentData.getTransactionAmount();
     }
 
     public Long getCardIssuerId() {
@@ -67,11 +49,11 @@ public class MerchantPayment {
         cardToken = card;
     }
 
-    public Long getCampaignId() {
+    public String getCampaignId() {
         return campaignId;
     }
 
-    public void setCampaignId(Long campaignId) {
+    public void setCampaignId(String campaignId) {
         this.campaignId = campaignId;
     }
 

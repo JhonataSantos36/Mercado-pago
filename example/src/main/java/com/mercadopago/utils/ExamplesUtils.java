@@ -194,7 +194,7 @@ public class ExamplesUtils {
     private static Builder discountSample(Activity activity) {
         Discount discount = new Discount();
         discount.setCurrencyId("ARS");
-        discount.setId(77L);
+        discount.setId("77123");
         discount.setCouponAmount(new BigDecimal(20));
         discount.setPercentOff(new BigDecimal(20));
         return createBase(activity).setDiscount(discount);
