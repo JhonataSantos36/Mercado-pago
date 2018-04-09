@@ -46,7 +46,7 @@
             android:gravity="center"
             android:includeFontPadding="false"
             android:textSize="28dp"
-            app:fontStyle="light"
+            app:font_style="light"
             tools:text="1522333333" />
 
         <com.mercadopago.customviews.MPTextView

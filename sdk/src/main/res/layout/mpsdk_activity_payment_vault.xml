@@ -48,7 +48,7 @@
                         android:textSize="17dp"
                         android:visibility="visible"
                         app:allowCustomFont="false"
-                        app:fontStyle="mono_regular" />
+                        app:font_style="mono_regular" />
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>

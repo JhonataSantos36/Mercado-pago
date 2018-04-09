@@ -41,7 +41,7 @@
             android:textColor="@color/mpsdk_background_blue"
             android:background="@drawable/mpsdk_title_toolbar"
             android:visibility="gone"
-            app:fontStyle="mono_regular"
+            app:font_style="mono_regular"
             app:allowCustomFont="false"
             style="@style/mpsdk_title_text"/>
     </android.support.v7.widget.Toolbar>

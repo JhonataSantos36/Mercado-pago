@@ -45,7 +45,7 @@
                     android:text="@string/mpsdk_you_can_finish_your_payment_with_cards"
                     android:textColor="@color/mpsdk_form_text"
                     android:textSize="20dp"
-                    app:fontStyle="regular" />
+                    app:font_style="regular" />
 
             </LinearLayout>
 

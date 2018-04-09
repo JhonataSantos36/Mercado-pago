@@ -47,7 +47,7 @@
                         android:textSize="17dp"
                         android:visibility="gone"
                         app:allowCustomFont="false"
-                        app:fontStyle="mono_regular" />
+                        app:font_style="mono_regular" />
 
                     <ImageView
                         android:id="@+id/mpsdkIcon"
@@ -205,7 +205,7 @@
                     android:text="@string/mpsdk_text_continue"
                     android:textColor="@color/mpsdk_continue_button"
                     android:textSize="16dp"
-                    app:fontStyle="regular"/>
+                    app:font_style="regular"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

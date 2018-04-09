@@ -85,7 +85,7 @@
                         android:visibility="visible"
                         android:text="•• ••• •••"
                         app:allowCustomFont="false"
-                        app:fontStyle="mono_regular"/>
+                        app:font_style="mono_regular"/>
 
                     <com.mercadopago.customviews.MPAutoResizeTextView
                         android:id="@+id/mpsdkIdNumberView"

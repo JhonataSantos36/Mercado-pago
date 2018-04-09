@@ -78,7 +78,7 @@ public class MPTextView extends TextView {
 
     private void readAttr(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MPTextView);
-        this.mFontStyle = a.getString(R.styleable.MPTextView_fontStyle);
+        this.mFontStyle = a.getString(R.styleable.MPTextView_font_style);
         this.mAllowCustomFont = a.getBoolean(R.styleable.MPTextView_allowCustomFont, true);
         if (this.mFontStyle == null) {
             this.mFontStyle = REGULAR;

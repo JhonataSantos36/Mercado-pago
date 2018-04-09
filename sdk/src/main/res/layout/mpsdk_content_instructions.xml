@@ -95,7 +95,7 @@
                 android:layout_marginStart="25dp"
                 android:gravity="center"
                 android:textSize="16dp"
-                app:fontStyle="regular"
+                app:font_style="regular"
                 tools:text="Info primaria" />
 
             <com.mercadopago.customviews.MPTextView
@@ -107,7 +107,7 @@
                 android:gravity="center"
                 android:textSize="12dp"
                 android:visibility="gone"
-                app:fontStyle="regular"
+                app:font_style="regular"
                 tools:text="Info primaria" />
 
             <View
@@ -127,7 +127,7 @@
                 android:gravity="center"
                 android:textSize="14dp"
                 android:visibility="gone"
-                app:fontStyle="regular"
+                app:font_style="regular"
                 tools:text="Info primaria" />
 
             <LinearLayout
@@ -188,7 +188,7 @@
                 android:paddingRight="10dp"
                 android:textColor="@color/mpsdk_color_link"
                 android:visibility="gone"
-                app:fontStyle="regular"
+                app:font_style="regular"
                 tools:text="Ir a banca en línea" />
 
             <View
@@ -208,7 +208,7 @@
             android:layout_marginTop="13dp"
             android:gravity="center"
             android:textSize="12dp"
-            app:fontStyle="regular"
+            app:font_style="regular"
             tools:text="Info secundaria" />
 
         <View
@@ -228,6 +228,6 @@
             android:text="@string/mpsdk_continue_shopping"
             android:textColor="@color/mpsdk_continue_button"
             android:textSize="16dp"
-            app:fontStyle="regular" />
+            app:font_style="regular" />
     </LinearLayout>
 </ScrollView>
