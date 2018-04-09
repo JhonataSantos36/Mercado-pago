@@ -97,7 +97,7 @@ task sourcesJar(type: Jar) {
     classifier = 'sources'
     from android.sourceSets.main.java.srcDirs
 }
-
+/.
 task javadoc(type: Javadoc) {
     failOnError = false
     options.encoding = 'UTF-8'
@@ -109,9 +109,10 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = "javadoc"
     from sourcesJar.destinationDir
 }
+./
 
 artifacts {
-    archives javadocJar
+    //archives javadocJar
     archives sourcesJar
 }
 
