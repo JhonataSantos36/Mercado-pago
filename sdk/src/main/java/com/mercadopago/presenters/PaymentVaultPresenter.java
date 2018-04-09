@@ -300,7 +300,7 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
             if (noPaymentMethodsAvailable()) {
                 showEmptyPaymentMethodsError();
             } else if (mSelectAutomatically && isOnlyOneItemAvailable()) {
-                if (CheckoutStore.getInstance().hasEnabledPaymenthMethodPlugin()) {
+                if (CheckoutStore.getInstance().hasEnabledPaymentMethodPlugin()) {
                     selectPluginPaymentMethod(CheckoutStore.getInstance().getFirstEnabledPluginId());
                 } else if (mPaymentMethodSearch.getGroups() != null && !mPaymentMethodSearch.getGroups().isEmpty()) {
                     selectItem(mPaymentMethodSearch.getGroups().get(0), true);
@@ -474,20 +474,20 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
             customCount = mPaymentMethodSearch.getCustomSearchItems().size();
         }
 
-        pluginCount = store.getPaymenthMethodPluginCount();
+        pluginCount = store.getPaymentMethodPluginCount();
 
         return groupCount + customCount + pluginCount == 1;
     }
 
     private boolean searchItemsAvailable() {
         return mPaymentMethodSearch != null && mPaymentMethodSearch.getGroups() != null
-                && (!mPaymentMethodSearch.getGroups().isEmpty() || CheckoutStore.getInstance().hasEnabledPaymenthMethodPlugin());
+                && (!mPaymentMethodSearch.getGroups().isEmpty() || CheckoutStore.getInstance().hasEnabledPaymentMethodPlugin());
     }
 
     private boolean noPaymentMethodsAvailable() {
         return (mPaymentMethodSearch.getGroups() == null || mPaymentMethodSearch.getGroups().isEmpty())
                 && (mPaymentMethodSearch.getCustomSearchItems() == null || mPaymentMethodSearch.getCustomSearchItems().isEmpty())
-                && !CheckoutStore.getInstance().hasEnabledPaymenthMethodPlugin();
+                && !CheckoutStore.getInstance().hasEnabledPaymentMethodPlugin();
     }
 
     private void showEmptyPaymentMethodsError() {

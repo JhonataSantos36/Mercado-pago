@@ -40,7 +40,7 @@ public final class PaymentProcessorPluginActivity extends AppCompatActivity impl
         super.onCreate(savedInstanceState);
 
         final CheckoutStore store = CheckoutStore.getInstance();
-        final PaymentProcessor paymentProcessor = store.getPaymentProcessor();
+        final PaymentProcessor paymentProcessor = store.doesPaymentProcessorSupportPaymentMethodSelected();
 
         if (paymentProcessor == null) {
             cancel();

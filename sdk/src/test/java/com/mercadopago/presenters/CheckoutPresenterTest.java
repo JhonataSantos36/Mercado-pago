@@ -1,7 +1,8 @@
-package com.mercadopago.checkout;
+package com.mercadopago.presenters;
 
 import com.mercadopago.constants.Sites;
 import com.mercadopago.controllers.Timer;
+import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.MercadoPagoError;
@@ -35,24 +36,31 @@ import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.plugins.DataInitializationTask;
+import com.mercadopago.plugins.PaymentMethodPlugin;
+import com.mercadopago.plugins.PaymentProcessor;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
-import com.mercadopago.presenters.CheckoutPresenter;
 import com.mercadopago.providers.CheckoutProvider;
 import com.mercadopago.util.TextUtils;
 import com.mercadopago.views.CheckoutView;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mercadopago.core.MercadoPagoCheckout.PAYMENT_PROCESSOR_KEY;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 
 public class CheckoutPresenterTest {
 
@@ -94,58 +102,20 @@ public class CheckoutPresenterTest {
         assertTrue(provider.campaignsRequested);
     }
 
-    @Ignore
-    @Test
-    public void ifNullCampaignsRetrievedThenDisableDiscounts() {
-        MockedProvider provider = new MockedProvider();
-        MockedView view = new MockedView();
-
-        CheckoutPresenter presenter = new CheckoutPresenter();
-        presenter.attachResourcesProvider(provider);
-        presenter.attachView(view);
-
-        CheckoutPreference preference = new CheckoutPreference.Builder()
-                .setSite(Sites.ARGENTINA)
-                .addItem(new Item("Item", BigDecimal.TEN))
-                .build();
-
-        presenter.setCheckoutPreference(preference);
-
-        presenter.initialize();
-        assertFalse(presenter.isDiscountEnabled());
-    }
-
-    @Ignore
-    @Test
-    public void ifEmptyCampaignsRetrievedThenDisableDiscounts() {
-        MockedProvider provider = new MockedProvider();
-        MockedView view = new MockedView();
-
-        CheckoutPresenter presenter = new CheckoutPresenter();
-        presenter.attachResourcesProvider(provider);
-        presenter.attachView(view);
-
-        CheckoutPreference preference = new CheckoutPreference.Builder()
-                .setSite(Sites.ARGENTINA)
-                .addItem(new Item("Item", BigDecimal.TEN))
-                .build();
-
-        presenter.setCheckoutPreference(preference);
-
-        provider.setCampaignsResponse(new ArrayList<Campaign>());
-        presenter.initialize();
-        assertFalse(presenter.isDiscountEnabled());
-    }
-
     @Test
     public void ifDirectDiscountCampaignAvailableThenRequestDirectDiscount() {
 
-        MockedProvider provider = new MockedProvider();
-        MockedView view = new MockedView();
+        CheckoutProvider provider = mock(CheckoutProvider.class);
+        DataInitializationTask dataMock = mock(DataInitializationTask.class);
+        CheckoutView view = mock(CheckoutView.class);
+        CheckoutStore store = CheckoutStore.getInstance();
+
+        store.setDataInitializationTask(dataMock);
 
         CheckoutPresenter presenter = new CheckoutPresenter();
         presenter.attachResourcesProvider(provider);
         presenter.attachView(view);
+
 
         CheckoutPreference preference = new CheckoutPreference.Builder()
                 .setSite(Sites.ARGENTINA)
@@ -154,9 +124,10 @@ public class CheckoutPresenterTest {
 
         presenter.setCheckoutPreference(preference);
 
-        provider.setCampaignsResponse(Discounts.getCampaigns());
         presenter.initialize();
-        assertTrue(provider.directDiscountRequested);
+
+        Mockito.verify(provider, times(1)).fetchFonts();
+        Mockito.verify(provider, times(1)).getDiscountCampaigns(presenter.onCampaignsRetrieved());
     }
 
     //Preferences configuration
@@ -1836,6 +1807,84 @@ public class CheckoutPresenterTest {
 
         presenter.initialize();
         assertTrue(view.initTracked);
+    }
+
+    @Test
+    public void whenIsDiscountEnabledAndNotHasDiscountThenShouldGetDiscountTrue() {
+        CheckoutPresenter presenter = getPresenterWithFlowDiscount(true);
+
+        presenter.setDiscount(null);
+
+        boolean shouldRetrieveDiscount = presenter.shouldRetrieveDiscount();
+
+        assertTrue(shouldRetrieveDiscount);
+    }
+
+    @Test
+    public void whenIsDiscountEnabledAndHasDiscountThenShouldGetDiscountFalse() {
+        CheckoutPresenter presenter = getPresenterWithFlowDiscount(true);
+
+        presenter.setDiscount(new Discount());
+
+        boolean shouldRetrieveDiscount = presenter.shouldRetrieveDiscount();
+
+        assertFalse(shouldRetrieveDiscount);
+    }
+
+    @Test
+    public void whenIsNotDiscountEnabledAndNotHasDiscountThenShouldGetDiscountFalse() {
+        CheckoutPresenter presenter = getPresenterWithFlowDiscount(false);
+
+        boolean shouldGetDiscount = presenter.shouldRetrieveDiscount();
+
+        assertFalse(shouldGetDiscount);
+    }
+
+    @Test
+    public void whenIsDiscountEnabledAndHasPaymentMethodPluginThenShouldGetDiscountFalse() {
+        CheckoutStore store = CheckoutStore.getInstance();
+        List<PaymentMethodPlugin> paymentMethodPlugins = new ArrayList<>();
+
+        PaymentMethodPlugin paymentMethodPlugin = mock(PaymentMethodPlugin.class);
+        paymentMethodPlugins.add(paymentMethodPlugin);
+
+        store.setPaymentMethodPluginList(paymentMethodPlugins);
+        store.getData().put(DataInitializationTask.KEY_INIT_SUCCESS, true);
+
+        when(paymentMethodPlugin.isEnabled(store.getData())).thenReturn(true);
+
+        CheckoutPresenter presenter = getPresenterWithFlowDiscount(true);
+        presenter.setDiscount(null);
+
+        boolean shouldGetDiscount = presenter.shouldRetrieveDiscount();
+
+        assertFalse(shouldGetDiscount);
+    }
+
+    @Test
+    public void whenIsDiscountEnabledAndHasPaymentPluginThenShouldGetDiscountFalse() {
+        CheckoutStore store = CheckoutStore.getInstance();
+
+        PaymentProcessor paymentProcessor = mock(PaymentProcessor.class);
+        store.addPaymentPlugins(paymentProcessor, PAYMENT_PROCESSOR_KEY);
+
+
+        CheckoutPresenter presenter = getPresenterWithFlowDiscount(true);
+        presenter.setDiscount(null);
+
+        boolean shouldGetDiscount = presenter.shouldRetrieveDiscount();
+
+        assertFalse(shouldGetDiscount);
+    }
+
+    private CheckoutPresenter getPresenterWithFlowDiscount(boolean enabled) {
+        FlowPreference flowPreference = mock(FlowPreference.class);
+        when(flowPreference.isDiscountEnabled()).thenReturn(enabled);
+
+        CheckoutPresenter presenter = new CheckoutPresenter();
+        presenter.setFlowPreference(flowPreference);
+
+        return presenter;
     }
 
     private class MockedView implements CheckoutView {
