@@ -19,7 +19,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            testCoverageEnabled true
+            testCoverageEnabled false
             multiDexEnabled true
             versionNameSuffix " Debug"
             debuggable true
@@ -27,27 +27,14 @@ android {
     }
 
     project.gradle.taskGraph.whenReady {
-        connectedDevDebugAndroidTest {
+        connectedDebugAndroidTest {
             ignoreFailures = true
-        }
-    }
-
-    flavorDimensions "environment"
-
-    productFlavors {
-        dev {
-            dimension "environment"
-            buildConfigField "String", "API_VERSION", "\"beta\""
-        }
-        prod {
-            dimension "environment"
-            buildConfigField "String", "API_VERSION", "\"v1\""
         }
     }
 }
 
 project.gradle.taskGraph.whenReady {
-    connectedDevDebugAndroidTest {
+    connectedDebugAndroidTest {
         ignoreFailures = true
     }
 }
