@@ -9,10 +9,6 @@ import com.mercadopago.paymentresult.props.TotalAmountProps;
 import java.math.BigDecimal;
 import java.util.Locale;
 
-/**
- * Created by mromar on 11/28/17.
- */
-
 public class TotalAmount extends Component<TotalAmountProps, Void> {
 
     public TotalAmount(@NonNull final TotalAmountProps props,

@@ -5,7 +5,6 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.mercadopago.paymentresult.formatter.HeaderTitleFormatter;
 import com.mercadopago.plugins.model.BusinessPayment;
 
 
@@ -20,9 +19,8 @@ public class HeaderProps {
     public final int iconImage;
     public final int badgeImage;
     public final String iconUrl;
-    public final String title;
+    public final CharSequence title;
     public final String label;
-    public final HeaderTitleFormatter amountFormat;
 
     private HeaderProps(@NonNull final Builder builder) {
         height = builder.height;
@@ -33,7 +31,6 @@ public class HeaderProps {
         badgeImage = builder.badgeImage;
         title = builder.title;
         label = builder.label;
-        amountFormat = builder.amountFormat;
     }
 
     public static HeaderProps from(@NonNull BusinessPayment businessPayment, @NonNull Context context) {
@@ -58,8 +55,7 @@ public class HeaderProps {
                 .setIconUrl(iconUrl)
                 .setBadgeImage(badgeImage)
                 .setTitle(title)
-                .setLabel(label)
-                .setAmountFormat(amountFormat);
+                .setLabel(label);
     }
 
     public static class Builder {
@@ -70,9 +66,8 @@ public class HeaderProps {
         public int iconImage;
         public int badgeImage;
         public String iconUrl;
-        public String title;
+        public CharSequence title;
         public String label;
-        public HeaderTitleFormatter amountFormat;
 
         public Builder setBackground(@DrawableRes final int background) {
             this.background = background;
@@ -104,18 +99,13 @@ public class HeaderProps {
             return this;
         }
 
-        public Builder setTitle(@NonNull final String title) {
+        public Builder setTitle(@NonNull final CharSequence title) {
             this.title = title;
             return this;
         }
 
         public Builder setLabel(@Nullable final String label) {
             this.label = label;
-            return this;
-        }
-
-        public Builder setAmountFormat(@NonNull final HeaderTitleFormatter amountFormat) {
-            this.amountFormat = amountFormat;
             return this;
         }
 

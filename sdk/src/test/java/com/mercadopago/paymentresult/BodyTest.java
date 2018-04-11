@@ -24,10 +24,6 @@ import org.junit.Test;
 
 import static org.mockito.Mockito.mock;
 
-/**
- * Created by vaserber on 22/11/2017.
- */
-
 public class BodyTest {
 
     private ActionDispatcher dispatcher;
@@ -46,7 +42,7 @@ public class BodyTest {
     @Test
     public void testBodyHasInstructions() {
         final Body body = new Body(getBodyPropsForInstructions(Instructions.getRapipagoInstruction()),
-                dispatcher, paymentResultProvider, paymentMethodProvider);
+                dispatcher, paymentResultProvider);
 
         Assert.assertTrue(body.hasInstructions());
         Assert.assertNotNull(body.getInstructionsComponent());
@@ -56,7 +52,7 @@ public class BodyTest {
     public void testInstructionsHasValidProps() {
         final Instruction instruction = Instructions.getRapipagoInstruction();
         final Body body = new Body(getBodyPropsForInstructions(instruction),
-                dispatcher, paymentResultProvider, paymentMethodProvider);
+                dispatcher, paymentResultProvider);
 
         com.mercadopago.paymentresult.components.Instructions instructionsComponent = body.getInstructionsComponent();
         Assert.assertEquals(instructionsComponent.props.instruction, instruction);
@@ -76,7 +72,7 @@ public class BodyTest {
     public void testBodyHasErrorWithContingency() {
         final PaymentResult paymentResult = PaymentResults.getStatusInProcessContingencyPaymentResult();
         final Body body = new Body(getBodyPropsForOnPayment(paymentResult),
-                dispatcher, paymentResultProvider, paymentMethodProvider);
+                dispatcher, paymentResultProvider);
 
         Assert.assertTrue(body.hasBodyError());
     }
@@ -85,7 +81,7 @@ public class BodyTest {
     public void testBodyHasErrorWithRejectionOther() {
         final PaymentResult paymentResult = PaymentResults.getStatusRejectedOtherPaymentResult();
         final Body body = new Body(getBodyPropsForOnPayment(paymentResult),
-                dispatcher, paymentResultProvider, paymentMethodProvider);
+                dispatcher, paymentResultProvider);
 
         Assert.assertTrue(body.hasBodyError());
     }
@@ -94,7 +90,7 @@ public class BodyTest {
     public void testBodyHasErrorWithRejectionInsufficientAmount() {
         final PaymentResult paymentResult = PaymentResults.getStatusRejectedInsufficientAmountPaymentResult();
         final Body body = new Body(getBodyPropsForOnPayment(paymentResult),
-                dispatcher, paymentResultProvider, paymentMethodProvider);
+                dispatcher, paymentResultProvider);
 
         Assert.assertTrue(body.hasBodyError());
     }
@@ -103,7 +99,7 @@ public class BodyTest {
     public void testBodyHasErrorWithRejectionCallForAuth() {
         final PaymentResult paymentResult = PaymentResults.getStatusCallForAuthPaymentResult();
         final Body body = new Body(getBodyPropsForOnPayment(paymentResult),
-                dispatcher, paymentResultProvider, paymentMethodProvider);
+                dispatcher, paymentResultProvider);
 
         Assert.assertTrue(body.hasBodyError());
     }
@@ -112,7 +108,7 @@ public class BodyTest {
     public void testBodyHasErrorWithRejectionBoleto() {
         final PaymentResult paymentResult = PaymentResults.getBoletoRejectedPaymentResult();
         final Body body = new Body(getBodyPropsForOnPayment(paymentResult),
-                dispatcher, paymentResultProvider, paymentMethodProvider);
+                dispatcher, paymentResultProvider);
 
         Assert.assertTrue(body.hasBodyError());
     }
@@ -121,7 +117,7 @@ public class BodyTest {
     public void testBodyHasErrorWithRejectionBadFilledDate() {
         final PaymentResult paymentResult = PaymentResults.getStatusRejectedBadFilledDatePaymentResult();
         final Body body = new Body(getBodyPropsForOnPayment(paymentResult),
-                dispatcher, paymentResultProvider, paymentMethodProvider);
+                dispatcher, paymentResultProvider);
 
         Assert.assertFalse(body.hasBodyError());
     }
@@ -130,7 +126,7 @@ public class BodyTest {
     public void testBodyHasErrorWithRejectionBadFilledSecurityCode() {
         final PaymentResult paymentResult = PaymentResults.getStatusRejectedBadFilledSecuPaymentResult();
         final Body body = new Body(getBodyPropsForOnPayment(paymentResult),
-                dispatcher, paymentResultProvider, paymentMethodProvider);
+                dispatcher, paymentResultProvider);
 
         Assert.assertFalse(body.hasBodyError());
     }
@@ -139,7 +135,7 @@ public class BodyTest {
     public void testBodyHasErrorWithRejectionBadFilledForm() {
         final PaymentResult paymentResult = PaymentResults.getStatusRejectedBadFilledFormPaymentResult();
         final Body body = new Body(getBodyPropsForOnPayment(paymentResult),
-                dispatcher, paymentResultProvider, paymentMethodProvider);
+                dispatcher, paymentResultProvider);
 
         Assert.assertFalse(body.hasBodyError());
     }
@@ -148,7 +144,7 @@ public class BodyTest {
     public void testBodyErrorHasValidPropsForInsufficientData() {
         final PaymentResult paymentResult = PaymentResults.getBoletoRejectedPaymentResult();
         final Body body = new Body(getBodyPropsForOnPayment(paymentResult),
-                dispatcher, paymentResultProvider, paymentMethodProvider);
+                dispatcher, paymentResultProvider);
 
         BodyError bodyError = body.getBodyErrorComponent();
         Assert.assertEquals(bodyError.props.status, paymentResult.getPaymentStatus());
@@ -160,7 +156,7 @@ public class BodyTest {
     public void testBodyHasReceipt() {
         final PaymentResult paymentResult = PaymentResults.getStatusApprovedPaymentResult();
         final Body body = new Body(getBodyPropsForOnPayment(paymentResult),
-                dispatcher, paymentResultProvider, paymentMethodProvider);
+                dispatcher, paymentResultProvider);
 
         Assert.assertTrue(body.hasReceipt());
     }
@@ -169,7 +165,7 @@ public class BodyTest {
     public void testBodyReceiptHasValidProps() {
         final PaymentResult paymentResult = PaymentResults.getStatusApprovedPaymentResult();
         final Body body = new Body(getBodyPropsForOnPayment(paymentResult),
-                dispatcher, paymentResultProvider, paymentMethodProvider);
+                dispatcher, paymentResultProvider);
 
         Receipt receipt = body.getReceiptComponent();
         Assert.assertEquals(receipt.props.receiptId, paymentResult.getPaymentId());
@@ -183,7 +179,7 @@ public class BodyTest {
 
         final PaymentResult paymentResult = PaymentResults.getStatusApprovedPaymentResult();
         final Body body = new Body(getBodyPropsForOnPayment(paymentResult),
-                dispatcher, paymentResultProvider, paymentMethodProvider);
+                dispatcher, paymentResultProvider);
 
         Assert.assertTrue(body.hasTopCustomComponent());
         Assert.assertNotNull(body.getApprovedTopCustomComponent());
@@ -197,7 +193,7 @@ public class BodyTest {
 
         final PaymentResult paymentResult = PaymentResults.getStatusApprovedPaymentResult();
         final Body body = new Body(getBodyPropsForOnPayment(paymentResult),
-                dispatcher, paymentResultProvider, paymentMethodProvider);
+                dispatcher, paymentResultProvider);
 
         Assert.assertTrue(body.hasBottomCustomComponent());
         Assert.assertNotNull(body.getPaymentMethodComponent());
@@ -213,7 +209,7 @@ public class BodyTest {
 
         final PaymentResult paymentResult = PaymentResults.getStatusApprovedPaymentResult();
         final Body body = new Body(getBodyPropsForOnPayment(paymentResult),
-                dispatcher, paymentResultProvider, paymentMethodProvider);
+                dispatcher, paymentResultProvider);
 
         Assert.assertTrue(body.hasBottomCustomComponent() && body.hasTopCustomComponent());
         Assert.assertNotNull(body.getApprovedBottomCustomComponent());

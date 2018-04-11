@@ -7,10 +7,6 @@ import com.mercadopago.model.Instruction;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;
 
-/**
- * Created by vaserber on 10/23/17.
- */
-
 public class PaymentResultBodyProps {
 
     public final String status;

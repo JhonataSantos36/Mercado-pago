@@ -8,10 +8,9 @@ import com.mercadopago.components.Component;
 import com.mercadopago.components.LoadingComponent;
 import com.mercadopago.components.RendererFactory;
 import com.mercadopago.constants.PaymentMethods;
-import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentResult;
-import com.mercadopago.paymentresult.PaymentMethodProvider;
+import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.paymentresult.PaymentResultProvider;
 import com.mercadopago.paymentresult.model.Badge;
 import com.mercadopago.paymentresult.props.HeaderProps;
@@ -52,14 +51,11 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
     public static final int WARNING_BADGE_IMAGE = R.drawable.mpsdk_badge_warning;
 
     public PaymentResultProvider paymentResultProvider;
-    public PaymentMethodProvider paymentMethodProvider;
 
     public PaymentResultContainer(@NonNull final ActionDispatcher dispatcher,
-                                  @NonNull final PaymentResultProvider paymentResultProvider,
-                                  @NonNull final PaymentMethodProvider paymentMethodProvider) {
+                                  @NonNull final PaymentResultProvider paymentResultProvider) {
         super(new PaymentResultProps.Builder().build(), dispatcher);
         this.paymentResultProvider = paymentResultProvider;
-        this.paymentMethodProvider = paymentMethodProvider;
     }
 
     public boolean isLoading() {
@@ -72,6 +68,13 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
 
     public Header getHeaderComponent() {
 
+        CharSequence title;
+        if (props.paymentResult.isCallForAuthorize()) {
+            title = props.headerFormatter.formatTextWithAmount(getTitle(props));
+        } else {
+            title = getTitle(props);
+        }
+
         final HeaderProps headerProps = new HeaderProps.Builder()
                 .setHeight(getHeaderMode())
                 .setBackground(getBackground(props.paymentResult))
@@ -79,9 +82,8 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
                 .setIconImage(getIconImage(props))
                 .setIconUrl(getIconUrl(props))
                 .setBadgeImage(getBadgeImage(props))
-                .setTitle(getTitle(props))
+                .setTitle(title)
                 .setLabel(getLabel(props))
-                .setAmountFormat(props.headerAmountFormatter)
                 .build();
 
         return new Header(headerProps, getDispatcher());
@@ -118,9 +120,8 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
                     .setDisclaimer(props.paymentResult.getStatementDescription())
                     .setProcessingMode(props.processingMode)
                     .setPaymentId(props.paymentResult.getPaymentId())
-                    .setBodyAmountFormatter(props.bodyAmountFormatter)
                     .build();
-            body = new Body(bodyProps, getDispatcher(), paymentResultProvider, paymentMethodProvider);
+            body = new Body(bodyProps, getDispatcher(), paymentResultProvider);
         }
         return body;
     }
@@ -344,12 +345,11 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
     }
 
     private String getTitle(@NonNull final PaymentResultProps props) {
-
         if (props.hasCustomizedTitle()) {
             return props.getPreferenceTitle();
         } else if (props.hasInstructions()) {
             return props.getInstructionsTitle();
-        } else if (props.paymentResult == null) {
+        } else if (props.paymentResult == null) { // TODO REMOVE THIS, is only used in mocks
             return paymentResultProvider.getEmptyText();
         } else if (isPaymentMethodOff(props.paymentResult)) {
             return paymentResultProvider.getEmptyText();
@@ -392,6 +392,7 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
                 }
             }
         }
+
         return paymentResultProvider.getEmptyText();
     }
 

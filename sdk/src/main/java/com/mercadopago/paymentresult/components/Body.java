@@ -5,29 +5,27 @@ import android.support.annotation.NonNull;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
 import com.mercadopago.components.CustomComponent;
-import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.model.Payment;
-import com.mercadopago.paymentresult.PaymentMethodProvider;
+import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.paymentresult.PaymentResultProvider;
 import com.mercadopago.paymentresult.props.BodyErrorProps;
 import com.mercadopago.paymentresult.props.InstructionsProps;
 import com.mercadopago.paymentresult.props.PaymentMethodProps;
 import com.mercadopago.paymentresult.props.PaymentResultBodyProps;
 import com.mercadopago.paymentresult.props.ReceiptProps;
+import com.mercadopago.paymentresult.props.TotalAmountProps;
 
 public class Body extends Component<PaymentResultBodyProps, Void> {
 
-    private final PaymentMethodProvider paymentMethodProvider;
+
     public PaymentResultProvider paymentResultProvider;
 
     public Body(@NonNull final PaymentResultBodyProps props,
                 @NonNull final ActionDispatcher dispatcher,
-                @NonNull final PaymentResultProvider paymentResultProvider,
-                @NonNull final PaymentMethodProvider paymentMethodProvider) {
+                @NonNull final PaymentResultProvider paymentResultProvider) {
         super(props, dispatcher);
         this.paymentResultProvider = paymentResultProvider;
-        this.paymentMethodProvider = paymentMethodProvider;
     }
 
     public boolean hasInstructions() {
@@ -70,16 +68,18 @@ public class Body extends Component<PaymentResultBodyProps, Void> {
     }
 
     public PaymentMethod getPaymentMethodComponent() {
-        final PaymentMethodProps paymentMethodProps = new PaymentMethodProps.Builder()
-                .setPaymentMethod(props.paymentData.getPaymentMethod())
-                .setPayerCost(props.paymentData.getPayerCost())
-                .setToken(props.paymentData.getToken())
-                .setIssuer(props.paymentData.getIssuer())
-                .setDisclaimer(props.disclaimer)
-                .setAmountFormatter(props.bodyAmountFormatter)
-                .setDiscount(props.paymentData.getDiscount())
-                .build();
-        return new PaymentMethod(paymentMethodProps, getDispatcher(), paymentMethodProvider);
+        final TotalAmountProps totalAmountProps = new TotalAmountProps(
+                props.bodyAmountFormatter,
+                props.paymentData.getPayerCost(),
+                props.paymentData.getDiscount());
+
+        final PaymentMethodProps paymentMethodProps = new PaymentMethodProps(props.paymentData.getPaymentMethod(),
+                props.paymentData.getToken(),
+                props.paymentData.getIssuer(),
+                props.disclaimer,
+                totalAmountProps);
+
+        return new PaymentMethod(paymentMethodProps, getDispatcher());
     }
 
     public boolean hasBodyError() {

@@ -10,4 +10,8 @@ public class TextUtil {
     public static boolean isEmpty(String text) {
         return text == null || text.isEmpty();
     }
+
+    public static boolean isEmpty(CharSequence text) {
+        return text == null || text.length() <= 0;
+    }
 }

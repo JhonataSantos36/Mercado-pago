@@ -10,9 +10,15 @@ import com.mercadopago.paymentresult.formatter.HeaderTitleFormatter;
 
 public interface PaymentResultPropsView extends MvpView {
 
-    void setPropPaymentResult(@NonNull final PaymentResult paymentResult, final HeaderTitleFormatter headerTitleFormatter, BodyAmountFormatter bodyAmountFormatter, final boolean showLoading);
+    void setPropPaymentResult(@NonNull final PaymentResult paymentResult,
+                              @NonNull final HeaderTitleFormatter formatter,
+                              @NonNull final BodyAmountFormatter bodyAmountFormatter,
+                              final boolean showLoading);
 
-    void setPropInstruction(@NonNull final Instruction instruction, @NonNull final HeaderTitleFormatter amountFormat, final boolean showLoading, @NonNull final String processingMode);
+    void setPropInstruction(@NonNull final Instruction instruction,
+                            @NonNull final HeaderTitleFormatter formatter,
+                            final boolean showLoading,
+                            @NonNull final String processingMode);
 
     void notifyPropsChanged();
 

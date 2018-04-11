@@ -11,10 +11,6 @@ import com.mercadopago.paymentresult.formatter.HeaderTitleFormatter;
 import com.mercadopago.paymentresult.props.HeaderProps;
 import com.mercadopago.paymentresult.props.PaymentResultProps;
 
-/**
- * Created by vaserber on 10/20/17.
- */
-
 public class PaymentResultPropsMutator implements Mutator, PaymentResultPropsView {
 
     private MutatorPropsListener propsListener;
@@ -27,31 +23,29 @@ public class PaymentResultPropsMutator implements Mutator, PaymentResultPropsVie
         propsListener = listener;
     }
 
-    //headerAmountFormatter can be null
     @Override
     public void setPropPaymentResult(@NonNull final PaymentResult paymentResult,
-                                     final HeaderTitleFormatter headerAmountFormatter,
-                                     final BodyAmountFormatter bodyAmountFormatter,
+                                     @NonNull final HeaderTitleFormatter formatter,
+                                     @NonNull final BodyAmountFormatter bodyAmountFormatter,
                                      final boolean showLoading) {
         props = props.toBuilder()
                 .setPaymentResult(paymentResult)
                 .setHeaderMode(HeaderProps.HEADER_MODE_WRAP)
-                .setHeaderAmountFormatter(headerAmountFormatter)
-                .setBodyAmountFormatter(bodyAmountFormatter)
+                .setHeaderFormatter(formatter)
                 .setLoading(showLoading)
                 .build();
     }
 
     @Override
     public void setPropInstruction(@NonNull final Instruction instruction,
-                                   @NonNull final HeaderTitleFormatter amountFormat,
+                                   @NonNull final HeaderTitleFormatter formatter,
                                    final boolean showLoading,
                                    @NonNull final String processingMode) {
         props = props.toBuilder()
                 .setInstruction(instruction)
-                .setHeaderAmountFormatter(amountFormat)
                 .setLoading(showLoading)
                 .setProcessingMode(processingMode)
+                .setHeaderFormatter(formatter)
                 .build();
     }
 

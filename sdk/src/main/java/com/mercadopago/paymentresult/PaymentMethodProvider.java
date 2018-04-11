@@ -7,9 +7,4 @@ public interface PaymentMethodProvider extends ResourcesProvider {
 
     int getIconResource(PaymentMethod paymentMethod);
 
-    String getLastDigitsText();
-
-    String getAccountMoneyText();
-
-    String getDisclaimer(String statementDescription);
 }

@@ -65,8 +65,24 @@ public class PaymentResult {
         return statementDescription;
     }
 
-    public boolean hasDiscount() {
-        return paymentData != null && paymentData.getDiscount() != null;
+    public boolean isCallForAuthorize() {
+        return Payment.StatusCodes.STATUS_REJECTED.equals(getPaymentStatus()) &&
+                Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE.equals(getPaymentStatusDetail());
+    }
+
+    public boolean isRejected() {
+        return Payment.StatusCodes.STATUS_REJECTED.equals(getPaymentStatus());
+    }
+
+    public boolean isInstructions() {
+        return (Payment.StatusCodes.STATUS_PENDING.equals(getPaymentStatus()) ||
+                Payment.StatusCodes.STATUS_IN_PROCESS.equals(getPaymentStatus())) &&
+                Payment.StatusDetail.STATUS_DETAIL_PENDING_WAITING_PAYMENT.equals(getPaymentStatusDetail());
+    }
+
+    public boolean isPending() {
+        return getPaymentStatus().equals(Payment.StatusCodes.STATUS_PENDING) ||
+                getPaymentStatus().equals(Payment.StatusCodes.STATUS_IN_PROCESS);
     }
 
     public static class Builder{

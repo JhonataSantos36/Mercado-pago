@@ -6,8 +6,8 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.view.LayoutInflater;
 import android.text.Spanned;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -93,6 +93,14 @@ public abstract class Renderer<T extends Component> {
     }
 
     protected void setText(@NonNull final TextView view, @Nullable final String text) {
+        if (TextUtil.isEmpty(text)) {
+            view.setVisibility(View.GONE);
+        } else {
+            view.setText(text);
+        }
+    }
+
+    protected void setText(@NonNull final TextView view, @Nullable final CharSequence text) {
         if (TextUtil.isEmpty(text)) {
             view.setVisibility(View.GONE);
         } else {

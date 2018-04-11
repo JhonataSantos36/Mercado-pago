@@ -4,10 +4,6 @@ import com.mercadopago.lite.util.CurrenciesUtil;
 
 import java.math.BigDecimal;
 
-/**
- * Created by mromar on 11/30/17.
- */
-
 public class BodyAmountFormatter extends AmountFormat {
 
     public BodyAmountFormatter(String currencyId, BigDecimal amount) {

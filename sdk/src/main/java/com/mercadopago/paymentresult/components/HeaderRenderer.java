@@ -16,10 +16,6 @@ import com.mercadopago.components.RendererFactory;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.paymentresult.props.HeaderProps;
 
-/**
- * Created by vaserber on 10/20/17.
- */
-
 public class HeaderRenderer extends Renderer<Header> {
 
     @Override
@@ -47,11 +43,7 @@ public class HeaderRenderer extends Renderer<Header> {
         RendererFactory.create(context, component.getIconComponent()).render(iconParentViewGroup);
 
         //Render title
-        if (component.props.amountFormat == null) {
-            setText(titleTextView, component.props.title);
-        } else {
-            titleTextView.setText(component.props.amountFormat.formatTextWithAmount(component.props.title));
-        }
+        setText(titleTextView, component.props.title);
 
         return headerView;
     }

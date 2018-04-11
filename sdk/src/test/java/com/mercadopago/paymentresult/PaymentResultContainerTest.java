@@ -9,6 +9,7 @@ import com.mercadopago.model.PaymentResult;
 import com.mercadopago.paymentresult.components.Body;
 import com.mercadopago.paymentresult.components.Header;
 import com.mercadopago.paymentresult.components.PaymentResultContainer;
+import com.mercadopago.paymentresult.formatter.HeaderTitleFormatter;
 import com.mercadopago.paymentresult.model.Badge;
 import com.mercadopago.paymentresult.props.HeaderProps;
 import com.mercadopago.paymentresult.props.PaymentResultProps;
@@ -19,12 +20,10 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-/**
- * Created by vaserber on 11/2/17.
- */
 
 public class PaymentResultContainerTest {
 
@@ -40,13 +39,11 @@ public class PaymentResultContainerTest {
 
     private ActionDispatcher dispatcher;
     private PaymentResultProvider paymentResultProvider;
-    private PaymentMethodProvider paymentMethodProvider;
 
     @Before
     public void setup() {
         dispatcher = mock(ActionDispatcher.class);
         paymentResultProvider = mock(PaymentResultProvider.class);
-        paymentMethodProvider = mock(PaymentMethodProvider.class);
 
         when(paymentResultProvider.getApprovedTitle()).thenReturn(APPROVED_TITLE);
         when(paymentResultProvider.getPendingTitle()).thenReturn(PENDING_TITLE);
@@ -143,13 +140,6 @@ public class PaymentResultContainerTest {
     }
 
     @Test
-    public void onEmptyPaymentResultGetDefaultBackground() {
-        final HeaderProps headerProps = getHeaderPropsFromContainerWith(null);
-
-        Assert.assertEquals(headerProps.background, PaymentResultContainer.DEFAULT_BACKGROUND_COLOR);
-    }
-
-    @Test
     public void onInvalidPaymentResultStatusGetDefaultBackground() {
         final PaymentData paymentData = new PaymentData();
         paymentData.setPaymentMethod(PaymentMethods.getPaymentMethodOff());
@@ -225,13 +215,6 @@ public class PaymentResultContainerTest {
         final HeaderProps headerProps = getHeaderPropsFromContainerWith(paymentResult);
 
         Assert.assertEquals(headerProps.iconImage, PaymentResultContainer.CARD_ICON_IMAGE);
-    }
-
-    @Test
-    public void onEmptyPaymentResultGetDefaultIcon() {
-        final HeaderProps headerProps = getHeaderPropsFromContainerWith(null);
-
-        Assert.assertEquals(headerProps.iconImage, PaymentResultContainer.DEFAULT_ICON_IMAGE);
     }
 
     @Test
@@ -371,13 +354,6 @@ public class PaymentResultContainerTest {
     }
 
     @Test
-    public void onEmptyPaymentResultGetDefaultBadge() {
-        final HeaderProps headerProps = getHeaderPropsFromContainerWith(null);
-
-        Assert.assertEquals(headerProps.badgeImage, PaymentResultContainer.DEFAULT_BADGE_IMAGE);
-    }
-
-    @Test
     public void onInvalidPaymentResultStatusGetDefaultBadge() {
         final PaymentData paymentData = new PaymentData();
         paymentData.setPaymentMethod(PaymentMethods.getPaymentMethodOff());
@@ -492,12 +468,6 @@ public class PaymentResultContainerTest {
         Assert.assertEquals(headerProps.title, instruction.getTitle());
     }
 
-    @Test
-    public void onEmptyPaymentResultGetEmptyTitle() {
-        final HeaderProps headerProps = getHeaderPropsFromContainerWith(null);
-
-        Assert.assertEquals(headerProps.title, paymentResultProvider.getEmptyText());
-    }
 
     @Test
     public void onPaymentMethodOffWithoutInstructionThenShowEmptyTitle() {
@@ -610,13 +580,6 @@ public class PaymentResultContainerTest {
         final HeaderProps headerProps = getHeaderPropsFromContainerWith(paymentResult);
 
         Assert.assertEquals(headerProps.label, paymentResultProvider.getRejectionLabel());
-    }
-
-    @Test
-    public void onEmptyPaymentResultGetEmptyLabel() {
-        final HeaderProps headerProps = getHeaderPropsFromContainerWith(null);
-
-        Assert.assertEquals(headerProps.label, paymentResultProvider.getEmptyText());
     }
 
     @Test
@@ -743,6 +706,7 @@ public class PaymentResultContainerTest {
 
         final PaymentResultProps paymentResultProps = new PaymentResultProps.Builder()
                 .setPaymentResult(paymentResult)
+                .setHeaderFormatter(getHeaderFormatterStub())
                 .build();
         container.setProps(paymentResultProps);
 
@@ -797,7 +761,9 @@ public class PaymentResultContainerTest {
 
         final PaymentResultProps paymentResultProps = new PaymentResultProps.Builder()
                 .setPaymentResult(paymentResult)
+                .setHeaderFormatter(getHeaderFormatterStub())
                 .build();
+
         container.setProps(paymentResultProps);
         return container.getHeaderComponent().props;
     }
@@ -814,8 +780,11 @@ public class PaymentResultContainerTest {
     }
 
     private PaymentResultContainer getContainer() {
-        return new PaymentResultContainer(dispatcher, paymentResultProvider, paymentMethodProvider);
+        return new PaymentResultContainer(dispatcher, paymentResultProvider);
     }
 
 
+    private HeaderTitleFormatter getHeaderFormatterStub() {
+        return new HeaderTitleFormatter("ARS", new BigDecimal(100.12), "Card");
+    }
 }
