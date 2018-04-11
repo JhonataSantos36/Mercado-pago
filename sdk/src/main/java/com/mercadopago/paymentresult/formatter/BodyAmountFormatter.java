@@ -1,6 +1,6 @@
 package com.mercadopago.paymentresult.formatter;
 
-import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.lite.util.CurrenciesUtil;
 
 import java.math.BigDecimal;
 

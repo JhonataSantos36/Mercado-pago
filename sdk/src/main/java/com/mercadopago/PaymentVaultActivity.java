@@ -17,17 +17,18 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentMethodSearchItemAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
+import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.controllers.CheckoutTimer;
 import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.decorations.GridSpacingItemDecoration;
+import com.mercadopago.customviews.GridSpacingItemDecoration;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.hooks.Hook;
 import com.mercadopago.hooks.HookActivity;
-import com.mercadopago.model.ApiException;
+import com.mercadopago.lite.exceptions.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CustomSearchItem;
 import com.mercadopago.model.Discount;
@@ -364,7 +365,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
         } else {
 
             final PaymentMethodInfo paymentMethodInfo = store.getSelectedPaymentMethodInfo(this);
-            finishPaymentMethodSelection(new PaymentMethod(paymentMethodInfo));
+            finishPaymentMethodSelection(new PaymentMethod(paymentMethodInfo.id, paymentMethodInfo.name, PaymentTypes.PLUGIN));
             overrideTransitionOut();
         }
     }
@@ -422,7 +423,7 @@ public class PaymentVaultActivity extends MercadoPagoBaseActivity implements Pay
             if (resultCode == RESULT_OK) {
                 final PaymentMethodInfo paymentMethodInfo =
                         CheckoutStore.getInstance().getSelectedPaymentMethodInfo(this);
-                finishPaymentMethodSelection(new PaymentMethod(paymentMethodInfo));
+                finishPaymentMethodSelection(new PaymentMethod(paymentMethodInfo.id, paymentMethodInfo.name, PaymentTypes.PLUGIN));
             } else {
                 overrideTransitionOut();
             }

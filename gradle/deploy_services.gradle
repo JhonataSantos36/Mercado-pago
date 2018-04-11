@@ -1,0 +1,140 @@
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+Properties properties = new Properties()
+
+if (project.rootProject.file('local.properties').exists()) {
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+}
+
+ext {
+    versionToDeploy = version_to_deploy as String
+    artifactLib = 'services'
+    libraryName = 'mercadopago-sdk_android_services'
+    libraryDescription = 'MercadoPago Services Android SDK'
+    siteUrl = 'https://github.com/mercadopago/px-android_services'
+    gitUrl = 'https://github.com/mercadopago/px-android_services.git'
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    groupName = "com.mercadopago"
+}
+
+version = versionToDeploy
+group = groupName
+archivesBaseName = artifactLib
+
+apply plugin: 'com.github.dcendents.android-maven'
+
+install {
+    group = groupName
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                groupId group
+                artifactId artifactLib
+
+                // Add your description here
+                name libraryName
+                description libraryDescription
+                url siteUrl
+
+                // Set your license
+                licenses {
+                    license {
+                        name licenseName
+                        url licenseUrl
+                    }
+                }
+                developers {
+                    developer {
+                        id 'valeria.serber'
+                        name 'Valeria Serber'
+                        email 'valeria.serber@mercadolibre.com'
+                    }
+                    developer {
+                        id 'angeles.arlanti'
+                        name 'Maria De Los Angeles Arlanti'
+                        email 'angeles.arlanti@mercadolibre.com'
+                    }
+                    developer {
+                        id 'nicolas.fortunato'
+                        name 'Nicolas Fortunato'
+                        email 'nicolas.fortunato@mercadolibre.com'
+                    }
+                    developer {
+                        id 'matias.romar'
+                        name 'Matias Romar'
+                        email 'matias.romar@mercadolibre.com'
+                    }
+                    developer {
+                        id 'lucas.bais'
+                        name 'Lucas Bais'
+                        email 'lucas.bais@mercadolibre.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+
+                }
+            }
+        }
+    }
+}
+
+apply plugin: 'com.jfrog.bintray'
+
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+task javadoc(type: Javadoc) {
+    failOnError = false
+    options.encoding = 'UTF-8'
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = "javadoc"
+    from sourcesJar.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+
+
+bintray {
+    version = versionToDeploy
+    user = properties.getProperty("bintray.user", "")
+    key = properties.getProperty("bintray.apikey", "")
+
+    override = true
+
+    configurations = ['archives']
+    pkg {
+        repo = 'maven'
+        name = libraryName
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+        publicDownloadNumbers = true
+        version {
+            desc = libraryDescription
+            gpg {
+                sign = true
+                passphrase = properties.getProperty("bintray.gpg.password", "")
+            }
+        }
+    }
+}

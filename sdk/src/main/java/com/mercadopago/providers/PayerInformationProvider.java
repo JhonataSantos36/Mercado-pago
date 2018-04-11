@@ -1,7 +1,7 @@
 package com.mercadopago.providers;
 
 import com.mercadopago.model.IdentificationType;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.mvp.ResourcesProvider;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface PayerInformationProvider extends ResourcesProvider {
 
-    void getIdentificationTypesAsync(final OnResourcesRetrievedCallback<List<IdentificationType>> onResourcesRetrievedCallback);
+    void getIdentificationTypesAsync(final TaggedCallback<List<IdentificationType>> taggedCallback);
 
     String getInvalidIdentificationNumberErrorMessage();
 

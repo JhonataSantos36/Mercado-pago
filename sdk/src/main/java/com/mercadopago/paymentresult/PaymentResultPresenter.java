@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.components.Action;
 import com.mercadopago.components.ActionsListener;
-import com.mercadopago.review_and_confirm.components.actions.ChangePaymentMethodAction;
 import com.mercadopago.components.LinkAction;
 import com.mercadopago.components.NextAction;
 import com.mercadopago.components.RecoverPaymentAction;
@@ -18,10 +17,11 @@ import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.MvpPresenter;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;
 import com.mercadopago.paymentresult.formatter.HeaderTitleFormatter;
 import com.mercadopago.preferences.ServicePreference;
+import com.mercadopago.review_and_confirm.components.actions.ChangePaymentMethodAction;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.utils.TrackingUtil;
 import com.mercadopago.util.ApiUtil;
@@ -227,7 +227,7 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
     }
 
     private void getInstructionsAsync(final Long paymentId, final String paymentTypeId) {
-        getResourcesProvider().getInstructionsAsync(paymentId, paymentTypeId, new OnResourcesRetrievedCallback<Instructions>() {
+        getResourcesProvider().getInstructionsAsync(paymentId, paymentTypeId, new TaggedCallback<Instructions>(ApiUtil.RequestOrigin.GET_INSTRUCTIONS) {
             @Override
             public void onSuccess(Instructions instructions) {
                 final List<Instruction> instructionsList

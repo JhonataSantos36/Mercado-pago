@@ -113,7 +113,10 @@ public class Tracker {
         mpTrackingContext.trackEvent(actionEvent);
     }
 
-    public static void trackPaymentVaultScreen(final Context context, final String merchantPublicKey, final PaymentMethodSearch paymentMethodSearch, final Set<String> escCardIds) {
+    public static void trackPaymentVaultScreen(final Context context,
+                                               final String merchantPublicKey,
+                                               final PaymentMethodSearch paymentMethodSearch,
+                                               final Set<String> escCardIds) {
 
         trackingStrategy = TrackingUtil.REALTIME_STRATEGY;
 
@@ -145,7 +148,7 @@ public class Tracker {
             }
     }
 
-    private static String getFormattedPaymentMethodsForTracking(final Context context, final PaymentMethodSearch paymentMethodSearch, final Set<String> escCardIds) {
+    private static String getFormattedPaymentMethodsForTracking(final Context context, @NonNull final PaymentMethodSearch paymentMethodSearch, final Set<String> escCardIds) {
         List<PaymentMethodPlugin> paymentMethodPluginList = CheckoutStore.getInstance().getPaymentMethodPluginList();
         List<PaymentMethodInfo> pluginsPaymentMethodInfo = PaymentMethodInfo.getPluginsPaymentMethodInfo(context, paymentMethodPluginList);
 

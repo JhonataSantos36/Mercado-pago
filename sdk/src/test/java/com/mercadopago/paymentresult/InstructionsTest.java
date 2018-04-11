@@ -1,7 +1,7 @@
 package com.mercadopago.paymentresult;
 
 import com.mercadopago.components.ActionDispatcher;
-import com.mercadopago.constants.ProcessingModes;
+import com.mercadopago.lite.constants.ProcessingModes;
 import com.mercadopago.mocks.Instructions;
 import com.mercadopago.model.Instruction;
 import com.mercadopago.paymentresult.components.InstructionsContent;

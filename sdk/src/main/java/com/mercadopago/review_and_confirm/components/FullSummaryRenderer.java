@@ -13,7 +13,7 @@ import com.mercadopago.components.Renderer;
 import com.mercadopago.components.RendererFactory;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.uicontrollers.payercosts.PayerCostColumn;
-import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.lite.util.CurrenciesUtil;
 
 import java.math.BigDecimal;
 

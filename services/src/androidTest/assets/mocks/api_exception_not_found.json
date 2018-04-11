@@ -1,0 +1,11 @@
+{
+  "message": "invalid public_key",
+  "error": "not_found",
+  "status": 404,
+  "cause": [
+    {
+      "code": "1001",
+      "description": "public_key not found"
+    }
+  ]
+}

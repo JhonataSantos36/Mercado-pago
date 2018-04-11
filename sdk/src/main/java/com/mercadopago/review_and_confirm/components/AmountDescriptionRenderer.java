@@ -11,7 +11,7 @@ import com.mercadopago.R;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.SummaryItemType;
-import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.lite.util.CurrenciesUtil;
 
 public class AmountDescriptionRenderer extends Renderer<AmountDescription> {
 

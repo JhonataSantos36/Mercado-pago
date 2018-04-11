@@ -16,14 +16,14 @@ import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PayerCostsAdapter;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.controllers.CheckoutTimer;
-import com.mercadopago.controllers.CustomServicesHandler;
+import com.mercadopago.lite.controllers.CustomServicesHandler;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.core.MercadoPagoUI;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.listeners.RecyclerItemClickListener;
-import com.mercadopago.model.ApiException;
+import com.mercadopago.lite.exceptions.ApiException;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
@@ -54,10 +54,6 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-
-/**
- * Created by vaserber on 9/29/16.
- */
 
 public class InstallmentsActivity extends MercadoPagoBaseActivity implements InstallmentsActivityView, TimerObserver {
 
@@ -107,8 +103,7 @@ public class InstallmentsActivity extends MercadoPagoBaseActivity implements Ins
         setMerchantInfo();
 
         mPresenter.attachView(this);
-        mPresenter.attachResourcesProvider(new InstallmentsProviderImpl(this, mPublicKey, mPrivateKey, mDefaultBaseURL,
-                mMerchantDiscountBaseURL, mMerchantGetDiscountURI, mDiscountAdditionalInfo));
+        mPresenter.attachResourcesProvider(new InstallmentsProviderImpl(this, mPublicKey, mPrivateKey));
 
         mActivityActive = true;
         analyzeLowRes();

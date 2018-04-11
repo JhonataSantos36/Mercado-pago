@@ -1,6 +1,6 @@
 package com.mercadopago.controllers;
 
-import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.model.CardInformation;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Setting;

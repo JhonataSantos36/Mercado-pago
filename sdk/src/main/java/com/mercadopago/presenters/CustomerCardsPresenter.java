@@ -6,7 +6,7 @@ import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.Customer;
 import com.mercadopago.mvp.MvpPresenter;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.providers.CustomerCardsProvider;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.views.CustomerCardsView;
@@ -39,7 +39,7 @@ public class CustomerCardsPresenter extends MvpPresenter<CustomerCardsView, Cust
     private void getCustomerAsync() {
         getView().showProgress();
 
-        getResourcesProvider().getCustomer(new OnResourcesRetrievedCallback<Customer>() {
+        getResourcesProvider().getCustomer(new TaggedCallback<Customer>(ApiUtil.RequestOrigin.GET_CUSTOMER) {
             @Override
             public void onSuccess(Customer customer) {
                 mCards = customer.getCards();

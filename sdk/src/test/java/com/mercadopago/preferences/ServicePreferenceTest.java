@@ -1,6 +1,6 @@
 package com.mercadopago.preferences;
 
-import com.mercadopago.constants.ProcessingModes;
+import com.mercadopago.lite.constants.ProcessingModes;
 
 import org.junit.Test;
 

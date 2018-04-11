@@ -1,1 +1,1 @@
-include ':sdk', ':example'
+include ':sdk', ':example', ':example_services', ':services', ':tracking', 'example_tracking'

@@ -3,19 +3,11 @@ package com.mercadopago.providers;
 import android.content.Context;
 
 import com.mercadopago.R;
-import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPagoServicesAdapter;
-import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.ApiException;
 import com.mercadopago.model.IdentificationType;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
-import com.mercadopago.util.ApiUtil;
+import com.mercadopago.mvp.TaggedCallback;
 
 import java.util.List;
-
-/**
- * Created by mromar on 22/09/17.
- */
 
 public class PayerInformationProviderImpl implements PayerInformationProvider {
 
@@ -24,11 +16,7 @@ public class PayerInformationProviderImpl implements PayerInformationProvider {
 
     public PayerInformationProviderImpl(Context context, String publicKey, String payerAccessToken) {
         this.context = context;
-        mercadoPago = new MercadoPagoServicesAdapter.Builder()
-                .setContext(context)
-                .setPublicKey(publicKey)
-                .setPrivateKey(payerAccessToken)
-                .build();
+        mercadoPago = new MercadoPagoServicesAdapter(context, publicKey, payerAccessToken);
     }
 
     @Override
@@ -52,18 +40,8 @@ public class PayerInformationProviderImpl implements PayerInformationProvider {
     }
 
     @Override
-    public void getIdentificationTypesAsync(final OnResourcesRetrievedCallback<List<IdentificationType>> onResourcesRetrievedCallback) {
-        mercadoPago.getIdentificationTypes(new Callback<List<IdentificationType>>() {
-            @Override
-            public void success(List<IdentificationType> identificationTypes) {
-                onResourcesRetrievedCallback.onSuccess(identificationTypes);
-            }
-
-            @Override
-            public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_IDENTIFICATION_TYPES));
-            }
-        });
+    public void getIdentificationTypesAsync(final TaggedCallback<List<IdentificationType>> taggedCallback) {
+        mercadoPago.getIdentificationTypes(taggedCallback);
     }
 
     @Override

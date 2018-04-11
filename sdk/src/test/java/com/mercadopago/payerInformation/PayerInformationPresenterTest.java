@@ -4,7 +4,7 @@ import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.mocks.IdentificationTypes;
 import com.mercadopago.model.Identification;
 import com.mercadopago.model.IdentificationType;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.presenters.PayerInformationPresenter;
 import com.mercadopago.providers.PayerInformationProvider;
 import com.mercadopago.views.PayerInformationView;
@@ -271,11 +271,11 @@ public class PayerInformationPresenterTest {
         private List<IdentificationType> successfulIdentificationTypesResponse;
 
         @Override
-        public void getIdentificationTypesAsync(OnResourcesRetrievedCallback<List<IdentificationType>> onResourcesRetrievedCallback) {
+        public void getIdentificationTypesAsync(TaggedCallback<List<IdentificationType>> taggedCallback) {
             if (shouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
-                onResourcesRetrievedCallback.onSuccess(successfulIdentificationTypesResponse);
+                taggedCallback.onSuccess(successfulIdentificationTypesResponse);
             }
         }
 

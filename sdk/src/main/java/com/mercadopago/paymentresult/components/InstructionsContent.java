@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
-import com.mercadopago.model.InstructionActionInfo;
+import com.mercadopago.model.InstructionAction;
 import com.mercadopago.model.InstructionReference;
 import com.mercadopago.paymentresult.props.InstructionsActionsProps;
 import com.mercadopago.paymentresult.props.InstructionsContentProps;
@@ -44,10 +44,10 @@ public class InstructionsContent extends Component<InstructionsContentProps, Voi
     }
 
     public boolean hasActions() {
-        final List<InstructionActionInfo> instructionActionInfoList = props.instruction.getActions();
-        if (instructionActionInfoList != null && !instructionActionInfoList.isEmpty()) {
-            for (InstructionActionInfo actionInfo : instructionActionInfoList) {
-                if (actionInfo.getTag().equals(InstructionActionInfo.Tags.LINK)) {
+        final List<InstructionAction> instructionActionList = props.instruction.getActions();
+        if (instructionActionList != null && !instructionActionList.isEmpty()) {
+            for (InstructionAction actionInfo : instructionActionList) {
+                if (actionInfo.getTag().equals(InstructionAction.Tags.LINK)) {
                     return true;
                 }
             }

@@ -24,7 +24,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.mercadopago.controllers.CheckoutTimer;
-import com.mercadopago.controllers.CustomServicesHandler;
+import com.mercadopago.lite.controllers.CustomServicesHandler;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPEditText;
 import com.mercadopago.customviews.MPTextView;
@@ -33,7 +33,7 @@ import com.mercadopago.model.Discount;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.presenters.DiscountsPresenter;
 import com.mercadopago.providers.DiscountProviderImpl;
-import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.lite.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -41,7 +41,6 @@ import com.mercadopago.util.TextUtil;
 import com.mercadopago.views.DiscountsActivityView;
 
 import java.math.BigDecimal;
-import java.util.Map;
 
 public class DiscountsActivity extends AppCompatActivity implements DiscountsActivityView, TimerObserver {
 
@@ -50,7 +49,6 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
     private String mMerchantBaseURL;
     private String mMerchantDiscountBaseURL;
     private String mMerchantGetDiscountURI;
-    private Map<String, String> mDiscountAdditionalInfo;
 
     //View
     protected ViewGroup mProgressLayout;
@@ -92,7 +90,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
 
     private void initializePresenter() {
         try {
-            DiscountProviderImpl discountProvider = new DiscountProviderImpl(this, mPresenter.getPublicKey(), mMerchantBaseURL, mMerchantDiscountBaseURL, mMerchantGetDiscountURI, mDiscountAdditionalInfo);
+            DiscountProviderImpl discountProvider = new DiscountProviderImpl(this, mPresenter.getPublicKey(), mMerchantBaseURL, mMerchantDiscountBaseURL, mMerchantGetDiscountURI);
             mPresenter.attachResourcesProvider(discountProvider);
             mPresenter.attachView(this);
         } catch (IllegalStateException exception) {
@@ -105,7 +103,6 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
             mMerchantBaseURL = CustomServicesHandler.getInstance().getServicePreference().getDefaultBaseURL();
             mMerchantDiscountBaseURL = CustomServicesHandler.getInstance().getServicePreference().getGetMerchantDiscountBaseURL();
             mMerchantGetDiscountURI = CustomServicesHandler.getInstance().getServicePreference().getGetMerchantDiscountURI();
-            mDiscountAdditionalInfo = CustomServicesHandler.getInstance().getServicePreference().getGetDiscountAdditionalInfo();
         }
     }
 

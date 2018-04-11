@@ -18,13 +18,13 @@ public class PaymentBody {
     private String couponCode;
     private Payer payer;
     private Float couponAmount;
-    private Integer campaignId;
+    private String campaignId;
 
     public void setCouponAmount(Float couponAmount) {
         this.couponAmount = couponAmount;
     }
 
-    public void setCampaignId(Integer campaignId) {
+    public void setCampaignId(String campaignId) {
         this.campaignId = campaignId;
     }
 
@@ -120,7 +120,7 @@ public class PaymentBody {
         return couponAmount;
     }
 
-    public Integer getCampaignId() {
+    public String getCampaignId() {
         return campaignId;
     }
 }

@@ -1,6 +1,6 @@
 package com.mercadopago.services;
 
-import com.mercadopago.adapters.MPCall;
+import com.mercadopago.lite.adapters.MPCall;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.MerchantPayment;

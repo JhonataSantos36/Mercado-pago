@@ -1,0 +1,59 @@
+{
+  "default_option": null,
+  "custom_options": [
+    {
+      "description": "Dinero en cuenta de Mercado Pago",
+      "id": "account_money",
+      "payment_method_id": "account_money",
+      "payment_type_id": "account_money"
+    }
+  ],
+  "groups": [
+    {
+      "children": null,
+      "children_header": null,
+      "comment": "",
+      "description": "Tarjeta de crédito",
+      "id": "credit_card",
+      "show_icon": true,
+      "type": "payment_type"
+    }
+  ],
+  "payment_methods": [
+    {
+      "id": "visa",
+      "name": "Visa",
+      "payment_type_id": "credit_card",
+      "status": "active",
+      "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/visa.gif",
+      "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/visa.gif",
+      "deferred_capture": "supported",
+      "settings": [
+        {
+          "bin": {
+            "pattern": "^4",
+            "exclusion_pattern": "^(487017|451766|451772|405896|473711|451769|451765|451757|451764|439818|451377|451761|406290|499859|451751|489412|477053|446344|473721)",
+            "installments_pattern": "^4"
+          },
+          "card_number": {
+            "length": 16,
+            "validation": "standard"
+          },
+          "security_code": {
+            "mode": "mandatory",
+            "length": 3,
+            "card_location": "back"
+          }
+        }
+      ],
+      "additional_info_needed": [
+        "cardholder_name",
+        "cardholder_identification_type",
+        "cardholder_identification_number"
+      ],
+      "min_allowed_amount": 0,
+      "max_allowed_amount": 250000,
+      "accreditation_time": 2880
+    }
+  ]
+}

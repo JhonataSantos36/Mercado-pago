@@ -11,8 +11,8 @@ import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoCheckout.Builder;
 import com.mercadopago.example.R;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.Discount;
 import com.mercadopago.model.Payment;
+import com.mercadopago.model.Discount;
 import com.mercadopago.plugins.DataInitializationTask;
 import com.mercadopago.plugins.MainPaymentProcessor;
 import com.mercadopago.plugins.components.SampleCustomComponent;
@@ -193,7 +193,7 @@ public class ExamplesUtils {
     private static Builder discountSample(Activity activity) {
         Discount discount = new Discount();
         discount.setCurrencyId("ARS");
-        discount.setId(77L);
+        discount.setId("77123");
         discount.setCouponAmount(new BigDecimal(20));
         discount.setPercentOff(new BigDecimal(20));
         return createBase(activity).setDiscount(discount);

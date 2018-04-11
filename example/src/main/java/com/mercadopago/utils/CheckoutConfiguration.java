@@ -1,7 +1,7 @@
 package com.mercadopago.utils;
 
 import com.google.gson.annotations.SerializedName;
-import com.mercadopago.constants.Sites;
+import com.mercadopago.model.Sites;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.Site;
 import com.mercadopago.preferences.FlowPreference;

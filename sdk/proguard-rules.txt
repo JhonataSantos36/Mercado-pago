@@ -16,12 +16,10 @@
 #   public *;
 #}
 
--keepnames class com.mercadopago.model.** { *; } #dtos
--keepnames class com.mercadopago.preferences.** { *; } #dtos
 -keepnames class com.mercadopago.presenters.CheckoutPresenter { *; } #utlizado como dto
 -keepnames class com.mercadopago.tracking.model.** { *; } #dtos
--keep class com.mercadopago.lite.model.** { *; } #dtos
--keep class com.mercadopago.lite.preferences.** { *; } #dtos
+-keep class com.mercadopago.model.** { *; } #dtos
+-keep class com.mercadopago.preferences.** { *; } #dtos
 
 -dontnote com.mercadopago.presenters.CheckoutPresenter
 -dontnote com.mercadopago.preferences.**

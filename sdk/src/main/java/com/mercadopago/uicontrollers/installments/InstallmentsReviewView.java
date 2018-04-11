@@ -11,7 +11,7 @@ import android.widget.FrameLayout;
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PayerCost;
-import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.lite.util.CurrenciesUtil;
 
 /**
  * Created by mromar on 2/3/17.

@@ -2,8 +2,8 @@ package com.mercadopago.model;
 
 import com.mercadopago.CheckoutActivity;
 import com.mercadopago.R;
-import com.mercadopago.exceptions.CardTokenException;
 import com.mercadopago.exceptions.ExceptionHandler;
+import com.mercadopago.lite.exceptions.CardTokenException;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
 
@@ -47,14 +47,14 @@ public class CardTokenTest extends BaseTest<CheckoutActivity> {
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setCardNumber("");
 
-        assertTrue(!cardToken.validateCardNumber());
+        assertFalse(cardToken.validateCardNumber());
     }
 
     public void testCardNumberMinLength() {
         CardToken cardToken = StaticMock.getCardToken();
         cardToken.setCardNumber("4444");
 
-        assertTrue(!cardToken.validateCardNumber());
+        assertFalse(cardToken.validateCardNumber());
     }
 
     public void testCardNumberMaxLength() {

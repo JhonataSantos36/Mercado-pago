@@ -6,7 +6,7 @@ import com.mercadopago.model.Identification;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Payer;
 import com.mercadopago.mvp.MvpPresenter;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.providers.PayerInformationProvider;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.views.PayerInformationView;
@@ -50,7 +50,7 @@ public class PayerInformationPresenter extends MvpPresenter<PayerInformationView
     private void getIdentificationTypesAsync() {
         getView().showProgressBar();
 
-        getResourcesProvider().getIdentificationTypesAsync(new OnResourcesRetrievedCallback<List<IdentificationType>>() {
+        getResourcesProvider().getIdentificationTypesAsync(new TaggedCallback<List<IdentificationType>>(ApiUtil.RequestOrigin.GET_IDENTIFICATION_TYPES) {
             @Override
             public void onSuccess(List<IdentificationType> identificationTypes) {
                 resolveIdentificationTypes(identificationTypes);

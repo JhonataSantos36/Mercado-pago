@@ -12,20 +12,17 @@ import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.MvpPresenter;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.providers.InstallmentsProvider;
 import com.mercadopago.util.ApiUtil;
-import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.lite.util.CurrenciesUtil;
 import com.mercadopago.util.InstallmentsUtil;
 import com.mercadopago.views.InstallmentsActivityView;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * Created by vaserber on 9/29/16.
- */
 
 public class InstallmentsPresenter extends MvpPresenter<InstallmentsActivityView, InstallmentsProvider> {
 
@@ -93,7 +90,7 @@ public class InstallmentsPresenter extends MvpPresenter<InstallmentsActivityView
     private void getInstallmentsAsync() {
         getView().showLoadingView();
 
-        getResourcesProvider().getInstallments(mBin, getAmount(), mIssuerId, mPaymentMethod.getId(), new OnResourcesRetrievedCallback<List<Installment>>() {
+        getResourcesProvider().getInstallments(mBin, getAmount(), mIssuerId, mPaymentMethod.getId(), new TaggedCallback<List<Installment>>(ApiUtil.RequestOrigin.GET_INSTALLMENTS) {
             @Override
             public void onSuccess(List<Installment> installments) {
                 if (installments.size() == 0) {

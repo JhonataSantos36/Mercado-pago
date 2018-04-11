@@ -3,7 +3,7 @@ package com.mercadopago.paymentresult.formatter;
 import android.support.annotation.Nullable;
 import android.text.SpannableStringBuilder;
 
-import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.lite.util.CurrenciesUtil;
 
 import java.math.BigDecimal;
 

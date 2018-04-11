@@ -29,7 +29,7 @@ import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.listeners.card.TicketIdentificationNameTextWatcher;
 import com.mercadopago.listeners.card.TicketIdentificationNumberTextWatcher;
-import com.mercadopago.model.ApiException;
+import com.mercadopago.lite.exceptions.ApiException;
 import com.mercadopago.model.Identification;
 import com.mercadopago.model.IdentificationType;
 import com.mercadopago.model.Payer;

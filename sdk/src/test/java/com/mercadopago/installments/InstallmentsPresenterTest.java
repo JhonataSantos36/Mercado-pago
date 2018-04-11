@@ -1,7 +1,7 @@
 package com.mercadopago.installments;
 
 import com.mercadopago.callbacks.OnSelectedCallback;
-import com.mercadopago.constants.Sites;
+import com.mercadopago.model.Sites;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.mocks.Installments;
 import com.mercadopago.mocks.Issuers;
@@ -14,8 +14,7 @@ import com.mercadopago.model.Installment;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.Site;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.InstallmentsPresenter;
 import com.mercadopago.providers.InstallmentsProvider;
@@ -675,7 +674,7 @@ public class InstallmentsPresenterTest {
     private Discount getDiscount() {
         Discount discount = new Discount();
 
-        discount.setId(77L);
+        discount.setId("77");
         discount.setCurrencyId("ARS");
         discount.setCouponAmount(new BigDecimal(50));
 
@@ -685,7 +684,7 @@ public class InstallmentsPresenterTest {
     private Discount getDiscountWithoutCurrency() {
         Discount discount = new Discount();
 
-        discount.setId(77L);
+        discount.setId("77");
         discount.setCouponAmount(new BigDecimal(50));
 
         return discount;
@@ -694,7 +693,7 @@ public class InstallmentsPresenterTest {
     private Discount getDiscountWithEmptyCurrency() {
         Discount discount = new Discount();
 
-        discount.setId(77L);
+        discount.setId("77");
         discount.setCurrencyId("");
         discount.setCouponAmount(new BigDecimal(50));
 
@@ -754,11 +753,11 @@ public class InstallmentsPresenterTest {
         }
 
         @Override
-        public void getInstallments(String bin, BigDecimal amount, Long issuerId, String paymentMethodId, OnResourcesRetrievedCallback<List<Installment>> onResourcesRetrievedCallback) {
+        public void getInstallments(String bin, BigDecimal amount, Long issuerId, String paymentMethodId, TaggedCallback<List<Installment>> taggedCallback) {
             if (shouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
-                onResourcesRetrievedCallback.onSuccess(successfulResponse);
+                taggedCallback.onSuccess(successfulResponse);
             }
         }
 

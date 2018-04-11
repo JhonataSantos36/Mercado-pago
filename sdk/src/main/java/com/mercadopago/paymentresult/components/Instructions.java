@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
-import com.mercadopago.constants.ProcessingModes;
+import com.mercadopago.lite.constants.ProcessingModes;
 import com.mercadopago.paymentresult.props.InstructionsContentProps;
 import com.mercadopago.paymentresult.props.InstructionsProps;
 import com.mercadopago.paymentresult.props.InstructionsSecondaryInfoProps;
