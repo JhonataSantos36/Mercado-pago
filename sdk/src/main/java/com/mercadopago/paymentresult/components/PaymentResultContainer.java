@@ -68,13 +68,6 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
 
     public Header getHeaderComponent() {
 
-        CharSequence title;
-        if (props.paymentResult.isCallForAuthorize()) {
-            title = props.headerFormatter.formatTextWithAmount(getTitle(props));
-        } else {
-            title = getTitle(props);
-        }
-
         final HeaderProps headerProps = new HeaderProps.Builder()
                 .setHeight(getHeaderMode())
                 .setBackground(getBackground(props.paymentResult))
@@ -82,7 +75,7 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
                 .setIconImage(getIconImage(props))
                 .setIconUrl(getIconUrl(props))
                 .setBadgeImage(getBadgeImage(props))
-                .setTitle(title)
+                .setTitle(getTitle(props))
                 .setLabel(getLabel(props))
                 .build();
 
@@ -344,7 +337,7 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
                         statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_REJECTED_HIGH_RISK));
     }
 
-    private String getTitle(@NonNull final PaymentResultProps props) {
+    private CharSequence getTitle(@NonNull final PaymentResultProps props) {
         if (props.hasCustomizedTitle()) {
             return props.getPreferenceTitle();
         } else if (props.hasInstructions()) {
@@ -385,8 +378,9 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
                 } else if (statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_REJECTED_REJECTED_BY_BANK)
                         || statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_REJECTED_REJECTED_INSUFFICIENT_DATA)) {
                     return paymentResultProvider.getRejectedInsufficientDataTitle();
-                } else if (statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_CALL_FOR_AUTHORIZE)) {
-                    return paymentResultProvider.getRejectedCallForAuthorizeTitle();
+                } else if (props.paymentResult.isCallForAuthorize()) {
+                    String rejectedCallForAuthorizeTitle = paymentResultProvider.getRejectedCallForAuthorizeTitle();
+                    return props.headerFormatter.formatTextWithAmount(rejectedCallForAuthorizeTitle);
                 } else {
                     return paymentResultProvider.getRejectedBadFilledOther();
                 }

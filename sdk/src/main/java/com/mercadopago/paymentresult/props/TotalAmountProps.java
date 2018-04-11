@@ -6,10 +6,6 @@ import com.mercadopago.model.Discount;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;
 
-/**
- * Created by mromar on 11/28/17.
- */
-
 public class TotalAmountProps {
 
     public final BodyAmountFormatter amountFormatter;
