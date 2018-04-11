@@ -3,6 +3,7 @@ package com.mercadopago.util;
 import android.content.Context;
 
 import com.mercadopago.R;
+import com.mercadopago.exceptions.BinException;
 import com.mercadopago.model.Bin;
 import com.mercadopago.model.PaymentMethod;
 
@@ -133,8 +134,8 @@ public class MercadoPagoUtil {
                 }
             }
             return validPaymentMethods;
-        } else {
-            throw new RuntimeException("Invalid bin: " + Bin.BIN_LENGTH + " digits needed, " + bin.length() + " found");
         }
+
+        throw new BinException(bin.length());
     }
 }
