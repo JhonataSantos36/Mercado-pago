@@ -5,7 +5,7 @@ import android.content.Context;
 import com.mercadopago.R;
 import com.mercadopago.core.MercadoPagoServicesAdapter;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.lite.model.Installment;
+import com.mercadopago.model.Installment;
 import com.mercadopago.mvp.TaggedCallback;
 
 import java.math.BigDecimal;

@@ -1,6 +1,6 @@
 package com.mercadopago.paymentresult;
 
-import com.mercadopago.lite.model.Instructions;
+import com.mercadopago.model.Instructions;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.mvp.ResourcesProvider;
 

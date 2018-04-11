@@ -2,7 +2,7 @@ package com.mercadopago.paymentresult;
 
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.mocks.PayerCosts;
-import com.mercadopago.lite.model.PayerCost;
+import com.mercadopago.model.PayerCost;
 import com.mercadopago.paymentresult.components.TotalAmount;
 import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;
 import com.mercadopago.paymentresult.props.TotalAmountProps;

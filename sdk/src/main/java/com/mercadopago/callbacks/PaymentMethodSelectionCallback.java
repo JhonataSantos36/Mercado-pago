@@ -1,6 +1,6 @@
 package com.mercadopago.callbacks;
 
-import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethod;
 
 import java.util.List;
 

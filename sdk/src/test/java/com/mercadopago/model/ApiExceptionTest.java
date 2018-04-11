@@ -1,7 +1,6 @@
 package com.mercadopago.model;
 
 import com.mercadopago.lite.exceptions.ApiException;
-import com.mercadopago.lite.model.Cause;
 
 import org.junit.Test;
 

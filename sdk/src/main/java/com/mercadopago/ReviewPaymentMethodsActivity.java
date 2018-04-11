@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.ReviewPaymentMethodsAdapter;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.presenters.ReviewPaymentMethodsPresenter;
 import com.mercadopago.providers.ReviewPaymentMethodsProviderImpl;
 import com.mercadopago.util.ErrorUtil;

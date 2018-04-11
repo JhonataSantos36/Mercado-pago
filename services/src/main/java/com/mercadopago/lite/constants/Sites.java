@@ -1,6 +1,6 @@
 package com.mercadopago.lite.constants;
 
-import com.mercadopago.lite.model.Site;
+import com.mercadopago.model.Site;
 
 public class Sites {
 

@@ -2,9 +2,9 @@ package com.mercadopago.uicontrollers;
 
 import android.content.Context;
 
-import com.mercadopago.lite.model.PaymentMethod;
-import com.mercadopago.lite.model.PaymentMethodSearchItem;
-import com.mercadopago.lite.model.Token;
+import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethodSearchItem;
+import com.mercadopago.model.Token;
 import com.mercadopago.uicontrollers.paymentmethods.PaymentMethodOffEditableRow;
 import com.mercadopago.uicontrollers.paymentmethods.PaymentMethodViewController;
 import com.mercadopago.uicontrollers.paymentmethods.card.PaymentMethodOnEditableRow;

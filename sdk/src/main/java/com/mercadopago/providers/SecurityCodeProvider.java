@@ -1,11 +1,11 @@
 package com.mercadopago.providers;
 
 import com.mercadopago.lite.exceptions.CardTokenException;
-import com.mercadopago.lite.model.Card;
-import com.mercadopago.lite.model.PaymentMethod;
-import com.mercadopago.lite.model.SavedCardToken;
-import com.mercadopago.lite.model.SavedESCCardToken;
-import com.mercadopago.lite.model.Token;
+import com.mercadopago.model.Card;
+import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.SavedCardToken;
+import com.mercadopago.model.SavedESCCardToken;
+import com.mercadopago.model.Token;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.mvp.ResourcesProvider;
 

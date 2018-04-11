@@ -11,8 +11,8 @@ import android.widget.LinearLayout;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.lite.model.Currency;
-import com.mercadopago.lite.model.Discount;
+import com.mercadopago.model.Currency;
+import com.mercadopago.model.Discount;
 import com.mercadopago.lite.util.CurrenciesUtil;
 
 import java.math.BigDecimal;

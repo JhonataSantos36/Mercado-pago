@@ -1,6 +1,6 @@
 package com.mercadopago.callbacks;
 
-import com.mercadopago.lite.model.Payment;
+import com.mercadopago.model.Payment;
 
 /**
  * Created by vaserber on 1/19/17.

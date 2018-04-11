@@ -3,7 +3,7 @@ package com.mercadopago.presenters;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.lite.model.Card;
+import com.mercadopago.model.Card;
 import com.mercadopago.model.Customer;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.TaggedCallback;

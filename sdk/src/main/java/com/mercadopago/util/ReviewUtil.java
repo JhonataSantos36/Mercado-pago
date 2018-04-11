@@ -3,7 +3,7 @@ package com.mercadopago.util;
 import android.content.Context;
 
 import com.mercadopago.R;
-import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethod;
 
 /**
  * Created by vaserber on 11/9/16.

@@ -2,7 +2,7 @@ package com.mercadopago.plugins.model;
 
 import android.support.annotation.NonNull;
 
-import com.mercadopago.lite.model.Payment;
+import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentData;
 
 

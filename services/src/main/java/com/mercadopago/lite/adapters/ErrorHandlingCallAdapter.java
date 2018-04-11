@@ -6,8 +6,8 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.lite.callbacks.Callback;
-import com.mercadopago.lite.model.Payment;
-import com.mercadopago.lite.model.Token;
+import com.mercadopago.model.Payment;
+import com.mercadopago.model.Token;
 import com.mercadopago.lite.util.ApiUtil;
 import com.mercadopago.tracking.tracker.MPTracker;
 

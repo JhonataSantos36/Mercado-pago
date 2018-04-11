@@ -1,7 +1,7 @@
 package com.mercadopago.utils;
 
 import com.mercadopago.lite.exceptions.ApiException;
-import com.mercadopago.lite.model.Discount;
+import com.mercadopago.model.Discount;
 import com.mercadopago.util.JsonUtil;
 
 public class Discounts {

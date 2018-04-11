@@ -1,19 +1,19 @@
 package com.mercadopago.installments;
 
 import com.mercadopago.callbacks.OnSelectedCallback;
-import com.mercadopago.lite.model.Sites;
+import com.mercadopago.model.Sites;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.mocks.Installments;
 import com.mercadopago.mocks.Issuers;
 import com.mercadopago.mocks.PayerCosts;
 import com.mercadopago.mocks.PaymentMethods;
-import com.mercadopago.lite.model.Card;
+import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
-import com.mercadopago.lite.model.Discount;
-import com.mercadopago.lite.model.Installment;
-import com.mercadopago.lite.model.Issuer;
-import com.mercadopago.lite.model.PayerCost;
-import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.model.Discount;
+import com.mercadopago.model.Installment;
+import com.mercadopago.model.Issuer;
+import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.lite.preferences.PaymentPreference;
 import com.mercadopago.presenters.InstallmentsPresenter;

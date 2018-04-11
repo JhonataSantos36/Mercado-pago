@@ -3,7 +3,7 @@ package com.mercadopago.review_and_confirm.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.mercadopago.lite.model.Item;
+import com.mercadopago.model.Item;
 import com.mercadopago.util.TextUtils;
 
 import java.util.ArrayList;

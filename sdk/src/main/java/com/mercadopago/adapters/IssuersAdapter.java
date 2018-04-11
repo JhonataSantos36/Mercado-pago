@@ -9,7 +9,7 @@ import android.widget.FrameLayout;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnSelectedCallback;
-import com.mercadopago.lite.model.Issuer;
+import com.mercadopago.model.Issuer;
 import com.mercadopago.uicontrollers.issuers.IssuersView;
 
 import java.util.ArrayList;

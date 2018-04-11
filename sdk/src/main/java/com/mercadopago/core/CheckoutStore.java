@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.hooks.CheckoutHooks;
 import com.mercadopago.hooks.Hook;
-import com.mercadopago.lite.model.Payment;
+import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.plugins.DataInitializationTask;

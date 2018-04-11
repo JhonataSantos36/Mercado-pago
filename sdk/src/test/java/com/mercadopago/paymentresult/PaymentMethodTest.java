@@ -5,10 +5,10 @@ import com.mercadopago.mocks.Issuers;
 import com.mercadopago.mocks.PayerCosts;
 import com.mercadopago.mocks.PaymentMethods;
 import com.mercadopago.mocks.Tokens;
-import com.mercadopago.lite.model.Issuer;
-import com.mercadopago.lite.model.PayerCost;
-import com.mercadopago.lite.model.PaymentMethod;
-import com.mercadopago.lite.model.Token;
+import com.mercadopago.model.Issuer;
+import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.Token;
 import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;
 import com.mercadopago.paymentresult.props.PaymentMethodProps;
 

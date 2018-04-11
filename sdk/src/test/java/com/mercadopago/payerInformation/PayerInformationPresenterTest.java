@@ -2,8 +2,8 @@ package com.mercadopago.payerInformation;
 
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.mocks.IdentificationTypes;
-import com.mercadopago.lite.model.Identification;
-import com.mercadopago.lite.model.IdentificationType;
+import com.mercadopago.model.Identification;
+import com.mercadopago.model.IdentificationType;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.presenters.PayerInformationPresenter;
 import com.mercadopago.providers.PayerInformationProvider;

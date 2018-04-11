@@ -1,14 +1,14 @@
 package com.mercadopago.providers;
 
 import com.mercadopago.lite.exceptions.CheckoutPreferenceException;
-import com.mercadopago.lite.model.Campaign;
+import com.mercadopago.model.Campaign;
 import com.mercadopago.model.Customer;
-import com.mercadopago.lite.model.Discount;
-import com.mercadopago.lite.model.Payer;
-import com.mercadopago.lite.model.Payment;
+import com.mercadopago.model.Discount;
+import com.mercadopago.model.Payer;
+import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentData;
-import com.mercadopago.lite.model.PaymentMethodSearch;
-import com.mercadopago.lite.model.Site;
+import com.mercadopago.model.PaymentMethodSearch;
+import com.mercadopago.model.Site;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.mvp.ResourcesProvider;
 import com.mercadopago.lite.preferences.CheckoutPreference;

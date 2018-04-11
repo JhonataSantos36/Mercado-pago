@@ -1,6 +1,6 @@
 package com.mercadopago.lite.exceptions;
 
-import com.mercadopago.lite.model.Cause;
+import com.mercadopago.model.Cause;
 import com.mercadopago.lite.util.ApiUtil;
 
 import java.util.List;

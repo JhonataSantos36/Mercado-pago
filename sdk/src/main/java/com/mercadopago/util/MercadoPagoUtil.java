@@ -3,8 +3,8 @@ package com.mercadopago.util;
 import android.content.Context;
 
 import com.mercadopago.R;
-import com.mercadopago.lite.model.Bin;
-import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.model.Bin;
+import com.mercadopago.model.PaymentMethod;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

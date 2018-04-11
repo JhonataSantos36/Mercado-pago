@@ -2,7 +2,7 @@ package com.mercadopago.paymentresult.props;
 
 import android.support.annotation.NonNull;
 
-import com.mercadopago.lite.model.InstructionAction;
+import com.mercadopago.model.InstructionAction;
 
 import java.util.List;
 

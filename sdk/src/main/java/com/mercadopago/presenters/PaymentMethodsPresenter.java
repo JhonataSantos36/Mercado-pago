@@ -1,9 +1,9 @@
 package com.mercadopago.presenters;
 
 import com.mercadopago.callbacks.FailureRecovery;
-import com.mercadopago.lite.model.PaymentTypes;
+import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.lite.preferences.PaymentPreference;

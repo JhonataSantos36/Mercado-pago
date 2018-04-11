@@ -2,7 +2,7 @@ package com.mercadopago.paymentresult.props;
 
 import android.support.annotation.NonNull;
 
-import com.mercadopago.lite.model.Instruction;
+import com.mercadopago.model.Instruction;
 
 /**
  * Created by vaserber on 11/14/17.

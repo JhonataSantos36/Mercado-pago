@@ -2,9 +2,9 @@ package com.mercadopago.presenters;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.lite.model.Identification;
-import com.mercadopago.lite.model.IdentificationType;
-import com.mercadopago.lite.model.Payer;
+import com.mercadopago.model.Identification;
+import com.mercadopago.model.IdentificationType;
+import com.mercadopago.model.Payer;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.providers.PayerInformationProvider;

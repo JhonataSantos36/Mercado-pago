@@ -17,13 +17,12 @@ import android.widget.TextView;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.lite.model.Bin;
-import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.model.Bin;
+import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MPAnimationUtils;
 import com.mercadopago.util.MPCardMaskUtil;
 import com.mercadopago.util.MPCardUIUtils;
-import com.mercadopago.util.MercadoPagoUtil;
 import com.mercadopago.util.ScaleUtil;
 
 /**

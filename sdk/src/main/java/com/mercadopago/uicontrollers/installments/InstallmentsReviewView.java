@@ -10,7 +10,7 @@ import android.widget.FrameLayout;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.lite.model.PayerCost;
+import com.mercadopago.model.PayerCost;
 import com.mercadopago.lite.util.CurrenciesUtil;
 
 /**

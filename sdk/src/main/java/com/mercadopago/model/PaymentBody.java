@@ -2,7 +2,6 @@ package com.mercadopago.model;
 
 
 import com.google.gson.annotations.SerializedName;
-import com.mercadopago.lite.model.Payer;
 
 public class PaymentBody {
 

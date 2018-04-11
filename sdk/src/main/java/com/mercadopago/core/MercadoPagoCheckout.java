@@ -10,7 +10,7 @@ import com.mercadopago.CheckoutActivity;
 import com.mercadopago.callbacks.CallbackHolder;
 import com.mercadopago.lite.controllers.CustomServicesHandler;
 import com.mercadopago.hooks.CheckoutHooks;
-import com.mercadopago.lite.model.Discount;
+import com.mercadopago.model.Discount;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.plugins.DataInitializationTask;

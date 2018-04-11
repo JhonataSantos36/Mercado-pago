@@ -12,7 +12,7 @@ import android.widget.ImageView;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.LayoutUtil;
 import com.mercadopago.util.MPCardMaskUtil;
 import com.mercadopago.util.ScaleUtil;

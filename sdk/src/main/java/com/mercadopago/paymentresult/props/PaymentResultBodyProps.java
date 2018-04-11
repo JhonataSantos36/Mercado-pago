@@ -3,7 +3,7 @@ package com.mercadopago.paymentresult.props;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.core.CheckoutStore;
-import com.mercadopago.lite.model.Instruction;
+import com.mercadopago.model.Instruction;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;
 

@@ -8,7 +8,7 @@ import android.text.Spanned;
 import android.text.SpannedString;
 import android.text.style.RelativeSizeSpan;
 
-import com.mercadopago.lite.model.Currency;
+import com.mercadopago.model.Currency;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;

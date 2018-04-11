@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.components.RendererFactory;
-import com.mercadopago.lite.model.Payment;
+import com.mercadopago.model.Payment;
 import com.mercadopago.plugins.PaymentPluginProcessorResultAction;
 import com.mercadopago.plugins.PluginComponent;
 import com.mercadopago.plugins.model.GenericPayment;

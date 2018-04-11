@@ -1,9 +1,5 @@
 package com.mercadopago.model;
 
-import com.mercadopago.lite.model.Card;
-import com.mercadopago.lite.model.CardToken;
-import com.mercadopago.lite.model.Token;
-
 /**
  * Created by vaserber on 10/24/16.
  */

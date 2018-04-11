@@ -2,7 +2,7 @@ package com.mercadopago.paymentresult;
 
 import android.support.annotation.NonNull;
 
-import com.mercadopago.lite.model.Instruction;
+import com.mercadopago.model.Instruction;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.mvp.MvpView;
 import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;

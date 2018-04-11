@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.lite.model.PaymentTypes;
-import com.mercadopago.lite.model.PaymentType;
+import com.mercadopago.model.PaymentTypes;
+import com.mercadopago.model.PaymentType;
 
 import java.util.ArrayList;
 import java.util.List;

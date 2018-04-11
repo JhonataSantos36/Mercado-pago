@@ -6,8 +6,6 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.mercadopago.CheckoutActivity;
-import com.mercadopago.lite.model.PaymentMethod;
-import com.mercadopago.lite.model.Setting;
 import com.mercadopago.test.StaticMock;
 
 import org.junit.Rule;

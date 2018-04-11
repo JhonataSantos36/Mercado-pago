@@ -7,7 +7,7 @@ import android.widget.Toast;
 import com.mercadopago.lite.callbacks.Callback;
 import com.mercadopago.lite.core.MercadoPagoServices;
 import com.mercadopago.lite.exceptions.ApiException;
-import com.mercadopago.lite.model.Issuer;
+import com.mercadopago.model.Issuer;
 
 import java.util.List;
 

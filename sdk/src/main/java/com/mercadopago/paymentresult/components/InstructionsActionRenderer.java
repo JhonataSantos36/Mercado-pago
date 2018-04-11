@@ -8,7 +8,7 @@ import com.mercadopago.R;
 import com.mercadopago.components.LinkAction;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.lite.model.InstructionAction;
+import com.mercadopago.model.InstructionAction;
 
 /**
  * Created by vaserber on 11/14/17.

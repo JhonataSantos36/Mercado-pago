@@ -9,7 +9,7 @@ import com.mercadopago.core.MercadoPagoServicesAdapter;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.lite.callbacks.Callback;
 import com.mercadopago.lite.exceptions.ApiException;
-import com.mercadopago.lite.model.Discount;
+import com.mercadopago.model.Discount;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.lite.preferences.ServicePreference;
 import com.mercadopago.util.ApiUtil;

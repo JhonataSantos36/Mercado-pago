@@ -1,8 +1,8 @@
 package com.mercadopago.paymentmethods;
 
-import com.mercadopago.lite.model.PaymentTypes;
+import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.lite.preferences.PaymentPreference;
 import com.mercadopago.presenters.PaymentMethodsPresenter;

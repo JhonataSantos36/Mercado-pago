@@ -3,11 +3,11 @@ package com.mercadopago.views;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.hooks.Hook;
-import com.mercadopago.lite.model.Card;
-import com.mercadopago.lite.model.CustomSearchItem;
-import com.mercadopago.lite.model.Payer;
-import com.mercadopago.lite.model.PaymentMethod;
-import com.mercadopago.lite.model.PaymentMethodSearchItem;
+import com.mercadopago.model.Card;
+import com.mercadopago.model.CustomSearchItem;
+import com.mercadopago.model.Payer;
+import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.mvp.MvpView;
 import com.mercadopago.plugins.PaymentMethodPlugin;
 

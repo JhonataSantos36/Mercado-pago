@@ -1,7 +1,7 @@
 package com.mercadopago.lite.services;
 
 import com.mercadopago.lite.adapters.MPCall;
-import com.mercadopago.lite.model.BankDeal;
+import com.mercadopago.model.BankDeal;
 
 import java.util.List;
 

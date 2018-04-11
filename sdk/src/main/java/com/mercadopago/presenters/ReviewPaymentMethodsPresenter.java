@@ -1,7 +1,7 @@
 package com.mercadopago.presenters;
 
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.providers.ReviewPaymentMethodsProvider;
 import com.mercadopago.views.ReviewPaymentMethodsView;

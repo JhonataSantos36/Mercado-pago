@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.lite.callbacks.Callback;
 import com.mercadopago.lite.core.MercadoPagoServices;
-import com.mercadopago.lite.model.Payment;
+import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentBody;
 import com.mercadopago.util.JsonUtil;
 

@@ -1,9 +1,9 @@
 package com.mercadopago.lite.services;
 
 import com.mercadopago.lite.adapters.MPCall;
-import com.mercadopago.lite.model.Customer;
-import com.mercadopago.lite.model.Discount;
-import com.mercadopago.lite.model.Payment;
+import com.mercadopago.model.Customer;
+import com.mercadopago.model.Discount;
+import com.mercadopago.model.Payment;
 import com.mercadopago.lite.preferences.CheckoutPreference;
 
 import java.util.Map;

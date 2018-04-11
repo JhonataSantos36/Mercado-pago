@@ -2,7 +2,7 @@ package com.mercadopago.views;
 
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.lite.model.Card;
+import com.mercadopago.model.Card;
 import com.mercadopago.mvp.MvpView;
 
 import java.util.List;

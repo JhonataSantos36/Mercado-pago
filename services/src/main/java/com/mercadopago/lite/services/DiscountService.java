@@ -1,8 +1,8 @@
 package com.mercadopago.lite.services;
 
 import com.mercadopago.lite.adapters.MPCall;
-import com.mercadopago.lite.model.Campaign;
-import com.mercadopago.lite.model.Discount;
+import com.mercadopago.model.Campaign;
+import com.mercadopago.model.Discount;
 
 import java.util.List;
 

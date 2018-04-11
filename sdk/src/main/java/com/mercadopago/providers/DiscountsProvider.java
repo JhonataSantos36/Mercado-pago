@@ -1,6 +1,6 @@
 package com.mercadopago.providers;
 
-import com.mercadopago.lite.model.Discount;
+import com.mercadopago.model.Discount;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.mvp.ResourcesProvider;
 

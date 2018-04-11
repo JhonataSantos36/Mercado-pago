@@ -14,7 +14,7 @@ import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.core.MercadoPagoServicesAdapter;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.lite.model.BankDeal;
+import com.mercadopago.model.BankDeal;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;

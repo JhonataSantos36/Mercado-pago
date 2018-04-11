@@ -4,9 +4,9 @@ import android.content.Context;
 
 import com.mercadopago.R;
 import com.mercadopago.core.MercadoPagoServicesAdapter;
-import com.mercadopago.lite.model.Installment;
-import com.mercadopago.lite.model.SavedESCCardToken;
-import com.mercadopago.lite.model.Token;
+import com.mercadopago.model.Installment;
+import com.mercadopago.model.SavedESCCardToken;
+import com.mercadopago.model.Token;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.util.MercadoPagoESC;
 import com.mercadopago.util.MercadoPagoESCImpl;

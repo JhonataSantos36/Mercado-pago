@@ -1,17 +1,15 @@
 package com.mercadopago.lite.test;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 
-import com.mercadopago.lite.model.CardToken;
-import com.mercadopago.lite.model.Cardholder;
-import com.mercadopago.lite.model.Identification;
-import com.mercadopago.lite.model.IdentificationType;
-import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.model.CardToken;
+import com.mercadopago.model.Cardholder;
+import com.mercadopago.model.Identification;
+import com.mercadopago.model.IdentificationType;
+import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.lite.util.JsonUtil;
 
 import java.io.InputStream;
-import java.lang.reflect.Type;
 
 public class StaticMock {
 

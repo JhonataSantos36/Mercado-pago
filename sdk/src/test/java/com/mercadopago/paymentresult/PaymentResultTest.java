@@ -3,12 +3,12 @@ package com.mercadopago.paymentresult;
 import android.support.annotation.NonNull;
 
 import com.mercadopago.lite.exceptions.ApiException;
-import com.mercadopago.lite.model.Sites;
+import com.mercadopago.model.Sites;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.mocks.PaymentMethods;
-import com.mercadopago.lite.model.Instruction;
-import com.mercadopago.lite.model.Instructions;
-import com.mercadopago.lite.model.Payment;
+import com.mercadopago.model.Instruction;
+import com.mercadopago.model.Instructions;
+import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.mvp.TaggedCallback;

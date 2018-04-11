@@ -4,8 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
-import com.mercadopago.lite.model.InstructionAction;
-import com.mercadopago.lite.model.InstructionReference;
+import com.mercadopago.model.InstructionAction;
+import com.mercadopago.model.InstructionReference;
 import com.mercadopago.paymentresult.props.InstructionsActionsProps;
 import com.mercadopago.paymentresult.props.InstructionsContentProps;
 import com.mercadopago.paymentresult.props.InstructionsInfoProps;

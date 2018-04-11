@@ -1,7 +1,6 @@
 package com.mercadopago.model;
 
 import com.mercadopago.CheckoutActivity;
-import com.mercadopago.lite.model.Payment;
 import com.mercadopago.test.BaseTest;
 import com.mercadopago.test.StaticMock;
 

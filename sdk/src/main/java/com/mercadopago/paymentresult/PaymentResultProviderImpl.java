@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.mercadopago.R;
 import com.mercadopago.core.MercadoPagoServicesAdapter;
-import com.mercadopago.lite.model.Instructions;
+import com.mercadopago.model.Instructions;
 import com.mercadopago.mvp.TaggedCallback;
 
 

@@ -3,7 +3,7 @@ package com.mercadopago.customerCards;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.mocks.Cards;
-import com.mercadopago.lite.model.Card;
+import com.mercadopago.model.Card;
 import com.mercadopago.model.Customer;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.presenters.CustomerCardsPresenter;

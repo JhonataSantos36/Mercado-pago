@@ -3,11 +3,11 @@ package com.mercadopago.review_and_confirm.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.mercadopago.lite.model.Discount;
-import com.mercadopago.lite.model.Item;
-import com.mercadopago.lite.model.PayerCost;
-import com.mercadopago.lite.model.PaymentMethod;
-import com.mercadopago.lite.model.Site;
+import com.mercadopago.model.Discount;
+import com.mercadopago.model.Item;
+import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.Site;
 
 import java.math.BigDecimal;
 import java.util.List;

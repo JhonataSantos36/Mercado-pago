@@ -1,6 +1,6 @@
 package com.mercadopago.providers;
 
-import com.mercadopago.lite.model.IdentificationType;
+import com.mercadopago.model.IdentificationType;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.mvp.ResourcesProvider;
 

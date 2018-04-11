@@ -3,7 +3,7 @@ package com.mercadopago.paymentresult;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.mocks.PaymentMethods;
 import com.mercadopago.mocks.PaymentResults;
-import com.mercadopago.lite.model.Instruction;
+import com.mercadopago.model.Instruction;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.paymentresult.components.Body;

@@ -6,9 +6,8 @@ import android.text.TextWatcher;
 import com.mercadopago.callbacks.PaymentMethodSelectionCallback;
 import com.mercadopago.callbacks.card.CardNumberEditTextCallback;
 import com.mercadopago.controllers.PaymentMethodGuessingController;
-import com.mercadopago.lite.model.Bin;
-import com.mercadopago.lite.model.PaymentMethod;
-import com.mercadopago.util.MercadoPagoUtil;
+import com.mercadopago.model.Bin;
+import com.mercadopago.model.PaymentMethod;
 
 import java.util.List;
 

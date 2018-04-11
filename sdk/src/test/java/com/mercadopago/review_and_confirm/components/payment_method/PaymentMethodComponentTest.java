@@ -1,7 +1,7 @@
 package com.mercadopago.review_and_confirm.components.payment_method;
 
 import com.mercadopago.components.CompactComponent;
-import com.mercadopago.lite.model.PaymentTypes;
+import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.review_and_confirm.models.PaymentModel;
 
 import org.junit.Before;

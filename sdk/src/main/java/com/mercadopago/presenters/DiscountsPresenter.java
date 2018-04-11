@@ -1,7 +1,7 @@
 package com.mercadopago.presenters;
 
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.lite.model.Discount;
+import com.mercadopago.model.Discount;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.providers.DiscountsProvider;

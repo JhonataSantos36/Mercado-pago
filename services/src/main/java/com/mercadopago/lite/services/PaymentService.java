@@ -1,9 +1,9 @@
 package com.mercadopago.lite.services;
 
 import com.mercadopago.lite.adapters.MPCall;
-import com.mercadopago.lite.model.Installment;
-import com.mercadopago.lite.model.Issuer;
-import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.model.Installment;
+import com.mercadopago.model.Issuer;
+import com.mercadopago.model.PaymentMethod;
 
 import java.math.BigDecimal;
 import java.util.List;

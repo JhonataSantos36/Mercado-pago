@@ -1,10 +1,10 @@
 package com.mercadopago.lite.services;
 
 import com.mercadopago.lite.adapters.MPCall;
-import com.mercadopago.lite.model.Instructions;
-import com.mercadopago.lite.model.Payment;
-import com.mercadopago.lite.model.PaymentMethodSearch;
-import com.mercadopago.lite.model.requests.PayerIntent;
+import com.mercadopago.model.Instructions;
+import com.mercadopago.model.Payment;
+import com.mercadopago.model.PaymentMethodSearch;
+import com.mercadopago.model.requests.PayerIntent;
 import com.mercadopago.lite.preferences.CheckoutPreference;
 
 import java.math.BigDecimal;

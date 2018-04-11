@@ -1,7 +1,7 @@
 package com.mercadopago.views;
 
 import com.mercadopago.lite.exceptions.ApiException;
-import com.mercadopago.lite.model.PaymentType;
+import com.mercadopago.model.PaymentType;
 
 import java.util.List;
 

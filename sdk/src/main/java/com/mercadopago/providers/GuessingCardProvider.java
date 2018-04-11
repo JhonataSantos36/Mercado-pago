@@ -1,12 +1,12 @@
 package com.mercadopago.providers;
 
-import com.mercadopago.lite.model.BankDeal;
-import com.mercadopago.lite.model.CardToken;
-import com.mercadopago.lite.model.IdentificationType;
-import com.mercadopago.lite.model.Installment;
-import com.mercadopago.lite.model.Issuer;
-import com.mercadopago.lite.model.PaymentMethod;
-import com.mercadopago.lite.model.Token;
+import com.mercadopago.model.BankDeal;
+import com.mercadopago.model.CardToken;
+import com.mercadopago.model.IdentificationType;
+import com.mercadopago.model.Installment;
+import com.mercadopago.model.Issuer;
+import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.Token;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.mvp.ResourcesProvider;
 import com.mercadopago.tracker.MPTrackingContext;

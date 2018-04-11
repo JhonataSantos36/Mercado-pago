@@ -1,11 +1,11 @@
 package com.mercadopago.lite.preferences;
 
 import com.google.gson.annotations.SerializedName;
-import com.mercadopago.lite.model.Card;
-import com.mercadopago.lite.model.PayerCost;
-import com.mercadopago.lite.model.PaymentMethod;
-import com.mercadopago.lite.model.PaymentType;
-import com.mercadopago.lite.model.PaymentTypes;
+import com.mercadopago.model.Card;
+import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentType;
+import com.mercadopago.model.PaymentTypes;
 
 import java.util.ArrayList;
 import java.util.List;

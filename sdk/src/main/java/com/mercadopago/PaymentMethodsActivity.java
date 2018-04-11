@@ -15,7 +15,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.PaymentMethodsAdapter;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.lite.preferences.PaymentPreference;
 import com.mercadopago.presenters.PaymentMethodsPresenter;
 import com.mercadopago.providers.PaymentMethodsProvider;

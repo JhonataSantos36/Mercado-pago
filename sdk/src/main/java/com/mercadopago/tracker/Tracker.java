@@ -6,8 +6,8 @@ import android.support.v4.util.Pair;
 
 import com.mercadopago.BuildConfig;
 import com.mercadopago.core.CheckoutStore;
-import com.mercadopago.lite.model.PaymentMethodSearch;
-import com.mercadopago.lite.model.PaymentMethodSearchItem;
+import com.mercadopago.model.PaymentMethodSearch;
+import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.plugins.PaymentMethodPlugin;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.review_and_confirm.models.PaymentModel;

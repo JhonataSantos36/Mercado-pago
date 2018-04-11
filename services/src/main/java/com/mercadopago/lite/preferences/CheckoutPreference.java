@@ -2,11 +2,11 @@ package com.mercadopago.lite.preferences;
 
 import com.google.gson.annotations.SerializedName;
 import com.mercadopago.lite.exceptions.CheckoutPreferenceException;
-import com.mercadopago.lite.model.Item;
-import com.mercadopago.lite.model.Payer;
-import com.mercadopago.lite.model.PaymentTypes;
-import com.mercadopago.lite.model.Site;
-import com.mercadopago.lite.model.Sites;
+import com.mercadopago.model.Item;
+import com.mercadopago.model.Payer;
+import com.mercadopago.model.PaymentTypes;
+import com.mercadopago.model.Site;
+import com.mercadopago.model.Sites;
 import com.mercadopago.lite.util.CurrenciesUtil;
 
 import java.math.BigDecimal;

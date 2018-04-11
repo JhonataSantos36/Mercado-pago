@@ -1,7 +1,7 @@
 package com.mercadopago.mocks;
 
 import com.google.gson.reflect.TypeToken;
-import com.mercadopago.lite.model.BankDeal;
+import com.mercadopago.model.BankDeal;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ResourcesUtil;
 

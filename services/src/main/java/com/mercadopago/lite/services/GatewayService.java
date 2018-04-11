@@ -1,11 +1,11 @@
 package com.mercadopago.lite.services;
 
 import com.mercadopago.lite.adapters.MPCall;
-import com.mercadopago.lite.model.CardToken;
-import com.mercadopago.lite.model.SavedCardToken;
-import com.mercadopago.lite.model.SavedESCCardToken;
-import com.mercadopago.lite.model.Token;
-import com.mercadopago.lite.model.requests.SecurityCodeIntent;
+import com.mercadopago.model.CardToken;
+import com.mercadopago.model.SavedCardToken;
+import com.mercadopago.model.SavedESCCardToken;
+import com.mercadopago.model.Token;
+import com.mercadopago.model.requests.SecurityCodeIntent;
 
 import retrofit2.http.Body;
 import retrofit2.http.POST;

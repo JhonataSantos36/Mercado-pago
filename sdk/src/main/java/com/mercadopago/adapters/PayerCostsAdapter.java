@@ -9,8 +9,8 @@ import android.widget.FrameLayout;
 
 import com.mercadopago.R;
 import com.mercadopago.callbacks.OnSelectedCallback;
-import com.mercadopago.lite.model.PayerCost;
-import com.mercadopago.lite.model.Site;
+import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.Site;
 import com.mercadopago.uicontrollers.payercosts.PayerCostRow;
 
 import java.util.ArrayList;

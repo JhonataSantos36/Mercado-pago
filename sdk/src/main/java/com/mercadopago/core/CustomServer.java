@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.lite.adapters.ErrorHandlingCallAdapter;
 import com.mercadopago.lite.callbacks.Callback;
-import com.mercadopago.lite.model.Discount;
-import com.mercadopago.lite.model.Payment;
+import com.mercadopago.model.Discount;
+import com.mercadopago.model.Payment;
 import com.mercadopago.lite.preferences.CheckoutPreference;
 import com.mercadopago.model.Customer;
 import com.mercadopago.services.CustomService;

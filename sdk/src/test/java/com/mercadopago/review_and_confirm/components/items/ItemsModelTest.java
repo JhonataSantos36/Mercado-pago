@@ -1,6 +1,6 @@
 package com.mercadopago.review_and_confirm.components.items;
 
-import com.mercadopago.lite.model.Item;
+import com.mercadopago.model.Item;
 import com.mercadopago.review_and_confirm.models.ItemModel;
 import com.mercadopago.review_and_confirm.models.ItemsModel;
 

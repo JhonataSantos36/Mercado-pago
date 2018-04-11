@@ -2,7 +2,7 @@ package com.mercadopago.paymentresult;
 
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.mocks.Instructions;
-import com.mercadopago.lite.model.Instruction;
+import com.mercadopago.model.Instruction;
 import com.mercadopago.paymentresult.components.AccreditationComment;
 import com.mercadopago.paymentresult.components.AccreditationTime;
 

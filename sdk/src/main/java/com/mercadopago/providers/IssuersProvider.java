@@ -1,7 +1,7 @@
 package com.mercadopago.providers;
 
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.lite.model.Issuer;
+import com.mercadopago.model.Issuer;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.mvp.ResourcesProvider;
 

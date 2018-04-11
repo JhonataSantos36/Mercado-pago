@@ -2,7 +2,7 @@ package com.mercadopago.mocks;
 
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.lite.exceptions.ApiException;
-import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ResourcesUtil;
 

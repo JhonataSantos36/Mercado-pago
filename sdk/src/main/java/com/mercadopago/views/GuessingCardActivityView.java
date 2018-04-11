@@ -4,12 +4,12 @@ import com.mercadopago.controllers.PaymentMethodGuessingController;
 import com.mercadopago.lite.exceptions.CardTokenException;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.lite.exceptions.ApiException;
-import com.mercadopago.lite.model.Discount;
-import com.mercadopago.lite.model.IdentificationType;
-import com.mercadopago.lite.model.Issuer;
-import com.mercadopago.lite.model.PayerCost;
-import com.mercadopago.lite.model.PaymentMethod;
-import com.mercadopago.lite.model.Token;
+import com.mercadopago.model.Discount;
+import com.mercadopago.model.IdentificationType;
+import com.mercadopago.model.Issuer;
+import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.Token;
 import com.mercadopago.mvp.MvpView;
 
 import java.math.BigDecimal;

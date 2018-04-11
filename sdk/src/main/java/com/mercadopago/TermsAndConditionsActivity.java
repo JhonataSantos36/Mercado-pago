@@ -9,7 +9,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 
-import com.mercadopago.lite.model.Sites;
+import com.mercadopago.model.Sites;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.util.ErrorUtil;
 
