@@ -16,8 +16,6 @@
 #   public *;
 #}
 
--keepnames class com.mercadopago.model.** { *; } #dtos
--keepnames class com.mercadopago.preferences.** { *; } #dtos
 -keepnames class com.mercadopago.presenters.CheckoutPresenter { *; } #utlizado como dto
 -keepnames class com.mercadopago.tracking.model.** { *; } #dtos
 -keep class com.mercadopago.model.** { *; } #dtos
