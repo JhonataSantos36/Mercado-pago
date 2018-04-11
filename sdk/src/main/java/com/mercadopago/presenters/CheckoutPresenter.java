@@ -1,16 +1,18 @@
 package com.mercadopago.presenters;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
-import com.mercadopago.lite.exceptions.CheckoutPreferenceException;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.hooks.Hook;
 import com.mercadopago.hooks.HookHelper;
 import com.mercadopago.lite.exceptions.ApiException;
+import com.mercadopago.lite.exceptions.CheckoutPreferenceException;
+import com.mercadopago.lite.model.Campaign;
 import com.mercadopago.lite.model.Card;
 import com.mercadopago.lite.model.Cause;
 import com.mercadopago.lite.model.Discount;
@@ -19,20 +21,19 @@ import com.mercadopago.lite.model.Payer;
 import com.mercadopago.lite.model.PayerCost;
 import com.mercadopago.lite.model.Payment;
 import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.lite.model.PaymentMethodSearch;
 import com.mercadopago.lite.model.Token;
-import com.mercadopago.lite.model.Campaign;
+import com.mercadopago.lite.preferences.CheckoutPreference;
+import com.mercadopago.lite.preferences.ServicePreference;
 import com.mercadopago.model.Customer;
 import com.mercadopago.model.PaymentData;
-import com.mercadopago.lite.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.plugins.DataInitializationTask;
-import com.mercadopago.lite.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
-import com.mercadopago.lite.preferences.ServicePreference;
 import com.mercadopago.providers.CheckoutProvider;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
@@ -134,8 +135,6 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     private void startCheckout() {
-        boolean couponDiscountFound = false;
-
         getResourcesProvider().fetchFonts();
         fetchImages();
         resolvePreSelectedData();
@@ -160,34 +159,49 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         final CheckoutStore store = CheckoutStore.getInstance();
         dataInitializationTask = store.getDataInitializationTask();
         if (dataInitializationTask != null) {
-            dataInitializationTask.execute(new DataInitializationTask.DataInitializationCallbacks() {
-                @Override
-                public void onDataInitialized(@NonNull final Map<String, Object> data) {
-                    data.put(DataInitializationTask.KEY_INIT_SUCCESS, true);
-                    finishInitializingPluginsData();
-                }
-
-                @Override
-                public void onFailure(@NonNull Exception e, @NonNull Map<String, Object> data) {
-                    data.put(DataInitializationTask.KEY_INIT_SUCCESS, false);
-                    finishInitializingPluginsData();
-                }
-            });
+            dataInitializationTask.execute(getDataInitializationCallback());
         } else {
             store.getData().put(DataInitializationTask.KEY_INIT_SUCCESS, true);
             finishInitializingPluginsData();
         }
     }
 
+    @VisibleForTesting
+    @NonNull
+    DataInitializationTask.DataInitializationCallbacks getDataInitializationCallback() {
+        return new DataInitializationTask.DataInitializationCallbacks() {
+            @Override
+            public void onDataInitialized(@NonNull final Map<String, Object> data) {
+                data.put(DataInitializationTask.KEY_INIT_SUCCESS, true);
+                finishInitializingPluginsData();
+            }
+
+            @Override
+            public void onFailure(@NonNull Exception e, @NonNull Map<String, Object> data) {
+                data.put(DataInitializationTask.KEY_INIT_SUCCESS, false);
+                finishInitializingPluginsData();
+            }
+        };
+    }
+
     private void finishInitializingPluginsData() {
         if (getView().isActive() && isViewAttached()) {
-            boolean shouldGetDiscounts = mDiscount == null && isDiscountEnabled();
-            if (shouldGetDiscounts) {
+            if (shouldRetrieveDiscount()) {
                 getDiscountCampaigns();
             } else {
                 retrievePaymentMethodSearch();
             }
         }
+    }
+
+    @VisibleForTesting
+    boolean shouldRetrieveDiscount() {
+        CheckoutStore store = CheckoutStore.getInstance();
+        return isDiscountEnabled() && mDiscount == null && !store.hasEnabledPaymentMethodPlugin() && !store.hasPaymentProcessor();
+    }
+
+    public boolean isDiscountEnabled() {
+        return mFlowPreference.isDiscountEnabled();
     }
 
     private void resolvePreSelectedData() {
@@ -211,7 +225,12 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     private void getDiscountCampaigns() {
-        getResourcesProvider().getDiscountCampaigns(new TaggedCallback<List<Campaign>>(ApiUtil.RequestOrigin.GET_CAMPAIGNS) {
+        getResourcesProvider().getDiscountCampaigns(onCampaignsRetrieved());
+    }
+
+    @VisibleForTesting
+    TaggedCallback<List<Campaign>> onCampaignsRetrieved() {
+        return new TaggedCallback<List<Campaign>>(ApiUtil.RequestOrigin.GET_CAMPAIGNS) {
             @Override
             public void onSuccess(List<Campaign> campaigns) {
                 if (isViewAttached()) {
@@ -226,7 +245,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
                     retrievePaymentMethodSearch();
                 }
             }
-        });
+        };
     }
 
 
@@ -302,7 +321,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     public BigDecimal getTransactionAmount() {
         BigDecimal amount;
 
-        if (mDiscount != null && isDiscountEnabled() && mDiscount.isValid()) {
+        if (mDiscount != null && mFlowPreference.isDiscountEnabled() && mDiscount.isValid()) {
             amount = mDiscount.getAmountWithDiscount(mCheckoutPreference.getAmount());
         } else {
             amount = mCheckoutPreference.getAmount();
@@ -425,10 +444,6 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
     private boolean isReviewAndConfirmEnabled() {
         return mFlowPreference.isReviewAndConfirmScreenEnabled();
-    }
-
-    public boolean isDiscountEnabled() {
-        return mFlowPreference.isDiscountEnabled();
     }
 
     public boolean isInstallmentsReviewScreenEnabled() {
@@ -580,7 +595,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     private boolean hasCustomPaymentProcessor() {
-        return CheckoutStore.getInstance().getPaymentProcessor() != null;
+        return CheckoutStore.getInstance().doesPaymentProcessorSupportPaymentMethodSelected() != null;
     }
 
     private void continuePaymentWithoutESC() {
@@ -779,7 +794,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
 
     public boolean isUniquePaymentMethod() {
         final CheckoutStore store = CheckoutStore.getInstance();
-        int pluginCount = store.getPaymenthMethodPluginCount();
+        int pluginCount = store.getPaymentMethodPluginCount();
         int groupCount = 0;
         int customCount = 0;
 

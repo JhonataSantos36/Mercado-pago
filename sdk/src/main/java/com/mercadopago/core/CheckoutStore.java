@@ -129,7 +129,7 @@ public class CheckoutStore {
         this.paymentMethodPluginList = paymentMethodPluginList;
     }
 
-    public boolean hasEnabledPaymenthMethodPlugin() {
+    public boolean hasEnabledPaymentMethodPlugin() {
         boolean result = false;
         for (final PaymentMethodPlugin plugin : paymentMethodPluginList) {
             if (plugin.isEnabled(CheckoutStore.getInstance().getData())) {
@@ -149,7 +149,7 @@ public class CheckoutStore {
         return null;
     }
 
-    public int getPaymenthMethodPluginCount() {
+    public int getPaymentMethodPluginCount() {
         int count = 0;
         for (final PaymentMethodPlugin plugin : paymentMethodPluginList) {
             if (plugin.isEnabled(CheckoutStore.getInstance().getData())) {
@@ -187,7 +187,7 @@ public class CheckoutStore {
         return data;
     }
 
-    public PaymentProcessor getPaymentProcessor() {
+    public PaymentProcessor doesPaymentProcessorSupportPaymentMethodSelected() {
         PaymentProcessor paymentProcessor = null;
         if (!TextUtil.isEmpty(selectedPaymentMethodId)) {
             paymentProcessor = paymentPlugins.get(MercadoPagoCheckout.PAYMENT_PROCESSOR_KEY);
@@ -196,6 +196,10 @@ public class CheckoutStore {
             }
         }
         return paymentProcessor;
+    }
+
+    public boolean hasPaymentProcessor() {
+        return paymentPlugins.containsKey(MercadoPagoCheckout.PAYMENT_PROCESSOR_KEY);
     }
 
     public void addPaymentPlugins(@NonNull final PaymentProcessor paymentProcessor, @NonNull final String paymentMethod) {
