@@ -1,5 +1,8 @@
 package com.mercadopago.model;
 
+import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.util.MercadoPagoUtil;
+
 import java.math.BigDecimal;
 
 /**
@@ -68,5 +71,34 @@ public class PaymentData {
 
     public void setTransactionAmount(BigDecimal transactionAmount) {
         this.transactionAmount = transactionAmount;
+    }
+
+    public boolean isComplete() {
+        //TODO refactor
+        if (paymentMethod.isEntityTypeRequired() && payer.getType() == null) {
+            return false;
+        }
+
+        if (paymentMethod.isPayerInfoRequired() && payer.getIdentification() == null) {
+            return false;
+        }
+
+
+        //TODO
+        /*
+        if (!Array.isNullOrEmpty(paymentMethod.financialInstitutions) && transactionDetails?.financialInstitution == null) {
+            return false;
+        }
+        */
+
+        if (paymentMethod.getId().equals(PaymentTypes.ACCOUNT_MONEY) || !paymentMethod.isOnline()) {
+            return true;
+        }
+
+        if (MercadoPagoUtil.isCard(paymentMethod.getPaymentTypeId()) && (token == null || payerCost == null)) {
+            return paymentMethod.getPaymentTypeId().equals(PaymentTypes.DEBIT_CARD) || paymentMethod.getPaymentTypeId().equals(PaymentTypes.PREPAID_CARD) && token != null;
+        }
+
+        return true;
     }
 }

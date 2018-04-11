@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.constants.PaymentTypes;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
+import com.mercadopago.util.MercadoPagoUtil;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -25,7 +26,6 @@ public class PaymentMethod {
     private String merchantAccountId;
 
     public PaymentMethod() {
-
     }
 
     public PaymentMethod(@NonNull final PaymentMethodInfo info) {
@@ -102,6 +102,14 @@ public class PaymentMethod {
         return isAdditionalInfoNeeded("cardholder_identification_number");
     }
 
+    public boolean isPayerInfoRequired() {
+        return isAdditionalInfoNeeded("bolbradesco_name") || isAdditionalInfoNeeded("bolbradesco_identification_type") || isAdditionalInfoNeeded("bolbradesco_identification_number");
+    }
+
+    public boolean isEntityTypeRequired( ){
+        return isAdditionalInfoNeeded("entity_type");
+    }
+
     private boolean isAdditionalInfoNeeded(String param) {
 
         if ((additionalInfoNeeded != null) && (additionalInfoNeeded.size() > 0)) {
@@ -117,6 +125,14 @@ public class PaymentMethod {
     public boolean isValidForBin(String bin) {
 
         return (Setting.getSettingByBin(this.getSettings(), bin) != null);
+    }
+
+    public boolean isOnline() {
+        return MercadoPagoUtil.isCard(getPaymentTypeId()) || isAccountMoney();
+    }
+
+    private boolean isAccountMoney() {
+        return this.getPaymentTypeId().equals(PaymentTypes.ACCOUNT_MONEY);
     }
 
     public String getStatus() {
