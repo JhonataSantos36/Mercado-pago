@@ -19,7 +19,7 @@ import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.TaggedCallback;
-import com.mercadopago.lite.preferences.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.tracker.Tracker;
 import com.mercadopago.tracking.tracker.MPTracker;
 import com.mercadopago.util.ApiUtil;

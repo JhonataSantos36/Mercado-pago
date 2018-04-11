@@ -16,7 +16,7 @@ import com.mercadopago.adapters.PaymentMethodsAdapter;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.lite.preferences.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.PaymentMethodsPresenter;
 import com.mercadopago.providers.PaymentMethodsProvider;
 import com.mercadopago.providers.PaymentMethodsProviderImpl;

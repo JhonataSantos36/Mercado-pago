@@ -22,7 +22,7 @@ import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Sites;
 import com.mercadopago.model.Token;
-import com.mercadopago.lite.preferences.CheckoutPreference;
+import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.mocks.Cards;
 import com.mercadopago.mocks.Customers;
 import com.mercadopago.mocks.Discounts;

@@ -5,7 +5,7 @@ import com.mercadopago.model.Sites;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.Site;
 import com.mercadopago.preferences.FlowPreference;
-import com.mercadopago.lite.preferences.ServicePreference;
+import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.TextUtil;
 
 import java.util.List;

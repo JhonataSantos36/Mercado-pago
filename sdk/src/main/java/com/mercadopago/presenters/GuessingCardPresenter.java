@@ -28,7 +28,7 @@ import com.mercadopago.model.Setting;
 import com.mercadopago.model.Token;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.TaggedCallback;
-import com.mercadopago.lite.preferences.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.providers.GuessingCardProvider;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.uicontrollers.card.CardView;

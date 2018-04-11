@@ -18,7 +18,7 @@ import com.mercadopago.plugins.MainPaymentProcessor;
 import com.mercadopago.plugins.components.SampleCustomComponent;
 import com.mercadopago.plugins.model.BusinessPayment;
 import com.mercadopago.plugins.model.ExitAction;
-import com.mercadopago.lite.preferences.CheckoutPreference;
+import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.review_and_confirm.models.ReviewAndConfirmPreferences;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;

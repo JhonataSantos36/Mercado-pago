@@ -20,7 +20,7 @@ import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.SavedESCCardToken;
 import com.mercadopago.model.Token;
 import com.mercadopago.mvp.TaggedCallback;
-import com.mercadopago.lite.preferences.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.CardVaultPresenter;
 import com.mercadopago.providers.CardVaultProvider;
 import com.mercadopago.views.CardVaultView;

@@ -12,7 +12,7 @@ import com.mercadopago.plugins.DataInitializationTask;
 import com.mercadopago.plugins.PaymentMethodPlugin;
 import com.mercadopago.plugins.PaymentProcessor;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
-import com.mercadopago.lite.preferences.CheckoutPreference;
+import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.review_and_confirm.models.ReviewAndConfirmPreferences;
 import com.mercadopago.util.TextUtil;

@@ -17,7 +17,7 @@ import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.model.Site;
-import com.mercadopago.lite.preferences.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.lite.util.CurrenciesUtil;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.TaggedCallback;

@@ -20,8 +20,8 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.Token;
-import com.mercadopago.lite.preferences.CheckoutPreference;
-import com.mercadopago.lite.preferences.PaymentPreference;
+import com.mercadopago.preferences.CheckoutPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.util.JsonUtil;
 
 import java.io.InputStream;

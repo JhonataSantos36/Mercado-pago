@@ -22,7 +22,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
-import com.mercadopago.lite.preferences.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.CardVaultPresenter;
 import com.mercadopago.providers.CardVaultProviderImpl;
 import com.mercadopago.tracking.utils.TrackingUtil;

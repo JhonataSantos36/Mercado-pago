@@ -11,7 +11,7 @@ import com.mercadopago.lite.callbacks.Callback;
 import com.mercadopago.lite.exceptions.ApiException;
 import com.mercadopago.model.Discount;
 import com.mercadopago.mvp.TaggedCallback;
-import com.mercadopago.lite.preferences.ServicePreference;
+import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.TextUtil;
 

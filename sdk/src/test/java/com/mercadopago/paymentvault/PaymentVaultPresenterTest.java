@@ -19,7 +19,7 @@ import com.mercadopago.model.Site;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.plugins.PaymentMethodPlugin;
 import com.mercadopago.preferences.FlowPreference;
-import com.mercadopago.lite.preferences.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.PaymentVaultPresenter;
 import com.mercadopago.providers.PaymentVaultProvider;
 import com.mercadopago.utils.Discounts;

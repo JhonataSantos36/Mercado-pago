@@ -18,7 +18,7 @@ import com.mercadopago.model.Site;
 import com.mercadopago.model.Token;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.TaggedCallback;
-import com.mercadopago.lite.preferences.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.providers.CardVaultProvider;
 import com.mercadopago.tracking.utils.TrackingUtil;
 import com.mercadopago.util.ApiUtil;

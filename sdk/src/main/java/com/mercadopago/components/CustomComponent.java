@@ -2,7 +2,7 @@ package com.mercadopago.components;
 
 import android.support.annotation.NonNull;
 
-import com.mercadopago.lite.preferences.CheckoutPreference;
+import com.mercadopago.preferences.CheckoutPreference;
 
 import java.util.Map;
 

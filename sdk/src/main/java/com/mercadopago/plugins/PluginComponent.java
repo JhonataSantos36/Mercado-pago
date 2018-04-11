@@ -6,7 +6,7 @@ import com.mercadopago.components.Component;
 import com.mercadopago.components.RendererFactory;
 import com.mercadopago.components.ToolbarComponent;
 import com.mercadopago.model.PaymentData;
-import com.mercadopago.lite.preferences.CheckoutPreference;
+import com.mercadopago.preferences.CheckoutPreference;
 
 import java.util.Map;
 

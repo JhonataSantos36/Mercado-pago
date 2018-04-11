@@ -7,7 +7,7 @@ import com.mercadopago.lite.adapters.ErrorHandlingCallAdapter;
 import com.mercadopago.lite.callbacks.Callback;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Payment;
-import com.mercadopago.lite.preferences.CheckoutPreference;
+import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.model.Customer;
 import com.mercadopago.services.CustomService;
 import com.mercadopago.util.HttpClientUtil;

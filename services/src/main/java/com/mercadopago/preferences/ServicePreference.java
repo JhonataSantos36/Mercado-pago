@@ -1,4 +1,4 @@
-package com.mercadopago.lite.preferences;
+package com.mercadopago.preferences;
 
 import com.google.gson.annotations.SerializedName;
 import com.mercadopago.lite.constants.ProcessingModes;

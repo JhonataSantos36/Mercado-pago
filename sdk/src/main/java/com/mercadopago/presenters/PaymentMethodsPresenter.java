@@ -6,7 +6,7 @@ import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.TaggedCallback;
-import com.mercadopago.lite.preferences.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.providers.PaymentMethodsProvider;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.views.PaymentMethodsView;

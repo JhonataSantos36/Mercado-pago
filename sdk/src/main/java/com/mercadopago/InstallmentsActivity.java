@@ -31,7 +31,7 @@ import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.Site;
 import com.mercadopago.observers.TimerObserver;
-import com.mercadopago.lite.preferences.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.InstallmentsPresenter;
 import com.mercadopago.providers.InstallmentsProviderImpl;
 import com.mercadopago.tracker.FlowHandler;

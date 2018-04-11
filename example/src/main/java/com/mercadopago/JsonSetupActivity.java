@@ -21,8 +21,8 @@ import com.google.gson.JsonSyntaxException;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.example.R;
 import com.mercadopago.utils.CheckoutConfiguration;
-import com.mercadopago.lite.preferences.CheckoutPreference;
-import com.mercadopago.lite.preferences.ServicePreference;
+import com.mercadopago.preferences.CheckoutPreference;
+import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.TextUtil;
 

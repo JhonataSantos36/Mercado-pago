@@ -20,7 +20,7 @@ import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;
 import com.mercadopago.paymentresult.formatter.HeaderTitleFormatter;
-import com.mercadopago.lite.preferences.ServicePreference;
+import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.review_and_confirm.components.actions.ChangePaymentMethodAction;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.tracking.utils.TrackingUtil;

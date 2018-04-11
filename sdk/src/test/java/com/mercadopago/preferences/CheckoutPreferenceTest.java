@@ -4,7 +4,6 @@ import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.model.Sites;
 import com.mercadopago.lite.exceptions.CheckoutPreferenceException;
 import com.mercadopago.model.Item;
-import com.mercadopago.lite.preferences.CheckoutPreference;
 
 import junit.framework.Assert;
 

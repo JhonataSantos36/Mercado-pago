@@ -53,7 +53,7 @@ import com.mercadopago.paymentresult.components.ReceiptRenderer;
 import com.mercadopago.paymentresult.components.TotalAmount;
 import com.mercadopago.paymentresult.components.TotalAmountRenderer;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
-import com.mercadopago.lite.preferences.ServicePreference;
+import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 import com.mercadopago.util.ApiUtil;

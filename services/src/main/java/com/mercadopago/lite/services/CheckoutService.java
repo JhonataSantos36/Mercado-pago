@@ -5,7 +5,7 @@ import com.mercadopago.model.Instructions;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.requests.PayerIntent;
-import com.mercadopago.lite.preferences.CheckoutPreference;
+import com.mercadopago.preferences.CheckoutPreference;
 
 import java.math.BigDecimal;
 import java.util.Map;

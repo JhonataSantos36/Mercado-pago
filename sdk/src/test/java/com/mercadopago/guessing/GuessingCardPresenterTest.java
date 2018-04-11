@@ -26,7 +26,7 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.Token;
 import com.mercadopago.mvp.TaggedCallback;
-import com.mercadopago.lite.preferences.PaymentPreference;
+import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.GuessingCardPresenter;
 import com.mercadopago.providers.GuessingCardProvider;
 import com.mercadopago.tracker.MPTrackingContext;

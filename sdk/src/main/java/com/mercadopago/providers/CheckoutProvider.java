@@ -11,7 +11,7 @@ import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.mvp.ResourcesProvider;
-import com.mercadopago.lite.preferences.CheckoutPreference;
+import com.mercadopago.preferences.CheckoutPreference;
 
 import java.math.BigDecimal;
 import java.util.List;
