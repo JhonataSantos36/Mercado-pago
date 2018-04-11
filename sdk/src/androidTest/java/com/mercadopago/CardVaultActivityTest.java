@@ -8,12 +8,12 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.mercadopago.lite.model.Sites;
 import com.mercadopago.lite.model.Discount;
 import com.mercadopago.lite.model.Installment;
 import com.mercadopago.lite.model.Issuer;
 import com.mercadopago.lite.model.PayerCost;
 import com.mercadopago.lite.model.PaymentMethod;
+import com.mercadopago.lite.model.Sites;
 import com.mercadopago.lite.model.Token;
 import com.mercadopago.test.FakeAPI;
 import com.mercadopago.test.StaticMock;
@@ -21,6 +21,7 @@ import com.mercadopago.util.JsonUtil;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -185,6 +186,7 @@ public class CardVaultActivityTest {
 
     }
 
+    @Ignore
     @Test
     public void ifInstallmentsEnabledForSavedCardThenStartInstallmentsActivity() {
         String installmentsJson = StaticMock.getInstallmentsJson();

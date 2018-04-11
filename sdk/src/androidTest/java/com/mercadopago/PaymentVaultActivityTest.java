@@ -16,6 +16,7 @@ import com.mercadopago.util.JsonUtil;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,6 +67,7 @@ public class PaymentVaultActivityTest {
         Intents.release();
     }
 
+    @Ignore
     @Test
     public void ifOnlyUniqueSearchItemAvailableThenSelectIt() {
         PaymentMethodSearch paymentMethodSearch = StaticMock.getPaymentMethodSearchWithUniqueItemCreditCard();
