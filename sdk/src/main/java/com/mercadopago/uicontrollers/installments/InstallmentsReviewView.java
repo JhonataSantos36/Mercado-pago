@@ -2,6 +2,7 @@ package com.mercadopago.uicontrollers.installments;
 
 import android.content.Context;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,7 @@ import android.widget.FrameLayout;
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.model.PayerCost;
-import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.lite.util.CurrenciesUtil;
 
 /**
  * Created by mromar on 2/3/17.
@@ -45,29 +46,14 @@ public class InstallmentsReviewView implements InstallmentsView {
     }
 
     private void setInstallmentAmountText() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append(mPayerCost.getInstallments());
-        stringBuilder.append(" ");
-        stringBuilder.append(mContext.getString(R.string.mpsdk_installments_by));
-        stringBuilder.append(" ");
-
-        stringBuilder.append(CurrenciesUtil.formatNumber(mPayerCost.getInstallmentAmount(), mCurrencyId));
-        Spanned spannedInstallmentsText = CurrenciesUtil.formatCurrencyInText(mPayerCost.getInstallmentAmount(),
-                mCurrencyId, stringBuilder.toString(), false, true);
-
-        mInstallmentsAmount.setText(spannedInstallmentsText);
+        final Spanned spannedInstallmentsText = CurrenciesUtil.getSpannedAmountWithCurrencySymbol(mPayerCost.getInstallmentAmount(), mCurrencyId);
+        mInstallmentsAmount.setText(TextUtils.concat(mPayerCost.getInstallments().toString(), " ",
+            mContext.getString(R.string.mpsdk_installments_by), " ", spannedInstallmentsText));
     }
 
     private void setTotalAmountWithRateText() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("(");
-        stringBuilder.append(CurrenciesUtil.formatNumber(mPayerCost.getTotalAmount(), mCurrencyId));
-        stringBuilder.append(")");
-        Spanned spannedFullAmountText = CurrenciesUtil.formatCurrencyInText(mPayerCost.getTotalAmount(),
-                mCurrencyId, stringBuilder.toString(), false, true);
-
-        mTotalAmount.setText(spannedFullAmountText);
+        final Spanned spannedInstallmentsText = CurrenciesUtil.getSpannedAmountWithCurrencySymbol(mPayerCost.getTotalAmount(), mCurrencyId);
+        mTotalAmount.setText(TextUtils.concat("(", spannedInstallmentsText, ")"));
     }
 
     private void setCFTPercentText() {

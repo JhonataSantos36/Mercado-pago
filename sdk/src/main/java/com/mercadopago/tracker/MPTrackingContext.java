@@ -3,7 +3,7 @@ package com.mercadopago.tracker;
 import android.content.Context;
 import android.os.Build;
 
-import com.mercadopago.core.Settings;
+import com.mercadopago.lite.core.Settings;
 import com.mercadopago.model.Fingerprint;
 import com.mercadopago.tracking.model.AppInformation;
 import com.mercadopago.tracking.model.DeviceInfo;
@@ -37,7 +37,7 @@ public class MPTrackingContext {
         return new AppInformation.Builder()
                 .setVersion(version)
                 .setPlatform("/mobile/android")
-                .setEnvironment(Settings.trackingEnvironment)
+                .setEnvironment(Settings.getTrackingEnvironment())
                 .build();
     }
 

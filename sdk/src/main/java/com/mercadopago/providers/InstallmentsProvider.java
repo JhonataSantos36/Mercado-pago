@@ -2,7 +2,7 @@ package com.mercadopago.providers;
 
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.Installment;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.mvp.ResourcesProvider;
 
 import java.math.BigDecimal;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface InstallmentsProvider extends ResourcesProvider {
 
-    void getInstallments(String bin, BigDecimal amount, Long issuerId, String paymentMethodId, final OnResourcesRetrievedCallback<List<Installment>> onResourcesRetrievedCallback);
+    void getInstallments(String bin, BigDecimal amount, Long issuerId, String paymentMethodId, final TaggedCallback<List<Installment>> taggedCallback);
 
     MercadoPagoError getNoInstallmentsFoundError();
 

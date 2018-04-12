@@ -32,7 +32,7 @@ public class AllModelTest extends BaseTest<CheckoutActivity> {
         payment.setCallForAuthorizeId("123");
         payment.setCaptured(false);
         payment.setCard(StaticMock.getCard());
-        payment.setCollectorId("1234567");
+        payment.setCollectorId(1234567L);
         payment.setCouponAmount(new BigDecimal("19"));
         payment.setCurrencyId("ARS");
         payment.setDateApproved(getDummyDate("2015-01-01"));
@@ -44,7 +44,7 @@ public class AllModelTest extends BaseTest<CheckoutActivity> {
         payment.setFeeDetails(StaticMock.getPayment(getApplicationContext()).getFeeDetails());
         payment.setId(Long.parseLong("123456"));
         payment.setInstallments(3);
-        payment.setIssuerId(3);
+        payment.setIssuerId("3");
         payment.setLiveMode(true);
         payment.setMetadata(null);
         payment.setMoneyReleaseDate(getDummyDate("2015-01-04"));
@@ -65,7 +65,7 @@ public class AllModelTest extends BaseTest<CheckoutActivity> {
         assertTrue(payment.getCallForAuthorizeId().equals("123"));
         assertTrue(!payment.getCaptured());
         assertTrue(payment.getCard().getId().equals("149024476"));
-        assertTrue(payment.getCollectorId().equals("1234567"));
+        assertTrue(payment.getCollectorId() == 1234567L);
         assertTrue(payment.getCouponAmount().toString().equals("19"));
         assertTrue(payment.getCurrencyId().equals("ARS"));
         assertTrue(validateDate(payment.getDateApproved(), "2015-01-01"));
@@ -77,7 +77,7 @@ public class AllModelTest extends BaseTest<CheckoutActivity> {
         assertTrue(payment.getFeeDetails().get(0).getAmount().toString().equals("5.99"));
         assertTrue(Long.toString(payment.getId()).equals("123456"));
         assertTrue(Integer.toString(payment.getInstallments()).equals("3"));
-        assertTrue(Long.toString(payment.getIssuerId()).toString().equals("3"));
+        assertTrue(payment.getIssuerId().equals("3"));
         assertTrue(payment.getLiveMode());
         assertTrue(payment.getMetadata() == null);
         assertTrue(validateDate(payment.getMoneyReleaseDate(), "2015-01-04"));

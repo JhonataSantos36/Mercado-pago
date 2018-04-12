@@ -1,6 +1,7 @@
 package com.mercadopago.tracker;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 
 import com.mercadopago.BuildConfig;
@@ -112,7 +113,10 @@ public class Tracker {
         mpTrackingContext.trackEvent(actionEvent);
     }
 
-    public static void trackPaymentVaultScreen(final Context context, final String merchantPublicKey, final PaymentMethodSearch paymentMethodSearch, final Set<String> escCardIds) {
+    public static void trackPaymentVaultScreen(final Context context,
+                                               final String merchantPublicKey,
+                                               final PaymentMethodSearch paymentMethodSearch,
+                                               final Set<String> escCardIds) {
 
         trackingStrategy = TrackingUtil.REALTIME_STRATEGY;
 
@@ -124,7 +128,9 @@ public class Tracker {
                 context, merchantPublicKey, properties);
     }
 
-    public static void trackPaymentVaultChildrenScreen(final Context context, final String merchantPublicKey, final PaymentMethodSearchItem selectedItem) {
+    public static void trackPaymentVaultChildrenScreen(@NonNull final Context context,
+                                                       @NonNull final String merchantPublicKey,
+                                                       @NonNull final PaymentMethodSearchItem selectedItem) {
 
             String selectedItemId = selectedItem.getId();
 
@@ -139,11 +145,10 @@ public class Tracker {
 
             } else {
                 trackScreen(TrackingUtil.SCREEN_ID_PAYMENT_VAULT, TrackingUtil.SCREEN_NAME_PAYMENT_VAULT, context, merchantPublicKey, null);
-
             }
     }
 
-    private static String getFormattedPaymentMethodsForTracking(final Context context, final PaymentMethodSearch paymentMethodSearch, final Set<String> escCardIds) {
+    private static String getFormattedPaymentMethodsForTracking(final Context context, @NonNull final PaymentMethodSearch paymentMethodSearch, final Set<String> escCardIds) {
         List<PaymentMethodPlugin> paymentMethodPluginList = CheckoutStore.getInstance().getPaymentMethodPluginList();
         List<PaymentMethodInfo> pluginsPaymentMethodInfo = PaymentMethodInfo.getPluginsPaymentMethodInfo(context, paymentMethodPluginList);
 

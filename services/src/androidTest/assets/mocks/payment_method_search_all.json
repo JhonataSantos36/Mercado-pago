@@ -1,0 +1,456 @@
+{
+   "groups": [
+      {
+         "children": [
+            {
+               "children": null,
+               "children_header": null,
+               "comment": "",
+               "description": "Tarjeta de crédito",
+               "id": "credit_card",
+               "type": "payment_type"
+            },
+            {
+               "children": null,
+               "children_header": null,
+               "comment": "",
+               "description": "Tarjeta de débito",
+               "id": "debit_card",
+               "type": "payment_type"
+            },
+            {
+               "children": null,
+               "children_header": null,
+               "comment": "",
+               "description": "Tarjeta prepaga de MercadoPago",
+               "id": "prepaid_card",
+               "type": "payment_type"
+            }
+         ],
+         "children_header": "¿Con que tarjeta?",
+         "comment": null,
+         "description": "Tarjetas",
+         "id": "cards",
+         "type": "group",
+         "show_icon": true
+      },
+      {
+         "children": [
+            {
+               "children": null,
+               "children_header": null,
+               "comment": "Se acreditará en 7 hábiles",
+               "description": "Oxxo",
+               "id": "oxxo",
+               "type": "payment_method",
+               "show_icon": true
+            },
+            {
+               "children": null,
+               "children_header": null,
+               "comment": "Se acreditará en 7 hábiles",
+               "description": "7eleven",
+               "id": "7eleven",
+               "type": "payment_method",
+               "show_icon": true
+            },
+            {
+               "children": null,
+               "children_header": null,
+               "comment": "Se acreditará en 7 hábiles",
+               "description": "Telecomm",
+               "id": "telecomm",
+               "type": "payment_method",
+               "show_icon": true
+            },
+            {
+               "children": null,
+               "children_header": null,
+               "comment": "Se acreditará en 7 hábiles",
+               "description": "BBVA Bancomer",
+               "id": "bancomer_ticket",
+               "type": "payment_method",
+               "show_icon": true
+            },
+            {
+               "children": null,
+               "children_header": null,
+               "comment": "Se acreditará en 7 hábiles",
+               "description": "Banamex",
+               "id": "banamex_ticket",
+               "type": "payment_method",
+               "show_icon": true
+            },
+            {
+               "children": null,
+               "children_header": null,
+               "comment": "Se acreditará en 7 hábiles",
+               "description": "Santander",
+               "id": "serfin_ticket",
+               "type": "payment_method",
+               "show_icon": true
+            },
+            {
+               "children": null,
+               "children_header": null,
+               "comment": "Se acreditará en 7 hábiles",
+               "description": "Gestopago",
+               "id": "gestopago",
+               "type": "payment_method",
+               "show_icon": true
+            }
+         ],
+         "children_header": "¿Dónde quieres pagar?",
+         "comment": null,
+         "description": "Efectivo",
+         "id": "ticket",
+         "type": "payment_type",
+         "show_icon": true
+      },
+      {
+         "children": [
+            {
+               "children": null,
+               "children_header": null,
+               "comment": "Se acreditará en 7 hábiles",
+               "description": "BBVA Bancomer",
+               "id": "bancomer_bank_transfer",
+               "type": "payment_method",
+               "show_icon": true
+            },
+            {
+               "children": null,
+               "children_header": null,
+               "comment": "Se acreditará en 7 hábiles",
+               "description": "Banamex",
+               "id": "banamex_bank_transfer",
+               "type": "payment_method",
+               "show_icon": true
+            },
+            {
+               "children": null,
+               "children_header": null,
+               "comment": "Se acreditará en 7 hábiles",
+               "description": "Santander",
+               "id": "serfin_bank_transfer",
+               "type": "payment_method",
+               "show_icon": true
+            },
+            {
+               "children": null,
+               "children_header": null,
+               "comment": "Se acreditará en 7 hábiles",
+               "description": "PagoEfectivo",
+               "id": "pagoefectivo_atm_pagoefectivo_atm",
+               "type": "payment_method",
+               "show_icon": true
+            }
+         ],
+         "children_header": "¿Cuál es tu banco?",
+         "comment": null,
+         "description": "Transferencia Bancaria",
+         "id": "bank_transfer",
+         "type": "payment_type",
+         "show_icon": true
+      }
+   ],
+   "payment_methods": [
+      {
+         "id": "debmaster",
+         "name": "Mastercard Débito",
+         "payment_type_id": "debit_card",
+         "status": "active",
+         "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/debmaster.gif",
+         "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/debmaster.gif",
+         "deferred_capture": "unsupported",
+         "settings": [
+            {
+               "bin": {
+                  "pattern": "^5",
+                  "exclusion_pattern": null,
+                  "installments_pattern": "^5"
+               },
+               "card_number": {
+                  "length": 16,
+                  "validation": "standard"
+               },
+               "security_code": {
+                  "mode": "mandatory",
+                  "length": 3,
+                  "card_location": "back"
+               }
+            }
+         ],
+         "additional_info_needed": [
+            "cardholder_name",
+            "issuer_id"
+         ],
+         "min_allowed_amount": 5,
+         "max_allowed_amount": 200000,
+         "accreditation_time": 1440
+      },
+      {
+         "id": "debvisa",
+         "name": "Visa Débito",
+         "payment_type_id": "debit_card",
+         "status": "active",
+         "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/debvisa.gif",
+         "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/debvisa.gif",
+         "deferred_capture": "unsupported",
+         "settings": [
+            {
+               "bin": {
+                  "pattern": "^4",
+                  "exclusion_pattern": null,
+                  "installments_pattern": "^4"
+               },
+               "card_number": {
+                  "length": 16,
+                  "validation": "standard"
+               },
+               "security_code": {
+                  "mode": "mandatory",
+                  "length": 3,
+                  "card_location": "back"
+               }
+            }
+         ],
+         "additional_info_needed": [
+            "cardholder_name",
+            "issuer_id"
+         ],
+         "min_allowed_amount": 5,
+         "max_allowed_amount": 200000,
+         "accreditation_time": 1440
+      },
+      {
+         "id": "master",
+         "name": "Mastercard",
+         "payment_type_id": "credit_card",
+         "status": "active",
+         "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/master.gif",
+         "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/master.gif",
+         "deferred_capture": "unsupported",
+         "settings": [
+            {
+               "bin": {
+                  "pattern": "^5",
+                  "exclusion_pattern": null,
+                  "installments_pattern": "^5"
+               },
+               "card_number": {
+                  "length": 16,
+                  "validation": "standard"
+               },
+               "security_code": {
+                  "mode": "mandatory",
+                  "length": 3,
+                  "card_location": "back"
+               }
+            }
+         ],
+         "additional_info_needed": [
+            "cardholder_name",
+            "issuer_id"
+         ],
+         "min_allowed_amount": 5,
+         "max_allowed_amount": 200000,
+         "accreditation_time": 2880
+      },
+      {
+         "id": "mercadopagocard",
+         "name": "Tarjeta MercadoPago",
+         "payment_type_id": "prepaid_card",
+         "status": "active",
+         "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/mercadopagocard.gif",
+         "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/mercadopagocard.gif",
+         "deferred_capture": "unsupported",
+         "settings": [
+            {
+               "bin": {
+                  "pattern": "^539978",
+                  "exclusion_pattern": null,
+                  "installments_pattern": "^539978"
+               },
+               "card_number": {
+                  "length": 16,
+                  "validation": "standard"
+               },
+               "security_code": {
+                  "mode": "mandatory",
+                  "length": 3,
+                  "card_location": "back"
+               }
+            }
+         ],
+         "additional_info_needed": [
+            "cardholder_name"
+         ],
+         "min_allowed_amount": 5,
+         "max_allowed_amount": 200000,
+         "accreditation_time": 1440
+      },
+      {
+         "id": "visa",
+         "name": "Visa",
+         "payment_type_id": "credit_card",
+         "status": "active",
+         "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/visa.gif",
+         "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/visa.gif",
+         "deferred_capture": "unsupported",
+         "settings": [
+            {
+               "bin": {
+                  "pattern": "^4",
+                  "exclusion_pattern": null,
+                  "installments_pattern": "^4"
+               },
+               "card_number": {
+                  "length": 16,
+                  "validation": "standard"
+               },
+               "security_code": {
+                  "mode": "mandatory",
+                  "length": 3,
+                  "card_location": "back"
+               }
+            }
+         ],
+         "additional_info_needed": [
+            "cardholder_name",
+            "issuer_id"
+         ],
+         "min_allowed_amount": 5,
+         "max_allowed_amount": 200000,
+         "accreditation_time": 2880
+      },
+      {
+         "id": "oxxo",
+         "name": "Oxxo",
+         "payment_type_id": "ticket",
+         "status": "active",
+         "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/oxxo.gif",
+         "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/oxxo.gif",
+         "deferred_capture": "does_not_apply",
+         "settings": [
+         ],
+         "additional_info_needed": [
+         ],
+         "min_allowed_amount": 10,
+         "max_allowed_amount": 10000,
+         "accreditation_time": 10080
+      },
+      {
+         "id": "serfin",
+         "name": "Santander",
+         "payment_type_id": "atm",
+         "status": "active",
+         "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/serfin_bank_transfer.gif",
+         "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/serfin_bank_transfer.gif",
+         "deferred_capture": "does_not_apply",
+         "settings": [
+         ],
+         "additional_info_needed": [
+         ],
+         "min_allowed_amount": 10,
+         "max_allowed_amount": 10000,
+         "accreditation_time": 10080
+      },
+      {
+         "id": "banamex",
+         "name": "Banamex",
+         "payment_type_id": "atm",
+         "status": "active",
+         "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/banamex_bank_transfer.gif",
+         "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/banamex_bank_transfer.gif",
+         "deferred_capture": "does_not_apply",
+         "settings": [
+         ],
+         "additional_info_needed": [
+         ],
+         "min_allowed_amount": 10,
+         "max_allowed_amount": 10000,
+         "accreditation_time": 10080
+      },
+      {
+         "id": "bancomer",
+         "name": "BBVA Bancomer",
+         "payment_type_id": "atm",
+         "status": "active",
+         "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/bancomer_bank_transfer.gif",
+         "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/bancomer_bank_transfer.gif",
+         "deferred_capture": "does_not_apply",
+         "settings": [
+         ],
+         "additional_info_needed": [
+         ],
+         "min_allowed_amount": 10,
+         "max_allowed_amount": 10000,
+         "accreditation_time": 10080
+      },
+      {
+         "id": "7eleven",
+         "name": "7eleven",
+         "payment_type_id": "ticket",
+         "status": "active",
+         "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/7eleven.gif",
+         "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/7eleven.gif",
+         "deferred_capture": "does_not_apply",
+         "settings": [
+         ],
+         "additional_info_needed": [
+         ],
+         "min_allowed_amount": 10,
+         "max_allowed_amount": 10000,
+         "accreditation_time": 10080
+      },
+      {
+         "id": "gestopago",
+         "name": "Gestopago",
+         "payment_type_id": "ticket",
+         "status": "active",
+         "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/gestopago.gif",
+         "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/gestopago.gif",
+         "deferred_capture": "does_not_apply",
+         "settings": [
+         ],
+         "additional_info_needed": [
+         ],
+         "min_allowed_amount": 10,
+         "max_allowed_amount": 10000,
+         "accreditation_time": 10080
+      },
+      {
+         "id": "telecomm",
+         "name": "Telecomm",
+         "payment_type_id": "ticket",
+         "status": "active",
+         "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/telecomm.gif",
+         "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/telecomm.gif",
+         "deferred_capture": "does_not_apply",
+         "settings": [
+         ],
+         "additional_info_needed": [
+         ],
+         "min_allowed_amount": 10,
+         "max_allowed_amount": 10000,
+         "accreditation_time": 10080
+      },
+      {
+         "id": "pagoefectivo_atm",
+         "name": "PagoEfectivo",
+         "payment_type_id": "atm",
+         "status": "active",
+         "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/telecomm.gif",
+         "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/telecomm.gif",
+         "deferred_capture": "does_not_apply",
+         "settings": [
+         ],
+         "additional_info_needed": [
+         ],
+         "min_allowed_amount": 10,
+         "max_allowed_amount": 10000,
+         "accreditation_time": 10080
+      }
+   ]
+}

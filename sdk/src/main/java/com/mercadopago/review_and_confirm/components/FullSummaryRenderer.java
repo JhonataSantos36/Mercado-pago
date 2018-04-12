@@ -13,7 +13,7 @@ import com.mercadopago.components.Renderer;
 import com.mercadopago.components.RendererFactory;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.uicontrollers.payercosts.PayerCostColumn;
-import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.lite.util.CurrenciesUtil;
 
 import java.math.BigDecimal;
 
@@ -80,7 +80,7 @@ public class FullSummaryRenderer extends Renderer<FullSummary> {
     }
 
     private Spanned getFormattedAmount(BigDecimal amount, String currencyId) {
-        return amount != null && !isEmpty(currencyId) ? CurrenciesUtil.getFormattedAmount(amount, currencyId) : null;
+        return amount != null && !isEmpty(currencyId) ? CurrenciesUtil.getSpannedAmountWithCurrencySymbol(amount, currencyId) : null;
     }
 
     public String getDisclaimer(FullSummary component, Context context) {

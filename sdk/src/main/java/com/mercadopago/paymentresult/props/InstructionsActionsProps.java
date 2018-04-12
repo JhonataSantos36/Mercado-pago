@@ -2,7 +2,7 @@ package com.mercadopago.paymentresult.props;
 
 import android.support.annotation.NonNull;
 
-import com.mercadopago.model.InstructionActionInfo;
+import com.mercadopago.model.InstructionAction;
 
 import java.util.List;
 
@@ -12,9 +12,9 @@ import java.util.List;
 
 public class InstructionsActionsProps {
 
-    public final List<InstructionActionInfo> instructionActions;
+    public final List<InstructionAction> instructionActions;
 
-    public InstructionsActionsProps(@NonNull final List<InstructionActionInfo> instructionActions) {
+    public InstructionsActionsProps(@NonNull final List<InstructionAction> instructionActions) {
         this.instructionActions = instructionActions;
     }
 
@@ -28,9 +28,9 @@ public class InstructionsActionsProps {
     }
 
     public static class Builder {
-        public List<InstructionActionInfo> instructionsActions;
+        public List<InstructionAction> instructionsActions;
 
-        public Builder setInstructionsActions(List<InstructionActionInfo> instructionsActions) {
+        public Builder setInstructionsActions(List<InstructionAction> instructionsActions) {
             this.instructionsActions = instructionsActions;
             return this;
         }

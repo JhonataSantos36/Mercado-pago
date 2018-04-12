@@ -1,6 +1,6 @@
 package com.mercadopago.util;
 
-import com.mercadopago.constants.Sites;
+import com.mercadopago.model.Sites;
 
 import java.util.Collection;
 import java.util.HashSet;

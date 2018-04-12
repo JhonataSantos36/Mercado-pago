@@ -96,7 +96,7 @@
                         custom:errorColor="@color/mpsdk_color_red_error" />
                 </LinearLayout>
 
-                <include layout="@layout/mpsdk_view_progress_bar_small"/>
+                <include android:visibility="gone" layout="@layout/mpsdk_view_progress_bar_small"/>
             </LinearLayout>
 
             <FrameLayout

@@ -3,6 +3,8 @@ package com.mercadopago.util;
 import android.content.Context;
 
 import com.mercadopago.R;
+import com.mercadopago.exceptions.BinException;
+import com.mercadopago.model.Bin;
 import com.mercadopago.model.PaymentMethod;
 
 import java.text.SimpleDateFormat;
@@ -11,8 +13,6 @@ import java.util.Date;
 import java.util.List;
 
 public class MercadoPagoUtil {
-
-    public static final int BIN_LENGTH = 6;
 
     private static final String SDK_PREFIX = "mpsdk_";
 
@@ -126,7 +126,7 @@ public class MercadoPagoUtil {
     }
 
     public static List<PaymentMethod> getValidPaymentMethodsForBin(String bin, List<PaymentMethod> paymentMethods) {
-        if (bin.length() == BIN_LENGTH) {
+        if (bin.length() == Bin.BIN_LENGTH) {
             List<PaymentMethod> validPaymentMethods = new ArrayList<>();
             for (PaymentMethod pm : paymentMethods) {
                 if (pm.isValidForBin(bin)) {
@@ -134,7 +134,8 @@ public class MercadoPagoUtil {
                 }
             }
             return validPaymentMethods;
-        } else
-            throw new RuntimeException("Invalid bin: " + BIN_LENGTH + " digits needed, " + bin.length() + " found");
+        }
+
+        throw new BinException(bin.length());
     }
 }

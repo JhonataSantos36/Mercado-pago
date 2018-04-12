@@ -1,0 +1,89 @@
+{
+  "id" : 1834100,
+  "date_created" : "2016-10-14T12:11:14.000-04:00",
+  "date_approved" : "2016-10-14T12:11:14.000-04:00",
+  "date_last_updated" : "2016-10-14T12:11:14.000-04:00",
+  "money_release_date" : null,
+  "operation_type" : "regular_payment",
+  "issuer_id" : "2",
+  "payment_method_id" : "amex",
+  "payment_type_id" : "credit_card",
+  "status" : "approved",
+  "status_detail" : "accredited",
+  "currency_id" : "ARS",
+  "description" : "Title of what you are paying for",
+  "live_mode" : false,
+  "sponsor_id" : null,
+  "authorization_code" : null,
+  "collector_id" : 98781497,
+  "payer" :
+  {
+    "type" : "customer",
+    "id" : "127233032-AvQ8fKbm4RmrXK",
+    "email" : "leonardo.gaston.rossi@gmail.com",
+    "identification" :
+    {
+      "type" : null,
+      "number" : null
+    },
+    "phone" :
+    {
+      "area_code" : " ",
+      "number" : "11 5967-8899",
+      "extension" : ""
+    },
+    "first_name" : "Leonardo",
+    "last_name" : "Rossi"
+  },
+  "metadata" : [],
+  "order" : [],
+  "external_reference" : null,
+  "transaction_amount" : 100,
+  "transaction_amount_refunded" : 0,
+  "coupon_amount" : 0,
+  "differential_pricing_id" : null,
+  "deduction_schema" : null,
+  "transaction_details" :
+  {
+    "net_received_amount" : 94.01,
+    "total_paid_amount" : 100,
+    "overpaid_amount" : 0,
+    "external_resource_url" : null,
+    "installment_amount" : 100,
+    "financial_institution" : null,
+    "payment_method_reference_id" : null
+  },
+  "fee_details" : [
+    {
+      "type" : "mercadopago_fee",
+      "amount" : 5.99,
+      "fee_payer" : "collector"
+    }
+  ],
+  "captured" : true,
+  "binary_mode" : false,
+  "call_for_authorize_id" : null,
+  "statement_descriptor" : "WWW.MERCADOPAGO.COM",
+  "installments" : 1,
+  "card" :
+  {
+    "id" : "1476454659517",
+    "first_six_digits" : "371180",
+    "last_four_digits" : "7522",
+    "expiration_month" : 12,
+    "expiration_year" : 2018,
+    "date_created" : "2016-10-14T10:16:52.000-04:00",
+    "date_last_updated" : "2016-10-14T10:16:52.000-04:00",
+    "cardholder" :
+    {
+      "name" : "APROHHH",
+      "identification" :
+      {
+        "number" : "12345678",
+        "type" : "DNI"
+      }
+    }
+  },
+  "notification_url" : null,
+  "refunds" : []
+}

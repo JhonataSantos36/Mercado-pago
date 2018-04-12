@@ -10,12 +10,12 @@ import android.view.View;
 
 import com.google.gson.reflect.TypeToken;
 import com.mercadopago.adapters.BankDealsAdapter;
-import com.mercadopago.callbacks.Callback;
 import com.mercadopago.callbacks.FailureRecovery;
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.core.MercadoPagoServicesAdapter;
-import com.mercadopago.model.ApiException;
+import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.BankDeal;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.tracker.FlowHandler;
 import com.mercadopago.tracker.MPTrackingContext;
 import com.mercadopago.tracking.model.ScreenViewEvent;
@@ -46,12 +46,7 @@ public class BankDealsActivity extends MercadoPagoActivity {
     protected void onValidStart() {
         trackInitialScreen();
 
-        mMercadoPago = new MercadoPagoServicesAdapter.Builder()
-                .setContext(getActivity())
-                .setPublicKey(mMerchantPublicKey)
-                .setPrivateKey(mPayerAccessToken)
-                .build();
-
+        mMercadoPago = new MercadoPagoServicesAdapter(getActivity(), mMerchantPublicKey, mPayerAccessToken);
         getBankDeals();
     }
 
@@ -128,14 +123,15 @@ public class BankDealsActivity extends MercadoPagoActivity {
             solveBankDeals(mBankDeals);
         } else {
             LayoutUtil.showProgressLayout(this);
-            mMercadoPago.getBankDeals(new Callback<List<BankDeal>>() {
+            mMercadoPago.getBankDeals(new TaggedCallback<List<BankDeal>>(ApiUtil.RequestOrigin.GET_BANK_DEALS) {
+
                 @Override
-                public void success(List<BankDeal> bankDeals) {
+                public void onSuccess(final List<BankDeal> bankDeals) {
                     solveBankDeals(bankDeals);
                 }
 
                 @Override
-                public void failure(ApiException apiException) {
+                public void onFailure(final MercadoPagoError error) {
                     if (isActivityActive()) {
                         setFailureRecovery(new FailureRecovery() {
                             @Override
@@ -143,7 +139,10 @@ public class BankDealsActivity extends MercadoPagoActivity {
                                 getBankDeals();
                             }
                         });
-                        ApiUtil.showApiExceptionError(getActivity(), apiException, mMerchantPublicKey, ApiUtil.RequestOrigin.GET_BANK_DEALS);
+                        ApiUtil.showApiExceptionError(getActivity(),
+                                error.getApiException(),
+                                mMerchantPublicKey,
+                                ApiUtil.RequestOrigin.GET_BANK_DEALS);
                     } else {
                         finishWithCancelResult();
                     }

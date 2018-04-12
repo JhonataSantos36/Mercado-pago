@@ -1,13 +1,13 @@
 package com.mercadopago.securitycode;
 
-import com.mercadopago.exceptions.CardTokenException;
+import com.mercadopago.lite.exceptions.ApiException;
+import com.mercadopago.lite.exceptions.CardTokenException;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.mocks.Cards;
 import com.mercadopago.mocks.Issuers;
 import com.mercadopago.mocks.PayerCosts;
 import com.mercadopago.mocks.PaymentMethods;
 import com.mercadopago.mocks.Tokens;
-import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Issuer;
@@ -19,7 +19,7 @@ import com.mercadopago.model.SavedCardToken;
 import com.mercadopago.model.SavedESCCardToken;
 import com.mercadopago.model.SecurityCode;
 import com.mercadopago.model.Token;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.presenters.SecurityCodePresenter;
 import com.mercadopago.providers.SecurityCodeProvider;
 import com.mercadopago.util.TextUtil;
@@ -554,11 +554,11 @@ public class SecurityCodePresenterTest {
         }
 
         @Override
-        public void cloneToken(String tokenId, OnResourcesRetrievedCallback<Token> onResourcesRetrievedCallback) {
+        public void cloneToken(String tokenId, TaggedCallback<Token> taggedCallback) {
             if (cloneTokenShouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
-                onResourcesRetrievedCallback.onSuccess(successfulCloneTokenResponse);
+                taggedCallback.onSuccess(successfulCloneTokenResponse);
             }
         }
 
@@ -573,11 +573,11 @@ public class SecurityCodePresenterTest {
         }
 
         @Override
-        public void putSecurityCode(String securityCode, String tokenId, OnResourcesRetrievedCallback<Token> onResourcesRetrievedCallback) {
+        public void putSecurityCode(String securityCode, String tokenId, TaggedCallback<Token> taggedCallback) {
             if (putSecurityCodeShouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
-                onResourcesRetrievedCallback.onSuccess(successfulPutSecurityCodeResponse);
+                taggedCallback.onSuccess(successfulPutSecurityCodeResponse);
             }
         }
 
@@ -592,11 +592,11 @@ public class SecurityCodePresenterTest {
         }
 
         @Override
-        public void createToken(SavedCardToken savedCardToken, OnResourcesRetrievedCallback<Token> onResourcesRetrievedCallback) {
+        public void createToken(SavedCardToken savedCardToken, TaggedCallback<Token> taggedCallback) {
             if (createTokenWithSavedCardTokenShouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
-                onResourcesRetrievedCallback.onSuccess(successfulcreateTokenWithSavedCardTokenResponse);
+                taggedCallback.onSuccess(successfulcreateTokenWithSavedCardTokenResponse);
             }
         }
 
@@ -611,11 +611,11 @@ public class SecurityCodePresenterTest {
         }
 
         @Override
-        public void createToken(SavedESCCardToken savedESCCardToken, OnResourcesRetrievedCallback<Token> onResourcesRetrievedCallback) {
+        public void createToken(SavedESCCardToken savedESCCardToken, TaggedCallback<Token> taggedCallback) {
             if (createESCTokenShouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
-                onResourcesRetrievedCallback.onSuccess(successfulcreateESCTokenResponse);
+                taggedCallback.onSuccess(successfulcreateESCTokenResponse);
             }
         }
 

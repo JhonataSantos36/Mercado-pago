@@ -8,7 +8,7 @@ import com.mercadopago.components.Component;
 import com.mercadopago.components.LoadingComponent;
 import com.mercadopago.components.RendererFactory;
 import com.mercadopago.constants.PaymentMethods;
-import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.paymentresult.PaymentMethodProvider;
@@ -188,6 +188,7 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
                         Payment.StatusDetail.STATUS_DETAIL_REJECTED_REJECTED_INSUFFICIENT_DATA.equals(statusDetail) ||
                         Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_DUPLICATED_PAYMENT.equals(statusDetail) ||
                         Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_MAX_ATTEMPTS.equals(statusDetail) ||
+                        Payment.StatusDetail.STATUS_DETAIL_CC_REJECTED_HIGH_RISK.equals(statusDetail) ||
                         Payment.StatusDetail.STATUS_DETAIL_REJECTED_HIGH_RISK.equals(statusDetail));
     }
 

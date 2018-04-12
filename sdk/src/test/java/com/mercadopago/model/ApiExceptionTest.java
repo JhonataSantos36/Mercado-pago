@@ -1,5 +1,7 @@
 package com.mercadopago.model;
 
+import com.mercadopago.lite.exceptions.ApiException;
+
 import org.junit.Test;
 
 import java.util.ArrayList;

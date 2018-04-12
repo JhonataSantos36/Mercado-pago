@@ -1,0 +1,40 @@
+{
+  "amount_info": {
+    "thousands_separator": ".",
+    "decimal_separator": ",",
+    "symbol": "$",
+    "decimal_places": 2,
+    "amount": 10000
+  },
+  "instructions":[
+    {
+      "title": "Pay $100.00 in your closest store",
+      "references": [
+        {
+          "label": "InvalidReference1",
+          "field_value": null,
+          "separator": "-"
+        },
+        {
+          "label": "InvalidReference2",
+          "field_value": [
+          ],
+          "separator": " "
+        }
+      ],
+      "info": [
+        "Info",
+        "Info second phrase"
+      ],
+      "secondary_info": [
+        "Secondary info",
+        "Secondary second phrase"
+      ],
+      "tertiary_info": [
+        "Tertiary info",
+        "Tertiary second phrase"
+      ],
+      "accreditation_message": "accreditation time"
+    }
+  ]
+}

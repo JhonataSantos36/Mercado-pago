@@ -3,17 +3,9 @@ package com.mercadopago.providers;
 import android.content.Context;
 
 import com.mercadopago.R;
-import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MerchantServer;
-import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Customer;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
-import com.mercadopago.util.ApiUtil;
-
-/**
- * Created by mromar on 4/11/17.
- */
+import com.mercadopago.mvp.TaggedCallback;
 
 public class CustomerCardsProviderImpl implements CustomerCardsProvider {
 
@@ -30,18 +22,8 @@ public class CustomerCardsProviderImpl implements CustomerCardsProvider {
     }
 
     @Override
-    public void getCustomer(final OnResourcesRetrievedCallback<Customer> onResourcesRetrievedCallback) {
-        MerchantServer.getCustomer(context, merchantBaseUrl, merchantGetCustomerUri, merchantAccessToken, new Callback<Customer>() {
-            @Override
-            public void success(Customer customer) {
-                onResourcesRetrievedCallback.onSuccess(customer);
-            }
-
-            @Override
-            public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_CUSTOMER));
-            }
-        });
+    public void getCustomer(final TaggedCallback<Customer> taggedCallback) {
+        MerchantServer.getCustomer(context, merchantBaseUrl, merchantGetCustomerUri, merchantAccessToken, taggedCallback);
     }
 
     @Override

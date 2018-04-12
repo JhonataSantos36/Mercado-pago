@@ -14,7 +14,7 @@ import com.mercadopago.components.RendererFactory;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.ApiException;
+import com.mercadopago.lite.exceptions.ApiException;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Site;
 import com.mercadopago.paymentresult.components.AccreditationComment;

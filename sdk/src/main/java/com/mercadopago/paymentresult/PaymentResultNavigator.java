@@ -1,7 +1,7 @@
 package com.mercadopago.paymentresult;
 
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.ApiException;
+import com.mercadopago.lite.exceptions.ApiException;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 
 /**

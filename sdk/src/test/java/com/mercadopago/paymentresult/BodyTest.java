@@ -4,8 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.CustomComponent;
-import com.mercadopago.constants.ProcessingModes;
-import com.mercadopago.core.CheckoutStore;
+import com.mercadopago.lite.constants.ProcessingModes;
 import com.mercadopago.mocks.Instructions;
 import com.mercadopago.mocks.PaymentResults;
 import com.mercadopago.model.Instruction;

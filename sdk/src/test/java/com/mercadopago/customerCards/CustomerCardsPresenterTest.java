@@ -5,7 +5,7 @@ import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.mocks.Cards;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.Customer;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.presenters.CustomerCardsPresenter;
 import com.mercadopago.providers.CustomerCardsProvider;
 import com.mercadopago.views.CustomerCardsView;
@@ -157,13 +157,13 @@ public class CustomerCardsPresenterTest {
         }
 
         @Override
-        public void getCustomer(OnResourcesRetrievedCallback<Customer> onResourcesRetrievedCallback) {
+        public void getCustomer(TaggedCallback<Customer> taggedCallback) {
             if (shouldFail) {
-                onResourcesRetrievedCallback.onFailure(failedResponse);
+                taggedCallback.onFailure(failedResponse);
             } else {
                 Customer customer = new Customer();
                 customer.setCards(successfulResponse);
-                onResourcesRetrievedCallback.onSuccess(customer);
+                taggedCallback.onSuccess(customer);
             }
         }
 

@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.mercadopago.components.Action;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.ComponentManager;
-import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentResult;
@@ -40,7 +40,7 @@ public final class PaymentProcessorPluginActivity extends AppCompatActivity impl
         super.onCreate(savedInstanceState);
 
         final CheckoutStore store = CheckoutStore.getInstance();
-        final PaymentProcessor paymentProcessor = store.getPaymentProcessor();
+        final PaymentProcessor paymentProcessor = store.doesPaymentProcessorSupportPaymentMethodSelected();
 
         if (paymentProcessor == null) {
             cancel();

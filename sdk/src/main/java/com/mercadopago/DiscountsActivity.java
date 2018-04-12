@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.mercadopago.controllers.CheckoutTimer;
-import com.mercadopago.controllers.CustomServicesHandler;
+import com.mercadopago.lite.controllers.CustomServicesHandler;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPEditText;
 import com.mercadopago.customviews.MPTextView;
@@ -32,7 +33,7 @@ import com.mercadopago.model.Discount;
 import com.mercadopago.observers.TimerObserver;
 import com.mercadopago.presenters.DiscountsPresenter;
 import com.mercadopago.providers.DiscountProviderImpl;
-import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.lite.util.CurrenciesUtil;
 import com.mercadopago.util.ErrorUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
@@ -40,7 +41,6 @@ import com.mercadopago.util.TextUtil;
 import com.mercadopago.views.DiscountsActivityView;
 
 import java.math.BigDecimal;
-import java.util.Map;
 
 public class DiscountsActivity extends AppCompatActivity implements DiscountsActivityView, TimerObserver {
 
@@ -49,7 +49,6 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
     private String mMerchantBaseURL;
     private String mMerchantDiscountBaseURL;
     private String mMerchantGetDiscountURI;
-    private Map<String, String> mDiscountAdditionalInfo;
 
     //View
     protected ViewGroup mProgressLayout;
@@ -91,7 +90,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
 
     private void initializePresenter() {
         try {
-            DiscountProviderImpl discountProvider = new DiscountProviderImpl(this, mPresenter.getPublicKey(), mMerchantBaseURL, mMerchantDiscountBaseURL, mMerchantGetDiscountURI, mDiscountAdditionalInfo);
+            DiscountProviderImpl discountProvider = new DiscountProviderImpl(this, mPresenter.getPublicKey(), mMerchantBaseURL, mMerchantDiscountBaseURL, mMerchantGetDiscountURI);
             mPresenter.attachResourcesProvider(discountProvider);
             mPresenter.attachView(this);
         } catch (IllegalStateException exception) {
@@ -104,7 +103,6 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
             mMerchantBaseURL = CustomServicesHandler.getInstance().getServicePreference().getDefaultBaseURL();
             mMerchantDiscountBaseURL = CustomServicesHandler.getInstance().getServicePreference().getGetMerchantDiscountBaseURL();
             mMerchantGetDiscountURI = CustomServicesHandler.getInstance().getServicePreference().getGetMerchantDiscountURI();
-            mDiscountAdditionalInfo = CustomServicesHandler.getInstance().getServicePreference().getGetDiscountAdditionalInfo();
         }
     }
 
@@ -281,10 +279,10 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
         if (isAmountValid(mPresenter.getCouponAmount()) && isDiscountCurrencyIdValid()) {
 
             discountAmountBuilder.append("-");
-            discountAmountBuilder.append(CurrenciesUtil.formatNumber(mPresenter.getCouponAmount(), mPresenter.getCurrencyId()));
-            discountAmount = CurrenciesUtil.formatCurrencyInText(mPresenter.getCouponAmount(), mPresenter.getCurrencyId(), discountAmountBuilder.toString(), false, true);
+            discountAmount = CurrenciesUtil.getSpannedString(mPresenter.getCouponAmount(),
+                mPresenter.getCurrencyId(), false, true);
 
-            mReviewSummaryDiscountAmount.setText(discountAmount);
+            mReviewSummaryDiscountAmount.setText(TextUtils.concat(discountAmountBuilder, discountAmount));
             if (!TextUtil.isEmpty(mPresenter.getDiscount().getConcept())) {
                 mReviewSummaryDiscountLabel.setText(mPresenter.getDiscount().getConcept());
             }
@@ -402,9 +400,7 @@ public class DiscountsActivity extends AppCompatActivity implements DiscountsAct
     }
 
     private Spanned getFormattedAmount(BigDecimal amount, String currencyId) {
-        String originalNumber = CurrenciesUtil.formatNumber(amount, currencyId);
-        Spanned amountText = CurrenciesUtil.formatCurrencyInText(amount, currencyId, originalNumber, false, true);
-        return amountText;
+        return CurrenciesUtil.getSpannedString(amount, currencyId, false, true);
     }
 
     @Override

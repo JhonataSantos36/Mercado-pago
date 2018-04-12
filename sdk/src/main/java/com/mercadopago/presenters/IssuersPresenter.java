@@ -7,7 +7,7 @@ import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.mvp.MvpPresenter;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.providers.IssuersProvider;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.views.IssuersActivityView;
@@ -62,7 +62,7 @@ public class IssuersPresenter extends MvpPresenter<IssuersActivityView, IssuersP
     private void getIssuersAsync() {
         getView().showLoadingView();
 
-        getResourcesProvider().getIssuers(mPaymentMethod.getId(), mBin, new OnResourcesRetrievedCallback<List<Issuer>>() {
+        getResourcesProvider().getIssuers(mPaymentMethod.getId(), mBin, new TaggedCallback<List<Issuer>>(ApiUtil.RequestOrigin.GET_ISSUERS) {
             @Override
             public void onSuccess(List<Issuer> issuers) {
                 getView().stopLoadingView();

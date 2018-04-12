@@ -1,15 +1,14 @@
 package com.mercadopago.core;
 
 import android.content.Context;
+
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.uicontrollers.discounts.DiscountRowView;
 import com.mercadopago.uicontrollers.installments.InstallmentsReviewView;
+
 import java.math.BigDecimal;
 
-/**
- * Created by mreverter on 6/10/16.
- */
 @Deprecated
 public class MercadoPagoUI {
 

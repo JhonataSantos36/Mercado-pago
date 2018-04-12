@@ -1,0 +1,35 @@
+{
+  "id": "amex",
+  "name": "American Express",
+  "payment_type_id": "credit_card",
+  "status": "active",
+  "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/amex.gif",
+  "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/amex.gif",
+  "deferred_capture": "supported",
+  "settings": [
+    {
+      "card_number": {
+        "validation": "standard",
+        "length": 15
+      },
+      "bin": {
+        "pattern": "^((34)|(37))",
+        "installments_pattern": "^((34)|(37))",
+        "exclusion_pattern": null
+      },
+      "security_code": {
+        "length": 4,
+        "card_location": "front",
+        "mode": "mandatory"
+      }
+    }
+  ],
+  "additional_info_needed": [
+    "cardholder_identification_number",
+    "cardholder_identification_type",
+    "cardholder_name"
+  ],
+  "min_allowed_amount": 0,
+  "max_allowed_amount": 250000,
+  "accreditation_time": 2880
+}

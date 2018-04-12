@@ -1,6 +1,7 @@
 package com.mercadopago.mocks;
 
-import com.mercadopago.model.ApiException;
+
+import com.mercadopago.lite.exceptions.ApiException;
 import com.mercadopago.model.Token;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.utils.ResourcesUtil;

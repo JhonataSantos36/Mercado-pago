@@ -19,7 +19,7 @@ import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.customviews.MPTextView;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.listeners.RecyclerItemClickListener;
-import com.mercadopago.model.ApiException;
+import com.mercadopago.lite.exceptions.ApiException;
 import com.mercadopago.model.CardInfo;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.PaymentMethod;

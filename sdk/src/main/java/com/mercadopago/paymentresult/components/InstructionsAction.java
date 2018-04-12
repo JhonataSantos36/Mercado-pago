@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
-import com.mercadopago.model.InstructionActionInfo;
+import com.mercadopago.model.InstructionAction;
 
 /**
  * Created by vaserber on 11/14/17.
@@ -18,26 +18,26 @@ public class InstructionsAction extends Component<InstructionsAction.Prop, Void>
 
     public static class Prop {
 
-        public final InstructionActionInfo instructionActionInfo;
+        public final InstructionAction instructionAction;
 
-        public Prop(@NonNull final InstructionActionInfo instructionActionInfo) {
-            this.instructionActionInfo = instructionActionInfo;
+        public Prop(@NonNull final InstructionAction instructionAction) {
+            this.instructionAction = instructionAction;
         }
 
         public Prop(@NonNull final Builder builder) {
-            instructionActionInfo = builder.instructionActionInfo;
+            instructionAction = builder.instructionAction;
         }
 
         public Builder toBuilder() {
             return new Prop.Builder()
-                    .setInstructionActionInfo(instructionActionInfo);
+                    .setInstructionAction(instructionAction);
         }
 
         public static final class Builder {
-            public InstructionActionInfo instructionActionInfo;
+            public InstructionAction instructionAction;
 
-            public Builder setInstructionActionInfo(InstructionActionInfo instructionActionInfo) {
-                this.instructionActionInfo = instructionActionInfo;
+            public Builder setInstructionAction(InstructionAction instructionAction) {
+                this.instructionAction = instructionAction;
                 return this;
             }
 

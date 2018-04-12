@@ -2,6 +2,7 @@ package com.mercadopago.uicontrollers.payercosts;
 
 import android.content.Context;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,7 @@ import android.widget.LinearLayout;
 
 import com.mercadopago.R;
 import com.mercadopago.customviews.MPTextView;
-import com.mercadopago.util.CurrenciesUtil;
+import com.mercadopago.lite.util.CurrenciesUtil;
 import com.mercadopago.util.InstallmentsUtil;
 
 import java.math.BigDecimal;
@@ -75,26 +76,14 @@ public class PayerCostColumn {
 
     private void setAmountWithRateText() {
         mTotalText.setVisibility(View.VISIBLE);
-        StringBuilder sb = new StringBuilder();
-        sb.append("(");
-        sb.append(CurrenciesUtil.formatNumber(payerCostTotalAmount, mCurrencyId));
-        sb.append(")");
-        Spanned spannedFullAmountText = CurrenciesUtil.formatCurrencyInText(payerCostTotalAmount,
-                mCurrencyId, sb.toString(), false, true);
-        mTotalText.setText(spannedFullAmountText);
+        final Spanned spannedInstallmentsText = CurrenciesUtil.getSpannedAmountWithCurrencySymbol(payerCostTotalAmount, mCurrencyId);
+        mTotalText.setText(TextUtils.concat("(", spannedInstallmentsText, ")"));
     }
 
     private void setInstallmentsText() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(installments);
-        sb.append(" ");
-        sb.append(mContext.getString(R.string.mpsdk_installments_by));
-        sb.append(" ");
-
-        sb.append(CurrenciesUtil.formatNumber(installmentsAmount, mCurrencyId));
-        Spanned spannedInstallmentsText = CurrenciesUtil.formatCurrencyInText(installmentsAmount,
-                mCurrencyId, sb.toString(), false, true);
-        mInstallmentsTextView.setText(spannedInstallmentsText);
+        final Spanned spannedInstallmentsText = CurrenciesUtil.getSpannedAmountWithCurrencySymbol(installmentsAmount, mCurrencyId);
+        mInstallmentsTextView.setText(TextUtils.concat(installments.toString(), " ", mContext.getString(R.string.mpsdk_installments_by),
+            " ", spannedInstallmentsText));
     }
 
     public void setOnClickListener(View.OnClickListener listener) {

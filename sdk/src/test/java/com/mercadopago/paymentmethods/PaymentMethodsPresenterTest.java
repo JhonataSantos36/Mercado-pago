@@ -1,9 +1,9 @@
 package com.mercadopago.paymentmethods;
 
-import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.presenters.PaymentMethodsPresenter;
 import com.mercadopago.providers.PaymentMethodsProvider;
@@ -105,7 +105,7 @@ public class PaymentMethodsPresenterTest {
     private class MockedResourcesProvider implements PaymentMethodsProvider {
 
         @Override
-        public void getPaymentMethods(OnResourcesRetrievedCallback<List<PaymentMethod>> resourcesRetrievedCallback) {
+        public void getPaymentMethods(TaggedCallback<List<PaymentMethod>> resourcesRetrievedCallback) {
             List<PaymentMethod> paymentMethods = new ArrayList<>();
 
             PaymentMethod paymentMethod1 = new PaymentMethod();

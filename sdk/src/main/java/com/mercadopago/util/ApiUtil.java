@@ -7,7 +7,7 @@ import android.net.NetworkInfo;
 
 import com.mercadopago.R;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.ApiException;
+import com.mercadopago.lite.exceptions.ApiException;
 import com.mercadopago.model.Cause;
 
 import retrofit2.Response;

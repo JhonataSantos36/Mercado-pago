@@ -8,8 +8,9 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.mercadopago.core.MercadoPagoCheckout;
-import com.mercadopago.core.Settings;
 import com.mercadopago.example.R;
+import com.mercadopago.lite.core.Settings;
+
 import com.mercadopago.tracking.constants.TrackingEnvironments;
 import com.mercadopago.utils.ExamplesUtils;
 
@@ -27,7 +28,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
         StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyLog()
                 .build());
 
-        Settings.trackingEnvironment = TrackingEnvironments.STAGING;
+        Settings.setTrackingEnvironment(TrackingEnvironments.STAGING);
 
         setContentView(R.layout.activity_checkout_example);
         mProgressBar = findViewById(R.id.progressBar);

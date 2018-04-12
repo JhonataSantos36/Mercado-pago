@@ -3,25 +3,17 @@ package com.mercadopago.providers;
 import android.content.Context;
 
 import com.mercadopago.R;
-import com.mercadopago.callbacks.Callback;
-import com.mercadopago.controllers.CustomServicesHandler;
+import com.mercadopago.lite.controllers.CustomServicesHandler;
 import com.mercadopago.core.CustomServer;
 import com.mercadopago.core.MercadoPagoServicesAdapter;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.ApiException;
-import com.mercadopago.model.Campaign;
+import com.mercadopago.lite.callbacks.Callback;
+import com.mercadopago.lite.exceptions.ApiException;
 import com.mercadopago.model.Discount;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.TextUtil;
-
-import java.util.List;
-import java.util.Map;
-
-/**
- * Created by mromar on 1/24/17.
- */
 
 public class DiscountProviderImpl implements DiscountsProvider {
 
@@ -37,115 +29,50 @@ public class DiscountProviderImpl implements DiscountsProvider {
     private final String merchantBaseUrl;
     private final String merchantDiscountUrl;
     private final String merchantGetDiscountUri;
-    private final Map<String, String> discountAdditionalInfo;
 
     private final ServicePreference servicePreference;
 
-    public DiscountProviderImpl(Context context, String publicKey, String merchantBaseUrl, String merchantDiscountUrl, String merchantGetDiscountUri, Map<String, String> discountAdditionalInfo) {
+    public DiscountProviderImpl(Context context, String publicKey, String merchantBaseUrl, String merchantDiscountUrl, String merchantGetDiscountUri) {
         this.context = context;
         this.merchantBaseUrl = merchantBaseUrl;
         this.merchantDiscountUrl = merchantDiscountUrl;
         this.merchantGetDiscountUri = merchantGetDiscountUri;
-        this.discountAdditionalInfo = discountAdditionalInfo;
         servicePreference = CustomServicesHandler.getInstance().getServicePreference();
-
-        if (publicKey == null) throw new IllegalStateException("public key not found");
-        if (context == null) throw new IllegalStateException("context not found");
-
-        mercadoPago = new MercadoPagoServicesAdapter.Builder()
-                .setContext(context)
-                .setPublicKey(publicKey)
-                .build();
+        mercadoPago = new MercadoPagoServicesAdapter(context, publicKey);
     }
 
     @Override
-    public void getDirectDiscount(String amount, String payerEmail, final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
+    public void getDirectDiscount(String amount, String payerEmail, final TaggedCallback<Discount> taggedCallback) {
         if (isMerchantServerDiscountsAvailable()) {
-            getMerchantDirectDiscount(amount, payerEmail, onResourcesRetrievedCallback);
+            getMerchantDirectDiscount(amount, payerEmail, taggedCallback);
         } else {
-            getMPDirectDiscount(amount, payerEmail, onResourcesRetrievedCallback);
+            mercadoPago.getDirectDiscount(amount, payerEmail, taggedCallback);
         }
     }
 
-    private void getMPDirectDiscount(String amount, String payerEmail, final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
-        mercadoPago.getDirectDiscount(amount, payerEmail, new Callback<Discount>() {
-            @Override
-            public void success(Discount discount) {
-                onResourcesRetrievedCallback.onSuccess(discount);
-            }
-
-            @Override
-            public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_DIRECT_DISCOUNT));
-            }
-        });
-    }
-
-    private void getMerchantDirectDiscount(String amount, String payerEmail, final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
+    private void getMerchantDirectDiscount(String amount, String payerEmail, final TaggedCallback<Discount> taggedCallback) {
         CustomServer.getDirectDiscount(context, amount, payerEmail, servicePreference.getGetMerchantDiscountBaseURL(), servicePreference.getGetMerchantDiscountURI(), servicePreference.getGetDiscountAdditionalInfo(), new Callback<Discount>() {
             @Override
             public void success(Discount discount) {
-                onResourcesRetrievedCallback.onSuccess(discount);
+                taggedCallback.onSuccess(discount);
             }
 
             @Override
             public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_DIRECT_DISCOUNT));
+                taggedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_DIRECT_DISCOUNT));
             }
         });
     }
 
     @Override
-    public void getCodeDiscount(String transactionAmount, String payerEmail, String discountCode, final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
+    public void getCodeDiscount(String transactionAmount, String payerEmail, String discountCode, final TaggedCallback<Discount> taggedCallback) {
         if (isMerchantServerDiscountsAvailable()) {
-            getMerchantCodeDiscount(transactionAmount, payerEmail, discountCode, onResourcesRetrievedCallback);
+            CustomServer.getCodeDiscount(discountCode, transactionAmount, payerEmail, context, servicePreference.getGetMerchantDiscountBaseURL(), servicePreference.getGetMerchantDiscountURI(), servicePreference.getGetDiscountAdditionalInfo(), taggedCallback);
         } else {
-            getMPCodeDiscount(transactionAmount, payerEmail, discountCode, onResourcesRetrievedCallback);
+            mercadoPago.getCodeDiscount(transactionAmount, payerEmail, discountCode, taggedCallback);
         }
     }
 
-    private void getMPCodeDiscount(String transactionAmount, String payerEmail, String discountCode, final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
-        mercadoPago.getCodeDiscount(transactionAmount, payerEmail, discountCode, new Callback<Discount>() {
-            @Override
-            public void success(Discount discount) {
-                onResourcesRetrievedCallback.onSuccess(discount);
-            }
-
-            @Override
-            public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_CODE_DISCOUNT));
-            }
-        });
-    }
-
-    @Override
-    public void getCampaigns(final OnResourcesRetrievedCallback<List<Campaign>> onResourcesRetrievedCallback) {
-        mercadoPago.getCampaigns(new Callback<List<Campaign>>() {
-            @Override
-            public void success(List<Campaign> campaigns) {
-                onResourcesRetrievedCallback.onSuccess(campaigns);
-            }
-
-            @Override
-            public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_CAMPAIGNS));
-            }
-        });
-    }
-
-    private void getMerchantCodeDiscount(String transactionAmount, String payerEmail, String discountCode, final OnResourcesRetrievedCallback<Discount> onResourcesRetrievedCallback) {
-        CustomServer.getCodeDiscount(discountCode, transactionAmount, payerEmail, context, servicePreference.getGetMerchantDiscountBaseURL(), servicePreference.getGetMerchantDiscountURI(), servicePreference.getGetDiscountAdditionalInfo(), new Callback<Discount>() {
-            @Override
-            public void success(Discount discount) {
-                onResourcesRetrievedCallback.onSuccess(discount);
-            }
-
-            @Override
-            public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_CODE_DISCOUNT));
-            }
-        });
-    }
 
     @Override
     public String getApiErrorMessage(String error) {

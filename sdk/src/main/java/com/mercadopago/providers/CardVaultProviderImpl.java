@@ -3,24 +3,16 @@ package com.mercadopago.providers;
 import android.content.Context;
 
 import com.mercadopago.R;
-import com.mercadopago.callbacks.Callback;
 import com.mercadopago.core.MercadoPagoServicesAdapter;
-import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Installment;
 import com.mercadopago.model.SavedESCCardToken;
 import com.mercadopago.model.Token;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
-import com.mercadopago.util.ApiUtil;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.util.MercadoPagoESC;
 import com.mercadopago.util.MercadoPagoESCImpl;
 
 import java.math.BigDecimal;
 import java.util.List;
-
-/**
- * Created by vaserber on 4/18/17.
- */
 
 public class CardVaultProviderImpl implements CardVaultProvider {
 
@@ -31,11 +23,7 @@ public class CardVaultProviderImpl implements CardVaultProvider {
     public CardVaultProviderImpl(Context context, String publicKey, String privateKey, boolean escEnabled) {
         this.context = context;
 
-        mercadoPago = new MercadoPagoServicesAdapter.Builder()
-                .setContext(context)
-                .setPublicKey(publicKey)
-                .setPrivateKey(privateKey)
-                .build();
+        mercadoPago = new MercadoPagoServicesAdapter(context, publicKey, privateKey);
 
         mercadoPagoESC = new MercadoPagoESCImpl(context, escEnabled);
     }
@@ -71,33 +59,18 @@ public class CardVaultProviderImpl implements CardVaultProvider {
     }
 
     @Override
-    public void getInstallmentsAsync(final String bin, final Long issuerId, final String paymentMethodId, final BigDecimal amount, final OnResourcesRetrievedCallback<List<Installment>> onResourcesRetrievedCallback) {
-        mercadoPago.getInstallments(bin, amount, issuerId, paymentMethodId, new Callback<List<Installment>>() {
-            @Override
-            public void success(List<Installment> installments) {
-                onResourcesRetrievedCallback.onSuccess(installments);
-            }
-
-            @Override
-            public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.GET_INSTALLMENTS));
-            }
-        });
+    public void getInstallmentsAsync(final String bin,
+                                     final Long issuerId,
+                                     final String paymentMethodId,
+                                     final BigDecimal amount,
+                                     final TaggedCallback<List<Installment>> taggedCallback) {
+        mercadoPago.getInstallments(bin, amount, issuerId, paymentMethodId, taggedCallback);
     }
 
     @Override
-    public void createESCTokenAsync(SavedESCCardToken escCardToken, final OnResourcesRetrievedCallback<Token> onResourcesRetrievedCallback) {
-        mercadoPago.createToken(escCardToken, new Callback<Token>() {
-            @Override
-            public void success(Token token) {
-                onResourcesRetrievedCallback.onSuccess(token);
-            }
-
-            @Override
-            public void failure(ApiException apiException) {
-                onResourcesRetrievedCallback.onFailure(new MercadoPagoError(apiException, ApiUtil.RequestOrigin.CREATE_TOKEN));
-            }
-        });
+    public void createESCTokenAsync(SavedESCCardToken escCardToken,
+                                    final TaggedCallback<Token> taggedCallback) {
+        mercadoPago.createToken(escCardToken, taggedCallback);
     }
 
     @Override

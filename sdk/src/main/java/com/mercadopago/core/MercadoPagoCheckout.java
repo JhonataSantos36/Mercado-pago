@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.CheckoutActivity;
 import com.mercadopago.callbacks.CallbackHolder;
-import com.mercadopago.controllers.CustomServicesHandler;
+import com.mercadopago.lite.controllers.CustomServicesHandler;
 import com.mercadopago.hooks.CheckoutHooks;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.PaymentData;

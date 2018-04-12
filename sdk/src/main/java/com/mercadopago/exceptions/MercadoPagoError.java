@@ -1,10 +1,8 @@
 package com.mercadopago.exceptions;
 
-import com.mercadopago.model.ApiException;
 
-/**
- * Created by mromar on 3/2/16.
- */
+import com.mercadopago.lite.exceptions.ApiException;
+
 public class MercadoPagoError {
 
     private String message;
@@ -47,10 +45,7 @@ public class MercadoPagoError {
     }
 
     public String getErrorDetail() {
-        if (errorDetail == null) {
-            errorDetail = "";
-        }
-        return errorDetail;
+        return errorDetail == null ? "" : errorDetail;
     }
 
     public boolean isApiException() {

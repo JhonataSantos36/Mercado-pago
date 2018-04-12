@@ -1,8 +1,8 @@
 package com.mercadopago.preferences;
 
-import com.mercadopago.constants.PaymentTypes;
-import com.mercadopago.constants.Sites;
-import com.mercadopago.exceptions.CheckoutPreferenceException;
+import com.mercadopago.model.PaymentTypes;
+import com.mercadopago.model.Sites;
+import com.mercadopago.lite.exceptions.CheckoutPreferenceException;
 import com.mercadopago.model.Item;
 
 import junit.framework.Assert;

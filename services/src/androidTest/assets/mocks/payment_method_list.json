@@ -1,0 +1,450 @@
+[
+  {
+    "accreditation_time":2880,
+    "additional_info_needed":[
+      "cardholder_name",
+      "cardholder_identification_type",
+      "cardholder_identification_number"
+    ],
+    "id":"visa",
+    "name":"Visa",
+    "payment_type_id":"credit_card",
+    "settings":[
+      {
+        "bin":{
+          "exclusion_pattern":"^(487017)",
+          "installments_pattern":"^4",
+          "pattern":"^4"
+        },
+        "card_number":{
+          "length":16,
+          "validation":"standard"
+        },
+        "security_code":{
+          "card_location":"back",
+          "length":3,
+          "mode":"mandatory"
+        }
+      }
+    ]
+  },
+  {
+    "accreditation_time":2880,
+    "additional_info_needed":[
+      "cardholder_identification_number",
+      "cardholder_identification_type",
+      "cardholder_name"
+    ],
+    "id":"amex",
+    "name":"American Express",
+    "payment_type_id":"credit_card",
+    "settings":[
+      {
+        "bin":{
+          "exclusion_pattern":"",
+          "installments_pattern":"^((34)|(37))",
+          "pattern":"^((34)|(37))"
+        },
+        "card_number":{
+          "length":15,
+          "validation":"standard"
+        },
+        "security_code":{
+          "card_location":"front",
+          "length":4,
+          "mode":"mandatory"
+        }
+      }
+    ]
+  },
+  {
+    "accreditation_time":2880,
+    "additional_info_needed":[
+      "cardholder_identification_number",
+      "cardholder_identification_type",
+      "cardholder_name",
+      "issuer_id"
+    ],
+    "id":"master",
+    "name":"Mastercard",
+    "payment_type_id":"credit_card",
+    "settings":[
+      {
+        "bin":{
+          "exclusion_pattern":"^((520053)|(546553)|(589562)|(554472)|(531847)|(527601)|(501105)|(522135)|(522137)|(527555)|((542702)|(544764)|(550073)|(528824))|(557039)|((515073)|(515070)))",
+          "installments_pattern":"^5",
+          "pattern":"^5"
+        },
+        "card_number":{
+          "length":16,
+          "validation":"standard"
+        },
+        "security_code":{
+          "card_location":"back",
+          "length":3,
+          "mode":"mandatory"
+        }
+      }
+    ]
+  },
+  {
+    "accreditation_time":2880,
+    "additional_info_needed":[
+      "cardholder_identification_type",
+      "cardholder_name",
+      "cardholder_identification_number"
+    ],
+    "id":"argencard",
+    "name":"Argencard",
+    "payment_type_id":"credit_card",
+    "settings":[
+      {
+        "bin":{
+          "exclusion_pattern":"^((589562)|(527571)|(527572))",
+          "installments_pattern":"^(501105)",
+          "pattern":"^(501105)"
+        },
+        "card_number":{
+          "length":16,
+          "validation":"standard"
+        },
+        "security_code":{
+          "card_location":"back",
+          "length":3,
+          "mode":"mandatory"
+        }
+      }
+    ]
+  },
+  {
+    "accreditation_time":2880,
+    "additional_info_needed":[
+      "cardholder_name",
+      "cardholder_identification_type",
+      "cardholder_identification_number"
+    ],
+    "id":"cabal",
+    "name":"Cabal",
+    "payment_type_id":"credit_card",
+    "settings":[
+      {
+        "bin":{
+          "exclusion_pattern":"",
+          "installments_pattern":"^((627170)|(589657)|(603522)|(604((20[1-9])|(2[1-9][0-9])|(3[0-9]{2})|(400))))",
+          "pattern":"^((627170)|(589657)|(603522)|(604((20[1-9])|(2[1-9][0-9])|(3[0-9]{2})|(400))))"
+        },
+        "card_number":{
+          "length":16,
+          "validation":"standard"
+        },
+        "security_code":{
+          "card_location":"back",
+          "length":3,
+          "mode":"mandatory"
+        }
+      }
+    ]
+  },
+  {
+    "accreditation_time":2880,
+    "additional_info_needed":[
+      "cardholder_name",
+      "cardholder_identification_type",
+      "cardholder_identification_number"
+    ],
+    "id":"cencosud",
+    "name":"Cencosud",
+    "payment_type_id":"credit_card",
+    "settings":[
+      {
+        "bin":{
+          "exclusion_pattern":"",
+          "installments_pattern":"^(603493)",
+          "pattern":"^(603493)"
+        },
+        "card_number":{
+          "length":16,
+          "validation":"standard"
+        },
+        "security_code":{
+          "card_location":"back",
+          "length":3,
+          "mode":"mandatory"
+        }
+      }
+    ]
+  },
+  {
+    "accreditation_time":2880,
+    "additional_info_needed":[
+      "cardholder_identification_type",
+      "cardholder_name",
+      "cardholder_identification_number"
+    ],
+    "id":"diners",
+    "name":"Diners",
+    "payment_type_id":"credit_card",
+    "settings":[
+      {
+        "bin":{
+          "exclusion_pattern":"",
+          "installments_pattern":"^((30)|(36)|(38))",
+          "pattern":"^((30)|(36)|(38))"
+        },
+        "card_number":{
+          "length":14,
+          "validation":"standard"
+        },
+        "security_code":{
+          "card_location":"back",
+          "length":3,
+          "mode":"mandatory"
+        }
+      }
+    ]
+  },
+  {
+    "accreditation_time":2880,
+    "additional_info_needed":[
+      "cardholder_identification_type",
+      "cardholder_name",
+      "cardholder_identification_number"
+    ],
+    "id":"naranja",
+    "name":"Naranja",
+    "payment_type_id":"credit_card",
+    "settings":[
+      {
+        "bin":{
+          "exclusion_pattern":"",
+          "installments_pattern":"^(589562)",
+          "pattern":"^(589562)"
+        },
+        "card_number":{
+          "length":16,
+          "validation":"none"
+        },
+        "security_code":{
+          "card_location":"back",
+          "length":3,
+          "mode":"mandatory"
+        }
+      }
+    ]
+  },
+  {
+    "accreditation_time":2880,
+    "additional_info_needed":[
+      "cardholder_identification_number",
+      "cardholder_name",
+      "cardholder_identification_type"
+    ],
+    "id":"nativa",
+    "name":"Nativa Mastercard",
+    "payment_type_id":"credit_card",
+    "settings":[
+      {
+        "bin":{
+          "exclusion_pattern":"",
+          "installments_pattern":"^(546553)",
+          "pattern":"^(546553)"
+        },
+        "card_number":{
+          "length":16,
+          "validation":"standard"
+        },
+        "security_code":{
+          "card_location":"back",
+          "length":3,
+          "mode":"mandatory"
+        }
+      }
+    ]
+  },
+  {
+    "accreditation_time":10080,
+    "additional_info_needed":[
+
+    ],
+    "id":"bapropagos",
+    "name":"Provincia Pagos",
+    "payment_type_id":"ticket",
+    "settings":[
+
+    ]
+  },
+  {
+    "accreditation_time":10080,
+    "additional_info_needed":[
+
+    ],
+    "id":"pagofacil",
+    "name":"Pago Fácil",
+    "payment_type_id":"ticket",
+    "settings":[
+
+    ]
+  },
+  {
+    "accreditation_time":10080,
+    "additional_info_needed":[
+
+    ],
+    "id":"rapipago",
+    "name":"Rapipago",
+    "payment_type_id":"ticket",
+    "settings":[
+
+    ]
+  },
+  {
+    "accreditation_time":2880,
+    "additional_info_needed":[
+
+    ],
+    "id":"redlink",
+    "name":"RedLink",
+    "payment_type_id":"atm",
+    "settings":[
+
+    ]
+  },
+  {
+    "accreditation_time":2880,
+    "additional_info_needed":[
+      "cardholder_name",
+      "cardholder_identification_type",
+      "cardholder_identification_number"
+    ],
+    "id":"cordobesa",
+    "name":"Cordobesa",
+    "payment_type_id":"credit_card",
+    "settings":[
+      {
+        "bin":{
+          "exclusion_pattern":"",
+          "installments_pattern":"^((542702)|(544764)|(550073))",
+          "pattern":"^((542702)|(544764)|(550073)|(528824))"
+        },
+        "card_number":{
+          "length":16,
+          "validation":"standard"
+        },
+        "security_code":{
+          "card_location":"back",
+          "length":3,
+          "mode":"optional"
+        }
+      }
+    ]
+  },
+  {
+    "accreditation_time":2880,
+    "additional_info_needed":[
+      "cardholder_name",
+      "cardholder_identification_type",
+      "cardholder_identification_number"
+    ],
+    "id":"cmr",
+    "name":"CMR",
+    "payment_type_id":"credit_card",
+    "settings":[
+      {
+        "bin":{
+          "exclusion_pattern":"",
+          "installments_pattern":"^(557039)",
+          "pattern":"^(557039)"
+        },
+        "card_number":{
+          "length":16,
+          "validation":"standard"
+        },
+        "security_code":{
+          "card_location":"back",
+          "length":3,
+          "mode":"optional"
+        }
+      }
+    ]
+  },
+  {
+    "accreditation_time":2880,
+    "additional_info_needed":[
+      "cardholder_name",
+      "cardholder_identification_type",
+      "cardholder_identification_number"
+    ],
+    "id":"cordial",
+    "name":"Cordial",
+    "payment_type_id":"credit_card",
+    "settings":[
+      {
+        "bin":{
+          "exclusion_pattern":"",
+          "installments_pattern":"^(522135|522137|527555)",
+          "pattern":"^(522135|522137|527555)"
+        },
+        "card_number":{
+          "length":16,
+          "validation":"standard"
+        },
+        "security_code":{
+          "card_location":"back",
+          "length":3,
+          "mode":"optional"
+        }
+      }
+    ]
+  },
+  {
+    "id": "tarshop",
+    "name": "Tarjeta Shopping",
+    "payment_type_id": "credit_card",
+    "status": "active",
+    "secure_thumbnail": "https://www.mercadopago.com/org-img/MP3/API/logos/tarshop.gif",
+    "thumbnail": "http://img.mlstatic.com/org-img/MP3/API/logos/tarshop.gif",
+    "deferred_capture": "supported",
+    "settings": [
+      {
+        "bin": {
+          "pattern": "^(603488)",
+          "exclusion_pattern": null,
+          "installments_pattern": "^(603488)"
+        },
+        "card_number": {
+          "length": 16,
+          "validation": "standard"
+        },
+        "security_code": {
+          "mode": "mandatory",
+          "length": 3,
+          "card_location": "back"
+        }
+      },
+      {
+        "bin": {
+          "pattern": "^(27995)",
+          "exclusion_pattern": null,
+          "installments_pattern": "^(27995)"
+        },
+        "card_number": {
+          "length": 13,
+          "validation": "none"
+        },
+        "security_code": {
+          "mode": "optional",
+          "length": 0,
+          "card_location": "back"
+        }
+      }
+    ],
+    "additional_info_needed": [
+      "cardholder_name",
+      "cardholder_identification_number",
+      "cardholder_identification_type"
+    ],
+    "min_allowed_amount": 0,
+    "max_allowed_amount": 250000,
+    "accreditation_time": 2880
+  }
+]

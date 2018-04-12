@@ -10,7 +10,7 @@ import com.mercadopago.components.Action;
 import com.mercadopago.components.Button;
 import com.mercadopago.components.ButtonLink;
 import com.mercadopago.components.CompactComponent;
-import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.review_and_confirm.models.PaymentModel;
 
 public class PaymentMethodComponent extends CompactComponent<PaymentModel, PaymentMethodComponent.Actions> {

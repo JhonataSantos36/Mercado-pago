@@ -1,0 +1,65 @@
+{
+  "address":{
+    "street_name":null,
+    "street_number":null,
+    "zip_code":null
+  },
+  "cards":[
+    {
+      "card_holder":null,
+      "customer_id":"178101336",
+      "date_created":null,
+      "date_last_updated":null,
+      "expiration_month":11,
+      "expiration_year":2019,
+      "first_six_digits":"503175",
+      "id":"149024476",
+      "issuer":{
+        "id":3,
+        "name":"Mastercard"
+      },
+      "last_four_digits":"0604",
+      "payment_method":{
+        "accreditation_time":null,
+        "additional_info_needed":null,
+        "deferred_capture":null,
+        "id":"master",
+        "max_allowed_amount":null,
+        "min_allowed_amount":null,
+        "name":"Mastercard",
+        "payment_type_id":"credit_card",
+        "secure_thumbnail":"https://www.mercadopago.com/org-img/MP3/API/logos/master.gif",
+        "settings":null,
+        "status":null,
+        "thumbnail":"http://img.mlstatic.com/org-img/MP3/API/logos/master.gif"
+      },
+      "security_code":{
+        "card_location":"back",
+        "length":3,
+        "mode":null
+      }
+    }
+  ],
+  "date_created":"2015-02-27T11:45:47.000-0500",
+  "date_last_updated":"2015-05-05T17:04:08.814-0400",
+  "default_card":149024476,
+  "description":null,
+  "email":"test_user_61065665@testuser.com",
+  "first_name":"test user",
+  "id":"178101336",
+  "identification":{
+    "number":null,
+    "type":null
+  },
+  "last_name":null,
+  "live_mode":true,
+  "metadata":{
+
+  },
+  "phone":{
+    "area_code":null,
+    "number":null
+  },
+  "registration_date":null
+}
+

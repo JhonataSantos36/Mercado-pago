@@ -1,23 +1,20 @@
 package com.mercadopago.presenters;
 
 import com.mercadopago.callbacks.FailureRecovery;
-import com.mercadopago.constants.PaymentTypes;
+import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.mvp.MvpPresenter;
-import com.mercadopago.mvp.OnResourcesRetrievedCallback;
+import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.preferences.PaymentPreference;
 import com.mercadopago.providers.PaymentMethodsProvider;
+import com.mercadopago.util.ApiUtil;
 import com.mercadopago.views.PaymentMethodsView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by mreverter on 1/5/17.
- */
-
-public class PaymentMethodsPresenter extends MvpPresenter<PaymentMethodsView, PaymentMethodsProvider>{
+public class PaymentMethodsPresenter extends MvpPresenter<PaymentMethodsView, PaymentMethodsProvider> {
 
     private boolean showBankDeals;
     private PaymentPreference paymentPreference;
@@ -39,17 +36,17 @@ public class PaymentMethodsPresenter extends MvpPresenter<PaymentMethodsView, Pa
     public void start() {
         definePaymentMethodsExclusions();
         retrievePaymentMethods();
-        if(showBankDeals && isViewAttached()) {
+        if (showBankDeals && isViewAttached()) {
             getView().showBankDeals();
         }
     }
 
     private void retrievePaymentMethods() {
         getView().showProgress();
-        getResourcesProvider().getPaymentMethods(new OnResourcesRetrievedCallback<List<PaymentMethod>>() {
+        getResourcesProvider().getPaymentMethods(new TaggedCallback<List<PaymentMethod>>(ApiUtil.RequestOrigin.GET_PAYMENT_METHODS) {
             @Override
             public void onSuccess(List<PaymentMethod> paymentMethods) {
-                if(isViewAttached()) {
+                if (isViewAttached()) {
                     getView().showPaymentMethods(getSupportedPaymentMethods(paymentMethods));
                     getView().hideProgress();
                 }
@@ -57,7 +54,7 @@ public class PaymentMethodsPresenter extends MvpPresenter<PaymentMethodsView, Pa
 
             @Override
             public void onFailure(MercadoPagoError exception) {
-                if(isViewAttached()) {
+                if (isViewAttached()) {
                     setFailureRecovery(new FailureRecovery() {
                         @Override
                         public void recover() {
@@ -126,7 +123,7 @@ public class PaymentMethodsPresenter extends MvpPresenter<PaymentMethodsView, Pa
     }
 
     public void recoverFromFailure() {
-        if(failureRecovery != null) {
+        if (failureRecovery != null) {
             failureRecovery.recover();
         }
     }
