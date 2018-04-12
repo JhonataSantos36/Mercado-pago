@@ -98,7 +98,7 @@ public class PaymentResultBodyProps {
 
         public Builder setCurrencyId(final String currencyId) {
             this.currencyId = currencyId;
-            returnhis;
+            return this;
         }
 
         public void setAmount(final BigDecimal amount) {
