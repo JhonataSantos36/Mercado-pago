@@ -58,12 +58,6 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     private boolean skipHook = false;
     private boolean hook1Displayed = false;
 
-    /**
-     * @deprecated Account money is a plugin now.
-     */
-    @Deprecated
-    private PaymentMethod accountMoneyPaymentMethod;
-
     public void initialize(boolean selectAutomatically) {
         try {
             mSelectAutomatically = selectAutomatically;
@@ -75,25 +69,12 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
     }
 
     private void onValidStart() {
-        if (mDiscountEnabled) {
-            initPaymentVaultDiscountFlow();
-        } else {
-            initPaymentVaultFlow();
-        }
+        initPaymentVaultFlow();
     }
 
-    private void initPaymentVaultDiscountFlow() {
-
-        if (isItemSelected()) {
-            initializeDiscountRow();
-            showSelectedItemChildren();
-        } else {
-            loadDiscount();
-        }
-    }
 
     private void initPaymentVaultFlow() {
-        initializeDiscountRow();
+        initializeAmountRow();
 
         if (isItemSelected()) {
             checkAvailablePaymentMethods();
@@ -102,49 +83,20 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
         }
     }
 
-    private void loadDiscount() {
-        if (mDirectDiscountEnabled && mDiscount == null) {
-            getView().showProgress();
-            getDirectDiscount();
-        } else {
-            initializeDiscountRow();
-            initPaymentVaultFlow();
-        }
-    }
-
     public void onDiscountOptionSelected() {
         getView().startDiscountFlow(mAmount);
     }
 
-    public void initializeDiscountRow() {
+    public void initializeAmountRow() {
         if (isViewAttached()) {
             getView().showDiscount(mAmount);
         }
     }
 
-    private void getDirectDiscount() {
-        getView().showProgress();
-        getResourcesProvider().getDirectDiscount(mAmount.toString(), mPayerEmail, new TaggedCallback<Discount>(ApiUtil.RequestOrigin.GET_DIRECT_DISCOUNT) {
-            @Override
-            public void onSuccess(Discount discount) {
-                mDiscount = discount;
-                initializeDiscountRow();
-                initPaymentVaultFlow();
-            }
-
-            @Override
-            public void onFailure(MercadoPagoError error) {
-                mDirectDiscountEnabled = false;
-                initializeDiscountRow();
-                initPaymentVaultFlow();
-            }
-        });
-    }
-
     public void onDiscountReceived(Discount discount) {
         setDiscount(discount);
         clearPaymentMethodOptions();
-        initializeDiscountRow();
+        initializeAmountRow();
         initPaymentVaultFlow();
     }
 
@@ -643,14 +595,6 @@ public class PaymentVaultPresenter extends MvpPresenter<PaymentVaultView, Paymen
             return true;
         }
         return false;
-    }
-
-    /**
-     * @deprecated Account money is a plugin now.
-     */
-    @Deprecated
-    public PaymentMethod getAccountMoneyPaymentMethod() {
-        return accountMoneyPaymentMethod;
     }
 
 

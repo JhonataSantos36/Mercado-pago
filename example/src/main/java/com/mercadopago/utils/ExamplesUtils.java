@@ -207,12 +207,7 @@ public class ExamplesUtils {
                 .setActivity(activity)
                 .setPublicKey(DUMMY_MERCHANT_PUBLIC_KEY)
                 .setCheckoutPreference(new CheckoutPreference(DUMMY_PREFERENCE_ID))
-                .setDataInitializationTask(new DataInitializationTask(defaultData) {
-                    @Override
-                    public void onLoadData(@NonNull final Map<String, Object> data) {
-                        data.put("user", "Nico");
-                    }
-                });
+                .setDataInitializationTask(getDataInitializationTask(defaultData));
     }
 
     public static Builder createBaseWithDecimals(final Activity activity) {
@@ -223,11 +218,16 @@ public class ExamplesUtils {
                 .setActivity(activity)
                 .setPublicKey(DUMMY_MERCHANT_PUBLIC_KEY)
                 .setCheckoutPreference(new CheckoutPreference(DUMMY_PREFERENCE_ID_WITH_DECIMALS))
-                .setDataInitializationTask(new DataInitializationTask(defaultData) {
-                    @Override
-                    public void onLoadData(@NonNull final Map<String, Object> data) {
-                        data.put("user", "Nico");
-                    }
-                });
+                .setDataInitializationTask(getDataInitializationTask(defaultData));
+    }
+
+    @NonNull
+    private static DataInitializationTask getDataInitializationTask(final Map<String, Object> defaultData) {
+        return new DataInitializationTask(defaultData) {
+            @Override
+            public void onLoadData(@NonNull final Map<String, Object> data) {
+                data.put("user", "Nico");
+            }
+        };
     }
 }
