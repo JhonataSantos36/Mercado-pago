@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
+import com.mercadopago.lite.util.CurrenciesUtil;
 import com.mercadopago.paymentresult.props.TotalAmountProps;
 
 import java.math.BigDecimal;
@@ -20,12 +21,13 @@ public class TotalAmount extends Component<TotalAmountProps, Void> {
         String amountTitle;
 
         if (hasPayerCostWithMultipleInstallments()) {
+            String installmentsAmount = CurrenciesUtil.getLocalizedAmountWithoutZeroDecimals(props.currencyId, props.payerCost.getInstallmentAmount());
             amountTitle = String.format(Locale.getDefault(),
                     "%dx %s",
                     props.payerCost.getInstallments(),
-                    props.amountFormatter.formatNumber(props.payerCost.getInstallmentAmount()));
+                    installmentsAmount);
         } else {
-            amountTitle = props.amountFormatter.formatNumber(getAmount());
+            amountTitle = CurrenciesUtil.getLocalizedAmountWithoutZeroDecimals(props.currencyId, getAmount());
         }
 
         return amountTitle;
@@ -37,7 +39,7 @@ public class TotalAmount extends Component<TotalAmountProps, Void> {
         if (hasPayerCostWithMultipleInstallments()) {
             amountDetail = String.format(Locale.getDefault(),
                     "(%s)",
-                    props.amountFormatter.formatNumber(props.payerCost.getTotalAmount()));
+                    CurrenciesUtil.getLocalizedAmountWithoutZeroDecimals(props.currencyId, props.payerCost.getTotalAmount()));
         }
 
         return amountDetail;
@@ -53,7 +55,7 @@ public class TotalAmount extends Component<TotalAmountProps, Void> {
         if (isValidDiscount()) {
             amount = getAmountWithDiscount();
         } else {
-            amount = props.amountFormatter.getAmount();
+            amount = props.amount;
         }
 
         return amount;
@@ -61,11 +63,9 @@ public class TotalAmount extends Component<TotalAmountProps, Void> {
 
     private boolean isValidDiscount() {
         boolean isValidDiscount = false;
-
         if (props.discount != null && isValidCouponAmount()) {
             isValidDiscount = true;
         }
-
         return isValidDiscount;
     }
 
@@ -74,6 +74,6 @@ public class TotalAmount extends Component<TotalAmountProps, Void> {
     }
 
     private BigDecimal getAmountWithDiscount() {
-        return props.amountFormatter.getAmount().subtract(props.discount.getCouponAmount());
+        return props.amount.subtract(props.discount.getCouponAmount());
     }
 }

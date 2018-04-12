@@ -5,7 +5,7 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 
-import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;
+import com.mercadopago.lite.util.CurrenciesUtil;
 import com.mercadopago.util.TextUtils;
 
 import java.math.BigDecimal;
@@ -46,7 +46,7 @@ public class ItemModel implements Parcelable {
     }
 
     public String getPrice() {
-        return new BodyAmountFormatter(currencyId, new BigDecimal(unitPrice)).formatNumber(new BigDecimal(unitPrice));
+        return CurrenciesUtil.getLocalizedAmountWithoutZeroDecimals(currencyId, new BigDecimal(unitPrice));
     }
 
     protected ItemModel(Parcel in) {

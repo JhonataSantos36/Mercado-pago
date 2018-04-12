@@ -18,8 +18,6 @@ import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.Site;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.TaggedCallback;
-import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;
-import com.mercadopago.paymentresult.formatter.HeaderTitleFormatter;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.review_and_confirm.components.actions.ChangePaymentMethodAction;
 import com.mercadopago.tracking.model.ScreenViewEvent;
@@ -77,14 +75,11 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
 
     protected void onValidStart() {
         initializeTracking();
-        HeaderTitleFormatter headerAmountFormatter = new HeaderTitleFormatter(site.getCurrencyId(), amount, paymentResult.getPaymentData().getPaymentMethod().getName());
-        BodyAmountFormatter bodyAmountFormatter = new BodyAmountFormatter(site.getCurrencyId(), amount);
-
         boolean showLoading = false;
         if (hasToAskForInstructions()) {
             showLoading = true;
         }
-        getView().setPropPaymentResult(paymentResult, headerAmountFormatter, bodyAmountFormatter, showLoading);
+        getView().setPropPaymentResult(site.getCurrencyId(), paymentResult, showLoading);
         checkGetInstructions();
     }
 
@@ -245,7 +240,7 @@ public class PaymentResultPresenter extends MvpPresenter<PaymentResultPropsView,
         if (instruction == null) {
             navigator.showError(new MercadoPagoError(getResourcesProvider().getStandardErrorMessage(), false), ApiUtil.RequestOrigin.GET_INSTRUCTIONS);
         } else {
-            getView().setPropInstruction(instruction, new HeaderTitleFormatter(site.getCurrencyId(), amount, null), false, servicePreference.getProcessingModeString());
+            getView().setPropInstruction(instruction, servicePreference.getProcessingModeString(), false);
             getView().notifyPropsChanged();
         }
     }

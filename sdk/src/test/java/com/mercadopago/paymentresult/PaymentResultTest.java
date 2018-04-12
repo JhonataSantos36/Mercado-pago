@@ -2,18 +2,16 @@ package com.mercadopago.paymentresult;
 
 import android.support.annotation.NonNull;
 
-import com.mercadopago.lite.exceptions.ApiException;
-import com.mercadopago.model.Sites;
 import com.mercadopago.exceptions.MercadoPagoError;
+import com.mercadopago.lite.exceptions.ApiException;
 import com.mercadopago.mocks.PaymentMethods;
 import com.mercadopago.model.Instruction;
 import com.mercadopago.model.Instructions;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentResult;
+import com.mercadopago.model.Sites;
 import com.mercadopago.mvp.TaggedCallback;
-import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;
-import com.mercadopago.paymentresult.formatter.HeaderTitleFormatter;
 import com.mercadopago.tracking.model.ScreenViewEvent;
 
 import junit.framework.Assert;
@@ -318,18 +316,19 @@ public class PaymentResultTest {
     private class MockedPropsView implements PaymentResultPropsView {
 
         @Override
-        public void setPropPaymentResult(@NonNull PaymentResult paymentResult, HeaderTitleFormatter amountFormat, BodyAmountFormatter bodyAmountFormatter, boolean showLoading) {
-
+        public void setPropPaymentResult(@NonNull final String currencyId,
+                                         @NonNull final PaymentResult paymentResult,
+                                         final boolean showLoading) {
         }
 
         @Override
-        public void setPropInstruction(@NonNull Instruction instruction, @NonNull HeaderTitleFormatter amountFormat, boolean showLoading, @NonNull String processingMode) {
-
+        public void setPropInstruction(@NonNull final Instruction instruction,
+                                       @NonNull final String processingModeString,
+                                       final boolean showLoading) {
         }
 
         @Override
         public void notifyPropsChanged() {
-
         }
 
     }

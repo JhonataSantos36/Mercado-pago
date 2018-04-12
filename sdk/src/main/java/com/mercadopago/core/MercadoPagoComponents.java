@@ -716,7 +716,7 @@ public class MercadoPagoComponents {
                 Intent guessingCardIntent = new Intent(activity, GuessingCardActivity.class);
                 guessingCardIntent.putExtra("merchantPublicKey", merchantPublicKey);
 
-                guessingCardIntent.putExtra("siteId", siteId);
+                guessingCardIntent.putExtra("currencyId", siteId);
 
                 if (requireSecurityCode != null) {
                     guessingCardIntent.putExtra("requireSecurityCode", requireSecurityCode);
@@ -1116,7 +1116,7 @@ public class MercadoPagoComponents {
                 intent.putExtra("card", JsonUtil.getInstance().toJson(card));
                 intent.putExtra("merchantPublicKey", merchantPublicKey);
                 intent.putExtra("payerAccessToken", payerAccessToken);
-                intent.putExtra("siteId", siteId);
+                intent.putExtra("currencyId", siteId);
                 intent.putExtra("cardInfo", JsonUtil.getInstance().toJson(cardInformation));
                 intent.putExtra("paymentRecovery", JsonUtil.getInstance().toJson(paymentRecovery));
                 intent.putExtra("escEnabled", escEnabled);

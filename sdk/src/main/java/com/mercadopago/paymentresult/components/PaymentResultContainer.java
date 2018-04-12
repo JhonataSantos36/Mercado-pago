@@ -12,14 +12,11 @@ import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentResult;
 import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.paymentresult.PaymentResultProvider;
+import com.mercadopago.paymentresult.formatter.HeaderTitleFormatter;
 import com.mercadopago.paymentresult.model.Badge;
 import com.mercadopago.paymentresult.props.HeaderProps;
 import com.mercadopago.paymentresult.props.PaymentResultBodyProps;
 import com.mercadopago.paymentresult.props.PaymentResultProps;
-
-/**
- * Created by vaserber on 10/20/17.
- */
 
 public class PaymentResultContainer extends Component<PaymentResultProps, Void> {
 
@@ -379,8 +376,7 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
                         || statusDetail.equals(Payment.StatusDetail.STATUS_DETAIL_REJECTED_REJECTED_INSUFFICIENT_DATA)) {
                     return paymentResultProvider.getRejectedInsufficientDataTitle();
                 } else if (props.paymentResult.isCallForAuthorize()) {
-                    String rejectedCallForAuthorizeTitle = paymentResultProvider.getRejectedCallForAuthorizeTitle();
-                    return props.headerFormatter.formatTextWithAmount(rejectedCallForAuthorizeTitle);
+                    return getCallForAuthFormattedTitle(props);
                 } else {
                     return paymentResultProvider.getRejectedBadFilledOther();
                 }
@@ -388,6 +384,14 @@ public class PaymentResultContainer extends Component<PaymentResultProps, Void> 
         }
 
         return paymentResultProvider.getEmptyText();
+    }
+
+    private CharSequence getCallForAuthFormattedTitle(final @NonNull PaymentResultProps props) {
+        String rejectedCallForAuthorizeTitle = paymentResultProvider.getRejectedCallForAuthorizeTitle();
+        HeaderTitleFormatter headerTitleFormatter = new HeaderTitleFormatter(props.currencyId,
+                props.paymentResult.getPaymentData().getTransactionAmount(),
+                props.paymentResult.getPaymentData().getPaymentMethod().getName());
+        return headerTitleFormatter.formatTextWithAmount(rejectedCallForAuthorizeTitle);
     }
 
     private String getLabel(@NonNull final PaymentResultProps props) {

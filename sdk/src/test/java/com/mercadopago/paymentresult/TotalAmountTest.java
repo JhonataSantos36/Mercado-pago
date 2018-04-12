@@ -1,10 +1,10 @@
 package com.mercadopago.paymentresult;
 
 import com.mercadopago.components.ActionDispatcher;
+import com.mercadopago.lite.util.CurrenciesUtil;
 import com.mercadopago.mocks.PayerCosts;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.paymentresult.components.TotalAmount;
-import com.mercadopago.paymentresult.formatter.BodyAmountFormatter;
 import com.mercadopago.paymentresult.props.TotalAmountProps;
 
 import junit.framework.Assert;
@@ -17,12 +17,9 @@ import java.util.Locale;
 
 import static org.mockito.Mockito.mock;
 
-/**
- * Created by mromar on 11/30/2017.
- */
-
 public class TotalAmountTest {
 
+    private static final String CURRENCY_ID = "ARS";
     private ActionDispatcher dispatcher;
 
     @Before
@@ -32,71 +29,57 @@ public class TotalAmountTest {
 
     @Test
     public void getAmountTitleWhenComponentHasPayerCostWithInstallments() {
-        String amountTitle;
-        final PayerCost payerCost = PayerCosts.getPayerCost();
-        final BodyAmountFormatter amountFormatter = new BodyAmountFormatter("ARS", new BigDecimal(1000));
-        final TotalAmount component = getTotalAmountComponent(payerCost, amountFormatter);
+        final TotalAmount component = getTotalAmountComponent(PayerCosts.getPayerCost());
 
-        amountTitle = String.format(Locale.getDefault(),
+        String amountTitle = String.format(Locale.getDefault(),
                 "%dx %s",
                 component.props.payerCost.getInstallments(),
-                component.props.amountFormatter.formatNumber(component.props.payerCost.getInstallmentAmount()));
-        Assert.assertTrue(component.getAmountTitle().equals(amountTitle));
+                CurrenciesUtil.getLocalizedAmountWithoutZeroDecimals(CURRENCY_ID,
+                        component.props.payerCost.getInstallmentAmount()));
+
+        Assert.assertEquals(amountTitle, component.getAmountTitle());
     }
 
     @Test
     public void getAmountTitleWhenComponentHasPayerCostWithoutInstallments() {
-        String amountTitle;
         final PayerCost payerCost = PayerCosts.getPayerCostWithoutInstallments();
-        final BodyAmountFormatter amountFormatter = new BodyAmountFormatter("ARS", new BigDecimal(1000));
-        final TotalAmount component = getTotalAmountComponent(payerCost, amountFormatter);
-
-        amountTitle = component.props.amountFormatter.formatNumber(component.props.amountFormatter.getAmount());
-        Assert.assertTrue(component.getAmountTitle().equals(amountTitle));
+        final TotalAmount component = getTotalAmountComponent(payerCost);
+        String expected = CurrenciesUtil.getLocalizedAmountWithoutZeroDecimals(CURRENCY_ID, component.props.amount);
+        Assert.assertEquals(expected, component.getAmountTitle());
     }
 
     @Test
     public void getEmptyAmountTitleWhenComponentHasNotPayerCost() {
         final PayerCost payerCost = null;
-        final BodyAmountFormatter amountFormatter = new BodyAmountFormatter("ARS", new BigDecimal(1000));
-        final TotalAmount component = getTotalAmountComponent(payerCost, amountFormatter);
-
-        Assert.assertTrue(component.getAmountDetail().equals(""));
+        final TotalAmount component = getTotalAmountComponent(payerCost);
+        Assert.assertEquals("", component.getAmountDetail());
     }
 
     @Test
     public void getAmountDetailWhenComponentHasPayerCost() {
-        String amountDetail;
+
         final PayerCost payerCost = PayerCosts.getPayerCost();
-        final BodyAmountFormatter amountFormatter = new BodyAmountFormatter("ARS", new BigDecimal(1000));
 
-        final TotalAmount component =
-                getTotalAmountComponent(payerCost, amountFormatter);
+        final TotalAmount component = getTotalAmountComponent(payerCost);
 
-        amountDetail = String.format(Locale.getDefault(),
+        String expected = String.format(Locale.getDefault(),
                 "(%s)",
-                component.props.amountFormatter.formatNumber(component.props.payerCost.getTotalAmount()));
+                CurrenciesUtil.getLocalizedAmountWithoutZeroDecimals(CURRENCY_ID, component.props.payerCost.getTotalAmount()));
 
-        Assert.assertTrue(component.getAmountDetail().equals(amountDetail));
+        Assert.assertEquals(expected, component.getAmountDetail());
     }
 
     @Test
     public void getEmptyAmountDetailWhenComponentHasNotPayerCost() {
         final PayerCost payerCost = null;
-        final BodyAmountFormatter amountFormatter = new BodyAmountFormatter("ARS", new BigDecimal(1000));
 
-        final TotalAmount component =
-                getTotalAmountComponent(payerCost, amountFormatter);
+        final TotalAmount component = getTotalAmountComponent(payerCost);
 
         Assert.assertTrue(component.getAmountDetail().equals(""));
     }
 
-    private TotalAmount getTotalAmountComponent(PayerCost payerCost, BodyAmountFormatter amountFormatter) {
-        final TotalAmountProps props = new TotalAmountProps.Builder()
-                .setPayerCost(payerCost)
-                .setAmountFormatter(amountFormatter)
-                .build();
-
+    private TotalAmount getTotalAmountComponent(PayerCost payerCost) {
+        final TotalAmountProps props = new TotalAmountProps(CURRENCY_ID, new BigDecimal(1000), payerCost, null);
         return new TotalAmount(props, dispatcher);
     }
 }

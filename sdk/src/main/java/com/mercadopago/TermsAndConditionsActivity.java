@@ -9,15 +9,15 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 
-import com.mercadopago.model.Sites;
 import com.mercadopago.customviews.MPTextView;
+import com.mercadopago.model.Sites;
 import com.mercadopago.util.ErrorUtil;
 
 import static android.text.TextUtils.isEmpty;
 
 public class TermsAndConditionsActivity extends MercadoPagoActivity {
 
-    public static final String EXTRA_SITE_ID = "siteId";
+    public static final String EXTRA_SITE_ID = "currencyId";
     public static final String EXTRA_BANK_DEAL_LEGALS = "bankDealLegals";
     protected View mMPTermsAndConditionsView;
     protected View mBankDealsTermsAndConditionsView;

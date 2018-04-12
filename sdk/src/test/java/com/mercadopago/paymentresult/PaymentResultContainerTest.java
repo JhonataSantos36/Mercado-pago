@@ -9,7 +9,6 @@ import com.mercadopago.model.PaymentResult;
 import com.mercadopago.paymentresult.components.Body;
 import com.mercadopago.paymentresult.components.Header;
 import com.mercadopago.paymentresult.components.PaymentResultContainer;
-import com.mercadopago.paymentresult.formatter.HeaderTitleFormatter;
 import com.mercadopago.paymentresult.model.Badge;
 import com.mercadopago.paymentresult.props.HeaderProps;
 import com.mercadopago.paymentresult.props.PaymentResultProps;
@@ -20,12 +19,12 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.math.BigDecimal;
-
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class PaymentResultContainerTest {
+
+    private static final String CURRENCY_ID = "ARS";
 
     private final static String APPROVED_TITLE = "approved title";
     private final static String PENDING_TITLE = "pending title";
@@ -706,7 +705,7 @@ public class PaymentResultContainerTest {
 
         final PaymentResultProps paymentResultProps = new PaymentResultProps.Builder()
                 .setPaymentResult(paymentResult)
-                .setHeaderFormatter(getHeaderFormatterStub())
+                .setCurrencyId(CURRENCY_ID)
                 .build();
         container.setProps(paymentResultProps);
 
@@ -761,7 +760,7 @@ public class PaymentResultContainerTest {
 
         final PaymentResultProps paymentResultProps = new PaymentResultProps.Builder()
                 .setPaymentResult(paymentResult)
-                .setHeaderFormatter(getHeaderFormatterStub())
+                .setCurrencyId(CURRENCY_ID)
                 .build();
 
         container.setProps(paymentResultProps);
@@ -781,10 +780,5 @@ public class PaymentResultContainerTest {
 
     private PaymentResultContainer getContainer() {
         return new PaymentResultContainer(dispatcher, paymentResultProvider);
-    }
-
-
-    private HeaderTitleFormatter getHeaderFormatterStub() {
-        return new HeaderTitleFormatter("ARS", new BigDecimal(100.12), "Card");
     }
 }

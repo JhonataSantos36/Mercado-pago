@@ -68,8 +68,8 @@ public class Body extends Component<PaymentResultBodyProps, Void> {
     }
 
     public PaymentMethod getPaymentMethodComponent() {
-        final TotalAmountProps totalAmountProps = new TotalAmountProps(
-                props.bodyAmountFormatter,
+        final TotalAmountProps totalAmountProps = new TotalAmountProps(props.currencyId,
+                props.amount,
                 props.paymentData.getPayerCost(),
                 props.paymentData.getDiscount());
 

@@ -7,7 +7,6 @@ import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.model.Instruction;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentResult;
-import com.mercadopago.paymentresult.formatter.HeaderTitleFormatter;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.util.TextUtils;
 
@@ -18,7 +17,7 @@ public class PaymentResultProps {
     public final String headerMode;
     public final boolean loading;
     public final String processingMode;
-    public final HeaderTitleFormatter headerFormatter;
+    public final String currencyId;
 
     public PaymentResultProps(@NonNull final Builder builder) {
         paymentResult = builder.paymentResult;
@@ -26,16 +25,16 @@ public class PaymentResultProps {
         instruction = builder.instruction;
         loading = builder.loading;
         processingMode = builder.processingMode;
-        headerFormatter = builder.headerFormatter;
+        currencyId = builder.currencyId;
     }
 
     public Builder toBuilder() {
         return new Builder()
+                .setCurrencyId(currencyId)
                 .setPaymentResult(paymentResult)
                 .setHeaderMode(headerMode)
                 .setInstruction(instruction)
                 .setLoading(loading)
-                .setHeaderFormatter(headerFormatter)
                 .setProcessingMode(processingMode);
     }
 
@@ -231,12 +230,12 @@ public class PaymentResultProps {
 
     public static class Builder {
 
-        public PaymentResult paymentResult;
-        public Instruction instruction;
-        public String headerMode = HeaderProps.HEADER_MODE_WRAP;
-        public boolean loading = true;
-        public String processingMode;
-        private HeaderTitleFormatter headerFormatter;
+        private PaymentResult paymentResult;
+        private Instruction instruction;
+        private String headerMode = HeaderProps.HEADER_MODE_WRAP;
+        private boolean loading = true;
+        private String processingMode;
+        private String currencyId;
 
         public Builder setPaymentResult(@NonNull final PaymentResult paymentResult) {
             this.paymentResult = paymentResult;
@@ -268,8 +267,8 @@ public class PaymentResultProps {
             return new PaymentResultProps(this);
         }
 
-        public Builder setHeaderFormatter(final HeaderTitleFormatter headerFormatter) {
-            this.headerFormatter = headerFormatter;
+        public Builder setCurrencyId(final String currencyId) {
+            this.currencyId = currencyId;
             return this;
         }
     }
