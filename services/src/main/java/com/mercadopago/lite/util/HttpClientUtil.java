@@ -1,7 +1,9 @@
 package com.mercadopago.lite.util;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
 
+import com.mercadopago.lite.core.ConnectivityStateInterceptor;
 import com.mercadopago.lite.core.Settings;
 
 import java.io.File;
@@ -43,6 +45,8 @@ public class HttpClientUtil {
                 .readTimeout(readTimeout, TimeUnit.SECONDS)
                 .cache(cache)
                 .addInterceptor(interceptor);
+
+        okHttpClientBuilder.addInterceptor(new ConnectivityStateInterceptor((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)));
 
         client = okHttpClientBuilder.build();
     }
