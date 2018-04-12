@@ -1,13 +1,11 @@
 package com.mercadopago.model;
 
 import com.mercadopago.constants.PaymentTypes;
-import com.mercadopago.util.MercadoPagoUtil;
 
 import java.math.BigDecimal;
 
-/**
- * Created by mreverter on 1/17/17.
- */
+import static com.mercadopago.util.TextUtil.isEmpty;
+
 public class PaymentData {
     private BigDecimal transactionAmount;
     private PaymentMethod paymentMethod;
@@ -74,31 +72,27 @@ public class PaymentData {
     }
 
     public boolean isComplete() {
-        //TODO refactor
-        if (paymentMethod.isEntityTypeRequired() && payer.getType() == null) {
-            return false;
-        }
+        return !hasEntityTypeAvailable() || !hasPayerInfoAvailable() || isAccountMoney() || !paymentMethod.isOnline() || isOneInstallment() || !isCreditCardInfoAvailable();
+    }
 
-        if (paymentMethod.isPayerInfoRequired() && payer.getIdentification() == null) {
-            return false;
-        }
+    private boolean hasEntityTypeAvailable() {
+        return paymentMethod.isEntityTypeRequired() && payer.getType() == null;
+    }
 
+    private boolean hasPayerInfoAvailable() {
+        return paymentMethod.isPayerInfoRequired() && payer.getIdentification() == null;
+    }
 
-        //TODO
-        /*
-        if (!Array.isNullOrEmpty(paymentMethod.financialInstitutions) && transactionDetails?.financialInstitution == null) {
-            return false;
-        }
-        */
+    private boolean isAccountMoney() {
+        return paymentMethod.getId().equals(PaymentTypes.ACCOUNT_MONEY);
+    }
 
-        if (paymentMethod.getId().equals(PaymentTypes.ACCOUNT_MONEY) || !paymentMethod.isOnline()) {
-            return true;
-        }
+    private boolean isOneInstallment() {
+        return !isEmpty(paymentMethod.getPaymentTypeId()) && token != null && payerCost == null && (paymentMethod.getPaymentTypeId().equals(PaymentTypes.DEBIT_CARD)
+                || paymentMethod.getPaymentTypeId().equals(PaymentTypes.PREPAID_CARD));
+    }
 
-        if (MercadoPagoUtil.isCard(paymentMethod.getPaymentTypeId()) && (token == null || payerCost == null)) {
-            return paymentMethod.getPaymentTypeId().equals(PaymentTypes.DEBIT_CARD) || paymentMethod.getPaymentTypeId().equals(PaymentTypes.PREPAID_CARD) && token != null;
-        }
-
-        return true;
+    private boolean isCreditCardInfoAvailable() {
+        return !isEmpty(paymentMethod.getPaymentTypeId()) && (token == null || payerCost == null) && paymentMethod.getPaymentTypeId().equals(PaymentTypes.CREDIT_CARD);
     }
 }
