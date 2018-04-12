@@ -54,6 +54,8 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class CheckoutPresenterTest {
 
@@ -1896,6 +1898,17 @@ public class CheckoutPresenterTest {
 
         presenter.initialize();
         assertTrue(view.initTracked);
+    }
+
+    @Test
+    public void whenIsDiscountEnabledAndNotHasDiscountThenShouldGetDiscountTrue() {
+        CheckoutPresenter presenter = new CheckoutPresenter();
+
+        presenter.setDiscount(null);
+
+        boolean shouldRetrieveDiscount = presenter.shouldRetrieveDiscount();
+
+        assertTrue(shouldRetrieveDiscount);
     }
 
     private class MockedView implements CheckoutView {
