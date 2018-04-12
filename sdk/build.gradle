@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
+apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 ext {
@@ -15,7 +16,7 @@ ext {
     siteUrl = 'https://github.com/mercadopago/px-android'
     gitUrl = 'https://github.com/mercadopago/px-android.git'
 
-    libraryVersion = '3.6.1_27'
+    libraryVersion = '3.6.2'
 
     developerId = 'matias.gualino'
     developerName = 'Matias Gualino'
@@ -26,7 +27,7 @@ ext {
     allLicenses = ["Apache-2.0"]
 }
 
-version = "3.6.1_27"
+version = "3.6.2"
 group = "com.mercadopago"
 archivesBaseName = "sdk"
 
@@ -37,7 +38,7 @@ android {
         minSdkVersion min_api_level.toInteger()
         targetSdkVersion api_level.toInteger()
         versionCode 1
-        versionName '3.6.1_27'
+        versionName '3.6.2'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     packagingOptions {
@@ -101,7 +102,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofit"
     implementation "com.squareup.picasso:picasso:$picasso"
 
-    implementation project(':px-tracking')
+    //api project(':px-tracking')
 }
 
 apply plugin: 'com.github.dcendents.android-maven'
@@ -192,6 +193,43 @@ bintray {
                 passphrase = properties.getProperty("bintray.gpg.password")
                 //Optional. The passphrase for GPG signing'
             }
+        }
+    }
+}
+
+
+// -- Publicar LOCAL ------------------------------------------
+
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "source"
+}
+
+publishing {
+    publications {
+        msdk(MavenPublication) {
+
+            groupId 'com.mercadopago'
+            artifactId 'sdk'
+            version '3.6.1_27.local'
+            artifact(bundleRelease)
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
+                configurations.compile.allDependencies.each {
+                    if(it.group != null && (it.name != null || "unspecified".equals(it.name)) && it.version != null) {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            // change to point to your repo, e.g. http://my.org/repo
+            url "${System.env.HOME}/.m2/repository"
         }
     }
 }
