@@ -1,55 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MP Android SDK Samples</string>
-    <string name="welcome_title">¡Mira las opciones que puedes integrar!</string>
-    <string name="welcome_text">Prueba Nuestro Checkout, o crea uno personalizado utilizando nuestros componentes de UI o nuestros servicios. </string>
-    <string name="select_checkout">Seleccioná una configuración</string>
 
-    <string name="simple_card_flow_label">Distintas pantallas</string>
-    <string name="guessing_card_flow_label">Formulario con guessing</string>
-    <string name="payment_received_congrats">"Felicitaciones, has recibido un pago. Su ID es "</string>
-    <string name="preference_creation_failed">Falló la creación de la preferencia</string>
-    <string name="checkout_title">Integración rapidísima</string>
-    <string name="checkout_description">¡Son solo 5 minutos! En ese tiempo, estarás probando Nuestro Checkout en tu aplicación.</string>
-    <string name="pick_color">¡Elije un color!</string>
-    <string name="dark_font">Fuente oscura</string>
-    <string name="title_activity_checkout_example">Nuestro checkout</string>
-    <string name="components_title">Arma tu propio checkout</string>
-    <string name="components_description">Utiliza los componentes que te provee nuestra librería para armar un checkout a tu gusto.</string>
-    <string name="components_comment">Cada uno de estos componentes puede usarse independientemente de los demás, y puedes combinarlos con tus propias pantallas.</string>
-    <string name="title_activity_customized_example">Checkout personalizado</string>
-    <string name="payment_creation_failed">Falló la creación del pago</string>
-    <string name="services_example_title">¡Mira todo lo que puedes hacer!</string>
-    <string name="services_example_description">Utiliza nuestros servicios para crear la experiencia que desees.</string>
-    <string name="reset">Restablecer</string>
-    <string name="complete_payment_method_selection">Selección de medio de pago completa</string>
-    <string name="card_with_installments">Cobra con tarjeta en cuotas</string>
-    <string name="card_without_installments">Cobra con tarjeta sin cuotas</string>
-    <string name="simple_payment_method_selection">Selección de medio de pago simple</string>
-    <string name="issuer_selection">Selección de banco</string>
-    <string name="installments_selection">Selección de cuotas</string>
-    <string name="lets_create_a_payment">¡Realicemos un pago! Recolecta los datos necesarios con nuestros componentes y envíalos a tu servidor para realizarlo. Veamos un ejemplo.</string>
-    <string name="pay">¡Pagar!</string>
-    <string name="cutomization_description">¡Puedes customizar los componentes según tus necesidades!</string>
-    <string name="exclude_visa">Excluir Visa</string>
-    <string name="exclude_cash">Excluir efectivo</string>
-    <string name="checkout_button">Nuestro Checkout</string>
-    <string name="components_button">Componentes de UI</string>
-    <string name="services_button">Servicios</string>
-    <string name="result_message_was_selected">"Se seleccionó: "</string>
-    <string name="result_message_issued_by">" emitida por "</string>
-    <string name="result_message_with">" con  "</string>
-    <string name="result_message_and_token">" y token id: "</string>
-    <string name="customer_selection">Selección de tarjeta guardada</string>
-    <string name="json_config_button_text">Tengo un JSON</string>
-    <string name="start_checkout_from_json">Ir al Checkout</string>
-    <string name="start_for_wrong">Inicio requerido no especificado o inválido.</string>
+    <string name="json_config_button_text">I have a JSON</string>
+    <string name="start_checkout_from_json">Go to Checkout</string>
+    <string name="title_activity_checkout_example">Our checkout</string>
+    <string name="checkout_title">Quick integration</string>
+    <string name="checkout_description">Just 5 minutes! In that time, you will be testing our checkout in your app.</string>
+    <string name="select_checkout">Select a configuration</string>
 
-    <!-- HOOKS -->
-    <string name="enable_hooks">Habilitar hooks</string>
+    <string name="start_for_wrong">Required response not specified</string>
 
     <!-- Second factor messages -->
-    <string name="auth_error_password">La clave ingresada es incorrecta.</string>
-    <string name="auth_error_password_required">El campo clave es requerido.</string>
-
+    <string name="auth_error_password">Incorrect password.</string>
+    <string name="auth_error_password_required">Password is required.</string>
 </resources>
