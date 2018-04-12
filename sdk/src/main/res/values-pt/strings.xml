@@ -36,6 +36,11 @@
     <string name="mpsdk_card_installments_title">Em quantas parcelas?</string>
     <string name="mpsdk_installments_of">de</string>
 
+    <string name="mpsdk_installments_by">x</string>
+    <string name="mpsdk_installments_tea">TEA</string>
+    <string name="mpsdk_installments_cft" >CFT</string>
+
+
     <!-- Checkout -->
     <string name="mpsdk_text_terms_and_conditions_start">Ao pagar, afirmo que eu sou maior de idade e aceito os</string>
     <string name="mpsdk_text_terms_and_conditions_linked">Termos e condições</string>
@@ -96,6 +101,8 @@
     <string name="mpsdk_subtitle_action_activity_congrats">Enviaremos os dados para\n%1$s</string>
     <string name="mpsdk_text_state_account_activity_congrats">Você verá o pagamento na fatura do seu cartão de crédito como\n %s</string>
     <string name="mpsdk_payment_id_description">Comprovante</string>
+    <string name="mpsdk_payment_id_description_number">Nº %1$s</string>
+    <string name="mpsdk_statement_default">MERCADO PAGO</string>
     <string name="mpsdk_account_money">Dinheiro em conta</string>
     <string name="mpsdk_ending_in">terminado em</string>
     <string name="mpsdk_receipt">Número da operação %1$s</string>
@@ -114,6 +121,7 @@
     <string name="mpsdk_subtitle_pending_contingency">Enviaremos o resultado por e-mail em menos de 1 hora.</string>
     <string name="mpsdk_error_description_contingency">Em algumas horas te avisaremos por e-mail se foi aprovado.</string>
     <string name="mpsdk_error_description_review_manual">Dentro das próximas 24 horas te avisaremos por e-mail se foi aprovado.</string>
+    <string name="mpsdk_pending_label">Depressa para pagar!</string>
 
     <!-- Rejection -->
     <string name="mpsdk_text_other_payment_method_button_rejection">Usar outro meio de pagamento</string>
@@ -149,6 +157,7 @@
     <string name="mpsdk_error_description_max_attempts">Como você chegou no limite de tentativas com este cartão, use outro meio de pagamento.</string>
     <string name="mpsdk_error_description_high_risk">Use um meio de pagamento diferente de cartão.</string>
     <string name="mpsdk_error_secondary_title_call">Não conseguiu autorizá-lo?</string>
+    <string name="mpsdk_text_card_enabled">Eu já habilitei meu cartão</string>
 
 
     <!-- Error messages -->
@@ -167,6 +176,15 @@
     <string name="mpsdk_error_title">Ops! Algo deu errado</string>
     <string name="mpsdk_standard_error_message">Estamos trabalhando para solucionar o problema. Por favor, tente novamente mais tarde.</string>
     <string name="mpsdk_error_message_email_required">O e-mail é obrigatório</string>
+    <string name="mpsdk_error_message_missing_public_key">A public key é obrigatória</string>
+    <string name="mpsdk_error_message_missing_amount">O valor é obrigatório</string>
+    <string name="mpsdk_error_message_missing_site">O site é obrigatório</string>
+    <string name="mpsdk_error_message_missing_payer_cost">Nenhuma parcela encontrada</string>
+    <string name="mpsdk_error_message_missing_installment_for_issuer">Nenhum financiamento foi encontrado para esse banco</string>
+    <string name="mpsdk_error_message_multiple_installments_for_issuer">Parcelas múltiplas foram encontradas para este banco</string>
+    <string name="mpsdk_error_message_missing_identification_types">Nenhum tipo de identificação encontrado</string>
+    <string name="mpsdk_error_message_missing_setting_for_bin">Nenhuma configuração encontrada para esse bin</string>
+
 
     <!-- API exception messages -->
     <string name="mpsdk_empty_card_expiration_month">O mês da data de validade do cartão não foi digitado</string>
@@ -286,8 +304,16 @@
     <string name="mpsdk_text_unlock_card_end">o antes de confirmar o pagamento.</string>
     <string name="mpsdk_title_unlock_card">Desbloquear Cartão</string>
 
+    <string name="mpsdk_error_message_detail_no_installments">Nenhuma parcela foi encontrada para um banco em InstallmentsActivity</string>
+    <string name="mpsdk_error_message_detail_no_payer_cost_found">Nenhum payer cost encontrado em InstallmentsActivity</string>
+    <string name="mpsdk_error_message_detail_multiple_installments">Múltiplas parcelas foram encontradas para um banco em InstallmentsActivity</string>
+    <string name="mpsdk_error_message_detail_issuers">Nenhum banco encontrado em IssuersActivity</string>
+    <string name="mpsdk_error_message_detail_no_payment_method_list">A lista de métodos de pagamento não foi encontrada em ReviewPaymentMethodsActivity</string>
+
     <!-- Boleto -->
     <string name="mpsdk_fill_your_data">Digite seus dados…</string>
     <string name="mpsdk_bolbradesco_rejection">Não foi possível processar o seu pagamento, desculpe-nos</string>
     <string name="mpsdk_bolbradesco_rejection_text">Por favor, tente pagar de outra forma.</string>
+
+    <string name="mpsdk_empty_string"></string>
 </resources>

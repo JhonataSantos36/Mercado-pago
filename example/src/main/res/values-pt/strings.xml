@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MP SDK Samples</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="welcome_title">Confira as opções que você tem para integrar. Desde módulos simples até o fluxo completo.</string>
-    <string name="step1_choice_description">Você pode coletar dados através de diferentes telas ou um único formulário para completar tudo o que puder para você.</string>
-    <string name="step3_choice_description">A bank selection screen can be added to the simple flow, or use the guessing form.</string>
-    <string name="step4_choice_description">Note que se você quiser aceitar pagamentos com cartão off-line e não devem utilizar o formulário para descartar adivinhar como mídia off-line.</string>
-    <string name="step5_choice_description">Um ecrã de selecção do banco pode ser adicionado ao fluxo simples, ou usar formulário guessing.</string>
-    <string name="simple_card_flow_label">Distintas pantallas</string>
-    <string name="guessing_card_flow_label">Formulário guessing</string>
+
+    <string name="app_name">MP Android SDK Samples</string>
+
+    <string name="json_config_button_text">Eu tenho um JSON</string>
+    <string name="start_checkout_from_json">Vá para o Checkout</string>
+    <string name="title_activity_checkout_example">Nosso checkout</string>
+    <string name="checkout_title">Integração muito rápida</string>
+    <string name="checkout_description">São apenas 5 minutos! Nesse período, você testará nosso Checkout em seu app.</string>
+    <string name="select_checkout">Selecione uma configuração</string>
+
+    <string name="start_for_wrong">Resposta obrigatória não especificada</string>
+
+    <!-- Second factor messages -->
+    <string name="auth_error_password">Senha Incorreta.</string>
+    <string name="auth_error_password_required">Senha requerida.</string>
+
 </resources>
