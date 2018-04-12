@@ -1,1 +1,1 @@
-include ':sdk', ':example', ':testCheckout', ':testLib'
+include ':sdk', ':example', ':testcheckout', ':testlib'

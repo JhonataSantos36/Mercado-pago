@@ -64,6 +64,6 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leak_cannary"
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leak_cannary"
-    androidTestImplementation project(':testCheckout')
-    androidTestImplementation project(':testLib')
+    androidTestImplementation project(':testcheckout')
+    androidTestImplementation project(':testlib')
 }

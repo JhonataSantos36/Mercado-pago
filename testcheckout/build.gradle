@@ -23,6 +23,6 @@ android {
 }
 
 dependencies {
-    implementation project(":testLib")
+    implementation project(':testlib')
     implementation project(":sdk")
 }
