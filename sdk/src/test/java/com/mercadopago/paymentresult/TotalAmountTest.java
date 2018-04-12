@@ -1,11 +1,10 @@
 package com.mercadopago.paymentresult;
 
 import com.mercadopago.components.ActionDispatcher;
+import com.mercadopago.components.TotalAmount;
 import com.mercadopago.lite.util.CurrenciesUtil;
 import com.mercadopago.mocks.PayerCosts;
 import com.mercadopago.model.PayerCost;
-import com.mercadopago.paymentresult.components.TotalAmount;
-import com.mercadopago.paymentresult.props.TotalAmountProps;
 
 import junit.framework.Assert;
 
@@ -79,7 +78,7 @@ public class TotalAmountTest {
     }
 
     private TotalAmount getTotalAmountComponent(PayerCost payerCost) {
-        final TotalAmountProps props = new TotalAmountProps(CURRENCY_ID, new BigDecimal(1000), payerCost, null);
-        return new TotalAmount(props, dispatcher);
+        final TotalAmount.TotalAmountProps props = new TotalAmount.TotalAmountProps(CURRENCY_ID, new BigDecimal(1000), payerCost, null);
+        return new TotalAmount(props);
     }
 }

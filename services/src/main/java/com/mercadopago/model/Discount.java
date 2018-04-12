@@ -1,20 +1,28 @@
 package com.mercadopago.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.annotation.VisibleForTesting;
+
 import com.mercadopago.lite.util.CurrenciesUtil;
 
 import java.math.BigDecimal;
 
-public class Discount {
+public class Discount implements Parcelable {
 
     private String id;
     private String name;
-    private BigDecimal percentOff;
-    private BigDecimal amountOff;
-    private BigDecimal couponAmount;
     private String currencyId;
     private String couponCode;
     private String concept;
     private String campaignId;
+    private BigDecimal percentOff;
+    private BigDecimal amountOff;
+    private BigDecimal couponAmount;
+
+    @VisibleForTesting
+    public Discount() {
+    }
 
     public String getCouponCode() {
         return couponCode;
@@ -106,5 +114,48 @@ public class Discount {
 
     public void setCampaignId(final String campaignId) {
         this.campaignId = campaignId;
+    }
+
+
+    protected Discount(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        currencyId = in.readString();
+        couponCode = in.readString();
+        concept = in.readString();
+        campaignId = in.readString();
+        percentOff = new BigDecimal(in.readString());
+        amountOff = new BigDecimal(in.readString());
+        couponAmount = new BigDecimal(in.readString());
+    }
+
+    public static final Creator<Discount> CREATOR = new Creator<Discount>() {
+        @Override
+        public Discount createFromParcel(Parcel in) {
+            return new Discount(in);
+        }
+
+        @Override
+        public Discount[] newArray(int size) {
+            return new Discount[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(final Parcel dest, final int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(currencyId);
+        dest.writeString(couponCode);
+        dest.writeString(concept);
+        dest.writeString(campaignId);
+        dest.writeString(percentOff.toString());
+        dest.writeString(amountOff.toString());
+        dest.writeString(couponAmount.toString());
     }
 }

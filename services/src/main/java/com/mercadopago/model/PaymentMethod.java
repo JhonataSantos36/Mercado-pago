@@ -1,25 +1,27 @@
 package com.mercadopago.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.VisibleForTesting;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-public class PaymentMethod {
+public class PaymentMethod implements Parcelable {
 
-    private List<String> additionalInfoNeeded;
     private String id;
     private String name;
     private String paymentTypeId;
     private String status;
     private String secureThumbnail;
     private String deferredCapture;
-    private List<Setting> settings;
-    private BigDecimal minAllowedAmount;
-    private BigDecimal maxAllowedAmount;
     private Integer accreditationTime;
     private String merchantAccountId;
+    private List<Setting> settings;
+    private List<String> additionalInfoNeeded;
     private List<FinancialInstitution> financialInstitutions;
+    private BigDecimal minAllowedAmount;
+    private BigDecimal maxAllowedAmount;
 
     /**
      * Constructor for custom payment methods like plugin implementation
@@ -45,43 +47,6 @@ public class PaymentMethod {
 
     @VisibleForTesting
     public PaymentMethod() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPaymentTypeId() {
-        return paymentTypeId;
-    }
-
-    public void setPaymentTypeId(String paymentTypeId) {
-        this.paymentTypeId = paymentTypeId;
-    }
-
-    public List<Setting> getSettings() {
-        return settings;
-    }
-
-    public void setSettings(List<Setting> settings) {
-        this.settings = settings;
-    }
-
-    @Override
-    public String toString() {
-        return name;
     }
 
     public boolean isIssuerRequired() {
@@ -189,5 +154,101 @@ public class PaymentMethod {
 
     public void setMerchantAccountId(String merchantAccountId) {
         this.merchantAccountId = merchantAccountId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPaymentTypeId() {
+        return paymentTypeId;
+    }
+
+    public void setPaymentTypeId(String paymentTypeId) {
+        this.paymentTypeId = paymentTypeId;
+    }
+
+    public List<Setting> getSettings() {
+        return settings;
+    }
+
+    public void setSettings(List<Setting> settings) {
+        this.settings = settings;
+    }
+
+    protected PaymentMethod(Parcel in) {
+        additionalInfoNeeded = in.createStringArrayList();
+        id = in.readString();
+        name = in.readString();
+        paymentTypeId = in.readString();
+        status = in.readString();
+        secureThumbnail = in.readString();
+        deferredCapture = in.readString();
+        settings = in.createTypedArrayList(Setting.CREATOR);
+        if (in.readByte() == 0) {
+            accreditationTime = null;
+        } else {
+            accreditationTime = in.readInt();
+        }
+        merchantAccountId = in.readString();
+        financialInstitutions = in.createTypedArrayList(FinancialInstitution.CREATOR);
+        minAllowedAmount = new BigDecimal(in.readString());
+        maxAllowedAmount = new BigDecimal(in.readString());
+    }
+
+    public static final Creator<PaymentMethod> CREATOR = new Creator<PaymentMethod>() {
+        @Override
+        public PaymentMethod createFromParcel(Parcel in) {
+            return new PaymentMethod(in);
+        }
+
+        @Override
+        public PaymentMethod[] newArray(int size) {
+            return new PaymentMethod[size];
+        }
+    };
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(final Parcel dest, final int flags) {
+        dest.writeStringList(additionalInfoNeeded);
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(paymentTypeId);
+        dest.writeString(status);
+        dest.writeString(secureThumbnail);
+        dest.writeString(deferredCapture);
+        dest.writeTypedList(settings);
+        if (accreditationTime == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(accreditationTime);
+        }
+        dest.writeString(merchantAccountId);
+        dest.writeTypedList(financialInstitutions);
+        dest.writeString(minAllowedAmount.toString());
+        dest.writeString(maxAllowedAmount.toString());
     }
 }

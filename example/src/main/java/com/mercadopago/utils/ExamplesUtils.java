@@ -11,8 +11,8 @@ import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoCheckout.Builder;
 import com.mercadopago.example.R;
 import com.mercadopago.exceptions.MercadoPagoError;
-import com.mercadopago.model.Payment;
 import com.mercadopago.model.Discount;
+import com.mercadopago.model.Payment;
 import com.mercadopago.plugins.DataInitializationTask;
 import com.mercadopago.plugins.MainPaymentProcessor;
 import com.mercadopago.plugins.components.SampleCustomComponent;
@@ -136,6 +136,7 @@ public class ExamplesUtils {
         options.add(new Pair<>("Business - Secondary And Help - Approved", startCompleteApprovedBusiness(activity)));
         options.add(new Pair<>("Business - Primary And Help - Pending", startCompletePendingBusiness(activity)));
         options.add(new Pair<>("Business - No help - Pending", startPendingBusinessNoHelp(activity)));
+        options.add(new Pair<>("Business - Complete w/pm - Approved", startCompleteApprovedBusinessWithPaymentMethod(activity)));
 
         return options;
 
@@ -145,6 +146,16 @@ public class ExamplesUtils {
         BusinessPayment payment = new BusinessPayment.Builder(BusinessPayment.Status.REJECTED, R.drawable.mpsdk_icon_card, "Title")
                 .setHelp("Help description!")
                 .setPrimaryButton(new ExitAction(BUTTON_PRIMARY_NAME, 23))
+                .setSecondaryButton(new ExitAction(BUTTON_SECONDARY_NAME, 34))
+                .build();
+
+        return customBusinessPayment(activity, payment);
+    }
+
+    private static Builder startCompleteApprovedBusinessWithPaymentMethod(Activity activity) {
+        BusinessPayment payment = new BusinessPayment.Builder(BusinessPayment.Status.APPROVED, R.drawable.mpsdk_icon_card, "Title")
+                .setHelp("Help description!")
+                .setPaymentMethodVisibility(true)
                 .setSecondaryButton(new ExitAction(BUTTON_SECONDARY_NAME, 34))
                 .build();
 

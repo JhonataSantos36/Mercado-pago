@@ -5,16 +5,16 @@ import android.support.annotation.NonNull;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
 import com.mercadopago.components.CustomComponent;
+import com.mercadopago.components.PaymentMethod;
+import com.mercadopago.components.TotalAmount;
 import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.paymentresult.PaymentResultProvider;
 import com.mercadopago.paymentresult.props.BodyErrorProps;
 import com.mercadopago.paymentresult.props.InstructionsProps;
-import com.mercadopago.paymentresult.props.PaymentMethodProps;
 import com.mercadopago.paymentresult.props.PaymentResultBodyProps;
 import com.mercadopago.paymentresult.props.ReceiptProps;
-import com.mercadopago.paymentresult.props.TotalAmountProps;
 
 public class Body extends Component<PaymentResultBodyProps, Void> {
 
@@ -68,18 +68,17 @@ public class Body extends Component<PaymentResultBodyProps, Void> {
     }
 
     public PaymentMethod getPaymentMethodComponent() {
-        final TotalAmountProps totalAmountProps = new TotalAmountProps(props.currencyId,
+        final TotalAmount.TotalAmountProps totalAmountProps = new TotalAmount.TotalAmountProps(props.currencyId,
                 props.amount,
                 props.paymentData.getPayerCost(),
                 props.paymentData.getDiscount());
 
-        final PaymentMethodProps paymentMethodProps = new PaymentMethodProps(props.paymentData.getPaymentMethod(),
-                props.paymentData.getToken(),
-                props.paymentData.getIssuer(),
+        final PaymentMethod.PaymentMethodProps paymentMethodProps = new PaymentMethod.PaymentMethodProps(props.paymentData.getPaymentMethod(),
+                props.paymentData.getToken() != null ? props.paymentData.getToken().getLastFourDigits() : null,
                 props.disclaimer,
                 totalAmountProps);
 
-        return new PaymentMethod(paymentMethodProps, getDispatcher());
+        return new PaymentMethod(paymentMethodProps);
     }
 
     public boolean hasBodyError() {

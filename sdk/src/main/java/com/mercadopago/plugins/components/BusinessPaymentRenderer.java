@@ -13,11 +13,17 @@ import android.widget.TextView;
 import com.mercadopago.R;
 import com.mercadopago.components.Button;
 import com.mercadopago.components.Footer;
+import com.mercadopago.components.PaymentMethod;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.components.RendererFactory;
+import com.mercadopago.components.TotalAmount;
+import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.paymentresult.components.Header;
 import com.mercadopago.paymentresult.props.HeaderProps;
+import com.mercadopago.plugins.model.BusinessPayment;
 import com.mercadopago.plugins.model.ExitAction;
+
+import java.math.BigDecimal;
 
 public class BusinessPaymentRenderer extends Renderer<BusinessPaymentContainer> {
     @Override
@@ -26,20 +32,32 @@ public class BusinessPaymentRenderer extends Renderer<BusinessPaymentContainer> 
                           @Nullable final ViewGroup parent) {
 
         final LinearLayout mainContentContainer = createMainContainer(context);
-        final ScrollView scrollView = createScrollContainer(context, mainContentContainer);
-        final View header = addHeader(component, context, mainContentContainer);
+        final ScrollView scrollView = createScrollContainer(mainContentContainer);
+        final View header = renderHeader(component, mainContentContainer);
         final ViewTreeObserver vto = scrollView.getViewTreeObserver();
 
-        if (component.props.hasHelp()) {
+        if (component.props.hasHelp() || component.props.shouldShowPaymentMethod()) {
             ViewGroup help = addHelp(component.props.getHelp(), mainContentContainer);
             vto.addOnGlobalLayoutListener(helpCorrectionListener(mainContentContainer, scrollView, help));
         } else {
             vto.addOnGlobalLayoutListener(noHelpCorrectionListener(mainContentContainer, scrollView, header));
         }
 
+        if (component.props.shouldShowPaymentMethod()) {
+            renderPaymentMethod(component.props, mainContentContainer);
+        }
+
         renderFooter(component, mainContentContainer);
 
         return scrollView;
+    }
+
+    private void renderPaymentMethod(final BusinessPayment props, final LinearLayout mainContentContainer) {
+        //TODO
+        com.mercadopago.model.PaymentMethod pm = new com.mercadopago.model.PaymentMethod("123", "asd", PaymentTypes.CREDIT_CARD);
+        TotalAmount.TotalAmountProps totalAmountProps = new TotalAmount.TotalAmountProps("ARS", new BigDecimal(100), null, null);
+        PaymentMethod paymentMethod = new PaymentMethod(new PaymentMethod.PaymentMethodProps(pm, "1234", "ASD das", totalAmountProps));
+        RendererFactory.create(mainContentContainer.getContext(), paymentMethod).render(mainContentContainer);
     }
 
     private ViewTreeObserver.OnGlobalLayoutListener helpCorrectionListener(final LinearLayout mainContentContainer,
@@ -112,16 +130,16 @@ public class BusinessPaymentRenderer extends Renderer<BusinessPaymentContainer> 
         return helpContainer;
     }
 
-    private View addHeader(@NonNull final BusinessPaymentContainer component, @NonNull final Context context,
-                           final LinearLayout linearLayout) {
+    private View renderHeader(@NonNull final BusinessPaymentContainer component, @NonNull final LinearLayout linearLayout) {
+        Context context = linearLayout.getContext();
         Header header = new Header(HeaderProps.from(component.props, context), component.getDispatcher());
         View render = RendererFactory.create(context, header).render(linearLayout);
         return render.findViewById(R.id.mpsdkPaymentResultContainerHeader);
     }
 
     @NonNull
-    private ScrollView createScrollContainer(@NonNull final Context context, final LinearLayout linearLayout) {
-        ScrollView scrollView = new ScrollView(context);
+    private ScrollView createScrollContainer(final LinearLayout linearLayout) {
+        ScrollView scrollView = new ScrollView(linearLayout.getContext());
         scrollView.setLayoutParams(
                 new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         scrollView.addView(linearLayout);

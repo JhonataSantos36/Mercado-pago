@@ -17,7 +17,7 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
     private final int iconId;
     private final String title;
     private final Status status;
-    private final boolean hasPaymentMethod;
+    private final boolean shouldShowPaymentMethod;
     private final ExitAction exitActionPrimary;
     private final ExitAction exitActionSecondary;
 
@@ -26,7 +26,7 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
         title = builder.title;
         status = builder.status;
         iconId = builder.iconId;
-        hasPaymentMethod = builder.hasPaymentMethod;
+        shouldShowPaymentMethod = builder.shouldShowPaymentMethod;
         exitActionPrimary = builder.buttonPrimary;
         exitActionSecondary = builder.buttonSecondary;
     }
@@ -34,7 +34,7 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
     protected BusinessPayment(Parcel in) {
         iconId = in.readInt();
         title = in.readString();
-        hasPaymentMethod = in.readByte() != 0;
+        shouldShowPaymentMethod = in.readByte() != 0;
         exitActionPrimary = in.readParcelable(ExitAction.class.getClassLoader());
         exitActionSecondary = in.readParcelable(ExitAction.class.getClassLoader());
         status = Status.fromName(in.readString());
@@ -67,7 +67,7 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
     public void writeToParcel(final Parcel dest, final int flags) {
         dest.writeInt(iconId);
         dest.writeString(title);
-        dest.writeByte((byte) (hasPaymentMethod ? 1 : 0));
+        dest.writeByte((byte) (shouldShowPaymentMethod ? 1 : 0));
         dest.writeParcelable(exitActionPrimary, flags);
         dest.writeParcelable(exitActionSecondary, flags);
         dest.writeString(status.name);
@@ -100,6 +100,10 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
 
     public String getHelp() {
         return help;
+    }
+
+    public boolean shouldShowPaymentMethod() {
+        return shouldShowPaymentMethod;
     }
 
     public enum Status {
@@ -144,7 +148,7 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
         private final String title;
 
         // Optional values
-        private final boolean hasPaymentMethod;
+        private boolean shouldShowPaymentMethod = false;
         private ExitAction buttonPrimary;
         private ExitAction buttonSecondary;
         private String help;
@@ -155,7 +159,7 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
             this.title = title;
             this.status = status;
             this.iconId = iconId;
-            hasPaymentMethod = false;
+            shouldShowPaymentMethod = false;
             buttonPrimary = null;
             buttonSecondary = null;
             help = null;
@@ -212,10 +216,9 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
          * @param visible visibility mode
          * @return builder
          */
-        public Builder setPaymentMethod(boolean visible) {
-            throw new UnsupportedOperationException("Not implemented yet :( under development");
-//            this.hasPaymentMethod = visible;
-//            return this;
+        public Builder setPaymentMethodVisibility(boolean visible) {
+            this.shouldShowPaymentMethod = visible;
+            return this;
         }
 
     }

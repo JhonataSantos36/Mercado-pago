@@ -1,4 +1,4 @@
-package com.mercadopago.paymentresult.components;
+package com.mercadopago.components;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mercadopago.R;
-import com.mercadopago.components.Renderer;
 import com.mercadopago.customviews.MPTextView;
 
 public class TotalAmountRenderer extends Renderer<TotalAmount> {

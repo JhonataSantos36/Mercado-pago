@@ -1,8 +1,11 @@
 package com.mercadopago.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
-public class Setting {
+public class Setting implements Parcelable {
 
     private Bin bin;
     private CardNumber cardNumber;
@@ -49,5 +52,35 @@ public class Setting {
         }
 
         return selectedSetting;
+    }
+
+    protected Setting(Parcel in) {
+        bin = in.readParcelable(Bin.class.getClassLoader());
+        cardNumber = in.readParcelable(CardNumber.class.getClassLoader());
+        securityCode = in.readParcelable(SecurityCode.class.getClassLoader());
+    }
+
+    public static final Creator<Setting> CREATOR = new Creator<Setting>() {
+        @Override
+        public Setting createFromParcel(Parcel in) {
+            return new Setting(in);
+        }
+
+        @Override
+        public Setting[] newArray(int size) {
+            return new Setting[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(final Parcel dest, final int flags) {
+        dest.writeParcelable(bin, flags);
+        dest.writeParcelable(cardNumber, flags);
+        dest.writeParcelable(securityCode, flags);
     }
 }

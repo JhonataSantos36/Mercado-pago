@@ -45,13 +45,9 @@ import com.mercadopago.paymentresult.components.InstructionsSubtitle;
 import com.mercadopago.paymentresult.components.InstructionsSubtitleRenderer;
 import com.mercadopago.paymentresult.components.InstructionsTertiaryInfo;
 import com.mercadopago.paymentresult.components.InstructionsTertiaryInfoRenderer;
-import com.mercadopago.paymentresult.components.PaymentMethod;
-import com.mercadopago.paymentresult.components.PaymentMethodRenderer;
 import com.mercadopago.paymentresult.components.PaymentResultContainer;
 import com.mercadopago.paymentresult.components.Receipt;
 import com.mercadopago.paymentresult.components.ReceiptRenderer;
-import com.mercadopago.paymentresult.components.TotalAmount;
-import com.mercadopago.paymentresult.components.TotalAmountRenderer;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
 import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.tracker.MPTrackingContext;
@@ -115,7 +111,6 @@ public class PaymentResultActivity extends AppCompatActivity implements PaymentR
         RendererFactory.register(InstructionsTertiaryInfo.class, InstructionsTertiaryInfoRenderer.class);
         RendererFactory.register(InstructionsActions.class, InstructionsActionsRenderer.class);
         RendererFactory.register(InstructionsAction.class, InstructionsActionRenderer.class);
-        RendererFactory.register(TotalAmount.class, TotalAmountRenderer.class);
         RendererFactory.register(BodyError.class, BodyErrorRenderer.class);
         RendererFactory.register(Receipt.class, ReceiptRenderer.class);
 

@@ -1,4 +1,4 @@
-package com.mercadopago.paymentresult.components;
+package com.mercadopago.components;
 
 import android.content.Context;
 
@@ -66,7 +66,6 @@ public class PaymentMethodRendererTest {
         String disclaimer = renderer.getDisclaimer(PaymentTypes.PLUGIN, null, context);
         assertTrue(disclaimer.equals(EMPTY_STRING));
     }
-
 
     @Test
     public void whenPaymentTypeIsCardDescriptionIsCardFormatted() {
