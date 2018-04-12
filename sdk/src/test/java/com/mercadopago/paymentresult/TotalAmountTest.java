@@ -31,13 +31,13 @@ public class TotalAmountTest {
     public void getAmountTitleWhenComponentHasPayerCostWithInstallments() {
         final TotalAmount component = getTotalAmountComponent(PayerCosts.getPayerCost());
 
-        String amountTitle = String.format(Locale.getDefault(),
+        String expected = String.format(Locale.getDefault(),
                 "%dx %s",
                 component.props.payerCost.getInstallments(),
                 CurrenciesUtil.getLocalizedAmountWithoutZeroDecimals(CURRENCY_ID,
                         component.props.payerCost.getInstallmentAmount()));
 
-        Assert.assertEquals(amountTitle, component.getAmountTitle());
+        Assert.assertEquals(expected, component.getAmountTitle());
     }
 
     @Test

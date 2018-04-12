@@ -35,6 +35,7 @@ public class PaymentResultBodyProps {
     public Builder toBuilder() {
         return new Builder()
                 .setStatus(status)
+                .setCurrencyId(currencyId)
                 .setStatusDetail(statusDetail)
                 .setInstruction(instruction)
                 .setPaymentData(paymentData)
@@ -95,8 +96,9 @@ public class PaymentResultBodyProps {
             return this;
         }
 
-        public void setCurrencyId(final String currencyId) {
+        public Builder setCurrencyId(final String currencyId) {
             this.currencyId = currencyId;
+            returnhis;
         }
 
         public void setAmount(final BigDecimal amount) {
