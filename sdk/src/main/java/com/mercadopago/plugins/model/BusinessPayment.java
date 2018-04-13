@@ -20,6 +20,7 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
     private final boolean shouldShowPaymentMethod;
     private final ExitAction exitActionPrimary;
     private final ExitAction exitActionSecondary;
+    private final String paymentMethodDisclaimer;
 
     private BusinessPayment(Builder builder) {
         help = builder.help;
@@ -29,6 +30,7 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
         shouldShowPaymentMethod = builder.shouldShowPaymentMethod;
         exitActionPrimary = builder.buttonPrimary;
         exitActionSecondary = builder.buttonSecondary;
+        paymentMethodDisclaimer = builder.paymentMethodDisclaimer;
     }
 
     protected BusinessPayment(Parcel in) {
@@ -39,6 +41,7 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
         exitActionSecondary = in.readParcelable(ExitAction.class.getClassLoader());
         status = Status.fromName(in.readString());
         help = in.readString();
+        paymentMethodDisclaimer = in.readString();
     }
 
     public static final Creator<BusinessPayment> CREATOR = new Creator<BusinessPayment>() {
@@ -72,6 +75,7 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
         dest.writeParcelable(exitActionSecondary, flags);
         dest.writeString(status.name);
         dest.writeString(help);
+        dest.writeString(paymentMethodDisclaimer);
     }
 
     public Status getStatus() {
@@ -104,6 +108,10 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
 
     public boolean shouldShowPaymentMethod() {
         return shouldShowPaymentMethod;
+    }
+
+    public String getPaymentMethodDisclaimer() {
+        return paymentMethodDisclaimer;
     }
 
     public enum Status {
@@ -149,6 +157,7 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
 
         // Optional values
         private boolean shouldShowPaymentMethod = false;
+        private String paymentMethodDisclaimer;
         private ExitAction buttonPrimary;
         private ExitAction buttonSecondary;
         private String help;
@@ -221,6 +230,18 @@ public final class BusinessPayment implements PluginPayment, Parcelable {
             return this;
         }
 
+        /**
+         * If value true is set on {@link #setPaymentMethodVisibility }
+         * and the payment method is credit card
+         * then the disclaimer will be shown on payment method view.
+         *
+         * @param paymentMethodDisclaimer disclaimer text
+         * @return builder
+         */
+        public Builder setPaymentMethodDisclaimer(final String paymentMethodDisclaimer) {
+            this.paymentMethodDisclaimer = paymentMethodDisclaimer;
+            return this;
+        }
     }
 
 

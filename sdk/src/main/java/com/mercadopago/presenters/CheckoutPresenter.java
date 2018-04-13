@@ -1068,13 +1068,14 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
     }
 
     public void onBusinessResult(final BusinessPayment businessPayment) {
-        // will be better a mapper object to create this.
-        final String lastFourDigits = mPaymentDataInput.getToken() != null ? mPaymentDataInput.getToken().getLastFourDigits() : null;
-        BusinessPaymentModel model = new BusinessPaymentModel(businessPayment, mDiscount, mPaymentDataInput.getPaymentMethod(),
-                mPaymentDataInput.getPayerCost(),
+        //TODO look for a better option than singleton, it make it not testeable.
+        PaymentData paymentData = CheckoutStore.getInstance().getPaymentData();
+
+        final String lastFourDigits = paymentData.getToken() != null ? paymentData.getToken().getLastFourDigits() : null;
+        BusinessPaymentModel model = new BusinessPaymentModel(businessPayment, mDiscount, paymentData.getPaymentMethod(),
+                paymentData.getPayerCost(),
                 mCheckoutPreference.getSite().getCurrencyId(),
-                mPaymentDataInput.getTransactionAmount(),
-                mPaymentResultInput.getStatementDescription(), lastFourDigits);
+                paymentData.getTransactionAmount(), lastFourDigits);
         getView().showBusinessResult(model);
     }
 }

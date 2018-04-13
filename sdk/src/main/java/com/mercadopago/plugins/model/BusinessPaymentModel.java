@@ -20,7 +20,7 @@ public class BusinessPaymentModel implements Parcelable {
     private final PayerCost payerCost;
     private final String currencyId;
     private final BigDecimal amount;
-    private final String disclaimer;
+
     private final String lastFourDigits;
 
     public BusinessPaymentModel(final BusinessPayment payment,
@@ -29,7 +29,6 @@ public class BusinessPaymentModel implements Parcelable {
                                 final PayerCost payerCost,
                                 final String currencyId,
                                 final BigDecimal amount,
-                                final String disclaimer,
                                 final String lastFourDigits) {
         this.payment = payment;
         this.discount = discount;
@@ -37,13 +36,12 @@ public class BusinessPaymentModel implements Parcelable {
         this.payerCost = payerCost;
         this.currencyId = currencyId;
         this.amount = amount;
-        this.disclaimer = disclaimer;
         this.lastFourDigits = lastFourDigits;
     }
 
     public PaymentMethodComponent.PaymentMethodProps getPaymentMethodProps() {
         TotalAmount.TotalAmountProps totalAmountProps = new TotalAmount.TotalAmountProps(currencyId, amount, payerCost, discount);
-        return new PaymentMethodComponent.PaymentMethodProps(paymentMethod, lastFourDigits, disclaimer, totalAmountProps);
+        return new PaymentMethodComponent.PaymentMethodProps(paymentMethod, lastFourDigits, payment.getPaymentMethodDisclaimer(), totalAmountProps);
     }
 
     protected BusinessPaymentModel(Parcel in) {
@@ -53,7 +51,6 @@ public class BusinessPaymentModel implements Parcelable {
         payerCost = in.readParcelable(PayerCost.class.getClassLoader());
         currencyId = in.readString();
         amount = new BigDecimal(in.readString());
-        disclaimer = in.readString();
         lastFourDigits = in.readString();
     }
 
@@ -82,7 +79,6 @@ public class BusinessPaymentModel implements Parcelable {
         dest.writeParcelable(payerCost, flags);
         dest.writeString(currencyId);
         dest.writeString(amount.toString());
-        dest.writeString(disclaimer);
         dest.writeString(lastFourDigits);
     }
 }
