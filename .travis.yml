@@ -10,7 +10,7 @@ cache:
     - $HOME/.gradle/wrapper
 env:
   global:
-    - GRADLE_OPTS="-Xmx512m -XX:MaxPermSize=512m"
+    - GRADLE_OPTS="-Xmx512m"
     - ADB_INSTALL_TIMEOUT=8
 
 android:
