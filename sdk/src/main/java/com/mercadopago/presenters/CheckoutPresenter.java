@@ -189,8 +189,15 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
             if (shouldRetrieveDiscount()) {
                 getDiscountCampaigns();
             } else {
+                resolveDiscount();
                 retrievePaymentMethodSearch();
             }
+        }
+    }
+
+    private void resolveDiscount(){
+        if (isDiscountEnabled() && mDiscount == null) {
+            mFlowPreference.disableDiscount();
         }
     }
 
