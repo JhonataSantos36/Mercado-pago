@@ -28,13 +28,11 @@ public class BodyTest {
 
     private ActionDispatcher dispatcher;
     private PaymentResultProvider paymentResultProvider;
-    private PaymentMethodProvider paymentMethodProvider;
 
     @Before
     public void setup() {
         dispatcher = mock(ActionDispatcher.class);
         paymentResultProvider = mock(PaymentResultProvider.class);
-        paymentMethodProvider = mock(PaymentMethodProvider.class);
 
         new PaymentResultScreenPreference.Builder().build();
     }
