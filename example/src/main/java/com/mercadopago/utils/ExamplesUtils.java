@@ -121,6 +121,7 @@ public class ExamplesUtils {
         options.add(new Pair<>("Business - Primary And Help - Pending", startCompletePendingBusiness(activity)));
         options.add(new Pair<>("Business - No help - Pending", startPendingBusinessNoHelp(activity)));
         options.add(new Pair<>("Business - Complete w/pm - Approved", startCompleteApprovedBusinessWithPaymentMethod(activity)));
+        options.add(new Pair<>("Business - NoHelp w/pm - Approved", startCompleteApprovedBusinessWithPaymentMethodNoHelp(activity)));
 
         return options;
 
@@ -145,6 +146,16 @@ public class ExamplesUtils {
 
         return customBusinessPayment(activity, payment);
     }
+
+    private static Builder startCompleteApprovedBusinessWithPaymentMethodNoHelp(Activity activity) {
+        BusinessPayment payment = new BusinessPayment.Builder(BusinessPayment.Status.APPROVED, R.drawable.mpsdk_icon_card, "Title")
+                .setPaymentMethodVisibility(true)
+                .setSecondaryButton(new ExitAction(BUTTON_SECONDARY_NAME, 34))
+                .build();
+
+        return customBusinessPayment(activity, payment);
+    }
+
 
     private static Builder startCompleteApprovedBusiness(Activity activity) {
         BusinessPayment payment = new BusinessPayment.Builder(BusinessPayment.Status.APPROVED, R.drawable.mpsdk_icon_card, "Title")

@@ -72,8 +72,8 @@ public class BusinessPaymentRenderer extends Renderer<BusinessPaymentContainer> 
             public void onGlobalLayout() {
                 int diffHeight = calculateDiff(mainContentContainer, scrollView);
                 if (diffHeight > 0) {
-                    toCorrect.setPadding(toCorrect.getPaddingLeft(), (int) Math.ceil(diffHeight / 2f), toCorrect.getPaddingRight(),
-                            (int) Math.ceil(diffHeight / 2f));
+                    toCorrect.setPadding(toCorrect.getPaddingLeft(), toCorrect.getPaddingTop() + (int) Math.ceil(diffHeight / 2f), toCorrect.getPaddingRight(),
+                            toCorrect.getPaddingBottom() + (int) Math.ceil(diffHeight / 2f));
                 }
             }
         };
