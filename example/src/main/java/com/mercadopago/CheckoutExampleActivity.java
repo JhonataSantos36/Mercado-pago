@@ -60,7 +60,7 @@ public class CheckoutExampleActivity extends AppCompatActivity {
     }
 
     private void onContinueClicked() {
-        MercadoPagoCheckout.Builder builder = ExamplesUtils.createBase(this);
+        MercadoPagoCheckout.Builder builder = ExamplesUtils.createBaseWithDecimals(this);
         builder.startForPayment();
     }
 

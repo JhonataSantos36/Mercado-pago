@@ -40,6 +40,7 @@ public class ExamplesUtils {
     private static final String RESULT_CODE_MESSAGE = " Result code: ";
     private static final String DUMMY_PREFERENCE_ID = "243962506-0bb62e22-5c7b-425e-a0a6-c22d0f4758a9";
     private static final String DUMMY_PREFERENCE_ID_WITH_DECIMALS = "243962506-ad5df092-f5a2-4b99-bcc4-7578d6e71849";
+    private static final String DUMMY_PREFERENCE_ID_WITH_NO_DECIMALS = "243966003-3db6717c-371a-4660-8d01-ebf63f588fd8";
     private static final String DUMMY_MERCHANT_PUBLIC_KEY = "TEST-c6d9b1f9-71ff-4e05-9327-3c62468a23ee";
 
     /*
@@ -201,7 +202,6 @@ public class ExamplesUtils {
 
     public static Builder createBase(final Activity activity) {
         final Map<String, Object> defaultData = new HashMap<>();
-        defaultData.put("amount", 120f);
 
         return new Builder()
                 .setActivity(activity)
@@ -217,7 +217,6 @@ public class ExamplesUtils {
 
     public static Builder createBaseWithDecimals(final Activity activity) {
         final Map<String, Object> defaultData = new HashMap<>();
-        defaultData.put("amount", 120f);
 
         return new Builder()
                 .setActivity(activity)
@@ -229,5 +228,20 @@ public class ExamplesUtils {
                         data.put("user", "Nico");
                     }
                 });
+    }
+
+    public static Builder createBaseWithNoDecimals(final Activity activity) {
+        final Map<String, Object> defaultData = new HashMap<>();
+
+        return new Builder()
+            .setActivity(activity)
+            .setPublicKey(DUMMY_MERCHANT_PUBLIC_KEY)
+            .setCheckoutPreference(new CheckoutPreference(DUMMY_PREFERENCE_ID_WITH_NO_DECIMALS))
+            .setDataInitializationTask(new DataInitializationTask(defaultData) {
+                @Override
+                public void onLoadData(@NonNull final Map<String, Object> data) {
+                    data.put("user", "Nico");
+                }
+            });
     }
 }

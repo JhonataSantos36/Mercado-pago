@@ -45,7 +45,7 @@ public class MercadoPagoServicesAdapter extends MercadoPagoServices {
         payload.put("issuer_id", paymentBody.getIssuerId());
         payload.put("installments", paymentBody.getInstallments());
         payload.put("campaign_id", paymentBody.getCampaignId());
-        super.createPayment(paymentBody.getTransactionId(), MP_API_BASE_URL,
+        createPayment(paymentBody.getTransactionId(), MP_API_BASE_URL,
                 MP_CHECKOUT_PAYMENTS_URI,
                 payload,
                 new HashMap<String, String>(),

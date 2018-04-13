@@ -131,10 +131,9 @@ public final class CurrenciesUtil {
                                                                @NonNull final BigDecimal amount) {
         String localized = getLocalizedAmountWithCurrencySymbol(amount, currencyId);
         if (hasZeroDecimals(currencyId, amount)) {
-            String decimals = getDecimals(currencyId, amount);
             Character decimalSeparator = currenciesList.get(currencyId).getDecimalSeparator();
-            localized = localized.replace(String.valueOf(decimalSeparator.charValue()), "");
-            localized = localized.replace(decimals, "");
+            int decimalIndex = localized.indexOf(decimalSeparator);
+            localized = localized.substring(0, decimalIndex);
         }
 
         return localized;

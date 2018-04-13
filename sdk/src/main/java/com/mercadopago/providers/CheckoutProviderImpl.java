@@ -221,9 +221,15 @@ public class CheckoutProviderImpl implements CheckoutProvider {
     }
 
     @Override
-    public void getPaymentMethodSearch(BigDecimal amount, final List<String> excludedPaymentTypes, final List<String> excludedPaymentMethods, Payer payer, Site site, final TaggedCallback<PaymentMethodSearch> onPaymentMethodSearchRetrievedCallback, final TaggedCallback<Customer> onCustomerRetrievedCallback) {
+    public void getPaymentMethodSearch(final BigDecimal amount,
+        final List<String> excludedPaymentTypes,
+        final List<String> excludedPaymentMethods,
+        final Payer payer,
+        final Site site,
+        final TaggedCallback<PaymentMethodSearch> onPaymentMethodSearchRetrievedCallback,
+        final TaggedCallback<Customer> onCustomerRetrievedCallback) {
 
-        Set<String> excludedPaymentTypesSet = new HashSet<>(excludedPaymentTypes);
+        final Set<String> excludedPaymentTypesSet = new HashSet<>(excludedPaymentTypes);
         excludedPaymentTypesSet.addAll(getUnsupportedPaymentTypes(site));
 
         mercadoPagoServicesAdapter.getPaymentMethodSearch(amount, new ArrayList<>(excludedPaymentTypesSet), excludedPaymentMethods, payer, site, new Callback<PaymentMethodSearch>() {
