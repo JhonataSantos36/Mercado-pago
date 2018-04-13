@@ -22,6 +22,7 @@ import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.Site;
 import com.mercadopago.model.Sites;
 import com.mercadopago.model.Token;
+import com.mercadopago.plugins.model.BusinessPaymentModel;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.mocks.Cards;
 import com.mercadopago.mocks.Customers;
@@ -1909,6 +1910,11 @@ public class CheckoutPresenterTest {
 
         @Override
         public void fetchImageFromUrl(String url) {
+
+        }
+
+        @Override
+        public void showBusinessResult(final BusinessPaymentModel model) {
 
         }
 

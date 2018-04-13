@@ -2,6 +2,7 @@ package com.mercadopago.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.VisibleForTesting;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -118,6 +119,10 @@ public class PayerCost implements Parcelable {
             return new PayerCost[size];
         }
     };
+
+    @VisibleForTesting
+    public PayerCost() {
+    }
 
     protected PayerCost(Parcel in) {
         if (in.readByte() == 0) {
