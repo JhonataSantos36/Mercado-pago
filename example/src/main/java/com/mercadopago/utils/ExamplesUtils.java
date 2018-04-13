@@ -73,22 +73,6 @@ public class ExamplesUtils {
     public static final Integer DUMMY_ITEM_QUANTITY = 1;
     public static final BigDecimal DUMMY_ITEM_UNIT_PRICE = new BigDecimal("1000");
 
-
-
-    public static PaymentMethodComponent getDummyPaymentMethod() {
-        PaymentMethodComponent paymentMethod = new PaymentMethodComponent();
-        paymentMethod.setId("visa");
-        paymentMethod.setName("Visa");
-        paymentMethod.setPaymentTypeId("credit_card");
-        return paymentMethod;
-    }
-
-    public static Issuer getDummyIssuer() {
-        Issuer issuer = new Issuer();
-        issuer.setId(338L);
-        return issuer;
-    }
-
     */
 
     public static void resolveCheckoutResult(final Activity context, final int requestCode, final int resultCode, final Intent data) {
