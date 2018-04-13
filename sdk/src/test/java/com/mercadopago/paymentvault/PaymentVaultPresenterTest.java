@@ -2,11 +2,9 @@ package com.mercadopago.paymentvault;
 
 import com.mercadopago.callbacks.OnSelectedCallback;
 import com.mercadopago.constants.PaymentMethods;
-import com.mercadopago.lite.exceptions.ApiException;
-import com.mercadopago.model.PaymentTypes;
-import com.mercadopago.model.Sites;
 import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.hooks.Hook;
+import com.mercadopago.lite.exceptions.ApiException;
 import com.mercadopago.mocks.PaymentMethodSearchs;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CustomSearchItem;
@@ -15,7 +13,9 @@ import com.mercadopago.model.Payer;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
+import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.model.Site;
+import com.mercadopago.model.Sites;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.plugins.PaymentMethodPlugin;
 import com.mercadopago.preferences.FlowPreference;
@@ -689,33 +689,6 @@ public class PaymentVaultPresenterTest {
 
         mockedView.simulateItemSelection(0);
 
-        assertTrue(mockedView.showedDiscountRow);
-    }
-
-    @Test
-    public void ifHasNotDirectDiscountSetFalseDirectDiscountEnabled() {
-        MockedView mockedView = new MockedView();
-        MockedProvider provider = new MockedProvider();
-
-        PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
-        provider.setResponse(paymentMethodSearch);
-
-        ApiException apiException = Discounts.getDoNotFindCampaignApiException();
-        MercadoPagoError mpException = new MercadoPagoError(apiException, "");
-        provider.setDiscountResponse(mpException);
-
-        PaymentVaultPresenter presenter = new PaymentVaultPresenter();
-        presenter.attachView(mockedView);
-        presenter.attachResourcesProvider(provider);
-
-        presenter.setAmount(BigDecimal.TEN);
-        presenter.setSite(Sites.ARGENTINA);
-
-        presenter.initialize(true);
-
-        mockedView.simulateItemSelection(0);
-
-        assertFalse(presenter.getDirectDiscountEnabled());
         assertTrue(mockedView.showedDiscountRow);
     }
 
