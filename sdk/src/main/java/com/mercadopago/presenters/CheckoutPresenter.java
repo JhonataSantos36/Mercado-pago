@@ -195,7 +195,7 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         }
     }
 
-    private void resolveDiscount(){
+    private void resolveDiscount() {
         if (isDiscountEnabled() && mDiscount == null) {
             mFlowPreference.disableDiscount();
         }

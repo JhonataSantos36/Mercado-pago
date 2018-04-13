@@ -86,8 +86,7 @@ public class CheckoutStore {
     }
 
     @NonNull
-    public
-    List<PaymentMethodPlugin> getPaymentMethodPluginList() {
+    public List<PaymentMethodPlugin> getPaymentMethodPluginList() {
         return paymentMethodPluginList;
     }
 
