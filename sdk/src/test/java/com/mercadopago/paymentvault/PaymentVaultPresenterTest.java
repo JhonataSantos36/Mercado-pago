@@ -693,33 +693,6 @@ public class PaymentVaultPresenterTest {
     }
 
     @Test
-    public void ifHasNotDirectDiscountSetFalseDirectDiscountEnabled() {
-        MockedView mockedView = new MockedView();
-        MockedProvider provider = new MockedProvider();
-
-        PaymentMethodSearch paymentMethodSearch = PaymentMethodSearchs.getCompletePaymentMethodSearchMLA();
-        provider.setResponse(paymentMethodSearch);
-
-        ApiException apiException = Discounts.getDoNotFindCampaignApiException();
-        MercadoPagoError mpException = new MercadoPagoError(apiException, "");
-        provider.setDiscountResponse(mpException);
-
-        PaymentVaultPresenter presenter = new PaymentVaultPresenter();
-        presenter.attachView(mockedView);
-        presenter.attachResourcesProvider(provider);
-
-        presenter.setAmount(BigDecimal.TEN);
-        presenter.setSite(Sites.ARGENTINA);
-
-        presenter.initialize(true);
-
-        mockedView.simulateItemSelection(0);
-
-        assertFalse(presenter.getDirectDiscountEnabled());
-        assertTrue(mockedView.showedDiscountRow);
-    }
-
-    @Test
     public void ifResourcesRetrievalFailThenShowError() {
         MockedView mockedView = new MockedView();
         MockedProvider provider = new MockedProvider();
