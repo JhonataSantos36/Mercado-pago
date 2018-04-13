@@ -48,7 +48,7 @@ public class BusinessPaymentRenderer extends Renderer<BusinessPaymentContainer> 
             }
         }
 
-        if (mainContentContainer.getChildCount() == 0) {
+        if (mainContentContainer.getChildCount() == 1) { //has only header
             vto.addOnGlobalLayoutListener(noBodyCorrection(mainContentContainer, scrollView, header));
         }
 
