@@ -15,8 +15,8 @@ public class PaymentMethodTest extends BaseTest<CheckoutActivity> {
     @Test
     public void testIsIssuerRequired() {
 
-        /*PaymentMethod visa = StaticMock.getPaymentMethod(getApplicationContext());
-        PaymentMethod master = StaticMock.getPaymentMethod(getApplicationContext(), "_issuer_required");
+        /*PaymentMethodComponent visa = StaticMock.getPaymentMethod(getApplicationContext());
+        PaymentMethodComponent master = StaticMock.getPaymentMethod(getApplicationContext(), "_issuer_required");
         assertTrue(!visa.isIssuerRequired());
         assertTrue(master.isIssuerRequired());*/
     }
@@ -24,8 +24,8 @@ public class PaymentMethodTest extends BaseTest<CheckoutActivity> {
     @Test
     public void testIsSecurityCodeRequired() {
 
-        /*PaymentMethod visa = StaticMock.getPaymentMethod(getApplicationContext());
-        PaymentMethod tarshop = StaticMock.getPaymentMethod(getApplicationContext(), "_cvv_not_required");
+        /*PaymentMethodComponent visa = StaticMock.getPaymentMethod(getApplicationContext());
+        PaymentMethodComponent tarshop = StaticMock.getPaymentMethod(getApplicationContext(), "_cvv_not_required");
         assertTrue(visa.isSecurityCodeRequired("466057"));
         assertTrue(tarshop.isSecurityCodeRequired("603488"));
         assertTrue(!tarshop.isSecurityCodeRequired("27995"));*/

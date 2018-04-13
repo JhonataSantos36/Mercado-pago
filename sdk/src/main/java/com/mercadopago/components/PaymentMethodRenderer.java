@@ -17,10 +17,10 @@ import com.mercadopago.util.TextUtils;
 
 import java.util.Locale;
 
-public class PaymentMethodRenderer extends Renderer<PaymentMethod> {
+public class PaymentMethodRenderer extends Renderer<PaymentMethodComponent> {
 
     @Override
-    public View render(@NonNull final PaymentMethod component, @NonNull final Context context, final ViewGroup parent) {
+    public View render(@NonNull final PaymentMethodComponent component, @NonNull final Context context, final ViewGroup parent) {
 
         final View paymentMethodView = inflate(R.layout.mpsdk_payment_method_component, parent);
         final ViewGroup paymentMethodViewGroup = paymentMethodView.findViewById(R.id.mpsdkPaymentMethodContainer);
@@ -30,7 +30,7 @@ public class PaymentMethodRenderer extends Renderer<PaymentMethod> {
 
         addTotalAmountContainer(component, context, paymentMethodView);
 
-        PaymentMethod.PaymentMethodProps props = component.props;
+        PaymentMethodComponent.PaymentMethodProps props = component.props;
         imageView.setImageDrawable(ContextCompat.getDrawable(context, ResourceUtil.getIconResource(context, props.paymentMethod.getId())));
         setText(descriptionTextView, getDescription(props.paymentMethod.getName(), props.paymentMethod.getPaymentTypeId(),
                 props.lastFourDigits, context));
@@ -41,7 +41,7 @@ public class PaymentMethodRenderer extends Renderer<PaymentMethod> {
         return paymentMethodView;
     }
 
-    private void addTotalAmountContainer(final @NonNull PaymentMethod component,
+    private void addTotalAmountContainer(final @NonNull PaymentMethodComponent component,
                                          final @NonNull Context context,
                                          final View paymentMethodView) {
 

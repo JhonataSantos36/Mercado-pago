@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.Component;
 import com.mercadopago.components.CustomComponent;
-import com.mercadopago.components.PaymentMethod;
+import com.mercadopago.components.PaymentMethodComponent;
 import com.mercadopago.components.TotalAmount;
 import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.model.Payment;
@@ -67,18 +67,18 @@ public class Body extends Component<PaymentResultBodyProps, Void> {
         return PaymentTypes.PLUGIN.equalsIgnoreCase(paymentMethod.getPaymentTypeId());
     }
 
-    public PaymentMethod getPaymentMethodComponent() {
+    public PaymentMethodComponent getPaymentMethodComponent() {
         final TotalAmount.TotalAmountProps totalAmountProps = new TotalAmount.TotalAmountProps(props.currencyId,
                 props.amount,
                 props.paymentData.getPayerCost(),
                 props.paymentData.getDiscount());
 
-        final PaymentMethod.PaymentMethodProps paymentMethodProps = new PaymentMethod.PaymentMethodProps(props.paymentData.getPaymentMethod(),
+        final PaymentMethodComponent.PaymentMethodProps paymentMethodProps = new PaymentMethodComponent.PaymentMethodProps(props.paymentData.getPaymentMethod(),
                 props.paymentData.getToken() != null ? props.paymentData.getToken().getLastFourDigits() : null,
                 props.disclaimer,
                 totalAmountProps);
 
-        return new PaymentMethod(paymentMethodProps);
+        return new PaymentMethodComponent(paymentMethodProps);
     }
 
     public boolean hasBodyError() {

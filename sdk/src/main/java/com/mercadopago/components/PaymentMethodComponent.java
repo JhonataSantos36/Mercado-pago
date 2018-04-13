@@ -2,13 +2,13 @@ package com.mercadopago.components;
 
 import android.support.annotation.NonNull;
 
-public class PaymentMethod extends Component<PaymentMethod.PaymentMethodProps, Void> {
+public class PaymentMethodComponent extends Component<PaymentMethodComponent.PaymentMethodProps, Void> {
 
     static {
-        RendererFactory.register(PaymentMethod.class, PaymentMethodRenderer.class);
+        RendererFactory.register(PaymentMethodComponent.class, PaymentMethodRenderer.class);
     }
 
-    public PaymentMethod(@NonNull final PaymentMethodProps props) {
+    public PaymentMethodComponent(@NonNull final PaymentMethodProps props) {
         super(props);
     }
 

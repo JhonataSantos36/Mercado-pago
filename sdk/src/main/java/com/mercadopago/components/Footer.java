@@ -34,7 +34,7 @@ public class Footer extends CompactComponent<Footer.Props, ActionDispatcher> {
     @Override
     public View render(@Nonnull final ViewGroup parent) {
         Context context = parent.getContext();
-        LinearLayout linearContainer = CompactComponent.createLinearContainer(parent);
+        LinearLayout linearContainer = CompactComponent.createLinearContainer(context);
         linearContainer.setBackgroundColor(context.getResources().getColor(R.color.mpsdk_white_background));
         linearContainer.setPadding(0, 0, 0, context.getResources().getDimensionPixelSize(R.dimen.mpsdk_s_margin));
 

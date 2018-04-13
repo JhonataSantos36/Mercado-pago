@@ -75,8 +75,8 @@ public class ExamplesUtils {
 
 
 
-    public static PaymentMethod getDummyPaymentMethod() {
-        PaymentMethod paymentMethod = new PaymentMethod();
+    public static PaymentMethodComponent getDummyPaymentMethod() {
+        PaymentMethodComponent paymentMethod = new PaymentMethodComponent();
         paymentMethod.setId("visa");
         paymentMethod.setName("Visa");
         paymentMethod.setPaymentTypeId("credit_card");

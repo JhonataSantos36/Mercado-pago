@@ -1,10 +1,14 @@
 package com.mercadopago.components;
 
+import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
+
+import com.mercadopago.R;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -59,11 +63,23 @@ public abstract class CompactComponent<Props, Actions> {
     }
 
     @Nonnull
-    public static LinearLayout createLinearContainer(final ViewGroup parent) {
-        LinearLayout linearLayout = new LinearLayout(parent.getContext());
+    public static LinearLayout createLinearContainer(final Context context) {
+        LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
         return linearLayout;
+    }
+
+    @Nonnull
+    public static ScrollView createScrollContainer(final Context context) {
+        ScrollView scrollView = new ScrollView(context);
+        scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        scrollView.setBackgroundColor(scrollView
+                .getContext()
+                .getResources()
+                .getColor(R.color.mpsdk_white_background));
+        return scrollView;
     }
 }
