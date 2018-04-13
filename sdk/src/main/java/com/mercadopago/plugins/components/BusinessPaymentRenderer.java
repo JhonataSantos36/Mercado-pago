@@ -38,18 +38,16 @@ public class BusinessPaymentRenderer extends Renderer<BusinessPaymentContainer> 
         if (component.props.payment.hasHelp()) {
             View helpView = new HelpComponent(component.props.payment.getHelp()).render(mainContentContainer);
             mainContentContainer.addView(helpView);
-            vto.addOnGlobalLayoutListener(bodyCorrection(mainContentContainer, scrollView, helpView));
         }
 
         if (component.props.payment.shouldShowPaymentMethod()) {
-            View paymentMethodView = renderPaymentMethod(component.props.paymentMethod, mainContentContainer);
-            if (!component.props.payment.hasHelp()) {
-                vto.addOnGlobalLayoutListener(bodyCorrection(mainContentContainer, scrollView, paymentMethodView));
-            }
+            renderPaymentMethod(component.props.paymentMethod, mainContentContainer);
         }
 
         if (mainContentContainer.getChildCount() == 1) { //has only header
             vto.addOnGlobalLayoutListener(noBodyCorrection(mainContentContainer, scrollView, header));
+        } else if (mainContentContainer.getChildCount() > 1) { // has more elements
+            vto.addOnGlobalLayoutListener(bodyCorrection(mainContentContainer, scrollView, mainContentContainer.getChildAt(1)));
         }
 
         renderFooter(component, mainContentContainer);
