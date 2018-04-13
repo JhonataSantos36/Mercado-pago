@@ -7,23 +7,6 @@ import com.mercadopago.exceptions.MercadoPagoError;
 import com.mercadopago.hooks.Hook;
 import com.mercadopago.lite.exceptions.ApiException;
 import com.mercadopago.lite.exceptions.CheckoutPreferenceException;
-import com.mercadopago.model.Campaign;
-import com.mercadopago.model.Card;
-import com.mercadopago.model.Cause;
-import com.mercadopago.model.Discount;
-import com.mercadopago.model.Identification;
-import com.mercadopago.model.Issuer;
-import com.mercadopago.model.Item;
-import com.mercadopago.model.Payer;
-import com.mercadopago.model.PayerCost;
-import com.mercadopago.model.Payment;
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentMethodSearch;
-import com.mercadopago.model.Site;
-import com.mercadopago.model.Sites;
-import com.mercadopago.model.Token;
-import com.mercadopago.plugins.model.BusinessPaymentModel;
-import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.mocks.Cards;
 import com.mercadopago.mocks.Customers;
 import com.mercadopago.mocks.Discounts;
@@ -33,14 +16,31 @@ import com.mercadopago.mocks.PaymentMethodSearchs;
 import com.mercadopago.mocks.PaymentMethods;
 import com.mercadopago.mocks.Payments;
 import com.mercadopago.mocks.Tokens;
+import com.mercadopago.model.Campaign;
+import com.mercadopago.model.Card;
+import com.mercadopago.model.Cause;
 import com.mercadopago.model.Customer;
+import com.mercadopago.model.Discount;
+import com.mercadopago.model.Identification;
+import com.mercadopago.model.Issuer;
+import com.mercadopago.model.Item;
+import com.mercadopago.model.Payer;
+import com.mercadopago.model.PayerCost;
+import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentData;
+import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentResult;
+import com.mercadopago.model.Site;
+import com.mercadopago.model.Sites;
+import com.mercadopago.model.Token;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.plugins.DataInitializationTask;
 import com.mercadopago.plugins.PaymentMethodPlugin;
 import com.mercadopago.plugins.PaymentProcessor;
+import com.mercadopago.plugins.model.BusinessPaymentModel;
+import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.providers.CheckoutProvider;
 import com.mercadopago.util.TextUtils;
@@ -1910,12 +1910,12 @@ public class CheckoutPresenterTest {
 
         @Override
         public void fetchImageFromUrl(String url) {
-
+            //Do nothing
         }
 
         @Override
         public void showBusinessResult(final BusinessPaymentModel model) {
-
+            //Do nothing
         }
 
         @Override
@@ -1926,7 +1926,7 @@ public class CheckoutPresenterTest {
 
         @Override
         public void showProgress() {
-
+            //Do nothing
         }
 
         @Override

@@ -17,7 +17,7 @@ public class PaymentMethodComponent extends Component<PaymentMethodComponent.Pay
         final String lastFourDigits;
         final String disclaimer;
 
-        public PaymentMethodProps(final com.mercadopago.model.PaymentMethod paymentMethod,
+        public PaymentMethodProps(final PaymentMethod paymentMethod,
                                   final String lastFourDigits,
                                   final String disclaimer,
                                   final TotalAmount.TotalAmountProps totalAmountProps) {
