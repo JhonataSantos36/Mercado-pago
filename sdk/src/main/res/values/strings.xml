@@ -15,8 +15,6 @@
     <string name="other_payment_method">Other payment method…</string>
 
     <!-- Vault -->
-    <string name="mpsdk_cod_seg_desc">Last <ns1:g example="4" id="numeros">%1$d</ns1:g> digits code on the back of the card</string>
-    <string name="mpsdk_cod_seg_desc_amex" tools:ignore="PluralsCandidate"><ns1:g example="4" id="numeros">%1$d</ns1:g> digits code on the front of the card</string>
     <string name="mpsdk_title_activity_vault">Pay</string>
     <string name="mpsdk_select_pm_label">Choose a payment method…</string>
     <string name="mpsdk_last_digits_label">Ending in</string>

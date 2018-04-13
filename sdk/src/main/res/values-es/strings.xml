@@ -16,8 +16,6 @@
     <string name="other_payment_method">Otro medio de pago…</string>
 
     <!-- Vault -->
-    <string name="mpsdk_cod_seg_desc">Últimos <xliff:g example="4" id="numeros">%1$d</xliff:g> números al dorso de la tarjeta</string>
-    <string name="mpsdk_cod_seg_desc_amex"><xliff:g example="4" id="numeros">%1$d</xliff:g> números al frente de la tarjeta</string>
     <string name="mpsdk_title_activity_vault">Pagar</string>
     <string name="mpsdk_select_pm_label">Selecciona un medio de pago…</string>
     <string name="mpsdk_last_digits_label">Terminada en</string>

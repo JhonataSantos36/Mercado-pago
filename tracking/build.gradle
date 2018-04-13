@@ -22,6 +22,9 @@ android {
         versionName '3.0.2-noop-6'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    lintOptions {
+        abortOnError false
+    }
     packagingOptions {
         exclude 'META-INF/services/com.fasterxml.jackson.core.JsonFactory'
         exclude 'META-INF/DEPENDENCIES.txt'
