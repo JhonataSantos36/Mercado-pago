@@ -83,7 +83,7 @@ public final class NestedScroll {
         ViewParent parent = new FrameLayout(view.getContext());
         ViewParent incrementView = null;
         int i = 0;
-        while (parent != null && !(parent.getClass() == parentClass)) {
+        while (parent != null && parent.getClass() != parentClass) {
             if (i == 0) {
                 parent = findParent(view);
             } else {

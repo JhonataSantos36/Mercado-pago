@@ -1,4 +1,4 @@
-package com.mercadopago.testCheckout.input;
+package com.mercadopago.testcheckout.input;
 
 
 public class Visa extends FakeCard {
@@ -34,6 +34,9 @@ public class Visa extends FakeCard {
                 break;
             case VENEZUELA:
                 cardNumber = "4966382331109310";
+                break;
+            default:
+                cardNumber = null;
                 break;
         }
 

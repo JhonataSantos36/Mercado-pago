@@ -35,6 +35,7 @@ public final class SimCardUtils {
                 break;
             default:
                 expectedCountryCode= "ar";
+                break;
         }
         final TelephonyManager tm = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
         return tm.getSimCountryIso().equals(expectedCountryCode);

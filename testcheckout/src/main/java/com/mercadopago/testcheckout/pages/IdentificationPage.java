@@ -1,4 +1,4 @@
-package com.mercadopago.testCheckout.pages;
+package com.mercadopago.testcheckout.pages;
 
 import android.view.View;
 
@@ -9,14 +9,13 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
-public class SecurityCodePage extends PageObject {
+public class IdentificationPage extends PageObject {
 
-    public IdentificationPage enterSecurityCode(final String escNumber) {
-        Matcher<View> cardSecurityCodeEditTextMatcher = withId(com.mercadopago.R.id.mpsdkCardSecurityCode);
+    public InstallmentsPage enterIdentificationNumber(final String idNumber) {
+        Matcher<View> cardIdentificationNumberEditTextMatcher = withId(com.mercadopago.R.id.mpsdkCardIdentificationNumber);
         Matcher<View> cardNextButtonTextMatcher = withId(com.mercadopago.R.id.mpsdkNextButtonText);
-        onView(cardSecurityCodeEditTextMatcher).perform(typeText(escNumber));
+        onView(cardIdentificationNumberEditTextMatcher).perform(typeText(idNumber));
         onView(cardNextButtonTextMatcher).perform(click());
-
-        return new IdentificationPage();
+        return new InstallmentsPage();
     }
 }

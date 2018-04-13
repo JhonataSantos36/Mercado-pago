@@ -1,11 +1,11 @@
-package com.mercadopago.testCheckout.flows;
+package com.mercadopago.testcheckout.flows;
 
 import android.support.annotation.NonNull;
 
 import com.mercadopago.core.MercadoPagoCheckout;
-import com.mercadopago.testCheckout.input.Card;
-import com.mercadopago.testCheckout.pages.CongratsPage;
-import com.mercadopago.testCheckout.pages.PaymentMethodPage;
+import com.mercadopago.testcheckout.input.Card;
+import com.mercadopago.testcheckout.pages.CongratsPage;
+import com.mercadopago.testcheckout.pages.PaymentMethodPage;
 
 public class CheckoutTestFlow {
 

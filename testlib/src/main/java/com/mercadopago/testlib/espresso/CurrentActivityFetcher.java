@@ -30,9 +30,9 @@ public final class CurrentActivityFetcher {
         public void run() {
             final Collection<Activity> resumedActivity = ActivityLifecycleMonitorRegistry.getInstance()
                 .getActivitiesInStage(Stage.RESUMED);
-            for (final Activity act : resumedActivity) {
-                currentActivity = act;
-                break;
+
+            if(resumedActivity.iterator().hasNext()){
+                currentActivity = resumedActivity.iterator().next();
             }
         }
 

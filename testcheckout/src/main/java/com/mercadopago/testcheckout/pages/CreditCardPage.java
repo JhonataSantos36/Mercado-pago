@@ -1,4 +1,4 @@
-package com.mercadopago.testCheckout.pages;
+package com.mercadopago.testcheckout.pages;
 
 
 import android.view.View;

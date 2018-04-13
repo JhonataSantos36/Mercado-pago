@@ -1,4 +1,4 @@
-package com.mercadopago.testCheckout.input;
+package com.mercadopago.testcheckout.input;
 
 
 import java.util.ArrayList;
