@@ -17,15 +17,9 @@ import com.mercadopago.components.HelpComponent;
 import com.mercadopago.components.PaymentMethodComponent;
 import com.mercadopago.components.Renderer;
 import com.mercadopago.components.RendererFactory;
-import com.mercadopago.components.TotalAmount;
-import com.mercadopago.model.PaymentMethod;
-import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.paymentresult.components.Header;
 import com.mercadopago.paymentresult.props.HeaderProps;
-import com.mercadopago.plugins.model.BusinessPayment;
 import com.mercadopago.plugins.model.ExitAction;
-
-import java.math.BigDecimal;
 
 public class BusinessPaymentRenderer extends Renderer<BusinessPaymentContainer> {
 
@@ -41,15 +35,15 @@ public class BusinessPaymentRenderer extends Renderer<BusinessPaymentContainer> 
         final View header = renderHeader(component, mainContentContainer);
         final ViewTreeObserver vto = scrollView.getViewTreeObserver();
 
-        if (component.props.hasHelp()) {
-            View helpView = new HelpComponent(component.props.getHelp()).render(mainContentContainer);
+        if (component.props.payment.hasHelp()) {
+            View helpView = new HelpComponent(component.props.payment.getHelp()).render(mainContentContainer);
             mainContentContainer.addView(helpView);
             vto.addOnGlobalLayoutListener(bodyCorrection(mainContentContainer, scrollView, helpView));
         }
 
-        if (component.props.shouldShowPaymentMethod()) {
-            View paymentMethodView = renderPaymentMethod(component.props, mainContentContainer);
-            if (!component.props.hasHelp()) {
+        if (component.props.payment.shouldShowPaymentMethod()) {
+            View paymentMethodView = renderPaymentMethod(component.props.paymentMethod, mainContentContainer);
+            if (!component.props.payment.hasHelp()) {
                 vto.addOnGlobalLayoutListener(bodyCorrection(mainContentContainer, scrollView, paymentMethodView));
             }
         }
@@ -63,11 +57,9 @@ public class BusinessPaymentRenderer extends Renderer<BusinessPaymentContainer> 
         return scrollView;
     }
 
-    private View renderPaymentMethod(final BusinessPayment props, final LinearLayout mainContentContainer) {
-        //TODO
-        PaymentMethod pm = new PaymentMethod("123", "asd", PaymentTypes.CREDIT_CARD);
-        TotalAmount.TotalAmountProps totalAmountProps = new TotalAmount.TotalAmountProps("ARS", new BigDecimal(100), null, null);
-        PaymentMethodComponent paymentMethodComponent = new PaymentMethodComponent(new PaymentMethodComponent.PaymentMethodProps(pm, "1234", "ASD das", totalAmountProps));
+    private View renderPaymentMethod(@NonNull final PaymentMethodComponent.PaymentMethodProps props,
+                                     @NonNull final LinearLayout mainContentContainer) {
+        PaymentMethodComponent paymentMethodComponent = new PaymentMethodComponent(props);
         RendererFactory.create(mainContentContainer.getContext(), paymentMethodComponent).render(mainContentContainer);
         return mainContentContainer.findViewById(R.id.mpsdkPaymentMethodContainer);
     }
@@ -87,9 +79,9 @@ public class BusinessPaymentRenderer extends Renderer<BusinessPaymentContainer> 
         };
     }
 
-    private void renderFooter(@NonNull final BusinessPaymentContainer component, final LinearLayout linearLayout) {
-        Button.Props primaryButtonProps = getButtonProps(component.props.getPrimaryAction());
-        Button.Props secondaryButtonProps = getButtonProps(component.props.getSecondaryAction());
+    private void renderFooter(@NonNull final BusinessPaymentContainer component, @NonNull final LinearLayout linearLayout) {
+        Button.Props primaryButtonProps = getButtonProps(component.props.payment.getPrimaryAction());
+        Button.Props secondaryButtonProps = getButtonProps(component.props.payment.getSecondaryAction());
         Footer footer = new Footer(new Footer.Props(primaryButtonProps, secondaryButtonProps), component.getDispatcher());
         View footerView = footer.render(linearLayout);
         linearLayout.addView(footerView);
@@ -107,15 +99,15 @@ public class BusinessPaymentRenderer extends Renderer<BusinessPaymentContainer> 
     @NonNull
     private View renderHeader(@NonNull final BusinessPaymentContainer component, @NonNull final LinearLayout linearLayout) {
         Context context = linearLayout.getContext();
-        Header header = new Header(HeaderProps.from(component.props, context), component.getDispatcher());
+        Header header = new Header(HeaderProps.from(component.props.payment, context), component.getDispatcher());
         View render = RendererFactory.create(context, header).render(linearLayout);
         return render.findViewById(R.id.mpsdkPaymentResultContainerHeader);
     }
 
     @NonNull
-    private ViewTreeObserver.OnGlobalLayoutListener noBodyCorrection(final LinearLayout mainContentContainer,
-                                                                     final ScrollView scrollView,
-                                                                     final View header) {
+    private ViewTreeObserver.OnGlobalLayoutListener noBodyCorrection(@NonNull final LinearLayout mainContentContainer,
+                                                                     @NonNull final ScrollView scrollView,
+                                                                     @NonNull final View header) {
         return new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {

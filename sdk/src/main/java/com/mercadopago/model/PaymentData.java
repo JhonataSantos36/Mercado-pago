@@ -2,9 +2,6 @@ package com.mercadopago.model;
 
 import java.math.BigDecimal;
 
-/**
- * Created by mreverter on 1/17/17.
- */
 public class PaymentData {
     private BigDecimal transactionAmount;
     private PaymentMethod paymentMethod;

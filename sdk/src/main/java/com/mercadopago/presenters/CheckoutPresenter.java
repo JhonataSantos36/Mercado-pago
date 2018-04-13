@@ -15,25 +15,27 @@ import com.mercadopago.lite.exceptions.CheckoutPreferenceException;
 import com.mercadopago.model.Campaign;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.Cause;
+import com.mercadopago.model.Customer;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Issuer;
 import com.mercadopago.model.Payer;
 import com.mercadopago.model.PayerCost;
 import com.mercadopago.model.Payment;
+import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodSearch;
-import com.mercadopago.model.Token;
-import com.mercadopago.preferences.CheckoutPreference;
-import com.mercadopago.preferences.ServicePreference;
-import com.mercadopago.model.Customer;
-import com.mercadopago.model.PaymentData;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentResult;
+import com.mercadopago.model.Token;
 import com.mercadopago.mvp.MvpPresenter;
 import com.mercadopago.mvp.TaggedCallback;
 import com.mercadopago.plugins.DataInitializationTask;
+import com.mercadopago.plugins.model.BusinessPayment;
+import com.mercadopago.plugins.model.BusinessPaymentModel;
+import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
 import com.mercadopago.preferences.PaymentResultScreenPreference;
+import com.mercadopago.preferences.ServicePreference;
 import com.mercadopago.providers.CheckoutProvider;
 import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
@@ -1063,5 +1065,16 @@ public class CheckoutPresenter extends MvpPresenter<CheckoutView, CheckoutProvid
         if (dataInitializationTask != null) {
             dataInitializationTask.cancel();
         }
+    }
+
+    public void onBusinessResult(final BusinessPayment businessPayment) {
+        // will be better a mapper object to create this.
+        final String lastFourDigits = mPaymentDataInput.getToken() != null ? mPaymentDataInput.getToken().getLastFourDigits() : null;
+        BusinessPaymentModel model = new BusinessPaymentModel(businessPayment, mDiscount, mPaymentDataInput.getPaymentMethod(),
+                mPaymentDataInput.getPayerCost(),
+                mCheckoutPreference.getSite().getCurrencyId(),
+                mPaymentDataInput.getTransactionAmount(),
+                mPaymentResultInput.getStatementDescription(), lastFourDigits);
+        getView().showBusinessResult(model);
     }
 }

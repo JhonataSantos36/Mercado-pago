@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.core.CheckoutStore;
 import com.mercadopago.core.MercadoPagoCheckout;
 import com.mercadopago.core.MercadoPagoComponents;
@@ -23,10 +22,12 @@ import com.mercadopago.model.PaymentMethodSearch;
 import com.mercadopago.model.PaymentMethodSearchItem;
 import com.mercadopago.model.PaymentRecovery;
 import com.mercadopago.model.PaymentResult;
+import com.mercadopago.model.PaymentTypes;
 import com.mercadopago.model.Token;
 import com.mercadopago.plugins.BusinessPaymentResultActivity;
 import com.mercadopago.plugins.PaymentProcessorPluginActivity;
 import com.mercadopago.plugins.model.BusinessPayment;
+import com.mercadopago.plugins.model.BusinessPaymentModel;
 import com.mercadopago.plugins.model.PaymentMethodInfo;
 import com.mercadopago.preferences.CheckoutPreference;
 import com.mercadopago.preferences.FlowPreference;
@@ -141,6 +142,12 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
         Picasso.with(this)
                 .load(url)
                 .fetch();
+    }
+
+    @Override
+    public void showBusinessResult(final BusinessPaymentModel model) {
+        overrideTransitionIn();
+        BusinessPaymentResultActivity.start(this, model, BUSINESS_REQUEST_CODE);
     }
 
     @Override
@@ -275,10 +282,10 @@ public class CheckoutActivity extends MercadoPagoBaseActivity implements Checkou
      * @param data intent data that can contains a {@link BusinessPayment}
      */
     private void paymentResultOk(final Intent data) {
+
         if (PaymentProcessorPluginActivity.isBusiness(data)) {
-            overrideTransitionIn();
             BusinessPayment businessPayment = PaymentProcessorPluginActivity.getBusinessPayment(data);
-            BusinessPaymentResultActivity.start(this, businessPayment, BUSINESS_REQUEST_CODE);
+            mCheckoutPresenter.onBusinessResult(businessPayment);
         } else {
             final PaymentResult paymentResult = CheckoutStore.getInstance().getPaymentResult();
             mCheckoutPresenter.checkStartPaymentResultActivity(paymentResult);

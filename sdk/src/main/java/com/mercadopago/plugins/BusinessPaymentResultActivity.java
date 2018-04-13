@@ -9,41 +9,41 @@ import com.mercadopago.components.Action;
 import com.mercadopago.components.ActionDispatcher;
 import com.mercadopago.components.ComponentManager;
 import com.mercadopago.plugins.components.BusinessPaymentContainer;
-import com.mercadopago.plugins.model.BusinessPayment;
+import com.mercadopago.plugins.model.BusinessPaymentModel;
 import com.mercadopago.plugins.model.ExitAction;
 
 public class BusinessPaymentResultActivity extends AppCompatActivity implements ActionDispatcher {
 
-    private static final String EXTRA_BUSINESS_PAYMENT = "extra_business_payment";
+    private static final String EXTRA_BUSINESS_PAYMENT_MODEL = "extra_business_payment_model";
 
     public static void start(final AppCompatActivity activity,
-                             final BusinessPayment businessPayment,
+                             final BusinessPaymentModel model,
                              int requestCode) {
         Intent intent = new Intent(activity, BusinessPaymentResultActivity.class);
-        intent.putExtra(EXTRA_BUSINESS_PAYMENT, businessPayment);
+        intent.putExtra(EXTRA_BUSINESS_PAYMENT_MODEL, model);
         activity.startActivityForResult(intent, requestCode);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BusinessPayment businessPayment = parseIntent();
-        if (businessPayment != null) {
-            initializeView(businessPayment);
+        BusinessPaymentModel model = parseBusinessPaymentModel();
+        if (model != null) {
+            initializeView(model);
         } else {
             throw new IllegalStateException("BusinessPayment can't be loaded");
         }
     }
 
     @Nullable
-    private BusinessPayment parseIntent() {
-        return getIntent().getExtras() != null ? (BusinessPayment) getIntent()
+    private BusinessPaymentModel parseBusinessPaymentModel() {
+        return getIntent().getExtras() != null ? (BusinessPaymentModel) getIntent()
                 .getExtras()
-                .getParcelable(EXTRA_BUSINESS_PAYMENT) : null;
+                .getParcelable(EXTRA_BUSINESS_PAYMENT_MODEL) : null;
     }
 
-    private void initializeView(final BusinessPayment businessPayment) {
-        BusinessPaymentContainer businessPaymentContainer = new BusinessPaymentContainer(businessPayment, this);
+    private void initializeView(final BusinessPaymentModel model) {
+        BusinessPaymentContainer businessPaymentContainer = new BusinessPaymentContainer(new BusinessPaymentContainer.Props(model.payment, model.getPaymentMethodProps()), this);
         ComponentManager componentManager = new ComponentManager(this);
         componentManager.render(businessPaymentContainer);
     }
